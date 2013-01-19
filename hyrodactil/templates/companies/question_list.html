@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+  <table class="table">
+    <tr>
+      <th>{% trans "Name" %}</th>
+      <th>{% trans "Type" %}</th>
+      <th>{% trans "Edit" %}</th>
+    </tr>
+
+    {% for question in question_list %}
+      <tr>
+        <td>
+          {{ question.name }}
+        </td>
+        <td>
+          {{ question.type }}
+        </td>
+        <td>
+          <a href="{% url 'companies:update_question' question.id %}" class="btn">{% trans "Edit" %}</a>
+        </td>
+      </tr>
+    {% endfor %}
+
+  </table>
+
+  <a href="{% url 'companies:create_question' %}" class="btn">{% trans "Create a department" %}</a>
+
+{% endblock content %}
