@@ -17,3 +17,8 @@ DATABASES = {
         "PORT": "",
         },
     }
+
+######### FAST HASHING FOR PASSWORDS
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    )

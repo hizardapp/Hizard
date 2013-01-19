@@ -15,6 +15,7 @@ build
 *.db
 
 # Logs:
+logs/
 *.log
 
 # IDEA
