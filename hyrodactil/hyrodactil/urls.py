@@ -4,7 +4,7 @@ urlpatterns = patterns('',
     url(
         r'^companies/',
         include(
-            'hyrodactil.hyrodactil.companies.urls',
+            'companies.urls',
             namespace='companies',
             app_name='companies'
         )

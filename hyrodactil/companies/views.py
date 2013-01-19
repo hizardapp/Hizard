@@ -1,8 +1,8 @@
-
+from django.contrib import messages
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView
 
 from braces.views import LoginRequiredMixin, SuccessURLRedirectListMixin
 
@@ -22,7 +22,14 @@ class CompanyCreateView(CreateView):
         company.save()
 
 
-class DepartmentListView(ListView):
+class DepartmentActionMixin(object):
+    def form_valid(self, form):
+        msg = 'Department {0}!'.format(self.action)
+        messages.info(self.request, msg)
+        return super(DepartmentActionMixin, self).form_valid(form)
+
+
+class DepartmentListView(DepartmentActionMixin, ListView):
     def get_queryset(self):
         # TODO: remove
         self.request.user = User.objects.get(username='vincent')
@@ -30,10 +37,11 @@ class DepartmentListView(ListView):
         return Department.objects.filter(company=company)
 
 
-class DepartmentCreateView(CreateView):
+class DepartmentCreateView(DepartmentActionMixin, CreateView):
     model = Department
     form_class = DepartmentForm
-    success_url = reverse('companies:list_departments')
+    action = 'created'
+    success_url = reverse_lazy('companies:list_departments')
 
     def form_valid(self, form):
         department = form.save(commit=False)
@@ -42,3 +50,10 @@ class DepartmentCreateView(CreateView):
         #department.company = Company.objects.get(owner=self.request.user)
         department.save()
         return super(DepartmentCreateView, self).form_valid(form)
+
+
+class DepartmentUpdateView(DepartmentActionMixin, UpdateView):
+    model = Department
+    form_class = DepartmentForm
+    action = 'updated'
+    success_url = reverse_lazy('companies:list_departments')

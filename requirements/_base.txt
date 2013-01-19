@@ -4,4 +4,3 @@ django-braces==0.2.1
 django-model-utils==1.1.0
 South==0.7.6
 django-registration==0.8
-unipath==0.2.1
