@@ -1,10 +1,10 @@
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
-from companies.tests.factories import CompanyFactory, QuestionFactory, UserFactory
+from factories._jobs import ApplicationFactory, OpeningFactory
+from factories._companies import CompanyFactory, QuestionFactory, UserFactory
 
-from .factories import ApplicationFactory, ApplicationAnswerFactory, OpeningFactory
-from ..models import Application, Opening
+from jobs.models import Application, Opening
 
 
 class ViewsWebTest(WebTest):

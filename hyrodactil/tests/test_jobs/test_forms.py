@@ -1,8 +1,8 @@
 from django.test import TestCase
 
-from companies.tests.factories import UserFactory, CompanyFactory, QuestionFactory
+from factories._companies import UserFactory, CompanyFactory, QuestionFactory
 
-from ..forms import OpeningForm
+from jobs.forms import OpeningForm
 
 
 class FormsTest(TestCase):
