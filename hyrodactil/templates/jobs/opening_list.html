@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+  <table class="table">
+    <tr>
+      <th>{% trans "Title" %}</th>
+      <th>{% trans "Created" %}</th>
+      <th>{% trans "Edit" %}</th>
+    </tr>
+
+    {% for opening in opening_list %}
+      <tr>
+        <td>
+          {{ opening.title }}
+        </td>
+        <td>
+          {{ opening.created }}
+        </td>
+        <td>
+          <a href="{% url 'jobs:update_opening' opening.id %}" class="btn">{% trans "Edit" %}</a>
+        </td>
+      </tr>
+    {% endfor %}
+
+  </table>
+
+  <a href="{% url 'jobs:create_opening' %}" class="btn">{% trans "Create an opening" %}</a>
+
+{% endblock content %}

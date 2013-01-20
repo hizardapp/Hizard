@@ -9,5 +9,19 @@ urlpatterns = patterns('',
             app_name='companies'
         )
     ),
+    url(
+        r'^jobs/',
+        include(
+            'jobs.urls',
+            namespace='jobs',
+            app_name='jobs')
+    ),
+    url(
+        r'^',
+        include(
+            'public.urls',
+            namespace='public',
+            app_name='public')
+    )
 
 )

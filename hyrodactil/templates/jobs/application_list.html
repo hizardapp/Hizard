@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+  <table class="table">
+    <tr>
+      <th>{% trans "First Name" %}</th>
+      <th>{% trans "Last Name" %}</th>
+      <th>{% trans "Date applied" %}</th>
+    </tr>
+
+    {% for application in application_list %}
+      <tr>
+        <td>
+          <a href="">{{ application.first_name }}</a>
+        </td>
+        <td>
+          {{ application.last_name }}
+        </td>
+        <td>
+          {{ application.created }}
+        </td>
+      </tr>
+    {% endfor %}
+
+  </table>
+
+{% endblock content %}

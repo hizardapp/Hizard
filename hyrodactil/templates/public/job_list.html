@@ -1,0 +1,94 @@
+<script>
+  function toggleDescription(opening_id) {
+    id_link = "hirodactyl-job-description-link-" + opening_id;
+    id_desc = "hirodactyl-job-description-content-" + opening_id;
+
+    e_desc = document.getElementById(id_desc);
+    e_link = document.getElementById(id_link);
+
+    if (e_desc.className === "hirodactyl-hidden") {
+      e_desc.className = "";
+      e_link.innerHTML = "Hide description";
+    } else {
+      e_desc.className += "hirodactyl-hidden";
+      e_link.innerHTML = "See the job description";
+    }
+  }
+
+  function toggleForm(opening_id){
+    id_form = "hirodactyl-job-form-" + opening_id;
+
+    e_form = document.getElementById(id_form)
+
+    if(e_form.className === "hyrodactyl-hidden"){
+      e_form = "";
+    } else {
+      e_form.className = "hyrodactyl-hidden";
+    }
+  }
+</script>
+
+<style media="screen" type="text/css">
+  .hirodactyl-container {
+    padding: 10px;
+    font-family: Arial, Verdana, sans-serif;
+  }
+  .hirodactyl-hidden {
+    display: none;
+  }
+  .hirodactyl-job {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid grey;
+  }
+  .hirodactyl-job-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    text-align: left;
+  }
+  .hirodactyl-link {
+    color: blue;
+  }
+</style>
+
+
+<div class=".hirodactyl-container">
+  {% for opening in openings %}
+
+    <div class="hirodactyl-job">
+      <div class="hirodactyl-job-title">{{ opening.title }}</div>
+      <div class="hirodactyl-job-description">
+
+        <div id="hirodactyl-job-description-link-{{ opening.id }}" class="hirodactyl-link" onclick="toggleDescription({{ opening.id }})">See the job description</div>
+        <div id="hirodactyl-job-description-content-{{ opening.id }}" class="hirodactyl-hidden">
+          {% autoescape off %}
+            {{ opening.description }}
+          {% endautoescape %}
+
+          <br><button type="button" onclick="toggleForm({{ opening.id }})">Apply</button>
+
+          <div id="hirodactyl-job-form-{{ opening.id }}" class="hirodactyl-hidden">
+
+            <form method="POST" action="{% url 'jobs:apply' opening.id %}">
+              First Name : <input type="textbox" name="first-name"><br>
+              Last Name : <input type="textbox" name="last-name"><br>
+              {% for question in opening.questions.all %}
+                {% if question.type == 'textarea' %}
+                  {{ question.label }}<textarea  name="{{ question.name }}"></textarea><br>
+                {% endif %}
+                {% if question.type != 'textarea' %}
+                  {{ question.label }} <input type="{{ question.type }}" name="{{ question.name }}" /> <br>
+                {% endif %}
+              {% endfor %}
+              <input type="submit" value="Apply to this job">
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  {% endfor %}
+</div>

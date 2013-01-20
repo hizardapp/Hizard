@@ -29,7 +29,7 @@ class DepartmentActionMixin(object):
         return super(DepartmentActionMixin, self).form_valid(form)
 
 
-class DepartmentListView(DepartmentActionMixin, ListView):
+class DepartmentListView(ListView):
     def get_queryset(self):
         # TODO: remove
         self.request.user = User.objects.get(username='vincent')
@@ -59,19 +59,19 @@ class DepartmentUpdateView(DepartmentActionMixin, UpdateView):
     success_url = reverse_lazy('companies:list_departments')
 
 
-class QuestionActionMixin(object):
-    def form_valid(self, form):
-        msg = 'Question {0}!'.format(self.action)
-        messages.info(self.request, msg)
-        return super(QuestionActionMixin, self).form_valid(form)
-
-
-class QuestionListView(QuestionActionMixin, ListView):
+class QuestionListView(ListView):
     def get_queryset(self):
         # TODO: remove
         self.request.user = User.objects.get(username='vincent')
         company = get_object_or_404(Company, owner=self.request.user)
         return Question.objects.filter(company=company)
+
+
+class QuestionActionMixin(object):
+    def form_valid(self, form):
+        msg = 'Question {0}!'.format(self.action)
+        messages.info(self.request, msg)
+        return super(QuestionActionMixin, self).form_valid(form)
 
 
 class QuestionCreateView(QuestionActionMixin, CreateView):
