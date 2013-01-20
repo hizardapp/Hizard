@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <form action="{% url 'companies:create' %}" method="POST" id="company_form">
+    <form action="{% url 'companies:create' %}" method="POST" id="company-form">
       {% csrf_token %}
 
       {{ form.as_p }}

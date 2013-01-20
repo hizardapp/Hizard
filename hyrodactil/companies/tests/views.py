@@ -18,13 +18,13 @@ class ViewsWebTest(WebTest):
         page = self.app.get(url, user=self.user)
 
         self.assertEqual(page.status_code, 200)
-        self.assertIn('company_form', page.forms)
+        self.assertIn('company-form', page.forms)
 
     def test_create_company_invalid(self):
         url = reverse('companies:create')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['company_form']
+        form = page.forms['company-form']
         form['name'] = ''
         response = form.submit()
 
@@ -35,7 +35,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:create')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['company_form']
+        form = page.forms['company-form']
         form['name'] = 'ACME'
         response = form.submit().follow()
 
@@ -66,7 +66,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:create_department')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department_form']
+        form = page.forms['department-form']
         form['name'] = 'Engineering'
         response = form.submit().follow()
 
@@ -80,7 +80,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:create_department')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department_form']
+        form = page.forms['department-form']
         form['name'] = ''
         response = form.submit()
 
@@ -93,7 +93,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:update_department', args=(dept.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department_form']
+        form = page.forms['department-form']
         form['name'] = 'Engineering'
 
         assert dept.name in page
@@ -110,7 +110,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:update_department', args=(dept.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department_form']
+        form = page.forms['department-form']
         form['name'] = ''
 
         assert dept.name in page
@@ -140,7 +140,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:create_question')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question_form']
+        form = page.forms['question-form']
         form['name'] = 'Cover letter'
         form['label'] = 'Please write a cover letter : '
         form['type'] = 'textbox'
@@ -157,7 +157,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:create_question')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question_form']
+        form = page.forms['question-form']
         form['name'] = ''
         form['label'] = ''
         form['type'] = 'textbox'
@@ -173,7 +173,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question_form']
+        form = page.forms['question-form']
         form['name'] = 'Last Name'
 
         assert question.name in page
@@ -191,7 +191,7 @@ class ViewsWebTest(WebTest):
         url = reverse('companies:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question_form']
+        form = page.forms['question-form']
         form['name'] = ''
 
         assert question.name in page
