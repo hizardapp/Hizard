@@ -14,7 +14,7 @@
     {% for application in application_list %}
       <tr>
         <td>
-          <a href="">{{ application.first_name }}</a>
+          <a href="{% url 'jobs:application_detail' application.id %}">{{ application.first_name }}</a>
         </td>
         <td>
           {{ application.last_name }}

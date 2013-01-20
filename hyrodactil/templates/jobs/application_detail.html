@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+  APPLICATION<br>
+  {{ application.first_name }} {{ application.last_name }}
+
+  <br><br>
+
+  {% for answer in answers %}
+    <p>
+      {{ answer.question.label }} : <br>
+      {{ answer.answer }}
+    </p>
+  {% endfor %}
+{% endblock %}
