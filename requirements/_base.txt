@@ -4,3 +4,4 @@ django-braces==0.2.1
 django-model-utils==1.1.0
 South==0.7.6
 django-countries==1.5
+-e git+https://github.com/brandsExclusive/django-registration.git#egg=django-registration

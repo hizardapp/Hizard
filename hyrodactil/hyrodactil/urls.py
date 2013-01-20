@@ -2,6 +2,10 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(
+        r'^accounts/',
+        include('registration.backends.simple.urls')
+    ),
+    url(
         r'^companies/',
         include(
             'companies.urls',

@@ -13,8 +13,6 @@ from companies.models import Company
 
 class OpeningListView(ListView):
     def get_queryset(self):
-        # TODO: remove
-        self.request.user = User.objects.get(username='vincent')
         company = get_object_or_404(Company, owner=self.request.user)
         return Opening.objects.filter(company=company)
 
@@ -34,9 +32,7 @@ class OpeningCreateView(OpeningActionMixin, CreateView):
 
     def form_valid(self, form):
         opening = form.save(commit=False)
-        # TODO: remove
-        opening.company = Company.objects.get(owner=User.objects.get(username='vincent'))
-        #department.company = Company.objects.get(owner=self.request.user)
+        opening.company = Company.objects.get(owner=self.request.user)
         opening.save()
         form.save_m2m()
         return super(OpeningCreateView, self).form_valid(form)
