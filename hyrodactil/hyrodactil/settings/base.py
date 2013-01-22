@@ -177,13 +177,13 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
-    'registration',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'companies',
     'jobs',
+    'profiles',
     'public',
 )
 
@@ -250,3 +250,5 @@ ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: "/companies/create/"
 }
 ########## END DJANGO REGISTRATION
+
+AUTH_USER_MODEL = 'profiles.CustomUser'
