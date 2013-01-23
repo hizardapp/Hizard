@@ -1,7 +1,7 @@
 import factory
 
 from companies.models import Company, Department, Question
-from .accounts import UserFactory
+from ._accounts import UserFactory
 
 
 class CompanyFactory(factory.Factory):

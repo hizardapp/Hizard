@@ -1,8 +1,9 @@
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
+from tests.factories._accounts import UserFactory
 from tests.factories._jobs import ApplicationFactory, OpeningFactory
-from tests.factories._companies import CompanyFactory, QuestionFactory, UserFactory
+from tests.factories._companies import CompanyFactory, QuestionFactory
 
 from jobs.models import Application, Opening
 
@@ -85,7 +86,7 @@ class ViewsWebTest(WebTest):
         url = reverse('jobs:list_openings')
 
         opening = OpeningFactory.create(title='DevOps', company=self.company)
-        user2 = UserFactory(username='sam')
+        user2 = UserFactory(email='sam@sam.com')
         company2 = CompanyFactory(name='Corp', owner=user2)
         opening2 = OpeningFactory.create(company=company2)
 

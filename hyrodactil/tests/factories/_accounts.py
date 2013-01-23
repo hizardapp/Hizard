@@ -1,12 +1,11 @@
 import factory
 
-from hyrodactil.settings import base
+from accounts.models import CustomUser
 
 
 class UserFactory(factory.Factory):
-    FACTORY_FOR = base.AUTH_USER_MODEL
+    FACTORY_FOR = CustomUser
 
-    username = 'bob'
     email = 'bob@bob.com'
     password = 'bob'
 

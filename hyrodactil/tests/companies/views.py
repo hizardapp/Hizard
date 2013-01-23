@@ -4,7 +4,7 @@ from django_webtest import WebTest
 from tests.factories._companies import (
     CompanyFactory, DepartmentFactory, QuestionFactory
     )
-from tests.factories.accounts import UserFactory
+from tests.factories._accounts import UserFactory
 from companies.models import Company, Department, Question
 
 
@@ -52,7 +52,7 @@ class ViewsWebTest(WebTest):
 
         company = CompanyFactory.create(owner=self.user)
         department = DepartmentFactory.create(company=company)
-        user2 = UserFactory(username='sam')
+        user2 = UserFactory(email='sam@sam.com')
         company2 = CompanyFactory(name='Corp', owner=user2)
         department2 = DepartmentFactory.create(name='Corp', company=company2)
 
@@ -126,7 +126,7 @@ class ViewsWebTest(WebTest):
 
         company = CompanyFactory.create(owner=self.user)
         question = QuestionFactory.create(company=company)
-        user2 = UserFactory(username='sam')
+        user2 = UserFactory(email='sam@sam.com')
         company2 = CompanyFactory(name='Corp', owner=user2)
         question2 = QuestionFactory.create(name='Age', company=company2)
 
