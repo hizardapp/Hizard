@@ -1,8 +1,8 @@
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
-from factories._jobs import ApplicationFactory, OpeningFactory
-from factories._companies import CompanyFactory, QuestionFactory, UserFactory
+from tests.factories._jobs import ApplicationFactory, OpeningFactory
+from tests.factories._companies import CompanyFactory, QuestionFactory, UserFactory
 
 from jobs.models import Application, Opening
 

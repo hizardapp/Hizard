@@ -1,26 +1,7 @@
 import factory
 
-from django.contrib.auth.models import User
-
 from companies.models import Company, Department, Question
-
-
-class UserFactory(factory.Factory):
-    FACTORY_FOR = User
-
-    username = 'bob'
-    email = 'bob@bob.com'
-    password = 'bob'
-
-    @classmethod
-    def _prepare(cls, create, **kwargs):
-        password = kwargs.pop('password', None)
-        user = super(UserFactory, cls)._prepare(create, **kwargs)
-        if password:
-            user.set_password(password)
-            if create:
-                user.save()
-        return user
+from .accounts import UserFactory
 
 
 class CompanyFactory(factory.Factory):

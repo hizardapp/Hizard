@@ -2,9 +2,10 @@ from base import *
 
 ########## TEST SETTINGS
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
-TEST_DISCOVER_TOP_LEVEL = SITE_ROOT + '/tests/'
-TEST_DISCOVER_ROOT = SITE_ROOT + '/tests/'
-#TEST_DISCOVER_PATTERN = "*"
+TEST_DISCOVER_TOP_LEVEL = SITE_ROOT
+TEST_DISCOVER_ROOT = join(SITE_ROOT, "tests")
+# Default is test*.py
+TEST_DISCOVER_PATTERN = "*"
 
 ########## IN-MEMORY TEST DATABASE
 DATABASES = {

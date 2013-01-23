@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from factories._companies import UserFactory, CompanyFactory, QuestionFactory
+from tests.factories._companies import UserFactory, CompanyFactory, QuestionFactory
 
 from jobs.forms import OpeningForm
 

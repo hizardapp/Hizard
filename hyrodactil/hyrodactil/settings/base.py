@@ -183,7 +183,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'companies',
     'jobs',
-    'profiles',
+    'accounts',
     'public',
 )
 
@@ -251,4 +251,4 @@ ABSOLUTE_URL_OVERRIDES = {
 }
 ########## END DJANGO REGISTRATION
 
-AUTH_USER_MODEL = 'profiles.CustomUser'
+AUTH_USER_MODEL = 'accounts.CustomUser'

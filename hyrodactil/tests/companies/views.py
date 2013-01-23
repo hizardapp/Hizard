@@ -1,9 +1,10 @@
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
-from factories._companies import (
-    CompanyFactory, DepartmentFactory, QuestionFactory, UserFactory
+from tests.factories._companies import (
+    CompanyFactory, DepartmentFactory, QuestionFactory
     )
+from tests.factories.accounts import UserFactory
 from companies.models import Company, Department, Question
 
 

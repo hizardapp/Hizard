@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
             ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
             ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.CustomUser'])),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CustomUser'])),
         ))
         db.send_create_signal(u'companies', ['Company'])
 
@@ -73,7 +73,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['profiles.CustomUser']"})
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.CustomUser']"})
         },
         u'companies.department': {
             'Meta': {'object_name': 'Department'},
@@ -101,7 +101,7 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'profiles.customuser': {
+        u'accounts.customuser': {
             'Meta': {'object_name': 'CustomUser'},
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
