@@ -3,7 +3,7 @@ from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 
 from accounts.models import CustomUser
-from tests.factories._accounts import UserFactory
+from ..factories._accounts import UserFactory
 
 
 class ModelAdminTests(TestCase):
@@ -14,7 +14,8 @@ class ModelAdminTests(TestCase):
         ma = ModelAdmin(CustomUser, self.site)
         expected = ['password', 'last_login', 'is_superuser', 'groups',
                     'user_permissions', 'email', 'is_active', 'is_admin',
-                    'is_staff', 'avatar', 'first_name', 'last_name']
+                    'is_staff', 'avatar', 'first_name', 'last_name',
+                    'activation_key']
 
         self.assertEqual(expected, ma.get_form(None).base_fields.keys())
 
@@ -26,7 +27,8 @@ class ModelAdminTests(TestCase):
                 'fields': [
                     'password', 'last_login', 'is_superuser', 'groups',
                     'user_permissions', 'email', 'is_active', 'is_admin',
-                    'is_staff', 'avatar', 'first_name', 'last_name']
+                    'is_staff', 'avatar', 'first_name', 'last_name',
+                    'activation_key']
             })
         ]
         self.assertEqual(expected, ma.get_fieldsets(None, user))

@@ -8,6 +8,7 @@ class UserFactory(factory.Factory):
 
     email = 'bob@bob.com'
     password = 'bob'
+    activation_key = 'RANDOMKEY'
 
     @classmethod
     def _prepare(cls, create, **kwargs):

@@ -7,7 +7,11 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(
         r'^accounts/',
-        include('registration.backends.simple.urls')
+        include(
+            'accounts.urls',
+            namespace='accounts',
+            app_name='accounts'
+        )
     ),
     url(
         r'^companies/',
