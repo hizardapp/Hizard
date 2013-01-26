@@ -34,8 +34,7 @@ class AccountsViewsTests(WebTest):
 
         response = form.submit()
 
-        expected_redirect = 'http://testserver%s' % reverse('public:home')
-        self.assertRedirects(response, expected_redirect)
+        self.assertRedirects(response, reverse('public:home'))
         self.assertEqual(CustomUser.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
 
@@ -72,7 +71,7 @@ class AccountsViewsTests(WebTest):
         response = self.app.get(reverse('auth:login'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'registration/login.html')
+        self.assertTemplateUsed(response, 'accounts/login.html')
         self.failUnless(isinstance(response.context['form'], AuthenticationForm))
 
     def test_post_login_view_success(self):
@@ -88,9 +87,8 @@ class AccountsViewsTests(WebTest):
         form['password'] = 'bob'
 
         response = form.submit()
-        expected_redirect = 'http://testserver%s' % reverse('public:home')
-        self.assertRedirects(response, expected_redirect)
-        # TODO check if logged in
+        self.assertRedirects(response, reverse('public:home'))
+        self.assertIn('_auth_user_id', self.app.session)
 
     def test_post_login_view_failure_inactive_user(self):
         """
@@ -107,17 +105,27 @@ class AccountsViewsTests(WebTest):
         response = form.submit()
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', '', 'This account is inactive.')
-        # TODO: assert not logged in
+        self.assertNotIn('_auth_user_id', self.app.session)
 
     def test_get_logout_while_logged_in(self):
+        """
+        GET the logout view while logged in
+        Should redirect to the home page and be logged out
+        """
         user = UserFactory.create()
         response = self.app.get(reverse('auth:logout'), user=user)
 
-        self.assertEqual(response.status_code, 200)
-        # TODO: assert not logged in
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('public:home'))
+        self.assertNotIn('_auth_user_id', self.app.session)
 
     def test_get_logout_while_logged_out(self):
+        """
+        GET the logout view while logged out
+        Should redirect to the home page since it's not allowed to access this
+        page without being logged in
+        """
         response = self.app.get(reverse('auth:logout'))
 
-        self.assertEqual(response.status_code, 200)
-        # TODO: assert redirected, you shouldn't be able to access this page
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('public:home'))

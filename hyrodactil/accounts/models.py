@@ -175,7 +175,6 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         now = datetime.datetime.now()
 
         if now > self.created + delta:
-            'print expired'
             return True
         else:
             return False

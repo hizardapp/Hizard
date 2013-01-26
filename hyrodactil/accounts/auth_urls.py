@@ -1,17 +1,21 @@
 from django.conf.urls import patterns, url
 
 from django.contrib.auth import views as auth_views
-
+from .views import LoginFormView, LogoutView
 
 urlpatterns = patterns('',
-    url(r'^login/$',
-        auth_views.login,
-        {'template_name': 'registration/login.html'},
-        name='login'),
-    url(r'^logout/$',
-        auth_views.logout,
-        {'template_name': 'registration/logout.html'},
-        name='logout'),
+    url(
+        r'^login/$',
+        LoginFormView.as_view(),
+        name='login'
+    ),
+    url(
+        r'^logout/$',
+        LogoutView.as_view(),
+        name='logout'
+    ),
+
+
     url(r'^password/change/$',
         auth_views.password_change,
         name='auth_password_change'),
