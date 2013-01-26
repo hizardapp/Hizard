@@ -32,9 +32,13 @@ class UserCreationForm(forms.ModelForm):
         return password2
 
     def save(self, commit=True):
-        # Save the provided password in hashed format
-        user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
+        """
+        Save the user using the manager to make sure it creates the
+        activation token and sens the activation email
+        """
+        email = self.cleaned_data["password1"]
+        password = self.cleaned_data["password1"]
+
         if commit:
-            user.save()
-        return user
+            user = CustomUser.objects.create_user(email, password, False)
+            return user

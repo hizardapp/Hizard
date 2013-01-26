@@ -7,6 +7,8 @@ from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
 from django.db import models
+from django.core import mail
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from model_utils.models import TimeStampedModel
@@ -35,6 +37,7 @@ class CustomUserManager(BaseUserManager):
             # create token here
             user.activation_key = self._create_activation_token(email)
             user.is_active = False
+            user.send_activation_email()
 
         user.save(using=self._db)
 
@@ -42,7 +45,9 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password):
         """
-        Creates an active superuser
+        Creates an active superuser.
+        Superuser are active from the start, they don't receive an activation
+        mail
         """
         user = self.create_user(email, password)
         user.is_admin = True
@@ -171,6 +176,24 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
             return True
         else:
             return False
+
+    def send_activation_email(self):
+        """
+        Use this method to send an activation email to a new user or resend a
+        new one if the user asks for it .
+        It needs 2 templates : one for the subject line (1 line only) and one
+        for the body.
+        """
+        context = {
+            'activation_key': self.activation_key,
+            'expiration_days': base.ACCOUNT_ACTIVATION_DAYS,
+            'site': None
+        }
+        subject = render_to_string('accounts/activation_email_subject.txt', context)
+        subject = ''.join(subject.splitlines())
+        body = render_to_string('accounts/activation_email_body.txt', context)
+
+        mail.send_mail(subject, body, base.DEFAULT_FROM_EMAIL, [self.email])
 
     def __unicode__(self):
         return self.email

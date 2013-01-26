@@ -39,7 +39,23 @@ class AccountsViewsTests(WebTest):
 
 
     def test_post_registration_view_failure(self):
-        pass
+        """
+        POST to this view with an error in the form should display this form
+        again with the error
+        """
+        page = self.app.get(reverse('accounts:register'))
+
+        form = page.forms['register-form']
+        form['email'] = 'bob@bob.com'
+        form['password1'] = 'password'
+        form['password2'] = 'wrong'
+
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'password2', 'Passwords don\'t match')
+        self.assertEqual(CustomUser.objects.count(), 0)
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_valid_activation(self):
         pass
