@@ -47,7 +47,7 @@
         <div class="nav-collapse collapse">
           <ul class="nav">
             {% if not user.is_authenticated %}
-              <li><a href=''>{% trans 'Login' %}</a></li>
+              <li><a href={% url 'auth:login' %}>{% trans 'Login' %}</a></li>
               <li><a href={% url 'accounts:register' %}>{% trans 'Register' %}</a></li>
             {% else %}
               <li><a href={% url 'jobs:list_openings' %}>{% trans 'Openings' %}</a></li>
@@ -60,7 +60,7 @@
         <div class="nav-collapse collapse pull-right">
           <ul class="nav">
             {% if user.is_authenticated %}
-              <li><a href="/accounts/logout/">{% trans 'Logout' %} {{ user }}</a></li>
+              <li><a href="{% url 'auth:logout' %}">{% trans 'Logout' %} {{ user }}</a></li>
             {% endif %}
           </ul>
         </div>

@@ -3,8 +3,21 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
+
+from django.contrib.auth import views as auth_views
+
+
+
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(
+        r'',
+        include(
+            'accounts.auth_urls',
+            namespace='auth',
+            app_name='accounts'
+        )
+    ),
     url(
         r'^accounts/',
         include(

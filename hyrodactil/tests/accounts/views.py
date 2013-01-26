@@ -1,8 +1,10 @@
+from django.contrib.auth.forms import AuthenticationForm
 from django.core import mail
 from django.core.urlresolvers import reverse
 
 from django_webtest import WebTest
 
+from ..factories._accounts import UserFactory
 from accounts.forms import UserCreationForm
 from accounts.models import CustomUser
 
@@ -62,3 +64,60 @@ class AccountsViewsTests(WebTest):
 
     def test_invalid_activation(self):
         pass
+
+    def test_get_login_view(self):
+        """
+        GET the login auth view (from django itself)
+        """
+        response = self.app.get(reverse('auth:login'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/login.html')
+        self.failUnless(isinstance(response.context['form'], AuthenticationForm))
+
+    def test_post_login_view_success(self):
+        """
+        POST to the view to login
+        Testing to make sure it works with email/activated user
+        """
+        user = UserFactory.create()
+        page = self.app.get(reverse('auth:login'))
+
+        form = page.forms['login-form']
+        form['username'] = user.email
+        form['password'] = 'bob'
+
+        response = form.submit()
+        expected_redirect = 'http://testserver%s' % reverse('public:home')
+        self.assertRedirects(response, expected_redirect)
+        # TODO check if logged in
+
+    def test_post_login_view_failure_inactive_user(self):
+        """
+        POST to the view to login
+        Testing to make sure it works with email/activated user
+        """
+        user = UserFactory.create(is_active=False)
+        page = self.app.get(reverse('auth:login'))
+
+        form = page.forms['login-form']
+        form['username'] = user.email
+        form['password'] = 'bob'
+
+        response = form.submit()
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', '', 'This account is inactive.')
+        # TODO: assert not logged in
+
+    def test_get_logout_while_logged_in(self):
+        user = UserFactory.create()
+        response = self.app.get(reverse('auth:logout'), user=user)
+
+        self.assertEqual(response.status_code, 200)
+        # TODO: assert not logged in
+
+    def test_get_logout_while_logged_out(self):
+        response = self.app.get(reverse('auth:logout'))
+
+        self.assertEqual(response.status_code, 200)
+        # TODO: assert redirected, you shouldn't be able to access this page
