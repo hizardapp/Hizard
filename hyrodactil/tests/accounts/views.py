@@ -38,7 +38,6 @@ class AccountsViewsTests(WebTest):
         self.assertEqual(CustomUser.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
 
-
     def test_post_registration_view_failure(self):
         """
         POST to this view with an error in the form should display this form
@@ -58,11 +57,24 @@ class AccountsViewsTests(WebTest):
         self.assertEqual(CustomUser.objects.count(), 0)
         self.assertEqual(len(mail.outbox), 0)
 
-    def test_valid_activation(self):
-        pass
+    def test_get_valid_activation(self):
+        user = UserFactory(is_active=False)
+        url = reverse('accounts:activate', args=(user.activation_key,))
 
-    def test_invalid_activation(self):
-        pass
+        response = self.client.get(url)
+        user_found = CustomUser.objects.get(id=1)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(user_found.is_active)
+
+    def test_get_invalid_activation(self):
+        """
+        GET the activation page with an invalid activation key
+        Should raise a 404, using client instead of app since app would fail
+        """
+        url = reverse('accounts:activate', args=('FAKE',))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
     def test_get_login_view(self):
         """

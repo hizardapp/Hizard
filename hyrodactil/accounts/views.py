@@ -23,6 +23,20 @@ def activate(request, activation_key):
     raise Http404
 
 
+class ActivateView(View):
+    """
+    Called with an activation key as a parameter
+    """
+    def get(self, *args, **kwargs):
+        activation_key = kwargs['activation_key']
+        activated = CustomUser.objects.activate_user(activation_key)
+
+        if activated:
+            return HttpResponseRedirect(reverse('public:home'))
+        else:
+            raise Http404
+
+
 class LoginFormView(FormView):
     """
     Login view, not using auth view in case we want to override some things
