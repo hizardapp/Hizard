@@ -36,7 +36,7 @@ class UserCreationForm(forms.ModelForm):
         Save the user using the manager to make sure it creates the
         activation token and sens the activation email
         """
-        email = self.cleaned_data["password1"]
+        email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
 
         if commit:

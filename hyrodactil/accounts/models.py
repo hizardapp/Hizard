@@ -1,11 +1,12 @@
-import base64
 import datetime
 import hashlib
 import random
+import string
 
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
+from django.contrib.sites.models import Site
 from django.db import models
 from django.core import mail
 from django.template.loader import render_to_string
@@ -102,9 +103,11 @@ def get_file_path(instance, filename):
     Base64 the name of the file and returns the path where it should be
     saved to
     """
+    possible_chars = (string.ascii_letters + string.digits)
+    new_name = ''.join(random.choice(possible_chars) for _ in xrange(6))
+
     ext = filename.split('.')[-1]
-    hash = base64.urlsafe_b64encode(instance.email).rstrip("=")
-    filename = "%s.%s" % (hash, ext)
+    filename = "%s.%s" % (new_name, ext)
 
     return '%s/avatars/%s' % (base.MEDIA_ROOT, filename)
 
@@ -189,6 +192,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
             'expiration_days': base.ACCOUNT_ACTIVATION_DAYS,
             'site': None
         }
+
         subject = render_to_string('accounts/activation_email_subject.txt', context)
         subject = ''.join(subject.splitlines())
         body = render_to_string('accounts/activation_email_body.txt', context)

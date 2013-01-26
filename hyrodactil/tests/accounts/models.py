@@ -46,10 +46,12 @@ class CustomUserCreationTest(TestCase):
     def test_get_file_path(self):
         user = UserFactory.create()
         path = get_file_path(user, 'default_avatar.jpg')
+        filename = path.split('/')[-1]
 
-        expected = '%s/avatars/%s' % (base.MEDIA_ROOT, 'Ym9iQGJvYi5jb20.jpg')
-
-        self.assertEqual(path, expected)
+        # The method should generate a 6char filename
+        self.assertEqual(len(filename.split('.')[0]), 6)
+        # The method should keep the extension from the original file
+        self.assertEqual(filename.split('.')[-1], 'jpg')
 
     def test_add_image_to_user(self):
         user = UserFactory.create()
