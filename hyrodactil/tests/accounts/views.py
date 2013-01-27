@@ -1,6 +1,8 @@
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.utils.http import int_to_base36
 
 from django_webtest import WebTest
 
@@ -189,3 +191,137 @@ class AccountsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'new_password2', 'The two password fields didn\'t match.')
         self.assertFalse(user_found.check_password('new'))
         self.assertFalse(user_found.check_password('wrong'))
+
+    def test_get_password_reset(self):
+        """
+        GET the reset password page
+        """
+        response = self.app.get(reverse('auth:reset_password'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/password_reset_form.html')
+        self.failUnless(isinstance(response.context['form'], PasswordResetForm))
+
+    def test_post_password_reset_success(self):
+        """
+        POST the reset password page
+        Should send a mail
+        """
+        user = UserFactory.create()
+
+        page = self.app.get(reverse('auth:reset_password'))
+        form = page.forms['reset-password-form']
+        form['email'] = user.email
+        response = form.submit()
+
+        self.assertRedirects(response, reverse('public:home'))
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_post_password_reset_failure(self):
+        """
+        POST the reset password page
+        Should ask for a confirmation
+        """
+        user = UserFactory.create()
+
+        page = self.app.get(reverse('auth:reset_password'))
+        form = page.forms['reset-password-form']
+        form['email'] = 'wrong@email.com'
+        response = form.submit()
+
+        self.assertContains(response, 'have an associated user account')
+
+    def test_get_password_confirm_valid(self):
+        """
+        GET the reset password confirmation page
+        Should display a form to change password without entering the current
+        """
+        user = UserFactory.create()
+        uidb36 = int_to_base36(user.pk)
+        token = default_token_generator.make_token(user)
+        response = self.app.get(
+            reverse('auth:confirm_reset_password',
+                kwargs = {
+                    'uidb36': uidb36,
+                    'token': token
+                }
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/password_reset_confirm.html')
+        self.failUnless(isinstance(response.context['form'], SetPasswordForm))
+
+    def test_get_password_confirm_invalid(self):
+        """
+        GET the reset password confirmation page with invalid uidb36/token
+        Should display an error
+        """
+        user = UserFactory.create()
+        response = self.app.get(
+            reverse('auth:confirm_reset_password',
+                kwargs = {
+                    'uidb36': 'wrong',
+                    'token': 'fake'
+                }
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/password_reset_confirm.html')
+        self.assertContains(response, 'Password reset failed')
+
+    def test_post_password_confirm_success(self):
+        """
+        POST the reset password confirmation page
+        Should change the password and redirects to home page
+        """
+        user = UserFactory.create()
+        uidb36 = int_to_base36(user.pk)
+        token = default_token_generator.make_token(user)
+        page = self.app.get(
+            reverse('auth:confirm_reset_password',
+                kwargs = {
+                    'uidb36': uidb36,
+                    'token': token
+                }
+            )
+        )
+        form = page.forms['confirm-reset-password-form']
+        form['new_password1'] = 'password'
+        form['new_password2'] = 'password'
+        response = form.submit()
+
+        user_found = CustomUser.objects.get(id=1)
+        self.assertRedirects(response, reverse('public:home'))
+        self.assertTrue(user_found.check_password('password'))
+        self.assertFalse(user_found.check_password('bob'))
+
+
+    def test_post_password_confirm_failure(self):
+        """
+        POST the reset password confirmation page
+        Should not change the password and shows the errors
+        """
+        user = UserFactory.create()
+        uidb36 = int_to_base36(user.pk)
+        token = default_token_generator.make_token(user)
+        page = self.app.get(
+            reverse('auth:confirm_reset_password',
+                kwargs = {
+                    'uidb36': uidb36,
+                    'token': token
+                }
+            )
+        )
+        form = page.forms['confirm-reset-password-form']
+        form['new_password1'] = 'password'
+        form['new_password2'] = 'wrong'
+        response = form.submit()
+
+        user_found = CustomUser.objects.get(id=1)
+
+        self.assertContains(response, 'The two password fields')
+        self.assertFalse(user_found.check_password('password'))
+        self.assertTrue(user_found.check_password('bob'))
+
