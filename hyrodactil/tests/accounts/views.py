@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.core import mail
 from django.core.urlresolvers import reverse
 
@@ -140,4 +140,52 @@ class AccountsViewsTests(WebTest):
         response = self.app.get(reverse('auth:logout'))
 
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed('accounts/login.html')
+
+    def test_get_change_password(self):
+        """
+        GET the change password page (accessible only while logged in)
+        """
+        user = UserFactory.create()
+        response = self.app.get(reverse('auth:change_password'), user=user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/password_change_form.html')
+        self.failUnless(isinstance(response.context['form'], PasswordChangeForm))
+
+    def test_post_change_password_success(self):
+        """
+        POST the change password page
+        Should change the password and redirects to home
+        """
+        user = UserFactory.create()
+
+        page = self.app.get(reverse('auth:change_password'), user=user)
+        form = page.forms['change-password-form']
+        form['old_password'] = 'bob'
+        form['new_password1'] = 'new'
+        form['new_password2'] = 'new'
+        response = form.submit()
+
+        user_found = CustomUser.objects.get(id=1)
         self.assertRedirects(response, reverse('public:home'))
+        self.assertTrue(user_found.check_password('new'))
+
+    def test_post_change_password_failure(self):
+        """
+        POST the change password page
+        Should display the error and not change the password
+        """
+        user = UserFactory.create()
+
+        page = self.app.get(reverse('auth:change_password'), user=user)
+        form = page.forms['change-password-form']
+        form['old_password'] = 'bob'
+        form['new_password1'] = 'new'
+        form['new_password2'] = 'wrong'
+        response = form.submit()
+
+        user_found = CustomUser.objects.get(id=1)
+        self.assertFormError(response, 'form', 'new_password2', 'The two password fields didn\'t match.')
+        self.assertFalse(user_found.check_password('new'))
+        self.assertFalse(user_found.check_password('wrong'))

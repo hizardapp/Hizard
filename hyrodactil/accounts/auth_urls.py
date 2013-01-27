@@ -1,12 +1,14 @@
 from django.conf.urls import patterns, url
 
 from django.contrib.auth import views as auth_views
-from .views import LoginFormView, LogoutView
+
+from .views import LoginView, LogoutView, PasswordChangeView
+
 
 urlpatterns = patterns('',
     url(
         r'^login/$',
-        LoginFormView.as_view(),
+        LoginView.as_view(),
         name='login'
     ),
     url(
@@ -14,14 +16,12 @@ urlpatterns = patterns('',
         LogoutView.as_view(),
         name='logout'
     ),
+    url(
+        r'^password/change/$',
+        PasswordChangeView.as_view(),
+        name='change_password'
+    ),
 
-
-    url(r'^password/change/$',
-        auth_views.password_change,
-        name='auth_password_change'),
-    url(r'^password/change/done/$',
-        auth_views.password_change_done,
-        name='auth_password_change_done'),
     url(r'^password/reset/$',
         auth_views.password_reset,
         name='auth_password_reset'),
