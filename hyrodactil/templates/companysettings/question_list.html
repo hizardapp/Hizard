@@ -20,13 +20,13 @@
           {{ question.type }}
         </td>
         <td>
-          <a href="{% url 'companies:update_question' question.id %}" class="btn">{% trans "Edit" %}</a>
+          <a href="{% url 'companysettings:update_question' question.id %}" class="btn">{% trans "Edit" %}</a>
         </td>
       </tr>
     {% endfor %}
 
   </table>
 
-  <a href="{% url 'companies:create_question' %}" class="btn">{% trans "Create a question" %}</a>
+  <a href="{% url 'companysettings:create_question' %}" class="btn">{% trans "Create a question" %}</a>
 
 {% endblock content %}
