@@ -31,7 +31,7 @@ urlpatterns = patterns('',
         )
     ),
     url(
-        r'^companysettings/',
+        r'^settings/',
         include(
             'companysettings.urls',
             namespace='companysettings',
