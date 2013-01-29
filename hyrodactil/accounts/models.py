@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(msg)
 
         if settings.SKIP_ACTIVATION:
-            active= True
+            active = True
 
         user = self.model(email=CustomUserManager.normalize_email(email))
         user.set_password(password)
@@ -63,7 +63,6 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
-
 
     def activate_user(self, activation_key):
         """
@@ -160,7 +159,6 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     company = models.ForeignKey(
         Company, related_name='employees', blank=True, null=True
     )
-
 
     objects = CustomUserManager()
 

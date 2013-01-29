@@ -55,7 +55,8 @@ class CustomUserCreationTest(TestCase):
 
     def test_add_image_to_user(self):
         user = UserFactory.create()
-        default_avatar = os.path.join(base.STATICFILES_DIRS[0], 'img/default_avatar.jpg')
+        default = 'img/default_avatar.jpg'
+        default_avatar = os.path.join(base.STATICFILES_DIRS[0], default)
 
         user.avatar = File(open(default_avatar))
         user.save()
@@ -130,7 +131,8 @@ class CustomUserCreationTest(TestCase):
 
     def test_delete_expired_users(self):
         user = UserFactory.create(is_active=False)
-        user.created -= datetime.timedelta(days=base.ACCOUNT_ACTIVATION_DAYS + 1)
+        days = datetime.timedelta(days=base.ACCOUNT_ACTIVATION_DAYS + 1)
+        user.created -= days
         user.save()
 
         CustomUser.objects.delete_expired_users()

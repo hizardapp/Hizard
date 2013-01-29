@@ -1,6 +1,9 @@
 from django.conf.urls import patterns, url
 
-from .views import LoginView, LogoutView, PasswordChangeView, PasswordConfirmResetView, PasswordResetView
+from .views import (
+    LoginView, LogoutView, PasswordChangeView, PasswordConfirmResetView,
+    PasswordResetView
+)
 
 
 urlpatterns = patterns('',

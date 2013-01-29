@@ -154,5 +154,6 @@ class PasswordConfirmResetView(FormView):
         except (ValueError, OverflowError, CustomUser.DoesNotExist):
             self.user = None
 
-        self.valid_link = bool(self.user is not None and default_token_generator.check_token(self.user, token))
+        check_token = default_token_generator.check_token(self.user, token)
+        self.valid_link = bool(self.user is not None and check_token)
         return self.valid_link

@@ -4,6 +4,7 @@ from accounts.forms import UserCreationForm
 
 from ..factories._accounts import UserFactory
 
+
 class UserCreationFormTests(TestCase):
     user_data = {
         'email': 'bob@bob.com',

@@ -1,4 +1,6 @@
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import (
+    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+)
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
 from django.core.urlresolvers import reverse
@@ -55,7 +57,8 @@ class AccountsViewsTests(WebTest):
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'password2', 'Passwords don\'t match')
+        error = "Passwords don't match"
+        self.assertFormError(response, 'form', 'password2', error)
         self.assertEqual(CustomUser.objects.count(), 0)
         self.assertEqual(len(mail.outbox), 0)
 
@@ -188,7 +191,8 @@ class AccountsViewsTests(WebTest):
         response = form.submit()
 
         user_found = CustomUser.objects.get(id=1)
-        self.assertFormError(response, 'form', 'new_password2', 'The two password fields didn\'t match.')
+        error = "The two password fields didn't match."
+        self.assertFormError(response, 'form', 'new_password2', error)
         self.assertFalse(user_found.check_password('new'))
         self.assertFalse(user_found.check_password('wrong'))
 
@@ -240,8 +244,9 @@ class AccountsViewsTests(WebTest):
         uidb36 = int_to_base36(user.pk)
         token = default_token_generator.make_token(user)
         response = self.app.get(
-            reverse('auth:confirm_reset_password',
-                kwargs = {
+            reverse(
+                'auth:confirm_reset_password',
+                kwargs={
                     'uidb36': uidb36,
                     'token': token
                 }
@@ -259,8 +264,9 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory.create()
         response = self.app.get(
-            reverse('auth:confirm_reset_password',
-                kwargs = {
+            reverse(
+                'auth:confirm_reset_password',
+                kwargs={
                     'uidb36': 'wrong',
                     'token': 'fake'
                 }
@@ -280,8 +286,9 @@ class AccountsViewsTests(WebTest):
         uidb36 = int_to_base36(user.pk)
         token = default_token_generator.make_token(user)
         page = self.app.get(
-            reverse('auth:confirm_reset_password',
-                kwargs = {
+            reverse(
+                'auth:confirm_reset_password',
+                kwargs={
                     'uidb36': uidb36,
                     'token': token
                 }
@@ -297,7 +304,6 @@ class AccountsViewsTests(WebTest):
         self.assertTrue(user_found.check_password('password'))
         self.assertFalse(user_found.check_password('bob'))
 
-
     def test_post_password_confirm_failure(self):
         """
         POST the reset password confirmation page
@@ -307,8 +313,9 @@ class AccountsViewsTests(WebTest):
         uidb36 = int_to_base36(user.pk)
         token = default_token_generator.make_token(user)
         page = self.app.get(
-            reverse('auth:confirm_reset_password',
-                kwargs = {
+            reverse(
+                'auth:confirm_reset_password',
+                kwargs={
                     'uidb36': uidb36,
                     'token': token
                 }
@@ -324,4 +331,3 @@ class AccountsViewsTests(WebTest):
         self.assertContains(response, 'The two password fields')
         self.assertFalse(user_found.check_password('password'))
         self.assertTrue(user_found.check_password('bob'))
-

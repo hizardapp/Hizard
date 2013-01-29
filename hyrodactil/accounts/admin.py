@@ -28,7 +28,9 @@ class CustomUserAdmin(UserAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
 
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'avatar')}),
+        (None, {
+            'fields':
+                ('email', 'password', 'first_name', 'last_name', 'avatar')}),
         ('Permissions', {'fields': ('is_active',
                                     'is_staff',
                                     'is_superuser',
@@ -37,10 +39,13 @@ class CustomUserAdmin(UserAdmin):
         ('Important dates', {'fields': ('last_login',)}),
     )
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'first_name', 'last_name', 'avatar')}
-        ),
+        (None,
+         {
+             'classes': ('wide',),
+             'fields': ('email', 'password1', 'password2', 'first_name',
+                        'last_name', 'avatar')
+         }
+         ),
     )
 
 
