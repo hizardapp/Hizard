@@ -1,6 +1,7 @@
 import factory
 
-from _companies import CompanyFactory, QuestionFactory
+from _companies import CompanyFactory
+from _companysettings import QuestionFactory
 from jobs.models import Application, ApplicationAnswer, Opening
 
 

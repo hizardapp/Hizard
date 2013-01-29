@@ -3,7 +3,8 @@ from django.db import models
 from django_countries import CountryField
 from model_utils.models import TimeStampedModel
 
-from companies.models import Company, Department, Question
+from companies.models import Company
+from companysettings.models import Department, Question
 
 
 class Opening(TimeStampedModel):

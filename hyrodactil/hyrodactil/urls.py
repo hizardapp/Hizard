@@ -4,10 +4,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 
-from django.contrib.auth import views as auth_views
-
-
-
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(
@@ -32,6 +28,14 @@ urlpatterns = patterns('',
             'companies.urls',
             namespace='companies',
             app_name='companies'
+        )
+    ),
+    url(
+        r'^settings/',
+        include(
+            'companysettings.urls',
+            namespace='companysettings',
+            app_name='companysettings'
         )
     ),
     url(

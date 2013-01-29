@@ -3,7 +3,8 @@ from django_webtest import WebTest
 
 from tests.factories._accounts import UserFactory
 from tests.factories._jobs import ApplicationFactory, OpeningFactory
-from tests.factories._companies import CompanyFactory, QuestionFactory
+from tests.factories._companies import CompanyFactory
+from tests.factories._companysettings import QuestionFactory
 
 from jobs.models import Application, Opening
 

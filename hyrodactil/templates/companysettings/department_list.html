@@ -16,13 +16,13 @@
           {{ department.name }}
         </td>
         <td>
-          <a href="{% url 'companies:update_department' department.id %}" class="btn">{% trans "Edit" %}</a>
+          <a href="{% url 'companysettings:update_department' department.id %}" class="btn">{% trans "Edit" %}</a>
         </td>
       </tr>
     {% endfor %}
 
   </table>
 
-  <a href="{% url 'companies:create_department' %}" class="btn">{% trans "Create a department" %}</a>
+  <a href="{% url 'companysettings:create_department' %}" class="btn">{% trans "Create a department" %}</a>
 
 {% endblock content %}
