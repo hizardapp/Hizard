@@ -14,11 +14,9 @@ class ViewsWebTest(WebTest):
     def test_list_departments(self):
         url = reverse('companysettings:list_departments')
 
-        company = CompanyFactory.create(owner=self.user)
-        department = DepartmentFactory.create(company=company)
+        department = DepartmentFactory.create(company=self.user.company)
         user2 = UserFactory(email='sam@sam.com')
-        company2 = CompanyFactory(name='Corp', owner=user2)
-        department2 = DepartmentFactory.create(name='Corp', company=company2)
+        department2 = DepartmentFactory.create(name='Corp', company=user2.company)
 
         page = self.app.get(url, user=self.user)
 
@@ -27,7 +25,6 @@ class ViewsWebTest(WebTest):
         assert 'Create a department' in page
 
     def test_create_department_valid(self):
-        company = CompanyFactory.create(owner=self.user)
         url = reverse('companysettings:create_department')
 
         page = self.app.get(url, user=self.user)
@@ -38,7 +35,7 @@ class ViewsWebTest(WebTest):
         self.assertEqual(response.status_code, 200)
         department_created = Department.objects.get()
 
-        self.assertEqual(department_created.company, company)
+        self.assertEqual(department_created.company, self.user.company)
         self.assertEqual(department_created.name, 'Engineering')
 
     def test_create_department_invalid(self):
@@ -53,8 +50,7 @@ class ViewsWebTest(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_update_department_valid(self):
-        company = CompanyFactory.create(owner=self.user)
-        dept = DepartmentFactory.create(name='Sales', company=company)
+        dept = DepartmentFactory.create(name='Sales', company=self.user.company)
         url = reverse('companysettings:update_department', args=(dept.id,))
 
         page = self.app.get(url, user=self.user)
@@ -70,8 +66,7 @@ class ViewsWebTest(WebTest):
         assert 'Sales' not in response
 
     def test_update_department_invalid(self):
-        company = CompanyFactory.create(owner=self.user)
-        dept = DepartmentFactory.create(name='Sales', company=company)
+        dept = DepartmentFactory.create(name='Sales', company=self.user.company)
         url = reverse('companysettings:update_department', args=(dept.id,))
 
         page = self.app.get(url, user=self.user)
@@ -88,11 +83,9 @@ class ViewsWebTest(WebTest):
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')
 
-        company = CompanyFactory.create(owner=self.user)
-        question = QuestionFactory.create(company=company)
+        question = QuestionFactory.create(company=self.user.company)
         user2 = UserFactory(email='sam@sam.com')
-        company2 = CompanyFactory(name='Corp', owner=user2)
-        question2 = QuestionFactory.create(name='Age', company=company2)
+        question2 = QuestionFactory.create(name='Age', company=user2.company)
 
         page = self.app.get(url, user=self.user)
 
@@ -101,7 +94,6 @@ class ViewsWebTest(WebTest):
         assert 'Create a question' in page
 
     def test_create_question_valid(self):
-        company = CompanyFactory.create(owner=self.user)
         url = reverse('companysettings:create_question')
 
         page = self.app.get(url, user=self.user)
@@ -115,7 +107,7 @@ class ViewsWebTest(WebTest):
         self.assertEqual(response.status_code, 200)
         question_created = Question.objects.get()
 
-        self.assertEqual(question_created.company, company)
+        self.assertEqual(question_created.company, self.user.company)
         self.assertEqual(question_created.name, 'Cover letter')
 
     def test_create_question_invalid(self):
@@ -133,8 +125,7 @@ class ViewsWebTest(WebTest):
         self.assertFormError(response, 'form', 'label', self.required)
 
     def test_update_question_valid(self):
-        company = CompanyFactory.create(owner=self.user)
-        question = QuestionFactory.create(company=company)
+        question = QuestionFactory.create(company=self.user.company)
         url = reverse('companysettings:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)
@@ -151,8 +142,7 @@ class ViewsWebTest(WebTest):
         assert 'First Name' not in response
 
     def test_update_question_invalid(self):
-        company = CompanyFactory.create(owner=self.user)
-        question = QuestionFactory.create(company=company)
+        question = QuestionFactory.create(company=self.user.company)
         url = reverse('companysettings:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)

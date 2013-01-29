@@ -15,7 +15,7 @@ class ModelAdminTests(TestCase):
         expected = ['password', 'last_login', 'is_superuser', 'groups',
                     'user_permissions', 'email', 'is_active', 'is_admin',
                     'is_staff', 'avatar', 'first_name', 'last_name',
-                    'activation_key']
+                    'activation_key', 'company']
 
         self.assertEqual(expected, ma.get_form(None).base_fields.keys())
 
@@ -28,7 +28,7 @@ class ModelAdminTests(TestCase):
                     'password', 'last_login', 'is_superuser', 'groups',
                     'user_permissions', 'email', 'is_active', 'is_admin',
                     'is_staff', 'avatar', 'first_name', 'last_name',
-                    'activation_key']
+                    'activation_key', 'company']
             })
         ]
         self.assertEqual(expected, ma.get_fieldsets(None, user))

@@ -15,6 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from model_utils.models import TimeStampedModel
 
+from companies.models import Company
+
 from hyrodactil.settings import base
 
 
@@ -154,6 +156,9 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         verbose_name=_('Activation key'),
         max_length=40,
         blank=True
+    )
+    company = models.ForeignKey(
+        Company, related_name='employees', blank=True, null=True
     )
 
 

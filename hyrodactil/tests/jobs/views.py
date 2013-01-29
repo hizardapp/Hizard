@@ -14,8 +14,7 @@ class ViewsWebTest(WebTest):
 
     def setUp(self):
         self.user = UserFactory()
-        self.company = CompanyFactory(owner=self.user)
-        self.question = QuestionFactory(company=self.company)
+        self.question = QuestionFactory(company=self.user.company)
 
     def test_arriving_on_opening_creation_page(self):
         url = reverse('jobs:create_opening')
@@ -46,7 +45,7 @@ class ViewsWebTest(WebTest):
 
         opening_created = Opening.objects.get()
 
-        self.assertEqual(opening_created.company, self.company)
+        self.assertEqual(opening_created.company, self.user.company)
         self.assertEqual(opening_created.title, 'Software Developer')
         self.assertEqual(opening_created.questions.count(), 1)
 
@@ -71,7 +70,7 @@ class ViewsWebTest(WebTest):
         self.assertEqual(opening_count, 0)
 
     def test_opening_edit(self):
-        opening = OpeningFactory.create(title='DevOps', company=self.company)
+        opening = OpeningFactory.create(title='DevOps', company=self.user.company)
         url = reverse('jobs:update_opening', args=(opening.id,))
 
         page = self.app.get(url, user=self.user)
@@ -86,10 +85,9 @@ class ViewsWebTest(WebTest):
     def test_opening_listing(self):
         url = reverse('jobs:list_openings')
 
-        opening = OpeningFactory.create(title='DevOps', company=self.company)
+        opening = OpeningFactory.create(title='DevOps', company=self.user.company)
         user2 = UserFactory(email='sam@sam.com')
-        company2 = CompanyFactory(name='Corp', owner=user2)
-        opening2 = OpeningFactory.create(company=company2)
+        opening2 = OpeningFactory.create(company=user2.company)
 
         page = self.app.get(url, user=self.user)
 
@@ -103,10 +101,10 @@ class ViewsWebTest(WebTest):
         self.assertEqual(page.response_code, 405)
 
     def test_apply_to_existing_opening(self):
-        opening = OpeningFactory.create(company=self.company)
-        question = QuestionFactory.create(company=self.company)
+        opening = OpeningFactory.create(company=self.user.company)
+        question = QuestionFactory.create(company=self.user.company)
         question2 = QuestionFactory.create(name='are you a ninja?',
-            company=self.company)
+            company=self.user.company)
 
         opening.questions.add(question)
         opening.questions.add(question2)
@@ -146,7 +144,7 @@ class ViewsWebTest(WebTest):
         self.assertEqual(number_application, 0)
 
     def test_listing_applicants(self):
-        opening = OpeningFactory.create(company=self.company)
+        opening = OpeningFactory.create(company=self.user.company)
         application = ApplicationFactory.create(opening=opening)
 
         url = reverse('jobs:list_applications', args=(opening.id,))
@@ -158,7 +156,7 @@ class ViewsWebTest(WebTest):
         assert application.last_name in page
 
     def test_applicant_details(self):
-        opening = OpeningFactory.create(company=self.company)
+        opening = OpeningFactory.create(company=self.user.company)
         application = ApplicationFactory.create(opening=opening)
         #answer = ApplicationAnswerFactory.create(application=application)
 

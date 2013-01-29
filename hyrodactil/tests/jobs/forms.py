@@ -11,9 +11,8 @@ from jobs.forms import OpeningForm
 class FormsTest(TestCase):
     def setUp(self):
         user = UserFactory()
-        company = CompanyFactory(owner=user)
-        QuestionFactory.create(company=company)
-        QuestionFactory.create(company=company)
+        QuestionFactory.create(company=user.company)
+        QuestionFactory.create(company=user.company)
 
         self.form_data = {'title': 'Software Developer',
                           'description': 'Fait des logiciels.',

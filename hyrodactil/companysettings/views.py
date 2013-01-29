@@ -18,7 +18,7 @@ class DepartmentActionMixin(object):
 
 class DepartmentListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
-        company = get_object_or_404(Company, owner=self.request.user)
+        company = get_object_or_404(Company, id=self.request.user.company.id)
         return Department.objects.filter(company=company)
 
 
@@ -30,7 +30,7 @@ class DepartmentCreateView(LoginRequiredMixin, DepartmentActionMixin, CreateView
 
     def form_valid(self, form):
         department = form.save(commit=False)
-        department.company = Company.objects.get(owner=self.request.user)
+        department.company = Company.objects.get(id=self.request.user.company.id)
         department.save()
         return super(DepartmentCreateView, self).form_valid(form)
 
@@ -44,7 +44,7 @@ class DepartmentUpdateView(LoginRequiredMixin, DepartmentActionMixin, UpdateView
 
 class QuestionListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
-        company = get_object_or_404(Company, owner=self.request.user)
+        company = get_object_or_404(Company, id=self.request.user.company.id)
         return Question.objects.filter(company=company)
 
 
@@ -63,7 +63,7 @@ class QuestionCreateView(LoginRequiredMixin, QuestionActionMixin, CreateView):
 
     def form_valid(self, form):
         question = form.save(commit=False)
-        question.company = Company.objects.get(owner=self.request.user)
+        question.company = Company.objects.get(id=self.request.user.company.id)
         question.save()
         return super(QuestionCreateView, self).form_valid(form)
 

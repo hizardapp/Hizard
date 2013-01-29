@@ -8,27 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Company'
-        db.create_table(u'companies_company', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
-            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CustomUser'])),
-        ))
-        db.send_create_signal(u'companies', ['Company'])
 
+        # Changing field 'CustomUser.company'
+        db.alter_column(u'accounts_customuser', 'company_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['companies.Company']))
 
     def backwards(self, orm):
-        # Deleting model 'Company'
-        db.delete_table(u'companies_company')
 
+        # Changing field 'CustomUser.company'
+        db.alter_column(u'accounts_customuser', 'company_id', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['companies.Company']))
 
     models = {
         u'accounts.customuser': {
             'Meta': {'object_name': 'CustomUser'},
             'activation_key': ('django.db.models.fields.CharField', [], {'max_length': '40', 'blank': 'True'}),
             'avatar': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'employees'", 'null': 'True', 'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -62,8 +56,7 @@ class Migration(SchemaMigration):
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.CustomUser']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -74,4 +67,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['companies']
+    complete_apps = ['accounts']

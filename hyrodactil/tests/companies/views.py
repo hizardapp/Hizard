@@ -7,7 +7,7 @@ from companies.models import Company
 
 class ViewsWebTest(WebTest):
     def setUp(self):
-        self.user = UserFactory.create()
+        self.user = UserFactory.create(company=None)
         self.required = 'This field is required.'
 
     def test_get_company(self):
@@ -39,8 +39,8 @@ class ViewsWebTest(WebTest):
 
         self.assertEqual(response.status_code, 200)
 
-        company_created = Company.objects.get()
+        company_created = Company.objects.get(id=1)
 
-        self.assertEqual(company_created.owner, self.user)
+        self.assertEqual(company_created.employees.all()[0], self.user)
         self.assertEqual(company_created.name, 'ACME')
 
