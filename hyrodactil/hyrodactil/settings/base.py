@@ -257,3 +257,4 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 ACCOUNT_ACTIVATION_DAYS = 7
 DEFAULT_FROM_EMAIL = 'Hyrodactil'
 LOGIN_URL = '/login/'
+SKIP_ACTIVATION = False

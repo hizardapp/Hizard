@@ -3,10 +3,11 @@ import hashlib
 import random
 import string
 
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
-from django.contrib.sites.models import Site
+
 from django.db import models
 from django.core import mail
 from django.template.loader import render_to_string
@@ -30,6 +31,9 @@ class CustomUserManager(BaseUserManager):
         if not email:
             msg = _('Email is mandatory')
             raise ValueError(msg)
+
+        if settings.SKIP_ACTIVATION:
+            active= True
 
         user = self.model(email=CustomUserManager.normalize_email(email))
         user.set_password(password)

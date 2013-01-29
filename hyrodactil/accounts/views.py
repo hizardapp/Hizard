@@ -1,7 +1,10 @@
 from braces.views import LoginRequiredMixin
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import (
+    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+)
 from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import Http404, HttpResponseRedirect
@@ -133,7 +136,7 @@ class PasswordConfirmResetView(FormView):
         """
         We display a special message if the link is not a valid one
         """
-        kwargs['valid_link'] =  self.valid_link
+        kwargs['valid_link'] = self.valid_link
         return super(PasswordConfirmResetView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
