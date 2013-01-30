@@ -51,7 +51,6 @@ class LoginView(FormView):
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            print request.user.company
             return HttpResponseRedirect(reverse('public:home'))
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)

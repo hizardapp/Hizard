@@ -43,7 +43,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-        <a class="brand" href={% url 'public:home' %}>{% trans 'Hirodactyl for' %} {{ user.company_set.all.0.name }}</a>
+        <a class="brand" href={% url 'public:home' %}>{% trans 'Hirodactyl for' %} {{ user.company.name }}</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
             {% if not user.is_authenticated %}

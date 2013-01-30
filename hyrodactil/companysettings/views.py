@@ -7,6 +7,7 @@ from braces.views import LoginRequiredMixin
 
 from .forms import DepartmentForm, QuestionForm
 from .models import Company, Department, Question
+from core.views import GetCompanyObjectsMixin
 
 
 class DepartmentActionMixin(object):
@@ -16,10 +17,8 @@ class DepartmentActionMixin(object):
         return super(DepartmentActionMixin, self).form_valid(form)
 
 
-class DepartmentListView(LoginRequiredMixin, ListView):
-    def get_queryset(self):
-        company = get_object_or_404(Company, id=self.request.user.company.id)
-        return Department.objects.filter(company=company)
+class DepartmentListView(LoginRequiredMixin, GetCompanyObjectsMixin, ListView):
+    model = Department
 
 
 class DepartmentCreateView(LoginRequiredMixin, DepartmentActionMixin, CreateView):
@@ -42,10 +41,8 @@ class DepartmentUpdateView(LoginRequiredMixin, DepartmentActionMixin, UpdateView
     success_url = reverse_lazy('companysettings:list_departments')
 
 
-class QuestionListView(LoginRequiredMixin, ListView):
-    def get_queryset(self):
-        company = get_object_or_404(Company, id=self.request.user.company.id)
-        return Question.objects.filter(company=company)
+class QuestionListView(LoginRequiredMixin, GetCompanyObjectsMixin, ListView):
+    model = Question
 
 
 class QuestionActionMixin(object):

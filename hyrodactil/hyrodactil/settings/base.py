@@ -186,6 +186,7 @@ LOCAL_APPS = (
     'jobs',
     'accounts',
     'public',
+    'core' # Contains views/methods used in other apps, not an app itself
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

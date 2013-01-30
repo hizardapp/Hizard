@@ -1,20 +1,19 @@
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+
 from .forms import OpeningForm
 from .models import Application, ApplicationAnswer, Opening
 from companies.models import Company
+from core.views import GetCompanyObjectsMixin
 
 
-class OpeningListView(ListView):
-    def get_queryset(self):
-        company = get_object_or_404(Company, id=self.request.user.company.id)
-        return Opening.objects.filter(company=company)
+class OpeningListView(GetCompanyObjectsMixin, ListView):
+    model = Opening
 
 
 class OpeningActionMixin(object):
