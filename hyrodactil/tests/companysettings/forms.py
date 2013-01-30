@@ -3,7 +3,7 @@ from django.test import TestCase
 from companysettings.forms import DepartmentForm, QuestionForm
 
 
-class FormsTest(TestCase):
+class CompanySettingsFormsTests(TestCase):
     def test_department_form_valid(self):
         form_data = {'name': 'Engineering'}
         form = DepartmentForm(data=form_data)

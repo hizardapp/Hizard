@@ -1,12 +1,11 @@
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
-from tests.factories._accounts import UserFactory
-from tests.factories._companies import CompanyFactory
-from tests.factories._companysettings import DepartmentFactory, QuestionFactory
+from ..factories._accounts import UserFactory
+from ..factories._companysettings import DepartmentFactory, QuestionFactory
 from companysettings.models import Department, Question
 
-class ViewsWebTest(WebTest):
+class CompanySettingsViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory.create()
         self.required = 'This field is required.'
@@ -15,14 +14,10 @@ class ViewsWebTest(WebTest):
         url = reverse('companysettings:list_departments')
 
         department = DepartmentFactory.create(company=self.user.company)
-        user2 = UserFactory(email='sam@sam.com')
-        department2 = DepartmentFactory.create(name='Corp', company=user2.company)
 
         page = self.app.get(url, user=self.user)
 
-        assert department.name in page
-        assert department2.name not in page
-        assert 'Create a department' in page
+        self.assertContains(page, department.name)
 
     def test_create_department_valid(self):
         url = reverse('companysettings:create_department')
@@ -57,13 +52,13 @@ class ViewsWebTest(WebTest):
         form = page.forms['department-form']
         form['name'] = 'Engineering'
 
-        assert dept.name in page
+        self.assertContains(page, dept.name)
 
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
-        assert 'Engineering' in response
-        assert 'Sales' not in response
+        self.assertContains(response, 'Engineering')
+        self.assertNotContains(response, 'Sales')
 
     def test_update_department_invalid(self):
         dept = DepartmentFactory.create(name='Sales', company=self.user.company)
@@ -73,7 +68,7 @@ class ViewsWebTest(WebTest):
         form = page.forms['department-form']
         form['name'] = ''
 
-        assert dept.name in page
+        self.assertContains(page, dept.name)
 
         response = form.submit()
 
@@ -84,14 +79,10 @@ class ViewsWebTest(WebTest):
         url = reverse('companysettings:list_questions')
 
         question = QuestionFactory.create(company=self.user.company)
-        user2 = UserFactory(email='sam@sam.com')
-        question2 = QuestionFactory.create(name='Age', company=user2.company)
 
         page = self.app.get(url, user=self.user)
 
-        assert question.name in page
-        assert question2.name not in page
-        assert 'Create a question' in page
+        self.assertContains(page, question.name)
 
     def test_create_question_valid(self):
         url = reverse('companysettings:create_question')
@@ -132,14 +123,14 @@ class ViewsWebTest(WebTest):
         form = page.forms['question-form']
         form['name'] = 'Last Name'
 
-        assert question.name in page
-        assert question.label in page
+        self.assertContains(page, question.name)
+        self.assertContains(page, question.label)
 
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
-        assert 'Last Name' in response
-        assert 'First Name' not in response
+        self.assertContains(response, 'Last Name')
+        self.assertNotContains(response, 'First Name')
 
     def test_update_question_invalid(self):
         question = QuestionFactory.create(company=self.user.company)
@@ -148,9 +139,6 @@ class ViewsWebTest(WebTest):
         page = self.app.get(url, user=self.user)
         form = page.forms['question-form']
         form['name'] = ''
-
-        assert question.name in page
-        assert question.label in page
 
         response = form.submit()
 

@@ -5,7 +5,7 @@ from tests.factories._accounts import UserFactory
 from companies.models import Company
 
 
-class ViewsWebTest(WebTest):
+class CompaniesViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory.create(company=None)
         self.required = 'This field is required.'
@@ -18,7 +18,7 @@ class ViewsWebTest(WebTest):
         self.assertEqual(page.status_code, 200)
         self.assertIn('company-form', page.forms)
 
-    def test_create_company_invalid(self):
+    def test_post_create_company_invalid(self):
         url = reverse('companies:create')
 
         page = self.app.get(url, user=self.user)
@@ -29,7 +29,7 @@ class ViewsWebTest(WebTest):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
 
-    def test_create_company_valid(self):
+    def test_post_create_company_valid(self):
         url = reverse('companies:create')
 
         page = self.app.get(url, user=self.user)

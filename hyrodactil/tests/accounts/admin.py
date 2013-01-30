@@ -2,8 +2,8 @@ from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 
-from accounts.models import CustomUser
 from ..factories._accounts import UserFactory
+from accounts.models import CustomUser
 
 
 class ModelAdminTests(TestCase):

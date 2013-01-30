@@ -1,8 +1,7 @@
 from django.test import TestCase
 
-from accounts.forms import UserCreationForm
-
 from ..factories._accounts import UserFactory
+from accounts.forms import UserCreationForm
 
 
 class UserCreationFormTests(TestCase):

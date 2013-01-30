@@ -3,7 +3,7 @@ from django.test import TestCase
 from companies.forms import CompanyForm
 
 
-class FormsTest(TestCase):
+class CompaniesFormsTest(TestCase):
     def test_company_form_valid(self):
         form_data = {'name': 'ACME'}
         form = CompanyForm(data=form_data)

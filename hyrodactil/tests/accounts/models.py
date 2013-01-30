@@ -10,7 +10,7 @@ from accounts.models import CustomUser, get_file_path
 from hyrodactil.settings import base
 
 
-class CustomUserCreationTest(TestCase):
+class CustomUserModelTests(TestCase):
     user_info = {
         'email': 'bob@bob.com',
         'password': 'password'
@@ -48,7 +48,7 @@ class CustomUserCreationTest(TestCase):
         path = get_file_path(user, 'default_avatar.jpg')
         filename = path.split('/')[-1]
 
-        # The method should generate a 6char filename
+        # The method should generate a 6 char filename
         self.assertEqual(len(filename.split('.')[0]), 6)
         # The method should keep the extension from the original file
         self.assertEqual(filename.split('.')[-1], 'jpg')

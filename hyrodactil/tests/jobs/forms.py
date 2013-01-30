@@ -1,14 +1,11 @@
 from django.test import TestCase
 
-from tests.factories._accounts import UserFactory
-from tests.factories._companies import CompanyFactory
-from tests.factories._companysettings import QuestionFactory
-
-
+from ..factories._accounts import UserFactory
+from ..factories._companysettings import QuestionFactory
 from jobs.forms import OpeningForm
 
 
-class FormsTest(TestCase):
+class JobsFormsTests(TestCase):
     def setUp(self):
         user = UserFactory()
         QuestionFactory.create(company=user.company)
