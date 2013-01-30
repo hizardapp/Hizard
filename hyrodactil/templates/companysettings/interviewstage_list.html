@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+    <table class="table">
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Edit" %}</th>
+        </tr>
+
+        {% for stage in interviewstage_list %}
+            <tr>
+                <td>
+                    {{ stage.name }}
+                </td>
+                <td>
+                    <a href="{% url 'companysettings:update_stage' stage.id %}" class="btn">{% trans "Edit" %}</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    <a href="{% url 'companysettings:create_stage' %}" class="btn">{% trans "Create a stage" %}</a>
+
+{% endblock content %}

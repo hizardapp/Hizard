@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Department, Question
+from .models import Department, Question, InterviewStage
 
 
 class DepartmentForm(forms.ModelForm):
@@ -13,3 +13,9 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ('name', 'label', 'type', 'options',)
+
+
+class InterviewStageForm(forms.ModelForm):
+    class Meta:
+        model = InterviewStage
+        fields = ('name',)

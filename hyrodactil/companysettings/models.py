@@ -37,3 +37,12 @@ class Question(TimeStampedModel):
 
     def __unicode__(self):
         return self.name
+
+
+class InterviewStage(TimeStampedModel):
+    name = models.CharField(max_length=100)
+
+    company = models.ForeignKey(Company)
+
+    def __unicode__(self):
+        return self.name

@@ -2,8 +2,10 @@ from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
-from ..factories._companysettings import DepartmentFactory, QuestionFactory
-from companysettings.models import Department, Question
+from ..factories._companysettings import (
+    DepartmentFactory, QuestionFactory, InterviewStageFactory
+)
+from companysettings.models import Department, Question, InterviewStage
 
 class CompanySettingsViewsTests(WebTest):
     def setUp(self):
@@ -14,7 +16,6 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:list_departments')
 
         department = DepartmentFactory.create(company=self.user.company)
-
         page = self.app.get(url, user=self.user)
 
         self.assertContains(page, department.name)
@@ -144,3 +145,70 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
+
+        def setUp(self):
+            self.user = UserFactory.create()
+        self.required = 'This field is required.'
+
+    def test_list_stages(self):
+        url = reverse('companysettings:list_stages')
+
+        stage = InterviewStageFactory.create(company=self.user.company)
+        page = self.app.get(url, user=self.user)
+
+        self.assertContains(page, stage.name)
+
+    def test_create_stage_valid(self):
+        url = reverse('companysettings:create_stage')
+
+        page = self.app.get(url, user=self.user)
+        form = page.forms['stage-form']
+        form['name'] = 'Phone interview'
+        response = form.submit().follow()
+
+        self.assertEqual(response.status_code, 200)
+        stage_created = InterviewStage.objects.get(id=1)
+
+        self.assertEqual(stage_created.company, self.user.company)
+        self.assertEqual(stage_created.name, 'Phone interview')
+
+    def test_create_stage_invalid(self):
+        url = reverse('companysettings:create_stage')
+
+        page = self.app.get(url, user=self.user)
+        form = page.forms['stage-form']
+        form['name'] = ''
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'name', self.required)
+
+    def test_update_stage_valid(self):
+        stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
+        url = reverse('companysettings:update_stage', args=(stage.id,))
+
+        page = self.app.get(url, user=self.user)
+        form = page.forms['stage-form']
+        form['name'] = 'Coding'
+
+        self.assertContains(page, stage.name)
+
+        response = form.submit().follow()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Coding')
+        self.assertNotContains(response, stage.name)
+
+    def test_update_stage_invalid(self):
+        stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
+        url = reverse('companysettings:update_stage', args=(stage.id,))
+
+        page = self.app.get(url, user=self.user)
+        form = page.forms['stage-form']
+        form['name'] = ''
+
+        self.assertContains(page, stage.name)
+
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)

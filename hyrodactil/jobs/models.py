@@ -4,7 +4,7 @@ from django_countries import CountryField
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
-from companysettings.models import Department, Question
+from companysettings.models import Department, Question, InterviewStage
 
 
 class Opening(TimeStampedModel):
@@ -26,6 +26,7 @@ class Application(TimeStampedModel):
     last_name = models.CharField(max_length=770)
 
     opening = models.ForeignKey(Opening)
+    stage = models.ForeignKey(InterviewStage, blank=True, null=True)
 
 
 class ApplicationAnswer(TimeStampedModel):

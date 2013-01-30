@@ -2,7 +2,8 @@ from django.conf.urls import patterns, url
 
 from .views import (
     DepartmentCreateView, DepartmentListView, DepartmentUpdateView,
-    QuestionListView, QuestionCreateView, QuestionUpdateView
+    QuestionListView, QuestionCreateView, QuestionUpdateView,
+    InterviewStageListView, InterviewStageCreateView, InterviewStageUpdateView
 )
 
 urlpatterns = patterns('',
@@ -19,4 +20,11 @@ urlpatterns = patterns('',
         name='create_question'),
     url(r'question/(?P<pk>\d+)$', QuestionUpdateView.as_view(),
         name='update_question'),
+
+    url(r'stages/$', InterviewStageListView.as_view(),
+        name='list_stages'),
+    url(r'stage$', InterviewStageCreateView.as_view(),
+        name='create_stage'),
+    url(r'stage/(?P<pk>\d+)$', InterviewStageUpdateView.as_view(),
+        name='update_stage'),
 )
