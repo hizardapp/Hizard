@@ -91,6 +91,22 @@ class AccountsViewsTests(WebTest):
         self.assertTemplateUsed(response, 'accounts/login.html')
         self.failUnless(isinstance(response.context['form'], AuthenticationForm))
 
+    def test_post_login_view_success_without_company(self):
+        """
+        POST to the view to login
+        Testing to make sure it works with email/activated user
+        """
+        user = UserFactory.create(company=None)
+        page = self.app.get(reverse('auth:login'))
+
+        form = page.forms['login-form']
+        form['username'] = user.email
+        form['password'] = 'bob'
+
+        response = form.submit()
+        self.assertRedirects(response, reverse('companies:create'))
+        self.assertIn('_auth_user_id', self.app.session)
+
     def test_post_login_view_success(self):
         """
         POST to the view to login

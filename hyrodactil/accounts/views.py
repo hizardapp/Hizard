@@ -51,12 +51,17 @@ class LoginView(FormView):
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
+            print request.user.company
             return HttpResponseRedirect(reverse('public:home'))
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        login(self.request, form.get_user())
+        user = form.get_user()
+        login(self.request, user)
+
+        if user.company is None:
+            self.success_url = reverse('companies:create')
         return super(LoginView, self).form_valid(form)
 
 
