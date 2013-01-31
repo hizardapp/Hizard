@@ -5,14 +5,15 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from braces.views import LoginRequiredMixin
 
 from .forms import OpeningForm
 from .models import Application, ApplicationAnswer, Opening
 from companies.models import Company
-from core.views import GetCompanyObjectsMixin
+from core.views import ListCompanyObjectsMixin,UserAllowedActionMixin
 
 
-class OpeningListView(GetCompanyObjectsMixin, ListView):
+class OpeningListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
     model = Opening
 
 
@@ -23,7 +24,7 @@ class OpeningActionMixin(object):
         return super(OpeningActionMixin, self).form_valid(form)
 
 
-class OpeningCreateView(OpeningActionMixin, CreateView):
+class OpeningCreateView(LoginRequiredMixin, OpeningActionMixin, CreateView):
     model = Opening
     form_class = OpeningForm
     action = 'created'
@@ -37,20 +38,20 @@ class OpeningCreateView(OpeningActionMixin, CreateView):
         return super(OpeningCreateView, self).form_valid(form)
 
 
-class OpeningUpdateView(OpeningActionMixin, UpdateView):
+class OpeningUpdateView(LoginRequiredMixin, UserAllowedActionMixin, OpeningActionMixin, UpdateView):
     model = Opening
     form_class = OpeningForm
     action = 'updated'
     success_url = reverse_lazy('jobs:list_openings')
 
 
-class ApplicationListView(ListView):
+class ApplicationListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
         return Application.objects.filter(opening=opening)
 
-
-class ApplicationDetailView(DetailView):
+# TODO: fix UserAllowedActionMixin to work with this case
+class ApplicationDetailView(LoginRequiredMixin, DetailView):
     model = Application
 
     def get_context_data(self, **kwargs):

@@ -7,10 +7,10 @@ from braces.views import LoginRequiredMixin
 from .forms import DepartmentForm, QuestionForm, InterviewStageForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
-from core.views import GetCompanyObjectsMixin
+from core.views import ListCompanyObjectsMixin, UserAllowedActionMixin
 
 
-class DepartmentListView(LoginRequiredMixin, GetCompanyObjectsMixin, ListView):
+class DepartmentListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
     model = Department
 
 
@@ -34,14 +34,14 @@ class DepartmentCreateView(LoginRequiredMixin, DepartmentActionMixin, CreateView
         return super(DepartmentCreateView, self).form_valid(form)
 
 
-class DepartmentUpdateView(LoginRequiredMixin, DepartmentActionMixin, UpdateView):
+class DepartmentUpdateView(LoginRequiredMixin, UserAllowedActionMixin, DepartmentActionMixin, UpdateView):
     model = Department
     form_class = DepartmentForm
     action = 'updated'
     success_url = reverse_lazy('companysettings:list_departments')
 
 
-class QuestionListView(LoginRequiredMixin, GetCompanyObjectsMixin, ListView):
+class QuestionListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
     model = Question
 
 
@@ -65,14 +65,14 @@ class QuestionCreateView(LoginRequiredMixin, QuestionActionMixin, CreateView):
         return super(QuestionCreateView, self).form_valid(form)
 
 
-class QuestionUpdateView(LoginRequiredMixin, QuestionActionMixin, UpdateView):
+class QuestionUpdateView(LoginRequiredMixin, UserAllowedActionMixin, QuestionActionMixin, UpdateView):
     model = Question
     form_class = QuestionForm
     action = 'updated'
     success_url = reverse_lazy('companysettings:list_questions')
 
 
-class InterviewStageListView(LoginRequiredMixin, GetCompanyObjectsMixin, ListView):
+class InterviewStageListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
     model = InterviewStage
 
 
@@ -96,7 +96,7 @@ class InterviewStageCreateView(LoginRequiredMixin, InterviewStageActionMixin, Cr
         return super(InterviewStageCreateView, self).form_valid(form)
 
 
-class InterviewStageUpdateView(LoginRequiredMixin, InterviewStageActionMixin, UpdateView):
+class InterviewStageUpdateView(LoginRequiredMixin, UserAllowedActionMixin, InterviewStageActionMixin, UpdateView):
     model = InterviewStage
     form_class = InterviewStageForm
     action = 'updated'
