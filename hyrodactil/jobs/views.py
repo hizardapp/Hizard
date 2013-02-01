@@ -1,34 +1,28 @@
-from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DetailView
+from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
 
 from .forms import OpeningForm
 from .models import Application, ApplicationAnswer, Opening
 from companies.models import Company
-from core.views import ListCompanyObjectsMixin,UserAllowedActionMixin
+from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 
 
-class OpeningListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
+class OpeningRestrictedListView(LoginRequiredMixin, RestrictedListView):
     model = Opening
 
 
-class OpeningActionMixin(object):
-    def form_valid(self, form):
-        msg = 'Opening {0}!'.format(self.action)
-        messages.info(self.request, msg)
-        return super(OpeningActionMixin, self).form_valid(form)
-
-
-class OpeningCreateView(LoginRequiredMixin, OpeningActionMixin, CreateView):
+class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = Opening
     form_class = OpeningForm
     action = 'created'
     success_url = reverse_lazy('jobs:list_openings')
+    success_message = _('Opening created.')
 
     def form_valid(self, form):
         opening = form.save(commit=False)
@@ -38,17 +32,19 @@ class OpeningCreateView(LoginRequiredMixin, OpeningActionMixin, CreateView):
         return super(OpeningCreateView, self).form_valid(form)
 
 
-class OpeningUpdateView(LoginRequiredMixin, UserAllowedActionMixin, OpeningActionMixin, UpdateView):
+class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = Opening
     form_class = OpeningForm
     action = 'updated'
     success_url = reverse_lazy('jobs:list_openings')
+    success_message = _('Opening updated.')
 
 
-class ApplicationListView(LoginRequiredMixin, ListView):
+class ApplicationListView(LoginRequiredMixin, RestrictedListView):
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
         return Application.objects.filter(opening=opening)
+
 
 # TODO: fix UserAllowedActionMixin to work with this case
 class ApplicationDetailView(LoginRequiredMixin, DetailView):
@@ -58,6 +54,7 @@ class ApplicationDetailView(LoginRequiredMixin, DetailView):
         context = super(ApplicationDetailView, self).get_context_data(**kwargs)
         context['answers'] = ApplicationAnswer.objects.filter(application=context['application'])
         return context
+
 
 @csrf_exempt
 def apply(request, opening_id):

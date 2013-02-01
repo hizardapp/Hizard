@@ -67,7 +67,7 @@ class AccountsViewsTests(WebTest):
         url = reverse('accounts:activate', args=(user.activation_key,))
 
         response = self.client.get(url)
-        user_found = CustomUser.objects.get(id=1)
+        user_found = CustomUser.objects.get()
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(user_found.is_active)
@@ -188,7 +188,7 @@ class AccountsViewsTests(WebTest):
         form['new_password2'] = 'new'
         response = form.submit()
 
-        user_found = CustomUser.objects.get(id=1)
+        user_found = CustomUser.objects.get()
         self.assertRedirects(response, reverse('public:home'))
         self.assertTrue(user_found.check_password('new'))
 
@@ -206,7 +206,7 @@ class AccountsViewsTests(WebTest):
         form['new_password2'] = 'wrong'
         response = form.submit()
 
-        user_found = CustomUser.objects.get(id=1)
+        user_found = CustomUser.objects.get()
         error = "The two password fields didn't match."
         self.assertFormError(response, 'form', 'new_password2', error)
         self.assertFalse(user_found.check_password('new'))
@@ -315,7 +315,7 @@ class AccountsViewsTests(WebTest):
         form['new_password2'] = 'password'
         response = form.submit()
 
-        user_found = CustomUser.objects.get(id=1)
+        user_found = CustomUser.objects.get()
         self.assertRedirects(response, reverse('public:home'))
         self.assertTrue(user_found.check_password('password'))
         self.assertFalse(user_found.check_password('bob'))
@@ -342,7 +342,7 @@ class AccountsViewsTests(WebTest):
         form['new_password2'] = 'wrong'
         response = form.submit()
 
-        user_found = CustomUser.objects.get(id=1)
+        user_found = CustomUser.objects.get()
 
         self.assertContains(response, 'The two password fields')
         self.assertFalse(user_found.check_password('password'))

@@ -167,7 +167,7 @@ class CompanySettingsViewsTests(WebTest):
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
-        stage_created = InterviewStage.objects.get(id=1)
+        stage_created = InterviewStage.objects.get()
 
         self.assertEqual(stage_created.company, self.user.company)
         self.assertEqual(stage_created.name, 'Phone interview')

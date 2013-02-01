@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 
 from .views import (
-    OpeningCreateView, OpeningListView, OpeningUpdateView, ApplicationListView,
-    ApplicationDetailView, apply
+    ApplicationDetailView, ApplicationListView, OpeningCreateView,
+    OpeningRestrictedListView, OpeningUpdateView, apply
 )
 
 urlpatterns = patterns('',
@@ -17,9 +17,7 @@ urlpatterns = patterns('',
         name='application_detail'
     ),
 
-    url(r'^$', OpeningListView.as_view(), name='list_openings'),
+    url(r'^$', OpeningRestrictedListView.as_view(), name='list_openings'),
     url(r'new/$', OpeningCreateView.as_view(), name='create_opening'),
     url(r'(?P<pk>\d+)$', OpeningUpdateView.as_view(), name='update_opening'),
-
-
 )

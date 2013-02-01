@@ -1,6 +1,5 @@
 from braces.views import LoginRequiredMixin
 
-from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
@@ -70,8 +69,6 @@ class LogoutView(LoginRequiredMixin, View):
     redirect to the home page
     """
     def get(self, *args, **kwargs):
-        msg = 'Logged out !'
-        messages.info(self.request, msg)
         logout(self.request)
         return HttpResponseRedirect(reverse('public:home'))
 

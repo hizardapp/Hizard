@@ -1,31 +1,25 @@
-from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView
+from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
 
 from .forms import DepartmentForm, QuestionForm, InterviewStageForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
-from core.views import ListCompanyObjectsMixin, UserAllowedActionMixin
+from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 
 
-class DepartmentListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
+class DepartmentRestrictedListView(LoginRequiredMixin, RestrictedListView):
     model = Department
 
 
-class DepartmentActionMixin(object):
-    def form_valid(self, form):
-        msg = 'Department {0}!'.format(self.action)
-        messages.info(self.request, msg)
-        return super(DepartmentActionMixin, self).form_valid(form)
-
-
-class DepartmentCreateView(LoginRequiredMixin, DepartmentActionMixin, CreateView):
+class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = Department
     form_class = DepartmentForm
     action = 'created'
     success_url = reverse_lazy('companysettings:list_departments')
+    success_message = _('Department created.')
 
     def form_valid(self, form):
         department = form.save(commit=False)
@@ -34,29 +28,24 @@ class DepartmentCreateView(LoginRequiredMixin, DepartmentActionMixin, CreateView
         return super(DepartmentCreateView, self).form_valid(form)
 
 
-class DepartmentUpdateView(LoginRequiredMixin, UserAllowedActionMixin, DepartmentActionMixin, UpdateView):
+class DepartmentUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = Department
     form_class = DepartmentForm
     action = 'updated'
     success_url = reverse_lazy('companysettings:list_departments')
+    success_message = _('Department updated.')
 
 
-class QuestionListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
+class QuestionRestrictedListView(LoginRequiredMixin, RestrictedListView):
     model = Question
 
 
-class QuestionActionMixin(object):
-    def form_valid(self, form):
-        msg = 'Question {0}!'.format(self.action)
-        messages.info(self.request, msg)
-        return super(QuestionActionMixin, self).form_valid(form)
-
-
-class QuestionCreateView(LoginRequiredMixin, QuestionActionMixin, CreateView):
+class QuestionCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = Question
     form_class = QuestionForm
     action = 'created'
     success_url = reverse_lazy('companysettings:list_questions')
+    success_message = _('Question created.')
 
     def form_valid(self, form):
         question = form.save(commit=False)
@@ -65,29 +54,24 @@ class QuestionCreateView(LoginRequiredMixin, QuestionActionMixin, CreateView):
         return super(QuestionCreateView, self).form_valid(form)
 
 
-class QuestionUpdateView(LoginRequiredMixin, UserAllowedActionMixin, QuestionActionMixin, UpdateView):
+class QuestionUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = Question
     form_class = QuestionForm
     action = 'updated'
     success_url = reverse_lazy('companysettings:list_questions')
+    success_message = _('Question updated.')
 
 
-class InterviewStageListView(LoginRequiredMixin, ListCompanyObjectsMixin, ListView):
+class InterviewStageRestrictedListView(LoginRequiredMixin, RestrictedListView):
     model = InterviewStage
 
 
-class InterviewStageActionMixin(object):
-    def form_valid(self, form):
-        msg = 'Stage {0}!'.format(self.action)
-        messages.info(self.request, msg)
-        return super(InterviewStageActionMixin, self).form_valid(form)
-
-
-class InterviewStageCreateView(LoginRequiredMixin, InterviewStageActionMixin, CreateView):
+class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = InterviewStage
     form_class = InterviewStageForm
     action = 'created'
     success_url = reverse_lazy('companysettings:list_stages')
+    success_message = _('Stage created.')
 
     def form_valid(self, form):
         stage = form.save(commit=False)
@@ -96,8 +80,9 @@ class InterviewStageCreateView(LoginRequiredMixin, InterviewStageActionMixin, Cr
         return super(InterviewStageCreateView, self).form_valid(form)
 
 
-class InterviewStageUpdateView(LoginRequiredMixin, UserAllowedActionMixin, InterviewStageActionMixin, UpdateView):
+class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = InterviewStage
     form_class = InterviewStageForm
     action = 'updated'
     success_url = reverse_lazy('companysettings:list_stages')
+    success_message = _('Stage updated.')

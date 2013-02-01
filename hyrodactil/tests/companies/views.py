@@ -39,7 +39,7 @@ class CompaniesViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
 
-        company_created = Company.objects.get(id=1)
+        company_created = Company.objects.get()
 
         self.assertEqual(company_created.employees.all()[0], self.user)
         self.assertEqual(company_created.name, 'ACME')
