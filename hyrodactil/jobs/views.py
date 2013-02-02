@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DetailView
@@ -46,9 +46,15 @@ class ApplicationListView(LoginRequiredMixin, RestrictedListView):
         return Application.objects.filter(opening=opening)
 
 
-# TODO: fix UserAllowedActionMixin to work with this case
 class ApplicationDetailView(LoginRequiredMixin, DetailView):
     model = Application
+
+    def get_object(self, queryset=None):
+        object = super(ApplicationDetailView, self).get_object()
+        if object.opening.company == self.request.user.company:
+            return object
+        else:
+            raise Http404
 
     def get_context_data(self, **kwargs):
         context = super(ApplicationDetailView, self).get_context_data(**kwargs)

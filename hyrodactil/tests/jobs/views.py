@@ -138,7 +138,7 @@ class JobsViewsTests(WebTest):
         self.assertContains(response, application.first_name)
         self.assertContains(response, application.last_name)
 
-    def test_applicant_details(self):
+    def test_get_applicant_details(self):
         opening = OpeningFactory.create(company=self.user.company)
         application = ApplicationFactory.create(opening=opening)
         #answer = ApplicationAnswerFactory.create(application=application)
@@ -148,3 +148,15 @@ class JobsViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.first_name)
+
+    def test_get_applicant_details_different_company(self):
+        opening = OpeningFactory.create(company=self.user.company)
+        application = ApplicationFactory.create(opening=opening)
+        rival = UserFactory.create(email='red@red.com')
+
+        url = reverse('jobs:application_detail', args=(application.id,))
+
+        self.client.login(username='red@red.com', password='bob')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 404)

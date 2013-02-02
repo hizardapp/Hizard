@@ -1,6 +1,6 @@
-from django.contrib import messages
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.http import Http404
+from django.test import RequestFactory
 from django_webtest import WebTest
 
 from companysettings.models import Department
@@ -61,8 +61,13 @@ class CoreViewsTests(WebTest):
 
     def _test_MessageMixin(self):
         mixin = MessageMixin()
-        mixin.request = self.Request()
-        mixin.request.add_message_storage()
+
+        request = RequestFactory()
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+
+        mixin.request = request
         mixin.success_message = 'Test successful'
         mixin.form_valid(form=None)
         messages.get_messages(mixin.request)
