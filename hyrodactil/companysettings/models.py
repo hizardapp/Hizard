@@ -20,6 +20,7 @@ class Question(TimeStampedModel):
         ('textbox', _('textbox')),
         ('textarea', _('textarea')),
         ('checkbox', _('checkbox')),
+        ('file', _('file')),
         ('ddl', _('ddl'))
     )
 

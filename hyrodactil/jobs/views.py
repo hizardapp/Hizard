@@ -6,6 +6,7 @@ from django.views.generic import CreateView, DetailView
 from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
+from core.utils import save_file
 
 from .forms import OpeningForm
 from .models import Application, ApplicationAnswer, Opening
@@ -93,11 +94,18 @@ def apply(request, opening_id):
         if len(question) == 0:
             continue
 
+        if question[0].type == 'file':
+            save_file(request.FILES[key])
+
         application_answer.question = question[0]
 
         application_answer.application = application
         application_answer.answer = data[key]
         application_answer.save()
+
+    if request.FILES:
+        pass
+        #save_file(request.FILES['CV'])
 
     data = 'applied'
     return HttpResponse(data, mimetype='application/json')
