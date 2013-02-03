@@ -38,6 +38,7 @@ class JobsViewsTests(WebTest):
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Opening created.")
 
         opening_created = Opening.objects.get()
 

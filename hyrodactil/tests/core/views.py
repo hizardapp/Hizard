@@ -1,10 +1,9 @@
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.http import Http404
-from django.test import RequestFactory
 from django_webtest import WebTest
 
 from companysettings.models import Department
-from core.views import MessageMixin, RestrictedListView
+from core.views import RestrictedListView
 from ..factories._accounts import UserFactory
 from ..factories._companysettings import DepartmentFactory
 
@@ -58,16 +57,3 @@ class CoreViewsTests(WebTest):
 
         with self.assertRaises(Http404):
             mixin.get_queryset()
-
-    def _test_MessageMixin(self):
-        mixin = MessageMixin()
-
-        request = RequestFactory()
-        setattr(request, 'session', 'session')
-        messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
-
-        mixin.request = request
-        mixin.success_message = 'Test successful'
-        mixin.form_valid(form=None)
-        messages.get_messages(mixin.request)
