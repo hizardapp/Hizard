@@ -88,6 +88,7 @@ class JobsViewsTests(WebTest):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.request.path, reverse('jobs:list_openings'))
         self.assertNotContains(response, 'DevOps')
+        self.assertContains(response, 'Opening deleted.')
 
     def test_can_only_edit_from_the_same_company(self):
         opening = OpeningFactory.create(title='Op', company=CompanyFactory())

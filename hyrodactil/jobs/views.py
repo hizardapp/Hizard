@@ -1,9 +1,10 @@
+from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DetailView
-from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
 from core.utils import save_file
@@ -45,6 +46,10 @@ class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
 class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = Opening
     success_url = reverse_lazy('jobs:list_openings')
+
+    def delete(self, request, *args, **kwargs):
+        messages.info(self.request, _('Opening deleted.'))
+        return super(OpeningDeleteView, self).delete(request, *args, **kwargs)
 
 
 class ApplicationListView(LoginRequiredMixin, RestrictedListView):
