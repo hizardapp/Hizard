@@ -1,10 +1,9 @@
 <script>
   function toggleDescription(opening_id) {
-    id_link = "hirodactyl-job-description-link-" + opening_id;
-    id_desc = "hirodactyl-job-description-content-" + opening_id;
-
-    e_desc = document.getElementById(id_desc);
-    e_link = document.getElementById(id_link);
+    var id_link = "hirodactyl-job-description-link-" + opening_id,
+        id_desc = "hirodactyl-job-description-content-" + opening_id,
+        e_desc = document.getElementById(id_desc),
+        e_link = document.getElementById(id_link);
 
     if (e_desc.className === "hirodactyl-hidden") {
       e_desc.className = "";
@@ -16,9 +15,8 @@
   }
 
   function toggleForm(opening_id){
-    id_form = "hirodactyl-job-form-" + opening_id;
-
-    e_form = document.getElementById(id_form)
+    var id_form = "hirodactyl-job-form-" + opening_id,
+        e_form = document.getElementById(id_form);
 
     if(e_form.className === "hyrodactyl-hidden"){
       e_form = "";
