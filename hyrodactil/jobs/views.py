@@ -30,7 +30,7 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
 
     def form_valid(self, form):
         opening = form.save(commit=False)
-        opening.company_id = self.request.user.company.id
+        opening.company = self.request.user.company
         opening.save()
         form.save_m2m()
         return super(OpeningCreateView, self).form_valid(form)
