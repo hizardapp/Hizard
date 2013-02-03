@@ -25,6 +25,9 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     success_url = reverse_lazy('jobs:list_openings')
     success_message = _('Opening created.')
 
+    def get_form(self, form_class):
+        return form_class(self.request.user.company, **self.get_form_kwargs())
+
     def form_valid(self, form):
         opening = form.save(commit=False)
         opening.company_id = self.request.user.company.id
@@ -39,6 +42,9 @@ class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     action = 'updated'
     success_url = reverse_lazy('jobs:list_openings')
     success_message = _('Opening updated.')
+
+    def get_form(self, form_class):
+        return form_class(self.request.user.company, **self.get_form_kwargs())
 
 
 class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):

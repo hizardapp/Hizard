@@ -46,6 +46,19 @@ class JobsViewsTests(WebTest):
         self.assertEqual(opening_created.title, 'Software Developer')
         self.assertEqual(opening_created.questions.count(), 1)
 
+    def test_opening_form_only_contains_questions_from_same_company(self):
+        same_company_question = QuestionFactory.create(
+            name='To be or not to be?',
+            company=self.user.company)
+        other_company_question = QuestionFactory.create(
+            name='Your 5 strenghts and weaknesses',
+            company=CompanyFactory())
+
+        url = reverse('jobs:create_opening')
+        page = self.app.get(url, user=self.user)
+        self.assertContains(page, same_company_question.name)
+        self.assertNotContains(page, other_company_question.name)
+
     def test_opening_creation_invalid(self):
         url = reverse('jobs:create_opening')
 

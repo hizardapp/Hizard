@@ -1,15 +1,16 @@
 from django.test import TestCase
 
 from ..factories._accounts import UserFactory
+from ..factories._companies import CompanyFactory
 from ..factories._companysettings import QuestionFactory
 from jobs.forms import OpeningForm
 
 
 class JobsFormsTests(TestCase):
     def setUp(self):
-        user = UserFactory()
-        QuestionFactory.create(company=user.company)
-        QuestionFactory.create(company=user.company)
+        self.user = UserFactory()
+        self.first_question = QuestionFactory.create(company=self.user.company)
+        QuestionFactory.create(company=self.user.company)
 
         self.form_data = {'title': 'Software Developer',
                           'description': 'Fait des logiciels.',
@@ -29,11 +30,13 @@ class JobsFormsTests(TestCase):
         return result
 
     def _form_is_valid_without(self, element_to_remove=''):
-        form = self.Form(data=self._remove_data(element_to_remove))
+        form = self.Form(self.user.company,
+                         data=self._remove_data(element_to_remove))
         self.assertTrue(form.is_valid())
 
     def _form_is_invalid_without(self, element_to_remove):
-        form = self.Form(data=self._remove_data(element_to_remove))
+        form = self.Form(self.user.company,
+                         data=self._remove_data(element_to_remove))
         self.assertFalse(form.is_valid())
         self.assertTrue(element_to_remove in form.errors)
 
@@ -51,5 +54,14 @@ class JobsFormsTests(TestCase):
     def test_invalid_opening_form_nonexisting_question(self):
         wrong_data = dict(self.form_data)
         wrong_data['questions'] = [1, 2, 3]
-        form = self.Form(data=wrong_data)
+        form = self.Form(self.user.company, data=wrong_data)
         self.assertFalse(form.is_valid())
+
+    def test_opening_form_only_contains_questions_from_same_company(self):
+        other_company_question = QuestionFactory.create(
+            name='Your 5 strenghts and weaknesses',
+            company=CompanyFactory())
+        form = self.Form(self.user.company, self.user.company)
+        questions_qs = form.fields["questions"].queryset
+        self.assertFalse(other_company_question in questions_qs)
+        self.assertTrue(self.first_question in questions_qs)
