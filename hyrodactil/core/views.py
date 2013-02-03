@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import Http404
 from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic.edit import BaseDeleteView
 
 
 class RestrictedListView(ListView):
@@ -16,18 +17,31 @@ class RestrictedListView(ListView):
             raise Http404
 
 
-class RestrictedUpdateView(UpdateView):
+class RestrictedQuerysetMixin(object):
     """
     Checks if the user is allowed to do actions on this object
     """
     def get_queryset(self):
-        query_set = super(RestrictedUpdateView, self).get_queryset()
+        query_set = super(RestrictedQuerysetMixin, self).get_queryset()
         query_set = query_set.filter(company=self.request.user.company)
 
         if len(query_set) > 0:
             return query_set
         else:
             raise Http404
+
+
+class RestrictedUpdateView(RestrictedQuerysetMixin, UpdateView):
+    pass
+
+
+class QuickDeleteView(BaseDeleteView):
+    def get(self, *args, **kwargs):
+        return self.delete(*args, **kwargs)
+
+
+class RestrictedDeleteView(RestrictedQuerysetMixin, QuickDeleteView):
+    pass
 
 
 class RestrictedDetailView(DetailView):

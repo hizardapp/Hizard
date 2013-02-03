@@ -12,6 +12,7 @@ from .forms import OpeningForm
 from .models import Application, ApplicationAnswer, Opening
 from companies.models import Company
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
+from core.views import RestrictedDeleteView
 
 
 class OpeningRestrictedListView(LoginRequiredMixin, RestrictedListView):
@@ -39,6 +40,11 @@ class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     action = 'updated'
     success_url = reverse_lazy('jobs:list_openings')
     success_message = _('Opening updated.')
+
+
+class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):
+    model = Opening
+    success_url = reverse_lazy('jobs:list_openings')
 
 
 class ApplicationListView(LoginRequiredMixin, RestrictedListView):

@@ -4,6 +4,7 @@ from django_webtest import WebTest
 from ..factories._accounts import UserFactory
 from ..factories._jobs import ApplicationFactory, OpeningFactory
 from ..factories._companysettings import QuestionFactory
+from ..factories._companies import CompanyFactory
 
 from jobs.models import Application, Opening
 
@@ -77,15 +78,32 @@ class JobsViewsTests(WebTest):
         self.assertContains(response, 'Software Developer')
         self.assertNotContains(response, 'DevOps')
 
+    def test_opening_delete(self):
+        opening = OpeningFactory.create(title='DevOps',
+                                        company=self.user.company)
+        url = reverse('jobs:delete_opening', args=(opening.id,))
+
+        response = self.app.get(url, user=self.user).follow()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.request.path, reverse('jobs:list_openings'))
+        self.assertNotContains(response, 'DevOps')
+
+    def test_can_only_edit_from_the_same_company(self):
+        opening = OpeningFactory.create(title='Op', company=CompanyFactory())
+        url = reverse('jobs:update_opening', args=(opening.id,))
+        self.app.get(url, user=self.user, status=404)
+
+    def test_can_only_delete_from_the_same_company(self):
+        opening = OpeningFactory.create(title='Op', company=CompanyFactory())
+        url = reverse('jobs:delete_opening', args=(opening.id,))
+        self.app.get(url, user=self.user, status=404)
+        self.assertTrue(opening in Opening.objects.all())
+
     def test_opening_listing(self):
         url = reverse('jobs:list_openings')
-
         opening = OpeningFactory.create(title='DevOps', company=self.user.company)
-
         response = self.app.get(url, user=self.user)
-
         self.assertContains(response, opening.title)
-
 
     def test_apply_to_existing_opening(self):
         opening = OpeningFactory.create(company=self.user.company)

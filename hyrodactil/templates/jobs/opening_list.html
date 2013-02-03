@@ -9,6 +9,7 @@
       <th>{% trans "Title" %}</th>
       <th>{% trans "Created" %}</th>
       <th>{% trans "Edit" %}</th>
+      <th>{% trans "Delete" %}</th>
     </tr>
 
     {% for opening in opening_list %}
@@ -21,6 +22,9 @@
         </td>
         <td>
           <a href="{% url 'jobs:update_opening' opening.id %}" class="btn">{% trans "Edit" %}</a>
+        </td>
+        <td>
+          <a href="{% url 'jobs:delete_opening' opening.id %}" class="btn btn-danger">{% trans "Delete" %}</a>
         </td>
       </tr>
     {% endfor %}
