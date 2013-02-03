@@ -160,6 +160,16 @@ class CompanySettingsViewsTests(WebTest):
             self.user = UserFactory.create()
         self.required = 'This field is required.'
 
+    def test_delete_question(self):
+        question = QuestionFactory.create(name='ninja', company=self.user.company)
+        url = reverse('companysettings:delete_question', args=(question.id,))
+
+        response = self.app.get(url, user=self.user).follow()
+        self.assertEqual(response.request.path,
+                         reverse('companysettings:list_questions'))
+        self.assertNotContains(response, "ninja")
+        self.assertContains(response, "Question deleted.")
+
     def test_list_stages(self):
         url = reverse('companysettings:list_stages')
 
@@ -222,3 +232,14 @@ class CompanySettingsViewsTests(WebTest):
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
+
+    def test_delete_stage(self):
+        stage = InterviewStageFactory.create(name='Interview',
+                                             company=self.user.company)
+        url = reverse('companysettings:delete_stage', args=(stage.id,))
+
+        response = self.app.get(url, user=self.user).follow()
+        self.assertEqual(response.request.path,
+                         reverse('companysettings:list_stages'))
+        self.assertNotContains(response, "Interview")
+        self.assertContains(response, "Stage deleted.")

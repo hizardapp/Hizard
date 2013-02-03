@@ -68,6 +68,12 @@ class QuestionUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView)
     success_message = _('Question updated.')
 
 
+class QuestionDeleteView(LoginRequiredMixin, RestrictedDeleteView):
+    model = Question
+    success_url = reverse_lazy('companysettings:list_questions')
+    success_message = _('Question deleted.')
+
+
 class InterviewStageRestrictedListView(LoginRequiredMixin, RestrictedListView):
     model = InterviewStage
 
@@ -92,3 +98,9 @@ class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdat
     action = 'updated'
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage updated.')
+
+
+class InterviewStageDeleteView(LoginRequiredMixin, RestrictedDeleteView):
+    model = InterviewStage
+    success_url = reverse_lazy('companysettings:list_stages')
+    success_message = _('Stage deleted.')

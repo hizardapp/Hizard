@@ -8,6 +8,7 @@
         <tr>
             <th>{% trans "Name" %}</th>
             <th>{% trans "Edit" %}</th>
+            <th>{% trans "Delete" %}</th>
         </tr>
 
         {% for stage in interviewstage_list %}
@@ -17,6 +18,9 @@
                 </td>
                 <td>
                     <a href="{% url 'companysettings:update_stage' stage.id %}" class="btn">{% trans "Edit" %}</a>
+                </td>
+                <td>
+                    <a href="{% url 'companysettings:delete_stage' stage.id %}" class="btn btn-danger">{% trans "Delete" %}</a>
                 </td>
             </tr>
         {% endfor %}

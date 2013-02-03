@@ -1,10 +1,11 @@
 from django.conf.urls import patterns, url
 
-from .views import (
+from views import (
     DepartmentCreateView, DepartmentRestrictedListView, DepartmentUpdateView,
     QuestionRestrictedListView, QuestionCreateView, QuestionUpdateView,
-    InterviewStageRestrictedListView, InterviewStageCreateView, InterviewStageUpdateView,
-    DepartmentDeleteView
+    InterviewStageRestrictedListView, InterviewStageCreateView,
+    InterviewStageUpdateView, DepartmentDeleteView, QuestionDeleteView,
+    InterviewStageDeleteView
 )
 
 urlpatterns = patterns('',
@@ -23,6 +24,8 @@ urlpatterns = patterns('',
         name='create_question'),
     url(r'question/(?P<pk>\d+)$', QuestionUpdateView.as_view(),
         name='update_question'),
+    url(r'question/(?P<pk>\d+)/delete$', QuestionDeleteView.as_view(),
+        name='delete_question'),
 
     url(r'stages/$', InterviewStageRestrictedListView.as_view(),
         name='list_stages'),
@@ -30,4 +33,6 @@ urlpatterns = patterns('',
         name='create_stage'),
     url(r'stage/(?P<pk>\d+)$', InterviewStageUpdateView.as_view(),
         name='update_stage'),
+    url(r'stage/(?P<pk>\d+)/delete$', InterviewStageDeleteView.as_view(),
+        name='delete_stage'),
 )

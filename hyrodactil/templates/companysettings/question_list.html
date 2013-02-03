@@ -9,6 +9,7 @@
       <th>{% trans "Name" %}</th>
       <th>{% trans "Type" %}</th>
       <th>{% trans "Edit" %}</th>
+      <th>{% trans "Delete" %}</th>
     </tr>
 
     {% for question in question_list %}
@@ -21,6 +22,9 @@
         </td>
         <td>
           <a href="{% url 'companysettings:update_question' question.id %}" class="btn">{% trans "Edit" %}</a>
+        </td>
+        <td>
+          <a href="{% url 'companysettings:delete_question' question.id %}" class="btn btn-danger">{% trans "Delete" %}</a>
         </td>
       </tr>
     {% endfor %}
