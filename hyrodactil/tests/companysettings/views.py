@@ -76,6 +76,15 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
 
+    def test_delete_department(self):
+        dept = DepartmentFactory.create(name='Sales', company=self.user.company)
+        url = reverse('companysettings:delete_department', args=(dept.id,))
+
+        response = self.app.get(url, user=self.user).follow()
+        self.assertEqual(response.request.path,
+                         reverse('companysettings:list_departments'))
+        self.assertNotContains(response, "Sales")
+
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')
 

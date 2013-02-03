@@ -41,7 +41,10 @@ class QuickDeleteView(BaseDeleteView):
 
 
 class RestrictedDeleteView(RestrictedQuerysetMixin, QuickDeleteView):
-    pass
+    def delete(self, request, *args, **kwargs):
+        message = self.success_message
+        messages.info(self.request, message)
+        return super(RestrictedDeleteView, self).delete(request, *args, **kwargs)
 
 
 class RestrictedDetailView(DetailView):

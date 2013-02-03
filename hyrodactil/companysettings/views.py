@@ -8,7 +8,7 @@ from .forms import DepartmentForm, QuestionForm, InterviewStageForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
-
+from core.views import RestrictedDeleteView
 
 class DepartmentRestrictedListView(LoginRequiredMixin, RestrictedListView):
     model = Department
@@ -32,6 +32,12 @@ class DepartmentUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateVie
     model = Department
     form_class = DepartmentForm
     action = 'updated'
+    success_url = reverse_lazy('companysettings:list_departments')
+    success_message = _('Department updated.')
+
+
+class DepartmentDeleteView(LoginRequiredMixin, RestrictedDeleteView):
+    model = Department
     success_url = reverse_lazy('companysettings:list_departments')
     success_message = _('Department updated.')
 
