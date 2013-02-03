@@ -39,7 +39,7 @@ class DepartmentUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateVie
 class DepartmentDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = Department
     success_url = reverse_lazy('companysettings:list_departments')
-    success_message = _('Department updated.')
+    success_message = _('Department deleted.')
 
 
 class QuestionRestrictedListView(LoginRequiredMixin, RestrictedListView):

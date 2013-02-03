@@ -84,6 +84,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_departments'))
         self.assertNotContains(response, "Sales")
+        self.assertContains(response, "Department deleted.")
 
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')
