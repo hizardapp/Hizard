@@ -10,7 +10,6 @@ from core.utils import save_file
 
 from .forms import OpeningForm
 from .models import Application, ApplicationAnswer, Opening
-from companies.models import Company
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 from core.views import RestrictedDeleteView
 
@@ -28,7 +27,7 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
 
     def form_valid(self, form):
         opening = form.save(commit=False)
-        opening.company = Company.objects.get(id=self.request.user.company.id)
+        opening.company_id = self.request.user.company.id
         opening.save()
         form.save_m2m()
         return super(OpeningCreateView, self).form_valid(form)
