@@ -24,7 +24,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:create_department')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department-form']
+        form = page.forms['action-form']
         form['name'] = 'Engineering'
         response = form.submit().follow()
 
@@ -38,7 +38,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:create_department')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department-form']
+        form = page.forms['action-form']
         form['name'] = ''
         response = form.submit()
 
@@ -50,7 +50,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_department', args=(dept.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department-form']
+        form = page.forms['action-form']
         form['name'] = 'Engineering'
 
         self.assertContains(page, dept.name)
@@ -66,7 +66,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_department', args=(dept.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['department-form']
+        form = page.forms['action-form']
         form['name'] = ''
 
         self.assertContains(page, dept.name)
@@ -99,7 +99,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:create_question')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question-form']
+        form = page.forms['action-form']
         form['name'] = 'Cover letter'
         form['label'] = 'Please write a cover letter : '
         form['type'] = 'textbox'
@@ -116,7 +116,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:create_question')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question-form']
+        form = page.forms['action-form']
         form['name'] = ''
         form['label'] = ''
         form['type'] = 'textbox'
@@ -131,7 +131,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question-form']
+        form = page.forms['action-form']
         form['name'] = 'Last Name'
 
         self.assertContains(page, question.name)
@@ -148,7 +148,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['question-form']
+        form = page.forms['action-form']
         form['name'] = ''
 
         response = form.submit()
@@ -182,7 +182,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:create_stage')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['stage-form']
+        form = page.forms['action-form']
         form['name'] = 'Phone interview'
         response = form.submit().follow()
 
@@ -196,7 +196,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:create_stage')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['stage-form']
+        form = page.forms['action-form']
         form['name'] = ''
         response = form.submit()
 
@@ -208,7 +208,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_stage', args=(stage.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['stage-form']
+        form = page.forms['action-form']
         form['name'] = 'Coding'
 
         self.assertContains(page, stage.name)
@@ -224,7 +224,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_stage', args=(stage.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['stage-form']
+        form = page.forms['action-form']
         form['name'] = ''
 
         self.assertContains(page, stage.name)

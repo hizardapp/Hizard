@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n bootstrap %}
+
+{% block content %}
+
+  <form action="{% block action %}{% endblock %}" method="POST" id="action-form" class="form-horizontal">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <div class="form-actions">
+      {% block form-actions %}
+        <input type="submit" value="{% trans 'Save' %}" class="btn"/>
+      {% endblock %}
+    </div>
+  </form>
+
+{% endblock content %}

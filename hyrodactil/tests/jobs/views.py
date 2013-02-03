@@ -27,7 +27,7 @@ class JobsViewsTests(WebTest):
         url = reverse('jobs:create_opening')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['job-form']
+        form = page.forms['action-form']
         form['title'] = 'Software Developer'
         form['description'] = 'Fait des logiciels.'
         form['is_private'] = ''
@@ -50,7 +50,7 @@ class JobsViewsTests(WebTest):
         url = reverse('jobs:create_opening')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['job-form']
+        form = page.forms['action-form']
         form['title'] = 'Software Developer'
         form['description'] = ''
         form['is_private'] = ''
@@ -71,7 +71,7 @@ class JobsViewsTests(WebTest):
         url = reverse('jobs:update_opening', args=(opening.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['job-form']
+        form = page.forms['action-form']
         form['title'] = 'Software Developer'
         response = form.submit().follow()
 

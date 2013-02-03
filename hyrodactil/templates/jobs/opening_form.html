@@ -1,14 +1,1 @@
-{% extends "base.html" %}
-
-{% block content %}
-
-  <form action="" method="POST" id="job-form">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <input type="submit">
-
-  </form>
-
-{% endblock content %}
+{% extends "core/base_form.html" %}

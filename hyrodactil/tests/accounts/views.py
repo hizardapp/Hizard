@@ -31,7 +31,7 @@ class AccountsViewsTests(WebTest):
         """
         page = self.app.get(reverse('accounts:register'))
 
-        form = page.forms['register-form']
+        form = page.forms['action-form']
         form['email'] = 'bob@bob.com'
         form['password1'] = 'password'
         form['password2'] = 'password'
@@ -49,7 +49,7 @@ class AccountsViewsTests(WebTest):
         """
         page = self.app.get(reverse('accounts:register'))
 
-        form = page.forms['register-form']
+        form = page.forms['action-form']
         form['email'] = 'bob@bob.com'
         form['password1'] = 'password'
         form['password2'] = 'wrong'
@@ -99,7 +99,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create(company=None)
         page = self.app.get(reverse('auth:login'))
 
-        form = page.forms['login-form']
+        form = page.forms['action-form']
         form['username'] = user.email
         form['password'] = 'bob'
 
@@ -115,7 +115,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create()
         page = self.app.get(reverse('auth:login'))
 
-        form = page.forms['login-form']
+        form = page.forms['action-form']
         form['username'] = user.email
         form['password'] = 'bob'
 
@@ -131,7 +131,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create(is_active=False)
         page = self.app.get(reverse('auth:login'))
 
-        form = page.forms['login-form']
+        form = page.forms['action-form']
         form['username'] = user.email
         form['password'] = 'bob'
 
@@ -182,7 +182,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create()
 
         page = self.app.get(reverse('auth:change_password'), user=user)
-        form = page.forms['change-password-form']
+        form = page.forms['action-form']
         form['old_password'] = 'bob'
         form['new_password1'] = 'new'
         form['new_password2'] = 'new'
@@ -200,7 +200,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create()
 
         page = self.app.get(reverse('auth:change_password'), user=user)
-        form = page.forms['change-password-form']
+        form = page.forms['action-form']
         form['old_password'] = 'bob'
         form['new_password1'] = 'new'
         form['new_password2'] = 'wrong'
@@ -230,7 +230,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create()
 
         page = self.app.get(reverse('auth:reset_password'))
-        form = page.forms['reset-password-form']
+        form = page.forms['action-form']
         form['email'] = user.email
         response = form.submit()
 
@@ -245,7 +245,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create()
 
         page = self.app.get(reverse('auth:reset_password'))
-        form = page.forms['reset-password-form']
+        form = page.forms['action-form']
         form['email'] = 'wrong@email.com'
         response = form.submit()
 
@@ -310,7 +310,7 @@ class AccountsViewsTests(WebTest):
                 }
             )
         )
-        form = page.forms['confirm-reset-password-form']
+        form = page.forms['action-form']
         form['new_password1'] = 'password'
         form['new_password2'] = 'password'
         response = form.submit()
@@ -337,7 +337,7 @@ class AccountsViewsTests(WebTest):
                 }
             )
         )
-        form = page.forms['confirm-reset-password-form']
+        form = page.forms['action-form']
         form['new_password1'] = 'password'
         form['new_password2'] = 'wrong'
         response = form.submit()
