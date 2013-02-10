@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+
+{% block content %}
+  <ul>
+    <li><a href={% url 'companysettings:list_departments' %}>{% trans 'Departments' %}</a></li>
+    <li><a href={% url 'companysettings:list_questions' %}>{% trans 'Questions' %}</a></li>
+    <li><a href={% url 'companysettings:list_stages' %}>{% trans 'Stages' %}</a></li>
+  </ul>
+{% endblock content %}

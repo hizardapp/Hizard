@@ -1,0 +1,48 @@
+@import "variables";
+
+header {
+  background-color: white;
+  border-bottom: 1px solid $light-grey;
+
+  // header is always on top on the page and take the whole page in width
+  z-index: 9999;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  h1 {
+    @include font-size(18);
+  }
+
+  // Adding borders and padding to the list items
+  ul li {
+    line-height: $main-header-line-height;
+
+    &:nth-child(1) {
+      border-left: 1px solid $light-grey;
+    }
+    border-right: 1px solid $light-grey;
+
+    a {
+      display: inline-block;
+      color: black;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
+  nav.main {
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  nav.secondary {
+    text-align: right;
+  }
+
+}

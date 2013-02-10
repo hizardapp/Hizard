@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
@@ -9,6 +9,11 @@ from .models import Department, Question, InterviewStage
 from companies.models import Company
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 from core.views import RestrictedDeleteView
+
+
+class SettingsHomeView(LoginRequiredMixin, TemplateView):
+    template_name = 'companysettings/settings.html'
+
 
 class DepartmentRestrictedListView(LoginRequiredMixin, RestrictedListView):
     model = Department

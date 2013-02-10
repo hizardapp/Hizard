@@ -4,26 +4,30 @@
 
 {% block content %}
 
-  <table class="table">
-    <tr>
-      <th>{% trans "First Name" %}</th>
-      <th>{% trans "Last Name" %}</th>
-      <th>{% trans "Date applied" %}</th>
-    </tr>
-
-    {% for application in application_list %}
+  <table class="twelve">
+    <thead>
       <tr>
-        <td>
-          <a href="{% url 'jobs:application_detail' application.id %}">{{ application.first_name }}</a>
-        </td>
-        <td>
-          {{ application.last_name }}
-        </td>
-        <td>
-          {{ application.created }}
-        </td>
+        <th>{% trans "First Name" %}</th>
+        <th>{% trans "Last Name" %}</th>
+        <th>{% trans "Date applied" %}</th>
       </tr>
-    {% endfor %}
+    </thead>
+
+    <tbody>
+      {% for application in application_list %}
+        <tr>
+          <td>
+            <a href="{% url 'jobs:application_detail' application.id %}">{{ application.first_name }}</a>
+          </td>
+          <td>
+            {{ application.last_name }}
+          </td>
+          <td>
+            {{ application.created }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
 
   </table>
 

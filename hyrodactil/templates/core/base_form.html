@@ -1,14 +1,26 @@
 {% extends "base.html" %}
-{% load i18n bootstrap %}
+{% load i18n %}
 
 {% block content %}
-
-  <form action="{% block action %}{% endblock %}" method="POST" id="action-form" class="form-horizontal">
+   {{ form.errors }}
+  <form action="{% block action %}{% endblock %}" method="POST" id="action-form">
     {% csrf_token %}
-    {{ form|bootstrap }}
+
+    <div class="row">
+      {% for field in form %}
+        <div class="two columns">
+          <label class="right inline">{{ field.label }}</label>
+        </div>
+        <div class="ten columns">
+          {{ field }}
+        </div>
+      {% endfor %}
+    </div>
+
+
     <div class="form-actions">
       {% block form-actions %}
-        <input type="submit" value="{% trans 'Save' %}" class="btn"/>
+        <input type="submit" value="{% trans 'Save' %}" class="button" />
       {% endblock %}
     </div>
   </form>

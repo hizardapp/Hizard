@@ -4,29 +4,33 @@
 
 {% block content %}
 
-  <table class="table">
-    <tr>
-      <th>{% trans "Name" %}</th>
-      <th>{% trans "Edit" %}</th>
-      <th>{% trans "Delete" %}</th>
-    </tr>
-
-    {% for department in department_list %}
+  <table class="twelve">
+    <thead>
       <tr>
-        <td>
-          {{ department.name }}
-        </td>
-        <td>
-          <a href="{% url 'companysettings:update_department' department.id %}" class="btn">{% trans "Edit" %}</a>
-        </td>
-        <td>
-          <a href="{% url 'companysettings:delete_department' department.id %}" class="btn btn-danger">{% trans "Delete" %}</a>
-        </td>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Edit" %}</th>
+        <th>{% trans "Delete" %}</th>
       </tr>
-    {% endfor %}
+    </thead>
+
+    <tbody>
+      {% for department in department_list %}
+        <tr>
+          <td>
+            {{ department.name }}
+          </td>
+          <td>
+            <a href="{% url 'companysettings:update_department' department.id %}" class="button">{% trans "Edit" %}</a>
+          </td>
+          <td>
+            <a href="{% url 'companysettings:delete_department' department.id %}" class="alert button">{% trans "Delete" %}</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
 
   </table>
 
-  <a href="{% url 'companysettings:create_department' %}" class="btn">{% trans "Create a department" %}</a>
+  <a href="{% url 'companysettings:create_department' %}" class="button">{% trans "Create a department" %}</a>
 
 {% endblock content %}

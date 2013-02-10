@@ -242,7 +242,7 @@ class AccountsViewsTests(WebTest):
         POST the reset password page
         Should ask for a confirmation
         """
-        user = UserFactory.create()
+        UserFactory.create()
 
         page = self.app.get(reverse('auth:reset_password'))
         form = page.forms['action-form']

@@ -5,7 +5,7 @@ from views import (
     QuestionRestrictedListView, QuestionCreateView, QuestionUpdateView,
     InterviewStageRestrictedListView, InterviewStageCreateView,
     InterviewStageUpdateView, DepartmentDeleteView, QuestionDeleteView,
-    InterviewStageDeleteView
+    InterviewStageDeleteView, SettingsHomeView
 )
 
 urlpatterns = patterns('',
@@ -35,4 +35,9 @@ urlpatterns = patterns('',
         name='update_stage'),
     url(r'stage/(?P<pk>\d+)/delete$', InterviewStageDeleteView.as_view(),
         name='delete_stage'),
+
+
+    url(r'$', SettingsHomeView.as_view(),
+        name='settings_home'),
+
 )

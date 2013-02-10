@@ -4,33 +4,37 @@
 
 {% block content %}
 
-  <table class="table">
-    <tr>
-      <th>{% trans "Title" %}</th>
-      <th>{% trans "Created" %}</th>
-      <th>{% trans "Edit" %}</th>
-      <th>{% trans "Delete" %}</th>
-    </tr>
-
-    {% for opening in opening_list %}
+  <table class="twelve">
+    <thead>
       <tr>
-        <td>
-          <a href="{% url 'jobs:list_applications' opening.id %}">{{ opening.title }}</a>
-        </td>
-        <td>
-          {{ opening.created }}
-        </td>
-        <td>
-          <a href="{% url 'jobs:update_opening' opening.id %}" class="btn">{% trans "Edit" %}</a>
-        </td>
-        <td>
-          <a href="{% url 'jobs:delete_opening' opening.id %}" class="btn btn-danger">{% trans "Delete" %}</a>
-        </td>
+        <th>{% trans "Title" %}</th>
+        <th>{% trans "Created" %}</th>
+        <th>{% trans "Edit" %}</th>
+        <th>{% trans "Delete" %}</th>
       </tr>
-    {% endfor %}
+    </thead>
+
+    <tbody>
+      {% for opening in opening_list %}
+        <tr>
+          <td>
+            <a href="{% url 'jobs:list_applications' opening.id %}">{{ opening.title }}</a>
+          </td>
+          <td>
+            {{ opening.created }}
+          </td>
+          <td>
+            <a href="{% url 'jobs:update_opening' opening.id %}" class="button">{% trans "Edit" %}</a>
+          </td>
+          <td>
+            <a href="{% url 'jobs:delete_opening' opening.id %}" class="alert button">{% trans "Delete" %}</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
 
   </table>
 
-  <a href="{% url 'jobs:create_opening' %}" class="btn">{% trans "Create an opening" %}</a>
+  <a href="{% url 'jobs:create_opening' %}" class="button">{% trans "Create an opening" %}</a>
 
 {% endblock content %}
