@@ -15,8 +15,8 @@ class QuestionFactory(factory.Factory):
     FACTORY_FOR = Question
 
     name = 'Cover letter'
-    label = 'Please write a cover letter'
-    type = 'TEXTAREA'
+    is_required = True
+    type = 'Single Line'
 
     company = factory.SubFactory(CompanyFactory)
 

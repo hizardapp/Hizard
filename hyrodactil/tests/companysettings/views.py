@@ -101,7 +101,7 @@ class CompanySettingsViewsTests(WebTest):
         page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'Cover letter'
-        form['label'] = 'Please write a cover letter : '
+        form['is_required'] = True
         form['type'] = 'textbox'
 
         response = form.submit().follow()
@@ -118,13 +118,12 @@ class CompanySettingsViewsTests(WebTest):
         page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = ''
-        form['label'] = ''
+        form['is_required'] = False
         form['type'] = 'textbox'
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
-        self.assertFormError(response, 'form', 'label', self.required)
 
     def test_update_question_valid(self):
         question = QuestionFactory.create(company=self.user.company)
@@ -135,7 +134,6 @@ class CompanySettingsViewsTests(WebTest):
         form['name'] = 'Last Name'
 
         self.assertContains(page, question.name)
-        self.assertContains(page, question.label)
 
         response = form.submit().follow()
 
@@ -155,10 +153,6 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
-
-        def setUp(self):
-            self.user = UserFactory.create()
-        self.required = 'This field is required.'
 
     def test_delete_question(self):
         question = QuestionFactory.create(name='ninja', company=self.user.company)

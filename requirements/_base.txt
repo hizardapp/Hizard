@@ -5,3 +5,4 @@ django-model-utils==1.1.0
 South==0.7.6
 django-countries==1.5
 pillow==1.7.8
+django-autoslug==1.6.1

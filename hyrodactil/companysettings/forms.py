@@ -12,7 +12,7 @@ class DepartmentForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('name', 'label', 'type', 'options',)
+        fields = ('name', 'is_required', 'type',)
 
 
 class InterviewStageForm(forms.ModelForm):

@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,22 +18,21 @@ class Department(TimeStampedModel):
 
 class Question(TimeStampedModel):
     TYPE_QUESTIONS = Choices(
-        ('textbox', _('textbox')),
-        ('textarea', _('textarea')),
-        ('checkbox', _('checkbox')),
-        ('file', _('file')),
-        ('ddl', _('ddl'))
+        ('textbox', _('Single Line')),
+        ('textarea', _('Multi Line')),
+        ('checkbox', _('Checkbox')),
+        ('file', _('File upload')),
     )
 
     name = models.CharField(max_length=200)
-    label = models.CharField(max_length=200)
+    slug = AutoSlugField(populate_from='name')
+    is_required = models.BooleanField()
 
     type = models.CharField(
         choices=TYPE_QUESTIONS,
         default=TYPE_QUESTIONS.textbox,
         max_length=20
     )
-    options = models.CharField(max_length=770, blank=True)
 
     company = models.ForeignKey(Company)
 

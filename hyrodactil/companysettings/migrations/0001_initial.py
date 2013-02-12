@@ -24,9 +24,9 @@ class Migration(SchemaMigration):
             ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
             ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('label', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique_with=(), max_length=50, populate_from='name')),
+            ('is_required', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('type', self.gf('django.db.models.fields.CharField')(default='textbox', max_length=20)),
-            ('options', self.gf('django.db.models.fields.CharField')(max_length=770, blank=True)),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companies.Company'])),
         ))
         db.send_create_signal(u'companysettings', ['Question'])
@@ -82,10 +82,10 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'label': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'is_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'options': ('django.db.models.fields.CharField', [], {'max_length': '770', 'blank': 'True'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': "'name'"}),
             'type': ('django.db.models.fields.CharField', [], {'default': "'textbox'", 'max_length': '20'})
         }
     }
