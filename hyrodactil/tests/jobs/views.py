@@ -175,6 +175,18 @@ class JobsViewsTests(WebTest):
         self.assertContains(response, application.first_name)
         self.assertContains(response, application.last_name)
 
+    def test_listing_all_applicants(self):
+        opening = OpeningFactory.create(company=self.user.company)
+        application = ApplicationFactory.create(opening=opening)
+
+        url = reverse('jobs:list_all_applications')
+
+        response = self.app.get(url, user=self.user)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, application.first_name)
+        self.assertContains(response, application.last_name)
+
     def test_get_applicant_details(self):
         opening = OpeningFactory.create(company=self.user.company)
         application = ApplicationFactory.create(opening=opening)
