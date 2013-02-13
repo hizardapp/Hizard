@@ -2,12 +2,10 @@ from django.conf.urls import patterns, url
 
 from .views import (
     ApplicationDetailView, ApplicationListView, OpeningCreateView,
-    OpeningRestrictedListView, OpeningUpdateView, OpeningDeleteView, apply
+    OpeningRestrictedListView, OpeningUpdateView, OpeningDeleteView
 )
 
 urlpatterns = patterns('',
-    url(r'apply/(?P<opening_id>\d+)$', apply, name='apply'),
-
     url(r'(?P<opening_id>\d+)/applications',
         ApplicationListView.as_view(),
         name='list_applications'

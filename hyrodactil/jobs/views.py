@@ -12,6 +12,7 @@ from .forms import OpeningForm
 from .models import Application, ApplicationAnswer, Opening
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 from core.views import RestrictedDeleteView
+from public.forms import ApplicationForm
 
 
 class OpeningRestrictedListView(LoginRequiredMixin, RestrictedListView):
@@ -73,51 +74,3 @@ class ApplicationDetailView(LoginRequiredMixin, DetailView):
         context = super(ApplicationDetailView, self).get_context_data(**kwargs)
         context['answers'] = ApplicationAnswer.objects.filter(application=context['application'])
         return context
-
-
-@csrf_exempt
-def apply(request, opening_id):
-    try:
-        opening = Opening.objects.get(id=opening_id)
-    except:
-        opening = None
-
-    if not opening:
-        data = 'fail'
-        return HttpResponse(data, mimetype='application/json')
-
-    data = request.POST.dict()
-
-    application = Application(opening=opening)
-    application.first_name = data['first-name']
-    application.last_name = data['last-name']
-    application.save()
-
-    del(data['first-name'])
-    del(data['last-name'])
-    questions = opening.questions.all()
-
-    for key in data.keys():
-        application_answer = ApplicationAnswer()
-
-        # Not very beautiful but works, for now
-        question = [question for question in questions if question.name == key]
-        # If no questions matches, skip this one
-        if len(question) == 0:
-            continue
-
-        if question[0].type == 'file':
-            save_file(request.FILES[key])
-
-        application_answer.question = question[0]
-
-        application_answer.application = application
-        application_answer.answer = data[key]
-        application_answer.save()
-
-    if request.FILES:
-        pass
-        #save_file(request.FILES['CV'])
-
-    data = 'applied'
-    return HttpResponse(data, mimetype='application/json')

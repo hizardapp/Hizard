@@ -17,8 +17,6 @@ from model_utils.models import TimeStampedModel
 
 from companies.models import Company
 
-from hyrodactil.settings import base
-
 
 class CustomUserManager(BaseUserManager):
     """
@@ -114,7 +112,7 @@ def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (new_name, ext)
 
-    return '%s/avatars/%s' % (base.MEDIA_ROOT, filename)
+    return '%s/avatars/%s' % (settings.MEDIA_ROOT, filename)
 
 
 class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
@@ -178,7 +176,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         the user created its account + the ACCOUNT_ACTIVATION_DAYS period
         defined in the settings
         """
-        delta = datetime.timedelta(days=base.ACCOUNT_ACTIVATION_DAYS)
+        delta = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         now = datetime.datetime.now()
 
         if now > self.created + delta:
@@ -195,7 +193,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         """
         context = {
             'activation_key': self.activation_key,
-            'expiration_days': base.ACCOUNT_ACTIVATION_DAYS,
+            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
             'site': None
         }
 
@@ -203,7 +201,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         subject = ''.join(subject.splitlines())
         body = render_to_string('accounts/activation_email_body.txt', context)
 
-        mail.send_mail(subject, body, base.DEFAULT_FROM_EMAIL, [self.email])
+        mail.send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [self.email])
 
     def __unicode__(self):
         return self.email

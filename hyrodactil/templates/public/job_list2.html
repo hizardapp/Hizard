@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  {% for opening in openings %}
+
+      {{ opening.ad.title }}
+
+      {% autoescape off %}
+          {{ opening.ad.description }}
+      {% endautoescape %}
+      <br>
+       {{ opening.form.errors }}
+      <form method="POST" action="." enctype="multipart/form-data">
+          {% csrf_token %}
+       <input type="hidden" name="opening" value="{{ opening.ad.id }}">
+        {% for field in opening.form %}
+            {{ field.label_tag }}
+            {{ field }}
+            <br>
+        {% endfor %}
+          <input type="submit" value="Apply to this job">
+      </form>
+      <br><br><br>
+
+  {% endfor %}
+</body>
+
+</html>

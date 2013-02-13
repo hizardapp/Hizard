@@ -2,12 +2,12 @@ import datetime
 import re
 import os
 
+from django.conf import settings
 from django.core.files import File
 from django.test import TestCase
 
 from ..factories._accounts import UserFactory
 from accounts.models import CustomUser, get_file_path
-from hyrodactil.settings import base
 
 
 class CustomUserModelTests(TestCase):
@@ -56,7 +56,7 @@ class CustomUserModelTests(TestCase):
     def test_add_image_to_user(self):
         user = UserFactory.create()
         default = 'img/default_avatar.jpg'
-        default_avatar = os.path.join(base.STATICFILES_DIRS[0], default)
+        default_avatar = os.path.join(settings.STATICFILES_DIRS[0], default)
 
         user.avatar = File(open(default_avatar))
         user.save()
@@ -89,12 +89,12 @@ class CustomUserModelTests(TestCase):
     def test_activate_user_past_date(self):
         user = UserFactory.create(is_active=False)
 
-        old_value = base.ACCOUNT_ACTIVATION_DAYS
-        base.ACCOUNT_ACTIVATION_DAYS = -1
+        old_value = settings.ACCOUNT_ACTIVATION_DAYS
+        settings.ACCOUNT_ACTIVATION_DAYS = -1
 
         activated = CustomUser.objects.activate_user(user.activation_key)
 
-        base.ACCOUNT_ACTIVATION_DAYS = old_value
+        settings.ACCOUNT_ACTIVATION_DAYS = old_value
 
         self.assertEqual(activated, False)
 
@@ -114,12 +114,12 @@ class CustomUserModelTests(TestCase):
     def test_activation_key_did_expire(self):
         user = UserFactory.create(is_active=False)
 
-        old_value = base.ACCOUNT_ACTIVATION_DAYS
-        base.ACCOUNT_ACTIVATION_DAYS = -1
+        old_value = settings.ACCOUNT_ACTIVATION_DAYS
+        settings.ACCOUNT_ACTIVATION_DAYS = -1
 
         expired = user.activation_key_expired()
 
-        base.ACCOUNT_ACTIVATION_DAYS = old_value
+        settings.ACCOUNT_ACTIVATION_DAYS = old_value
 
         self.assertEqual(expired, True)
 
@@ -131,7 +131,7 @@ class CustomUserModelTests(TestCase):
 
     def test_delete_expired_users(self):
         user = UserFactory.create(is_active=False)
-        days = datetime.timedelta(days=base.ACCOUNT_ACTIVATION_DAYS + 1)
+        days = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
         user.created -= days
         user.save()
 
