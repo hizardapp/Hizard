@@ -6,7 +6,6 @@ from ..factories._jobs import OpeningFactory
 from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._companies import CompanyFactory
 
-from applications.models import Application
 from jobs.models import Opening
 
 
@@ -117,46 +116,3 @@ class JobsViewsTests(WebTest):
         opening = OpeningFactory.create(title='DevOps', company=self.user.company)
         response = self.app.get(url, user=self.user)
         self.assertContains(response, opening.title)
-
-    def test_apply_to_existing_opening(self):
-        self.skipTest('need to remake it')
-
-        opening = OpeningFactory.create(company=self.user.company)
-        question = SingleLineQuestionFactory.create(company=self.user.company)
-        question2 = SingleLineQuestionFactory.create(name='are you a ninja?',
-            company=self.user.company)
-
-        opening.questions.add(question)
-        opening.questions.add(question2)
-
-        opening.save()
-
-        url = reverse('jobs:apply', args=(opening.id,))
-        application_data = {'first-name': 'Vincent',
-                            'last-name': 'Prouillet',
-                            question.name: 'This is me.',
-                            question2.name: 'Yes'}
-
-        self.app.post(url, application_data)
-
-        application = Application.objects.get()
-        self.assertEqual(application.opening, opening)
-        self.assertEqual(application.first_name, 'Vincent')
-        self.assertEqual(application.last_name, 'Prouillet')
-
-        app_answers = application.applicationanswer_set.all()
-
-        self.assertEqual(app_answers[0].answer, 'Yes')
-        self.assertEqual(app_answers[1].answer, 'This is me.')
-
-    def test_apply_to_non_existing_opening(self):
-        self.skipTest('need to remake it')
-
-        url = reverse('jobs:apply', args=(7777,))
-        application_data = {'first-name': 'Vincent',
-                            'last-name': 'Prouillet'}
-
-        self.app.post(url, application_data)
-
-        number_application = Application.objects.count()
-        self.assertEqual(number_application, 0)
