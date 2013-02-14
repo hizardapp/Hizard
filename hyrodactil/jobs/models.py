@@ -19,18 +19,3 @@ class Opening(TimeStampedModel):
 
     company = models.ForeignKey(Company)
     questions = models.ManyToManyField(Question, blank=True, null=True)
-
-
-class Application(TimeStampedModel):
-    first_name = models.CharField(max_length=770)
-    last_name = models.CharField(max_length=770)
-
-    opening = models.ForeignKey(Opening)
-    stage = models.ForeignKey(InterviewStage, blank=True, null=True)
-
-
-class ApplicationAnswer(TimeStampedModel):
-    answer = models.TextField(blank=True, null=True)
-
-    question = models.ForeignKey(Question)
-    application = models.ForeignKey(Application)

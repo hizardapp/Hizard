@@ -186,6 +186,7 @@ LOCAL_APPS = (
     'jobs',
     'accounts',
     'public',
+    'applications',
     'core' # Contains views/methods used in other apps, not an app itself
 )
 

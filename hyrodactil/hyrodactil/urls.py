@@ -46,6 +46,13 @@ urlpatterns = patterns('',
             app_name='jobs')
     ),
     url(
+        r'^applications/',
+        include(
+            'applications.urls',
+            namespace='applications',
+            app_name='applications')
+    ),
+    url(
         r'^',
         include(
             'public.urls',

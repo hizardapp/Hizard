@@ -1,14 +1,14 @@
 import factory
 
 from companysettings.models import Department, Question, InterviewStage
-from ._companies import CompanyFactory
+import _companies
 
 
 class DepartmentFactory(factory.Factory):
     FACTORY_FOR = Department
 
     name = 'Engineering'
-    company = factory.SubFactory(CompanyFactory)
+    company = factory.SubFactory(_companies.CompanyFactory)
 
 
 class SingleLineQuestionFactory(factory.Factory):
@@ -18,7 +18,7 @@ class SingleLineQuestionFactory(factory.Factory):
     is_required = True
     type = 'textbox'
 
-    company = factory.SubFactory(CompanyFactory)
+    company = factory.SubFactory(_companies.CompanyFactory)
 
 class MultiLineQuestionFactory(factory.Factory):
     FACTORY_FOR = Question
@@ -27,7 +27,7 @@ class MultiLineQuestionFactory(factory.Factory):
     is_required = True
     type = 'textarea'
 
-    company = factory.SubFactory(CompanyFactory)
+    company = factory.SubFactory(_companies.CompanyFactory)
 
 class CheckboxQuestionFactory(factory.Factory):
     FACTORY_FOR = Question
@@ -36,7 +36,7 @@ class CheckboxQuestionFactory(factory.Factory):
     is_required = True
     type = 'checkbox'
 
-    company = factory.SubFactory(CompanyFactory)
+    company = factory.SubFactory(_companies.CompanyFactory)
 
 class FileQuestionFactory(factory.Factory):
     FACTORY_FOR = Question
@@ -45,10 +45,10 @@ class FileQuestionFactory(factory.Factory):
     is_required = True
     type = 'file'
 
-    company = factory.SubFactory(CompanyFactory)
+    company = factory.SubFactory(_companies.CompanyFactory)
 
 class InterviewStageFactory(factory.Factory):
     FACTORY_FOR = InterviewStage
 
     name = 'Phone interview'
-    company = factory.SubFactory(CompanyFactory)
+    company = factory.SubFactory(_companies.CompanyFactory)

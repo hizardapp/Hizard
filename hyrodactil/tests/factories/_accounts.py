@@ -2,7 +2,7 @@ import factory
 
 from accounts.models import CustomUser
 
-from ._companies import CompanyFactory
+import _companies
 
 
 class UserFactory(factory.Factory):
@@ -11,7 +11,7 @@ class UserFactory(factory.Factory):
     email = 'bob@bob.com'
     password = 'bob'
     activation_key = '842771118e1d60c103c068280e023bd362af5cc4'
-    company = factory.SubFactory(CompanyFactory)
+    company = factory.SubFactory(_companies.CompanyFactory)
 
     @classmethod
     def _prepare(cls, create, **kwargs):

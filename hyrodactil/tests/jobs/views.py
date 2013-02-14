@@ -2,15 +2,15 @@ from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
-from ..factories._jobs import ApplicationFactory, OpeningFactory
+from ..factories._jobs import OpeningFactory
 from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._companies import CompanyFactory
 
-from jobs.models import Application, Opening
+from applications.models import Application
+from jobs.models import Opening
 
 
 class JobsViewsTests(WebTest):
-    csrf_checks = False
 
     def setUp(self):
         self.user = UserFactory()
@@ -162,50 +162,3 @@ class JobsViewsTests(WebTest):
 
         number_application = Application.objects.count()
         self.assertEqual(number_application, 0)
-
-    def test_listing_applicants(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
-
-        url = reverse('jobs:list_applications', args=(opening.id,))
-
-        response = self.app.get(url, user=self.user)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.first_name)
-        self.assertContains(response, application.last_name)
-
-    def test_listing_all_applicants(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
-
-        url = reverse('jobs:list_all_applications')
-
-        response = self.app.get(url, user=self.user)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.first_name)
-        self.assertContains(response, application.last_name)
-
-    def test_get_applicant_details(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
-        #answer = ApplicationAnswerFactory.create(application=application)
-
-        url = reverse('jobs:application_detail', args=(application.id,))
-        response = self.app.get(url, user=self.user)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.first_name)
-
-    def test_get_applicant_details_different_company(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
-        rival = UserFactory.create(email='red@red.com')
-
-        url = reverse('jobs:application_detail', args=(application.id,))
-
-        self.client.login(username='red@red.com', password='bob')
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, 404)
