@@ -19,4 +19,3 @@ class ApplicationAnswer(TimeStampedModel):
 
     question = models.ForeignKey(Question)
     application = models.ForeignKey(Application)
-

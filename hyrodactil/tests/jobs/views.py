@@ -74,10 +74,8 @@ class JobsViewsTests(WebTest):
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
-        # Should check that there is an error
-        opening_count = Opening.objects.count()
 
-        self.assertEqual(opening_count, 0)
+        self.assertEqual(Opening.objects.count(), 0)
 
     def test_opening_edit(self):
         opening = OpeningFactory.create(title='DevOps', company=self.user.company)
