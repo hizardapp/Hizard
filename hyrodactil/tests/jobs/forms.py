@@ -2,15 +2,15 @@ from django.test import TestCase
 
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
-from ..factories._companysettings import QuestionFactory
+from ..factories._companysettings import SingleLineQuestionFactory
 from jobs.forms import OpeningForm
 
 
 class JobsFormsTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
-        self.first_question = QuestionFactory.create(company=self.user.company)
-        QuestionFactory.create(company=self.user.company)
+        self.first_question = SingleLineQuestionFactory.create(company=self.user.company)
+        SingleLineQuestionFactory.create(company=self.user.company)
 
         self.form_data = {'title': 'Software Developer',
                           'description': 'Fait des logiciels.',
@@ -58,7 +58,7 @@ class JobsFormsTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_opening_form_only_contains_questions_from_same_company(self):
-        other_company_question = QuestionFactory.create(
+        other_company_question = SingleLineQuestionFactory.create(
             name='Your 5 strenghts and weaknesses',
             company=CompanyFactory())
         form = self.Form(self.user.company, self.user.company)

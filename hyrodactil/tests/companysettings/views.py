@@ -3,7 +3,7 @@ from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
 from ..factories._companysettings import (
-    DepartmentFactory, QuestionFactory, InterviewStageFactory
+    DepartmentFactory, SingleLineQuestionFactory, InterviewStageFactory
 )
 from companysettings.models import Department, Question, InterviewStage
 
@@ -89,7 +89,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')
 
-        question = QuestionFactory.create(company=self.user.company)
+        question = SingleLineQuestionFactory.create(company=self.user.company)
 
         page = self.app.get(url, user=self.user)
 
@@ -126,7 +126,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_update_question_valid(self):
-        question = QuestionFactory.create(company=self.user.company)
+        question = SingleLineQuestionFactory.create(company=self.user.company)
         url = reverse('companysettings:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)
@@ -142,7 +142,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(response, 'First Name')
 
     def test_update_question_invalid(self):
-        question = QuestionFactory.create(company=self.user.company)
+        question = SingleLineQuestionFactory.create(company=self.user.company)
         url = reverse('companysettings:update_question', args=(question.id,))
 
         page = self.app.get(url, user=self.user)
@@ -155,7 +155,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_delete_question(self):
-        question = QuestionFactory.create(name='ninja', company=self.user.company)
+        question = SingleLineQuestionFactory.create(name='ninja', company=self.user.company)
         url = reverse('companysettings:delete_question', args=(question.id,))
 
         response = self.app.get(url, user=self.user).follow()

@@ -7,3 +7,4 @@ class CompanyFactory(factory.Factory):
     FACTORY_FOR = Company
 
     name = 'ACME'
+    url = 'http://www.acme.com'

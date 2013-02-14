@@ -1,7 +1,7 @@
 import factory
 
 from _companies import CompanyFactory
-from _companysettings import QuestionFactory
+import _companysettings
 from jobs.models import Application, ApplicationAnswer, Opening
 
 
@@ -15,7 +15,23 @@ class OpeningFactory(factory.Factory):
     loc_city = 'Cannes'
     loc_postcode = '93100'
     company = factory.SubFactory(CompanyFactory)
-    #questions = factory.SubFactory(QuestionFactory)
+
+
+class OpeningWithQuestionsFactory(OpeningFactory):
+
+    @classmethod
+    def _prepare(cls, create, **kwargs):
+        opening = super(OpeningWithQuestionsFactory, cls)._prepare(create, **kwargs)
+        if opening.id:
+            question1 = _companysettings.SingleLineQuestionFactory(company=opening.company)
+            question2 = _companysettings.MultiLineQuestionFactory(company=opening.company)
+            question3 = _companysettings.CheckboxQuestionFactory(is_required=False, company=opening.company)
+            question4 = _companysettings.FileQuestionFactory(is_required=False, company=opening.company)
+            opening.questions.add(question1)
+            opening.questions.add(question2)
+            opening.questions.add(question3)
+            opening.questions.add(question4)
+        return opening
 
 
 class ApplicationFactory(factory.Factory):
@@ -29,6 +45,6 @@ class ApplicationFactory(factory.Factory):
 class ApplicationAnswerFactory(factory.Factory):
     FACTORY_FOR = ApplicationAnswer
 
-    answer = "Some clever answer"
+    answer = 'Some clever answer'
     application = factory.SubFactory(ApplicationFactory)
-    question = factory.SubFactory(QuestionFactory)
+    question = factory.SubFactory(_companysettings.SingleLineQuestionFactory)

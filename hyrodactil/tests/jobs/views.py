@@ -3,7 +3,7 @@ from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
 from ..factories._jobs import ApplicationFactory, OpeningFactory
-from ..factories._companysettings import QuestionFactory
+from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._companies import CompanyFactory
 
 from jobs.models import Application, Opening
@@ -14,7 +14,7 @@ class JobsViewsTests(WebTest):
 
     def setUp(self):
         self.user = UserFactory()
-        self.question = QuestionFactory(company=self.user.company)
+        self.question = SingleLineQuestionFactory(company=self.user.company)
 
     def test_arriving_on_opening_creation_page(self):
         url = reverse('jobs:create_opening')
@@ -47,10 +47,10 @@ class JobsViewsTests(WebTest):
         self.assertEqual(opening_created.questions.count(), 1)
 
     def test_opening_form_only_contains_questions_from_same_company(self):
-        same_company_question = QuestionFactory.create(
+        same_company_question = SingleLineQuestionFactory.create(
             name='To be or not to be?',
             company=self.user.company)
-        other_company_question = QuestionFactory.create(
+        other_company_question = SingleLineQuestionFactory.create(
             name='Your 5 strenghts and weaknesses',
             company=CompanyFactory())
 
@@ -124,8 +124,8 @@ class JobsViewsTests(WebTest):
         self.skipTest('need to remake it')
 
         opening = OpeningFactory.create(company=self.user.company)
-        question = QuestionFactory.create(company=self.user.company)
-        question2 = QuestionFactory.create(name='are you a ninja?',
+        question = SingleLineQuestionFactory.create(company=self.user.company)
+        question2 = SingleLineQuestionFactory.create(name='are you a ninja?',
             company=self.user.company)
 
         opening.questions.add(question)

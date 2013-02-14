@@ -11,15 +11,41 @@ class DepartmentFactory(factory.Factory):
     company = factory.SubFactory(CompanyFactory)
 
 
-class QuestionFactory(factory.Factory):
+class SingleLineQuestionFactory(factory.Factory):
     FACTORY_FOR = Question
 
-    name = 'Cover letter'
+    name = 'Single Line'
     is_required = True
-    type = 'Single Line'
+    type = 'textbox'
 
     company = factory.SubFactory(CompanyFactory)
 
+class MultiLineQuestionFactory(factory.Factory):
+    FACTORY_FOR = Question
+
+    name = 'Multi Line'
+    is_required = True
+    type = 'textarea'
+
+    company = factory.SubFactory(CompanyFactory)
+
+class CheckboxQuestionFactory(factory.Factory):
+    FACTORY_FOR = Question
+
+    name = 'Checkbox'
+    is_required = True
+    type = 'checkbox'
+
+    company = factory.SubFactory(CompanyFactory)
+
+class FileQuestionFactory(factory.Factory):
+    FACTORY_FOR = Question
+
+    name = 'File'
+    is_required = True
+    type = 'file'
+
+    company = factory.SubFactory(CompanyFactory)
 
 class InterviewStageFactory(factory.Factory):
     FACTORY_FOR = InterviewStage
