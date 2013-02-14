@@ -60,6 +60,12 @@ class ApplicationListView(LoginRequiredMixin, RestrictedListView):
         return Application.objects.filter(opening=opening)
 
 
+class AllApplicationListView(LoginRequiredMixin, RestrictedListView):
+    def get_queryset(self):
+        return Application.objects.filter(
+                opening__company=self.request.user.company).order_by("opening")
+
+
 class ApplicationDetailView(LoginRequiredMixin, DetailView):
     model = Application
 
