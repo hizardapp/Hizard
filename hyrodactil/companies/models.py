@@ -5,6 +5,8 @@ from model_utils.models import TimeStampedModel
 
 class Company(TimeStampedModel):
     name = models.CharField(max_length=100)
+    url = models.URLField(blank=True)
+
 
     class Meta:
         verbose_name_plural = 'companies'
