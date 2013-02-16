@@ -51,12 +51,5 @@
 // Media Queries Overrides
 // @import "foundation/components/modules/mqueries";
 
-@import "font-awesome";
-
-// Contains classes to apply to ul/li
-@import "site_partials/_list";
-
-// Top level menu/navigation
-@import "site_partials/_header";
-// Contains all the website content
-@import "site_partials/_container";
+@import "jobs_partials/_header";
+@import "jobs_partials/_opening_list";

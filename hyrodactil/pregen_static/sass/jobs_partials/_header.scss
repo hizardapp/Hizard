@@ -1,0 +1,17 @@
+@import "../_variables";
+
+
+header {
+  @include outerRow();
+
+  h1 {
+    @include column(10);
+  }
+
+  a {
+    @include column(2);
+    line-height: 80px;
+  }
+
+  border-bottom: 1px solid $light-grey;
+}

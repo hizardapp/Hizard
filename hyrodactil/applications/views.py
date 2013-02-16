@@ -6,6 +6,7 @@ from braces.views import LoginRequiredMixin
 
 from .forms import ApplicationForm
 from applications.models import Application, ApplicationAnswer
+from companies.models import Company
 from core.views import  RestrictedListView
 from jobs.models import Opening
 
@@ -15,7 +16,9 @@ class OpeningListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(OpeningListView, self).get_context_data(**kwargs)
-        context['openings'] = Opening.objects.filter(company=self.kwargs['company_id'])
+        company = Company.objects.get(id=self.kwargs['company_id'])
+        context['company'] = company
+        context['openings'] = Opening.objects.filter(company=company)
         return context
 
 
