@@ -27,6 +27,10 @@ class ApplicationForm(forms.ModelForm):
             if not question.is_required:
                 self.fields[field_name].required = False
 
+        for field in self.fields:
+            if self.fields[field].required:
+                self.fields[field].label += '*'
+
     def save(self):
         application = Application(
             first_name=self.cleaned_data['first_name'], last_name=self.cleaned_data['last_name'],

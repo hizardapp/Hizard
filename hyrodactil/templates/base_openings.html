@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+{% load i18n %}
+
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock title %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link href="{{ STATIC_URL }}css/jobs.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <header>
+    <h1>{% block header %}{% endblock header %}</h1>
+    <a href="#">{% trans 'Back to our website' %}</a>
+  </header>
+
+  {% block apply-header %}
+  {% endblock apply-header %}
+
+  <div class="content">
+    <section>
+      {% block section %}
+      {% endblock section %}
+    </section>
+
+    <aside>
+      {% block aside %}
+      {% endblock aside %}
+    </aside>
+
+  </div>
+
+
+</body>
+
+</html>

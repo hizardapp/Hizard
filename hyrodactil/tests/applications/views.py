@@ -21,7 +21,6 @@ class ApplicationViewsTests(WebTest):
         page = self.app.get(url)
 
         self.assertEqual(page.status_code, 200)
-        self.assertContains(page, self.opening.description)
         self.assertContains(page, self.opening.title)
 
     def test_get_application_form(self):

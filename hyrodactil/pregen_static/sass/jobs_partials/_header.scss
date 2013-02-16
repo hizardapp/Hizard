@@ -15,3 +15,19 @@ header {
 
   border-bottom: 1px solid $light-grey;
 }
+
+.apply-header {
+  @include outerRow();
+  padding-top: 10px;
+
+  h3 {
+    @include column(10);
+  }
+
+  a {
+    @include column(2);
+    line-height: 50px;
+  }
+
+  border-bottom: 1px solid $light-grey;
+}

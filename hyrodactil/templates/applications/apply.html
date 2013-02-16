@@ -1,14 +1,40 @@
-{{ opening.company.name }}
+{% extends "base_openings.html" %}
 
-<br><br>
+{% load i18n %}
 
-{{ opening.title }}<br>
-{{ opening.description }}
 
-<br>
+{% block title %}
+   {{ opening.title }} - {{ opening.company.name }}
+{% endblock title %}
 
-<form action="." method="POST">
+
+{% block header %}
+    {{ opening.company.name }}
+{% endblock header %}
+
+
+{% block apply-header %}
+    <div class="apply-header">
+        <h3>{{ opening.title }}</h3>
+        <a href="{% url 'applications:list_openings' opening.company.id %}">{% trans 'Back to the job listing' %}</a>
+    </div>
+{% endblock apply-header %}
+
+
+{% block section %}
+    {{ opening.description }}
+{% endblock section %}
+
+
+{% block aside %}
+  <form action="." method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
+
+    {% for field in form %}
+        {{ field.label_tag }}
+        {{ field }}
+    {% endfor %}
+    <br><br><br>
+    <input type="submit" value="Submit" class="button">
+  </form>
+{% endblock aside %}
