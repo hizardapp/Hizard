@@ -1,3 +1,6 @@
+import os
+import uuid
+
 from django import forms
 
 from .models import Application, ApplicationAnswer
@@ -12,13 +15,17 @@ class ApplicationForm(forms.ModelForm):
         self.opening = kwargs.pop('opening')
         super(ApplicationForm, self).__init__(*args, **kwargs)
 
+        if not self.opening:
+            return
+
         for question in self.opening.questions.all():
             field_name = 'q_%s' % question.slug
 
             if question.type == 'textbox':
                 self.fields[field_name] = forms.CharField(label=question.name)
             elif question.type == 'textarea':
-                self.fields[field_name] = forms.CharField(label=question.name, widget=forms.Textarea)
+                self.fields[field_name] = forms.CharField(label=question.name,
+                    widget=forms.Textarea)
             elif question.type == 'checkbox':
                 self.fields[field_name] = forms.BooleanField(label=question.name)
             elif question.type == 'file':
@@ -31,9 +38,44 @@ class ApplicationForm(forms.ModelForm):
             if self.fields[field].required:
                 self.fields[field].label += '*'
 
+    def _assure_directory_exists(self):
+        """
+        Creates the company directory in media/uploads if it doesn't exist
+        already.
+        """
+        path = 'media/uploads/%d' % self.opening.company.id
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+    def _get_random_filename(self, filename):
+        """
+        Use uuid to generate a unique filename and adds the file extension
+        """
+        new_filename = str(uuid.uuid4())
+        extension = filename.split('.')[-1]
+        new_filename += '.%s' % extension
+
+        return new_filename
+
+    def _save_file(self, file):
+        """
+        Saves the files uploaded by an applicant into media/uploads/company_id
+        """
+        filename = self._get_random_filename(file.name)
+        path = 'media/uploads/%d/%s' %(self.opening.company.id, filename)
+        destination = open(path, 'wb+')
+
+        for chunk in file.chunks():
+            destination.write(chunk)
+        destination.close()
+
+        return filename
+
     def save(self):
         application = Application(
-            first_name=self.cleaned_data['first_name'], last_name=self.cleaned_data['last_name'],
+            first_name=self.cleaned_data['first_name'],
+            last_name=self.cleaned_data['last_name'],
             opening=self.opening
         )
         application.save()
@@ -44,7 +86,8 @@ class ApplicationForm(forms.ModelForm):
                 question = questions.filter(slug=field[2:])[0]
 
                 if isinstance(self.fields[field], forms.FileField):
-                    answer = 'look into self.files and save the file'
+                    self._assure_directory_exists()
+                    answer = self._save_file(self.files[field])
                 else:
                     answer = self.cleaned_data[field]
 
