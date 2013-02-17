@@ -50,4 +50,3 @@ class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = Opening
     success_url = reverse_lazy('jobs:list_openings')
     success_message = _('Opening deleted.')
-

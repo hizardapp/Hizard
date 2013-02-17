@@ -8,7 +8,6 @@ class Company(TimeStampedModel):
     url = models.URLField(blank=True)
     introduction = models.TextField(blank=True)
 
-
     class Meta:
         verbose_name_plural = 'companies'
 

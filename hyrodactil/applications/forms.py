@@ -24,8 +24,8 @@ class ApplicationForm(forms.ModelForm):
             if question.type == 'textbox':
                 self.fields[field_name] = forms.CharField(label=question.name)
             elif question.type == 'textarea':
-                self.fields[field_name] = forms.CharField(label=question.name,
-                    widget=forms.Textarea)
+                self.fields[field_name] = forms.CharField(
+                    label=question.name, widget=forms.Textarea)
             elif question.type == 'checkbox':
                 self.fields[field_name] = forms.BooleanField(label=question.name)
             elif question.type == 'file':
@@ -63,7 +63,7 @@ class ApplicationForm(forms.ModelForm):
         Saves the files uploaded by an applicant into media/uploads/company_id
         """
         filename = self._get_random_filename(file.name)
-        path = 'media/uploads/%d/%s' %(self.opening.company.id, filename)
+        path = 'media/uploads/%d/%s' % (self.opening.company.id, filename)
         destination = open(path, 'wb+')
 
         for chunk in file.chunks():

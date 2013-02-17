@@ -7,7 +7,7 @@ from braces.views import LoginRequiredMixin
 from .forms import ApplicationForm
 from applications.models import Application, ApplicationAnswer
 from companies.models import Company
-from core.views import  RestrictedListView
+from core.views import RestrictedListView
 from jobs.models import Opening
 
 
@@ -80,5 +80,6 @@ class ApplicationDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ApplicationDetailView, self).get_context_data(**kwargs)
-        context['answers'] = ApplicationAnswer.objects.filter(application=context['application'])
+        context['answers'] = ApplicationAnswer.objects.filter(
+            application=context['application'])
         return context

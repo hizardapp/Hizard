@@ -4,7 +4,7 @@ from django_countries import CountryField
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
-from companysettings.models import Department, Question, InterviewStage
+from companysettings.models import Department, Question
 
 
 class Opening(TimeStampedModel):

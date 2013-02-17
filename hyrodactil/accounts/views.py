@@ -1,9 +1,7 @@
 from braces.views import LoginRequiredMixin
 
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
-)
+import django.contrib.auth.forms as auth_forms
 from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import Http404, HttpResponseRedirect
@@ -42,7 +40,7 @@ class LoginView(FormView):
     """
     Login view, not using auth view in case we want to override some things
     """
-    form_class = AuthenticationForm
+    form_class = auth_forms.AuthenticationForm
     template_name = 'accounts/login.html'
     success_url = reverse_lazy('public:home')
 
@@ -77,7 +75,7 @@ class PasswordChangeView(LoginRequiredMixin, FormView):
     """
     Change password view, only for logged in users
     """
-    form_class = PasswordChangeForm
+    form_class = auth_forms.PasswordChangeForm
     template_name = 'accounts/password_change_form.html'
     success_url = reverse_lazy('public:home')
 
@@ -95,7 +93,7 @@ class PasswordChangeView(LoginRequiredMixin, FormView):
 
 
 class PasswordResetView(FormView):
-    form_class = PasswordResetForm
+    form_class = auth_forms.PasswordResetForm
     template_name = 'accounts/password_reset_form.html'
     success_url = reverse_lazy('public:home')
 
@@ -115,7 +113,7 @@ class PasswordResetView(FormView):
 
 
 class PasswordConfirmResetView(FormView):
-    form_class = SetPasswordForm
+    form_class = auth_forms.SetPasswordForm
     template_name = 'accounts/password_reset_confirm.html'
     success_url = reverse_lazy('public:home')
 
