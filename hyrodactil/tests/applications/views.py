@@ -12,6 +12,7 @@ from ..factories._jobs import OpeningFactory, OpeningWithQuestionsFactory
 from applications.models import Application, ApplicationAnswer
 from companysettings.models import Question
 
+
 class ApplicationViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory()
@@ -41,8 +42,9 @@ class ApplicationViewsTests(WebTest):
         url = reverse('applications:apply', args=(self.opening.id,))
         form = self.app.get(url).form
 
-        form['first_name'] = 'Software Developer'
-        form['last_name'] = 'Fait des logiciels.'
+        form['first_name'] = 'Bilbon'
+        form['last_name'] = 'Sacquet'
+        form['email'] = 'bilbon@shire.com'
         form['q_single-line'] = 'Lalala'
         form['q_multi-line'] = 'Lalala'
         # name of file, content of file
@@ -87,8 +89,8 @@ class ApplicationViewsTests(WebTest):
         response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.first_name)
-        self.assertContains(response, application.last_name)
+        self.assertContains(response, application.applicant.first_name)
+        self.assertContains(response, application.applicant.last_name)
 
     def test_listing_all_applicants(self):
         opening = OpeningFactory.create(company=self.user.company)
@@ -99,8 +101,8 @@ class ApplicationViewsTests(WebTest):
         response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.first_name)
-        self.assertContains(response, application.last_name)
+        self.assertContains(response, application.applicant.first_name)
+        self.assertContains(response, application.applicant.last_name)
 
     def test_get_applicant_details(self):
         opening = OpeningFactory.create(company=self.user.company)
@@ -111,7 +113,7 @@ class ApplicationViewsTests(WebTest):
         response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.first_name)
+        self.assertContains(response, application.applicant.first_name)
 
     def test_get_applicant_details_different_company(self):
         opening = OpeningFactory.create(company=self.user.company)

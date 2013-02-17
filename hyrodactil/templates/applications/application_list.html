@@ -26,10 +26,10 @@
         {% for application in opening.list %}
           <tr>
             <td>
-              <a href="{% url 'applications:application_detail' application.id %}">{{ application.first_name }}</a>
+              <a href="{% url 'applications:application_detail' application.id %}">{{ application.applicant.first_name }}</a>
             </td>
             <td>
-              {{ application.last_name }}
+              {{ application.applicant.last_name }}
             </td>
             <td>
               {{ application.created }}

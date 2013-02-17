@@ -8,49 +8,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Applicant'
-        db.create_table(u'applications_applicant', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
-            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=770)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=770)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=254)),
-        ))
-        db.send_create_signal(u'applications', ['Applicant'])
-
-        # Adding model 'Application'
-        db.create_table(u'applications_application', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
-            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
-            ('applicant', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['applications.Applicant'])),
-            ('opening', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['jobs.Opening'])),
-            ('stage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companysettings.InterviewStage'], null=True, blank=True)),
-        ))
-        db.send_create_signal(u'applications', ['Application'])
-
-        # Adding model 'ApplicationAnswer'
-        db.create_table(u'applications_applicationanswer', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
-            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
-            ('answer', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companysettings.Question'])),
-            ('application', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['applications.Application'])),
-        ))
-        db.send_create_signal(u'applications', ['ApplicationAnswer'])
+        # Removing unique constraint on 'Applicant', fields ['email']
+        db.delete_unique(u'applications_applicant', ['email'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Applicant'
-        db.delete_table(u'applications_applicant')
-
-        # Deleting model 'Application'
-        db.delete_table(u'applications_application')
-
-        # Deleting model 'ApplicationAnswer'
-        db.delete_table(u'applications_applicationanswer')
+        # Adding unique constraint on 'Applicant', fields ['email']
+        db.create_unique(u'applications_applicant', ['email'])
 
 
     models = {

@@ -6,10 +6,14 @@ from companysettings.models import Question, InterviewStage
 from jobs.models import Opening
 
 
-class Application(TimeStampedModel):
+class Applicant(TimeStampedModel):
     first_name = models.CharField(max_length=770)
     last_name = models.CharField(max_length=770)
+    email = models.EmailField(max_length=254)
 
+
+class Application(TimeStampedModel):
+    applicant = models.ForeignKey(Applicant)
     opening = models.ForeignKey(Opening)
     stage = models.ForeignKey(InterviewStage, blank=True, null=True)
 

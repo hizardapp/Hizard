@@ -5,14 +5,17 @@ import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase
 
+from ..factories._applications import ApplicantFactory
 from ..factories._jobs import OpeningFactory, OpeningWithQuestionsFactory
 from applications.forms import ApplicationForm
+from applications.models import Applicant
 
 
 class ApplicationFormTests(TestCase):
     form_data = {
         'first_name': 'Bob',
-        'last_name': 'Marley'
+        'last_name': 'Marley',
+        'email': 'bob@marley.jah'
     }
 
     question_data = {
@@ -94,3 +97,14 @@ class ApplicationFormTests(TestCase):
 
         # Making sure we delete the folder and the files inside
         shutil.rmtree(dir)
+
+    def test_should_not_create_new_applicant_if_exists(self):
+        ApplicantFactory(email='bob@marley.jah')
+        opening = OpeningFactory()
+
+        form = ApplicationForm(data=self.form_data, opening=opening)
+        self.assertTrue(form.is_valid())
+
+        form.save()
+
+        self.assertEqual(Applicant.objects.count(), 1)

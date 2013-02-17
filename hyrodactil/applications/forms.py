@@ -3,13 +3,13 @@ import uuid
 
 from django import forms
 
-from .models import Application, ApplicationAnswer
+from .models import Applicant, Application, ApplicationAnswer
 
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
-        model = Application
-        fields = ('first_name', 'last_name',)
+        model = Applicant
+        fields = ('first_name', 'last_name', 'email')
 
     def __init__(self, *args, **kwargs):
         self.opening = kwargs.pop('opening')
@@ -73,9 +73,18 @@ class ApplicationForm(forms.ModelForm):
         return filename
 
     def save(self):
+        try:
+            applicant = Applicant.objects.get(email=self.cleaned_data['email'])
+        except Applicant.DoesNotExist:
+            applicant = Applicant(
+                first_name=self.cleaned_data['first_name'],
+                last_name=self.cleaned_data['last_name'],
+                email=self.cleaned_data['email']
+            )
+            applicant.save()
+
         application = Application(
-            first_name=self.cleaned_data['first_name'],
-            last_name=self.cleaned_data['last_name'],
+            applicant=applicant,
             opening=self.opening
         )
         application.save()
