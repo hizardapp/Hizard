@@ -1,3 +1,29 @@
+/* line 51, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-3.2.5/scss/foundation/mixins/_semantic-grid.scss */
+header.applicant h1, header.applicant div span {
+  float: left;
+}
+
+/* line 55, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-3.2.5/scss/foundation/mixins/_semantic-grid.scss */
+header.applicant, header.applicant div, .answers .answer {
+  *zoom: 1;
+}
+/* line 4, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-3.2.5/scss/foundation/mixins/_clearfix.scss */
+header.applicant:before, header.applicant div:before, .answers .answer:before, header.applicant:after, header.applicant div:after, .answers .answer:after {
+  content: " ";
+  display: table;
+}
+/* line 5, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-3.2.5/scss/foundation/mixins/_clearfix.scss */
+header.applicant:after, header.applicant div:after, .answers .answer:after {
+  clear: both;
+}
+
+/* line 62, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-3.2.5/scss/foundation/mixins/_semantic-grid.scss */
+header.applicant h1, header.applicant div span {
+  position: relative;
+  min-height: 1px;
+  padding: 0 15px;
+}
+
 /* Requires: normalize.css */
 /* Global Reset & Standards ---------------------- */
 /* line 5, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-3.2.5/scss/foundation/common/_globals.scss */
@@ -4481,7 +4507,7 @@ ul.icons li [class*=" icon-"] {
 }
 
 /* line 3, ../../pregen_static/sass/site_partials/_header.scss */
-header {
+header.main {
   background-color: white;
   border-bottom: 1px solid #e6e6e6;
   z-index: 9999;
@@ -4491,37 +4517,37 @@ header {
   top: 0;
 }
 /* line 14, ../../pregen_static/sass/site_partials/_header.scss */
-header h1 {
+header.main h1 {
   font-size: 18px;
   font-size: 1.8rem;
 }
 /* line 19, ../../pregen_static/sass/site_partials/_header.scss */
-header ul li {
+header.main ul li {
   line-height: 45px;
   border-right: 1px solid #e6e6e6;
 }
 /* line 22, ../../pregen_static/sass/site_partials/_header.scss */
-header ul li:nth-child(1) {
+header.main ul li:nth-child(1) {
   border-left: 1px solid #e6e6e6;
 }
 /* line 27, ../../pregen_static/sass/site_partials/_header.scss */
-header ul li a {
+header.main ul li a {
   display: inline-block;
   color: black;
   padding-left: 10px;
   padding-right: 10px;
 }
 /* line 34, ../../pregen_static/sass/site_partials/_header.scss */
-header ul li i {
+header.main ul li i {
   margin-right: 5px;
 }
 /* line 39, ../../pregen_static/sass/site_partials/_header.scss */
-header nav.main {
+header.main nav.main {
   vertical-align: middle;
   text-align: center;
 }
 /* line 44, ../../pregen_static/sass/site_partials/_header.scss */
-header nav.secondary {
+header.main nav.secondary {
   text-align: right;
 }
 
@@ -4530,4 +4556,79 @@ header nav.secondary {
   margin-top: 70px;
   margin-bottom: 20px;
   padding: 10px;
+}
+
+/* line 2, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+header.applicant {
+  width: 1000px;
+  max-width: 100%;
+  min-width: 768px;
+  margin: 0 auto;
+}
+@media only screen and (max-width: 767px) {
+  /* line 2, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+  header.applicant {
+    width: auto;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+/* line 5, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+header.applicant h1 {
+  width: 100%;
+}
+@media only screen and (max-width: 767px) {
+  /* line 5, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+  header.applicant h1 {
+    float: none;
+    width: auto;
+  }
+}
+/* line 9, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+header.applicant div {
+  width: 1000px;
+  max-width: 100%;
+  min-width: 768px;
+  margin: 0 auto;
+}
+@media only screen and (max-width: 767px) {
+  /* line 9, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+  header.applicant div {
+    width: auto;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+/* line 11, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+header.applicant div span {
+  font-weight: bold;
+  font-size: 17px;
+  left: 8.33333%;
+  width: 91.66667%;
+}
+@media only screen and (max-width: 767px) {
+  /* line 11, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+  header.applicant div span {
+    float: none;
+    width: auto;
+  }
+}
+
+/* line 21, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+.answers .answer {
+  width: 1000px;
+  max-width: 100%;
+  min-width: 768px;
+  margin: 0 auto;
+}
+@media only screen and (max-width: 767px) {
+  /* line 21, ../../pregen_static/sass/site_partials/_applicant_details.scss */
+  .answers .answer {
+    width: auto;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }

@@ -47,31 +47,6 @@ class RestrictedDeleteView(RestrictedQuerysetMixin, QuickDeleteView):
         return super(RestrictedDeleteView, self).delete(request, *args, **kwargs)
 
 
-class RestrictedDetailView(DetailView):
-    """
-    Check if the user is allowed to view the details of this object
-    """
-    model = None
-    # In case the model in the detail view has its ownership data from a
-    # related object
-    restricted_by_model = None
-
-    def get_queryset(self):
-        query_set = super(RestrictedDetailView, self).get_queryset()
-
-        if self.restricted_by_model:
-            # The model is related to another model which has a company field
-            pass
-        else:
-            # The model has a company field
-            query_set = query_set.filter(company=self.request.user.company)
-
-        if len(query_set) > 0:
-            return query_set
-        else:
-            raise Http404
-
-
 class MessageMixin(object):
     """
     Pass a message to the template after create/update action (maybe delete)

@@ -3,14 +3,23 @@
 {% load i18n %}
 
 {% block content %}
-  {{ application.applicant.first_name }} {{ application.applicant.last_name }}
+  <header class="applicant">
+    <h1>{{ application.applicant.first_name }} {{ application.applicant.last_name }}</h1>
+    <div>
+      <span>{{ application.applicant.email }}</span>
+    </div>
+  </header>
 
   <br><br>
 
-  {% for answer in answers %}
-    <p>
-      {{ answer.question.label }} : <br>
-      {{ answer.answer }}
-    </p>
-  {% endfor %}
+  <div class="answers">
+    {% for answer in answers %}
+       <div class="answer">
+         {{ answer.question.name }}: {{ answer.answer }}
+       </div>
+    {% endfor %}
+  </div>
+
+  <br><br>
+
 {% endblock %}
