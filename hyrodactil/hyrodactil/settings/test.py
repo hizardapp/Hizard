@@ -23,3 +23,4 @@ DATABASES = {
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
 )
+SOUTH_TESTS_MIGRATE = False
