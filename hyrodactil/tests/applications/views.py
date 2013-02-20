@@ -5,7 +5,9 @@ from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
-from ..factories._applications import ApplicationFactory
+from ..factories._applications import (
+    ApplicationFactory, ApplicationAnswerFactory
+)
 from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._jobs import OpeningFactory, OpeningWithQuestionsFactory
 
@@ -105,12 +107,16 @@ class ApplicationViewsTests(WebTest):
 
     def test_get_applicant_details(self):
         application = ApplicationFactory.create(opening=self.opening)
+        answer = ApplicationAnswerFactory.create(application=application,
+                                                 question=self.question,
+                                                 answer="Man")
 
         url = reverse('applications:application_detail', args=(application.id,))
         response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
+        self.assertContains(response, "Man")
 
     def test_get_applicant_details_different_company(self):
         application = ApplicationFactory.create(opening=self.opening)
