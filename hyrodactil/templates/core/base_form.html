@@ -18,11 +18,16 @@
     {% endfor %}
 
 
-    <div class="form-actions">
-      {% block form-actions %}
-        <input type="submit" value="{% trans 'Save' %}" class="button" />
-      {% endblock %}
+    <div class="row">
+      <div class="form-actions twelve columns end">
+        <div class="right">
+          {% block form-actions %}
+            <input type="submit" value="{% trans 'Save' %}" class="button" />
+          {% endblock %}
+        </div>
+      </div>
     </div>
+
   </form>
 
 {% endblock content %}
