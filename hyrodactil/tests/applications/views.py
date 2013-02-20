@@ -81,10 +81,10 @@ class ApplicationViewsTests(WebTest):
 
 
     def test_listing_applicants(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
+        application = ApplicationFactory.create(opening=self.opening)
 
-        url = reverse('applications:list_applications', args=(opening.id,))
+        url = reverse('applications:list_applications',
+                args=(self.opening.id,))
 
         response = self.app.get(url, user=self.user)
 
@@ -93,8 +93,7 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(response, application.applicant.last_name)
 
     def test_listing_all_applicants(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
+        application = ApplicationFactory.create(opening=self.opening)
 
         url = reverse('applications:list_all_applications')
 
@@ -105,9 +104,7 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(response, application.applicant.last_name)
 
     def test_get_applicant_details(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
-        #answer = ApplicationAnswerFactory.create(application=application)
+        application = ApplicationFactory.create(opening=self.opening)
 
         url = reverse('applications:application_detail', args=(application.id,))
         response = self.app.get(url, user=self.user)
@@ -116,8 +113,7 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(response, application.applicant.first_name)
 
     def test_get_applicant_details_different_company(self):
-        opening = OpeningFactory.create(company=self.user.company)
-        application = ApplicationFactory.create(opening=opening)
+        application = ApplicationFactory.create(opening=self.opening)
         rival = UserFactory.create(email='red@red.com')
 
         url = reverse('applications:application_detail', args=(application.id,))
