@@ -6,16 +6,16 @@
   <form action="{% block action %}{% endblock %}" method="POST" id="action-form">
     {% csrf_token %}
 
-    <div class="row">
-      {% for field in form %}
+    {% for field in form %}
+      <div class="row">
         <div class="two columns">
           <label class="right inline">{{ field.label }}</label>
         </div>
         <div class="ten columns">
           {{ field }}
         </div>
-      {% endfor %}
-    </div>
+      </div>
+    {% endfor %}
 
 
     <div class="form-actions">
