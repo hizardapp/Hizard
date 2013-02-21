@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.http import Http404
-from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import BaseDeleteView
 
 

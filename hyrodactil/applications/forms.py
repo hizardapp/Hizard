@@ -3,7 +3,9 @@ import uuid
 
 from django import forms
 
-from .models import Applicant, Application, ApplicationAnswer
+from .models import (
+        Applicant, Application, ApplicationAnswer, ApplicationTransition
+)
 
 
 class ApplicationForm(forms.ModelForm):
@@ -105,3 +107,9 @@ class ApplicationForm(forms.ModelForm):
                 application_answer.question = question
                 application_answer.answer = answer
                 application_answer.save()
+
+
+class ApplicationTransitionForm(forms.ModelForm):
+    class Meta:
+        model = ApplicationTransition
+        fields = ('stage',)

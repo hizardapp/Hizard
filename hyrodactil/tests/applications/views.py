@@ -8,8 +8,10 @@ from ..factories._accounts import UserFactory
 from ..factories._applications import (
     ApplicationFactory, ApplicationAnswerFactory
 )
-from ..factories._companysettings import SingleLineQuestionFactory
-from ..factories._jobs import OpeningFactory, OpeningWithQuestionsFactory
+from ..factories._companysettings import (
+    SingleLineQuestionFactory, InterviewStageFactory
+)
+from ..factories._jobs import OpeningWithQuestionsFactory
 
 from applications.models import Application, ApplicationAnswer
 from companysettings.models import Question
@@ -128,3 +130,21 @@ class ApplicationViewsTests(WebTest):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 404)
+
+    def test_applicant_details_update_stage(self):
+        application = ApplicationFactory.create(opening=self.opening)
+        phoned = InterviewStageFactory.create(company=self.user.company)
+
+        url = reverse('applications:application_detail',
+                args=(application.id,))
+        response = self.app.get(url, user=self.user)
+        self.assertEqual(response.status_code, 200)
+        form = self.app.get(url).form
+        form['stage'] = '%s' % phoned.pk
+        response = form.submit().follow()
+
+        transition = application.applicationtransition_set.get()
+        self.assertEqual(transition.user, self.user)
+        self.assertEqual(transition.stage, phoned)
+
+        self.assertContains(response, str(transition))
