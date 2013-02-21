@@ -21,7 +21,7 @@
             <a href="{% url 'applications:list_applications' opening.id %}">{{ opening.title }}</a>
           </td>
           <td>
-            {{ opening.created }}
+            {{ opening.created|date:"d/m/Y" }}
           </td>
           <td>
             <a href="{% url 'jobs:update_opening' opening.id %}" class="button">{% trans "Edit" %}</a>

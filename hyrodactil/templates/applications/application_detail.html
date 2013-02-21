@@ -22,7 +22,11 @@
 
   <ul>
     {% for transition in application.applicationtransition_set.all %}
-    <li>{{ transition }}</li>
+    <li>
+      {% blocktrans with stage=transition.stage user=transition.user created=transition.created|date:"d/m/Y H:m" %}
+        Moved to {{ stage }} by {{ user }} on {{ created }}
+      {% endblocktrans %}
+    </li>
     {% endfor %}
   </ul>
 

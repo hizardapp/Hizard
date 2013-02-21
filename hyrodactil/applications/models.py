@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from model_utils.models import TimeStampedModel
 
@@ -22,9 +23,6 @@ class ApplicationTransition(TimeStampedModel):
     application = models.ForeignKey(Application)
     user = models.ForeignKey(CustomUser)
     stage = models.ForeignKey(InterviewStage)
-
-    def __str__(self):
-        return "%s by %s on %s" % (self.stage, self.user, self.created)
 
     class Meta:
         ordering = "created",

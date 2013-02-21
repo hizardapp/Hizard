@@ -147,4 +147,5 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(transition.user, self.user)
         self.assertEqual(transition.stage, phoned)
 
-        self.assertContains(response, str(transition))
+        self.assertContains(response, transition.user)
+        self.assertContains(response, transition.stage)

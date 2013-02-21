@@ -1,14 +1,11 @@
 from django.core.urlresolvers import reverse_lazy
-from django.http import Http404
-from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView
 
 from braces.views import LoginRequiredMixin
 
 from .forms import OpeningForm
 from .models import Opening
-from applications.models import Application, ApplicationAnswer
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 from core.views import RestrictedDeleteView
 
