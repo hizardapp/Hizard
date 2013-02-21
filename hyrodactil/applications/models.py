@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
 from model_utils.models import TimeStampedModel
 
@@ -26,6 +25,7 @@ class ApplicationTransition(TimeStampedModel):
 
     class Meta:
         ordering = "created",
+
 
 class ApplicationAnswer(TimeStampedModel):
     answer = models.TextField(blank=True, null=True)

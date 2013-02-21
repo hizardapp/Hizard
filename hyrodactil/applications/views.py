@@ -75,8 +75,10 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
 
     def get_application(self):
         try:
-            return Application.objects.get(pk=self.kwargs["pk"],
-                    opening__company=self.request.user.company)
+            return Application.objects.get(
+                pk=self.kwargs["pk"],
+                opening__company=self.request.user.company
+            )
         except Application.DoesNotExist:
             raise Http404
 
@@ -93,4 +95,3 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         transition.user = self.request.user
         transition.save()
         return redirect('applications:application_detail', pk=self.kwargs['pk'])
-
