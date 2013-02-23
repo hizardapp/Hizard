@@ -35,7 +35,8 @@ class CompaniesViewsTests(WebTest):
         page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'ACME'
-        response = form.submit().follow()
+        form['subdomain'] = 'acmememe'
+        response = form.submit().follow(headers=dict(Host="acmememe.h.com"))
 
         self.assertEqual(response.status_code, 200)
 

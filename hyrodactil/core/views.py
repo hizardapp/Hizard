@@ -11,7 +11,7 @@ class RestrictedListView(ListView):
     def get_queryset(self):
         company = self.request.user.company
 
-        if company:
+        if company and company.subdomain == self.request.subdomain:
             return self.model.objects.filter(company=company)
         else:
             raise Http404
@@ -23,12 +23,13 @@ class RestrictedQuerysetMixin(object):
     """
     def get_queryset(self):
         query_set = super(RestrictedQuerysetMixin, self).get_queryset()
-        query_set = query_set.filter(company=self.request.user.company)
+        company = self.request.user.company
+        query_set = query_set.filter(company=company)
 
-        if len(query_set) > 0:
-            return query_set
-        else:
+        if self.request.subdomain != company.subdomain or len(query_set) == 0:
             raise Http404
+        else:
+            return query_set
 
 
 class RestrictedUpdateView(RestrictedQuerysetMixin, UpdateView):

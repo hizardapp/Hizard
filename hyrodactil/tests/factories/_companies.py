@@ -8,3 +8,4 @@ class CompanyFactory(factory.Factory):
 
     name = 'ACME'
     website = 'http://www.acme.com'
+    subdomain = factory.Sequence(lambda n: 'domain%s' % n)

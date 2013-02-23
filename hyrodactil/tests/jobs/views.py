@@ -25,7 +25,8 @@ class JobsViewsTests(WebTest):
     def test_opening_creation(self):
         url = reverse('jobs:create_opening')
 
-        page = self.app.get(url, user=self.user)
+        page = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['title'] = 'Software Developer'
         form['description'] = 'Fait des logiciels.'
@@ -80,7 +81,8 @@ class JobsViewsTests(WebTest):
         opening = OpeningFactory.create(title='DevOps', company=self.user.company)
         url = reverse('jobs:update_opening', args=(opening.id,))
 
-        page = self.app.get(url, user=self.user)
+        page = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['title'] = 'Software Developer'
         response = form.submit().follow()
@@ -94,7 +96,9 @@ class JobsViewsTests(WebTest):
                                         company=self.user.company)
         url = reverse('jobs:delete_opening', args=(opening.id,))
 
-        response = self.app.get(url, user=self.user).follow()
+        response = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+                ).follow()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.request.path, reverse('jobs:list_openings'))
         self.assertNotContains(response, 'DevOps')
@@ -114,5 +118,6 @@ class JobsViewsTests(WebTest):
     def test_opening_listing(self):
         url = reverse('jobs:list_openings')
         opening = OpeningFactory.create(title='DevOps', company=self.user.company)
-        response = self.app.get(url, user=self.user)
+        response = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         self.assertContains(response, opening.title)

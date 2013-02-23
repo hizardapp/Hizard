@@ -13,8 +13,9 @@ class CoreViewsTests(WebTest):
         """
         Class simulating a request object
         """
-        def __init__(self, user=None):
+        def __init__(self, user=None, subdomain=None):
             self.user = user
+            self.subdomain = subdomain
 
         def add_message_storage(self):
             self.session = {}
@@ -23,7 +24,7 @@ class CoreViewsTests(WebTest):
     def test_ListCompanyObjectsMixin_with_company(self):
         user = UserFactory()
         mixin = RestrictedListView()
-        mixin.request = self.Request(user)
+        mixin.request = self.Request(user, subdomain=user.company.subdomain)
         mixin.model = Department
         department = DepartmentFactory(company=user.company)
         result = mixin.get_queryset()
@@ -42,7 +43,7 @@ class CoreViewsTests(WebTest):
     def test_UserAllowedActionMixin_with_company(self):
         user = UserFactory()
         mixin = RestrictedListView()
-        mixin.request = self.Request(user)
+        mixin.request = self.Request(user, subdomain=user.company.subdomain)
         mixin.model = Department
         department = DepartmentFactory(company=user.company)
         result = mixin.get_queryset()
@@ -55,5 +56,13 @@ class CoreViewsTests(WebTest):
         mixin = RestrictedListView()
         mixin.request = self.Request(user)
 
+        with self.assertRaises(Http404):
+            mixin.get_queryset()
+
+    def test_ListCompanyObjectsMixin_with_inexiting_subdomain(self):
+        user = UserFactory()
+        mixin = RestrictedListView()
+        mixin.request = self.Request(user, subdomain="theunsequenced")
+        mixin.model = Department
         with self.assertRaises(Http404):
             mixin.get_queryset()

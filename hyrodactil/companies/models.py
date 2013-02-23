@@ -5,6 +5,7 @@ from model_utils.models import TimeStampedModel
 
 class Company(TimeStampedModel):
     name = models.CharField(max_length=100)
+    subdomain = models.SlugField(unique=True)
     website = models.URLField(blank=True)
     introduction = models.TextField(blank=True)
 
