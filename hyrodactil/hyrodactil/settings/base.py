@@ -184,7 +184,8 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'companies',
     'companysettings',
-    'jobs',
+    'openings',
+    'public_jobs',
     'accounts',
     'public',
     'applications',

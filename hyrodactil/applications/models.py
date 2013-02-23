@@ -4,7 +4,7 @@ from model_utils.models import TimeStampedModel
 
 from accounts.models import CustomUser
 from companysettings.models import Question, InterviewStage
-from jobs.models import Opening
+from openings.models import Opening
 
 
 class Applicant(TimeStampedModel):

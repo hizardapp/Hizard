@@ -16,7 +16,7 @@
 
   {% for opening in openings %}
     <div class="opening">
-      <a href="{% url 'applications:apply' opening.id %}">{{ opening.title }}</a>
+      <a href="{% url 'public_jobs:apply' opening.id %}">{{ opening.title }}</a>
       <br>
       {% if opening.department %}
         <span>Department: {{ opening.department }}</span>

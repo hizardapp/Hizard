@@ -24,10 +24,10 @@
             {{ opening.created|date:"d/m/Y" }}
           </td>
           <td>
-            <a href="{% url 'jobs:update_opening' opening.id %}" class="button">{% trans "Edit" %}</a>
+            <a href="{% url 'openings:update_opening' opening.id %}" class="button">{% trans "Edit" %}</a>
           </td>
           <td>
-            <a href="{% url 'jobs:delete_opening' opening.id %}" class="alert button">{% trans "Delete" %}</a>
+            <a href="{% url 'openings:delete_opening' opening.id %}" class="alert button">{% trans "Delete" %}</a>
           </td>
         </tr>
       {% endfor %}
@@ -35,6 +35,6 @@
 
   </table>
 
-  <a href="{% url 'jobs:create_opening' %}" class="button">{% trans "Create an opening" %}</a>
+  <a href="{% url 'openings:create_opening' %}" class="button">{% trans "Create an opening" %}</a>
 
 {% endblock content %}

@@ -1,7 +1,7 @@
 import factory
 
 import _companysettings
-import _jobs
+import _openings
 from applications.models import Applicant, Application, ApplicationAnswer
 
 
@@ -16,7 +16,7 @@ class ApplicationFactory(factory.Factory):
     FACTORY_FOR = Application
 
     applicant = factory.SubFactory(ApplicantFactory)
-    opening = factory.SubFactory(_jobs.OpeningFactory)
+    opening = factory.SubFactory(_openings.OpeningFactory)
 
 
 class ApplicationAnswerFactory(factory.Factory):

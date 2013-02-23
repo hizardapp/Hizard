@@ -3,10 +3,10 @@ from django.test import TestCase
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
 from ..factories._companysettings import SingleLineQuestionFactory
-from jobs.forms import OpeningForm
+from openings.forms import OpeningForm
 
 
-class JobsFormsTests(TestCase):
+class OpeningsFormsTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.first_question = SingleLineQuestionFactory.create(company=self.user.company)

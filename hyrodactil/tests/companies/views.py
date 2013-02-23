@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django_webtest import WebTest
 
 from tests.factories._accounts import UserFactory
@@ -36,9 +37,13 @@ class CompaniesViewsTests(WebTest):
         form = page.forms['action-form']
         form['name'] = 'ACME'
         form['subdomain'] = 'acmememe'
-        response = form.submit().follow(headers=dict(Host="acmememe.h.com"))
+        response = form.submit()
+        expected = "http://acmememe.%s%s" % (settings.SITE_URL,
+                reverse("openings:list_openings"))
+        self.assertEqual(response["Location"], expected)
+        self.assertEqual(response.status_code, 302)
 
-        self.assertEqual(response.status_code, 200)
+        response = response.follow()
 
         company_created = Company.objects.get()
 

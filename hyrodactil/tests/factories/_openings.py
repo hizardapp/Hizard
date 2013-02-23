@@ -2,7 +2,7 @@ import factory
 
 import _companies
 import _companysettings
-from jobs.models import Opening
+from openings.models import Opening
 
 
 class OpeningFactory(factory.Factory):

@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase
 
 from ..factories._applications import ApplicantFactory
-from ..factories._jobs import OpeningFactory, OpeningWithQuestionsFactory
+from ..factories._openings import OpeningFactory, OpeningWithQuestionsFactory
 from applications.forms import ApplicationForm
 from applications.models import Applicant
 

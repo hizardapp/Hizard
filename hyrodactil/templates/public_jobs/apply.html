@@ -16,7 +16,7 @@
 {% block apply-header %}
     <div class="apply-header">
         <h3>{{ opening.title }}</h3>
-        <a href="{% url 'applications:list_openings' opening.company.id %}">{% trans 'Back to the job listing' %}</a>
+        <a href="{% url 'public_jobs:list_openings' %}">{% trans 'Back to the job listing' %}</a>
     </div>
 {% endblock apply-header %}
 

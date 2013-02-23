@@ -67,7 +67,7 @@
 
           <div id="hirodactyl-job-form-{{ opening.id }}" class="hirodactyl-hidden">
 
-            <form method="POST" action="{% url 'jobs:apply' opening.id %}" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'public_jobs:apply' opening.id %}" enctype="multipart/form-data">
               First Name : <input type="textbox" name="first-name"><br>
               Last Name : <input type="textbox" name="last-name"><br>
               {% for question in opening.questions.all %}
