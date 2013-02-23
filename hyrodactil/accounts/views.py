@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout
 import django.contrib.auth.forms as auth_forms
 from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.conf import settings
 from django.http.response import Http404, HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.utils.http import base36_to_int
@@ -42,7 +43,6 @@ class LoginView(FormView):
     """
     form_class = auth_forms.AuthenticationForm
     template_name = 'accounts/login.html'
-    success_url = reverse_lazy('public:home')
 
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
@@ -52,12 +52,29 @@ class LoginView(FormView):
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
+    def build_subdomain_url(self, url):
+        scheme = "https" if self.request.is_secure() else "http"
+        server_port = int(self.request.environ['SERVER_PORT'])
+        if server_port not in (80, 443):
+            host_part = "%s://%s.%s:%s" % (scheme,
+                self.request.user.company.subdomain,
+                settings.SITE_URL,
+                server_port)
+        else:
+            host_part = "%s://%s.%s" % (scheme,
+                self.request.user.company.subdomain,
+                settings.SITE_URL)
+
+        return "%s%s" % (host_part, url)
+
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
 
         if user.company is None:
             self.success_url = reverse('companies:create')
+        else:
+            self.success_url = self.build_subdomain_url(reverse("public:home"))
         return super(LoginView, self).form_valid(form)
 
 

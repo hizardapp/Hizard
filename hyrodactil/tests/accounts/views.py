@@ -3,6 +3,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.http import int_to_base36
 
@@ -120,7 +121,10 @@ class AccountsViewsTests(WebTest):
         form['password'] = 'bob'
 
         response = form.submit()
-        self.assertRedirects(response, reverse('public:home'))
+        self.assertRedirects(response,
+                "http://%s.%s%s" % (user.company.subdomain,
+                                    settings.SITE_URL,
+                                    reverse('public:home')))
         self.assertIn('_auth_user_id', self.app.session)
 
     def test_post_login_view_failure_inactive_user(self):
@@ -278,7 +282,7 @@ class AccountsViewsTests(WebTest):
         GET the reset password confirmation page with invalid uidb36/token
         Should display an error
         """
-        user = UserFactory.create()
+        UserFactory.create()
         response = self.app.get(
             reverse(
                 'auth:confirm_reset_password',
