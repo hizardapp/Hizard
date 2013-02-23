@@ -143,7 +143,7 @@ class ApplicationViewsTests(WebTest):
         form['stage'] = '%s' % phoned.pk
         response = form.submit().follow()
 
-        transition = application.applicationtransition_set.get()
+        transition = application.stage_transitions.get()
         self.assertEqual(transition.user, self.user)
         self.assertEqual(transition.stage, phoned)
 

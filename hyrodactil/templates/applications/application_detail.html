@@ -21,7 +21,7 @@
   </div>
 
   <ul>
-    {% for transition in application.applicationtransition_set.all %}
+    {% for transition in application.stage_transitions.all %}
     <li>
       {% blocktrans with stage=transition.stage user=transition.user created=transition.created|date:"d/m/Y H:m" %}
         Moved to {{ stage }} by {{ user }} on {{ created }}

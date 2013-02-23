@@ -4,7 +4,7 @@ from django.views.generic import FormView, TemplateView
 
 from braces.views import LoginRequiredMixin
 
-from .forms import ApplicationForm, ApplicationTransitionForm
+from .forms import ApplicationForm, ApplicationStageTransitionForm
 from applications.models import Application, ApplicationAnswer
 from companies.models import Company
 from core.views import RestrictedListView
@@ -70,7 +70,7 @@ class AllApplicationListView(LoginRequiredMixin, RestrictedListView):
 
 class ApplicationDetailView(LoginRequiredMixin, FormView):
     model = Application
-    form_class = ApplicationTransitionForm
+    form_class = ApplicationStageTransitionForm
     template_name = "applications/application_detail.html"
 
     def get_application(self):

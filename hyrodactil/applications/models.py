@@ -18,8 +18,8 @@ class Application(TimeStampedModel):
     opening = models.ForeignKey(Opening)
 
 
-class ApplicationTransition(TimeStampedModel):
-    application = models.ForeignKey(Application)
+class ApplicationStageTransition(TimeStampedModel):
+    application = models.ForeignKey(Application, related_name="stage_transitions")
     user = models.ForeignKey(CustomUser)
     stage = models.ForeignKey(InterviewStage)
 
