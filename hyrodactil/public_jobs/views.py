@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import TemplateView
 
 from applications.forms import ApplicationForm
@@ -11,7 +11,7 @@ class OpeningListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(OpeningListView, self).get_context_data(**kwargs)
-        company = Company.objects.get(subdomain=self.request.subdomain)
+        company = get_object_or_404(Company, subdomain=self.request.subdomain)
         context['company'] = company
         context['openings'] = Opening.objects.filter(company=company)
         return context

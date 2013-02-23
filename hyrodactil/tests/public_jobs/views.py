@@ -25,6 +25,10 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, self.opening.title)
 
+    def test_get_list_openings_inexisting_subdomain(self):
+        url = reverse('public_jobs:list_openings')
+        self.app.get(url, headers=dict(Host="tralala.h.com"), status=404)
+
     def test_get_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))
 
