@@ -4,7 +4,7 @@ import views
 
 urlpatterns = patterns('',
     url(
-        r'^applications$',
+        r'^$',
         views.AllApplicationListView.as_view(),
         name='list_all_applications'
     ),
