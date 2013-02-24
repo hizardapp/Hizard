@@ -6,6 +6,7 @@ from applications.forms import ApplicationForm
 from companies.models import Company
 from openings.models import Opening
 
+
 class OpeningListView(TemplateView):
     template_name = 'public_jobs/opening_list.html'
 
@@ -49,5 +50,3 @@ class ApplyView(TemplateView):
                 'form': form
             }
             return self.render_to_response(context)
-
-

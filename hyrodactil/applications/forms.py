@@ -2,9 +2,10 @@ import os
 import uuid
 
 from django import forms
+from django.conf import settings
 
 from .models import (
-        Applicant, Application, ApplicationAnswer, ApplicationStageTransition
+    Applicant, Application, ApplicationAnswer, ApplicationStageTransition
 )
 
 
@@ -45,7 +46,7 @@ class ApplicationForm(forms.ModelForm):
         Creates the company directory in media/uploads if it doesn't exist
         already.
         """
-        path = 'media/uploads/%d' % self.opening.company.id
+        path = '%s/uploads/%d' % (settings.MEDIA_ROOT, self.opening.company.id)
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -65,14 +66,15 @@ class ApplicationForm(forms.ModelForm):
         Saves the files uploaded by an applicant into media/uploads/company_id
         """
         filename = self._get_random_filename(file.name)
-        path = 'media/uploads/%d/%s' % (self.opening.company.id, filename)
+        upload_path = '/uploads/%d/%s' % (self.opening.company.id, filename)
+        path = '%s/%s' % (settings.MEDIA_ROOT, upload_path)
         destination = open(path, 'wb+')
 
         for chunk in file.chunks():
             destination.write(chunk)
         destination.close()
 
-        return filename
+        return upload_path
 
     def save(self):
         try:

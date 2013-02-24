@@ -1,6 +1,7 @@
 import os
 import shutil
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
@@ -59,10 +60,10 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(ApplicationAnswer.objects.count(), 4)
 
         # Testing the file has been properly updated
-        dir = 'media/uploads/%d' % self.opening.company.id
+        dir = '%s/uploads/%d' % (settings.MEDIA_ROOT, self.opening.company.id)
         file_question = Question.objects.get(type='file')
-        filename = ApplicationAnswer.objects.get(question=file_question).answer
-        path = dir + '/%s' % filename
+        filepath = ApplicationAnswer.objects.get(question=file_question).answer
+        path = '%s/%s' % (settings.MEDIA_ROOT, filepath)
         self.assertTrue(os.path.exists(path))
 
         # Making sure we delete the folder and the files inside

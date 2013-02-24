@@ -2,6 +2,7 @@ import os
 import shutil
 import StringIO
 
+from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase
 
@@ -63,7 +64,7 @@ class ApplicationFormTests(TestCase):
 
     def test_assure_directory_exists(self):
         opening = OpeningFactory()
-        path = 'media/uploads/%d' % opening.company.id
+        path = '%s/uploads/%d' % (settings.MEDIA_ROOT, opening.company.id)
         form = ApplicationForm(opening=opening)
 
         self.assertFalse(os.path.exists(path))
@@ -84,15 +85,15 @@ class ApplicationFormTests(TestCase):
 
     def test_save_file(self):
         opening = OpeningFactory()
-        dir = 'media/uploads/%d' % opening.company.id
+        dir = '%s/uploads/%d' % (settings.MEDIA_ROOT, opening.company.id)
 
         form = ApplicationForm(opening=opening)
         file = self._get_temporary_text_file()
 
         form._assure_directory_exists()
         self.assertEqual(len(os.listdir(dir)), 0)
-        filename = form._save_file(file)
-        path = dir + '/%s' % filename
+        filepath = form._save_file(file)
+        path = '%s/%s' % (settings.MEDIA_ROOT, filepath)
         self.assertTrue(os.path.exists(path))
 
         # Making sure we delete the folder and the files inside
