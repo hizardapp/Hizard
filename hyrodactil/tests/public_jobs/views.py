@@ -54,7 +54,10 @@ class ApplicationViewsTests(WebTest):
         form['q_file'] = 'resume.pdf', "My resume"
         response = form.submit().follow()
 
-        self.assertEqual(response.request.path, reverse('public:home'))
+        self.assertEqual(
+            response.request.path,
+            reverse('public_jobs:confirmation', args=(self.opening.id,))
+        )
         self.assertEqual(Application.objects.count(), 1)
         # 2 required, 2 not required, we still record the 4 though
         self.assertEqual(ApplicationAnswer.objects.count(), 4)

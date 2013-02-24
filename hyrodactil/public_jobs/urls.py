@@ -13,4 +13,9 @@ urlpatterns = patterns('',
         views.ApplyView.as_view(),
         name='apply'
     ),
+    url(
+        r'^(?P<opening_id>\d+)/applied/$',
+        views.ApplicationConfirmationView.as_view(),
+        name='confirmation'
+    ),
 )

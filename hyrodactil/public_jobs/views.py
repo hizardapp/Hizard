@@ -43,10 +43,23 @@ class ApplyView(TemplateView):
 
         if form.is_valid():
             form.save()
-            return redirect('public:home')
+            return redirect('public_jobs:confirmation', opening_id=opening.id)
         else:
             context = {
                 'opening': opening,
                 'form': form
             }
             return self.render_to_response(context)
+
+
+class ApplicationConfirmationView(TemplateView):
+    template_name = 'public_jobs/confirmation.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            opening = Opening.objects.get(id=self.kwargs['opening_id'])
+        except Opening.DoesNotExist:
+            raise Http404
+
+        context = {'opening': opening}
+        return self.render_to_response(context)
