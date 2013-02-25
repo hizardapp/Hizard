@@ -50,3 +50,6 @@ class CompaniesViewsTests(WebTest):
         self.assertEqual(company_created.employees.all()[0], self.user)
         self.assertEqual(company_created.name, 'ACME')
 
+        self.assertTrue(len(company_created.question_set.all()) > 0)
+        self.assertTrue(len(company_created.interviewstage_set.all()) > 0)
+

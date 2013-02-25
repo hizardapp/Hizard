@@ -3,7 +3,7 @@ from django.views.generic import CreateView
 
 from braces.views import LoginRequiredMixin
 
-from core.utils import build_subdomain_url
+from core import utils
 from .forms import CompanyForm
 from .models import Company
 
@@ -13,7 +13,7 @@ class CompanyCreateView(LoginRequiredMixin, CreateView):
     form_class = CompanyForm
 
     def get_success_url(self):
-        return build_subdomain_url(self.request,
+        return utils.build_subdomain_url(self.request,
             reverse('openings:list_openings'))
 
     def form_valid(self, form):
@@ -22,5 +22,7 @@ class CompanyCreateView(LoginRequiredMixin, CreateView):
 
         self.request.user.company = company
         self.request.user.save()
+
+        utils.setup_company(company)
 
         return super(CompanyCreateView, self).form_valid(form)
