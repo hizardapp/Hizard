@@ -48,7 +48,7 @@ class LoginView(FormView):
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('public:home'))
+            return HttpResponseRedirect(self.get_success_url())
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
@@ -56,12 +56,13 @@ class LoginView(FormView):
         user = form.get_user()
         login(self.request, user)
 
-        if user.company is None:
-            self.success_url = reverse('companies:create')
-        else:
-            self.success_url = build_subdomain_url(self.request,
-                    reverse("public:home"))
         return super(LoginView, self).form_valid(form)
+
+    def get_success_url(self):
+        if self.request.user.company is None:
+            return reverse('companies:create')
+        else:
+            return build_subdomain_url(self.request, reverse("public:home"))
 
 
 class LogoutView(LoginRequiredMixin, View):

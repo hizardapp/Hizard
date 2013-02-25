@@ -127,6 +127,14 @@ class AccountsViewsTests(WebTest):
                                     reverse('public:home')))
         self.assertIn('_auth_user_id', self.app.session)
 
+    def test_already_loggedin(self):
+        "Testing that logged in users get redirected to home page"
+        user = UserFactory.create()
+        self.assertRedirects(self.app.get(reverse('auth:login'), user=user),
+                "http://%s.%s%s" % (user.company.subdomain,
+                                    settings.SITE_URL,
+                                    reverse('public:home')))
+
     def test_post_login_view_failure_inactive_user(self):
         """
         POST to the view to login
