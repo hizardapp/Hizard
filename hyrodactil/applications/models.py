@@ -10,7 +10,9 @@ from openings.models import Opening
 class Applicant(TimeStampedModel):
     first_name = models.CharField(max_length=770)
     last_name = models.CharField(max_length=770)
+    # 254 is the max length of an email
     email = models.EmailField(max_length=254)
+    resume = models.FileField(upload_to='resumes')
 
 
 class Application(TimeStampedModel):

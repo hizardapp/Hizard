@@ -48,10 +48,11 @@ class ApplicationViewsTests(WebTest):
         form['first_name'] = 'Bilbon'
         form['last_name'] = 'Sacquet'
         form['email'] = 'bilbon@shire.com'
+        # name of file, content of file
+        form['resume'] = 'resume.pdf', "My resume"
         form['q_single-line'] = 'Lalala'
         form['q_multi-line'] = 'Lalala'
-        # name of file, content of file
-        form['q_file'] = 'resume.pdf', "My resume"
+        form['q_file'] = 'mypicture.jpg', "me"
         response = form.submit().follow()
 
         self.assertEqual(
@@ -59,6 +60,11 @@ class ApplicationViewsTests(WebTest):
             reverse('public_jobs:confirmation', args=(self.opening.id,))
         )
         self.assertEqual(Application.objects.count(), 1)
+        applicant = Application.objects.get(id=1).applicant
+
+        self.assertEqual(applicant.first_name, 'Bilbon')
+        self.assertEqual(applicant.resume.url, 'resumes/resume.pdf')
+
         # 2 required, 2 not required, we still record the 4 though
         self.assertEqual(ApplicationAnswer.objects.count(), 4)
 
@@ -69,8 +75,9 @@ class ApplicationViewsTests(WebTest):
         path = '%s/%s' % (settings.MEDIA_ROOT, filepath)
         self.assertTrue(os.path.exists(path))
 
-        # Making sure we delete the folder and the files inside
+        # Making sure we delete the folders and the files inside
         shutil.rmtree(dir)
+        shutil.rmtree('%s/resumes' % settings.MEDIA_ROOT)
 
     def test_invalid_post_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))

@@ -11,6 +11,7 @@ class ApplicantFactory(factory.Factory):
     first_name = 'Bilbon'
     last_name = 'Sacquet'
     email = 'bilbon@shire.com'
+    resume = 'resume.pdf'
 
 class ApplicationFactory(factory.Factory):
     FACTORY_FOR = Application

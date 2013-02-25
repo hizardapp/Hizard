@@ -3,6 +3,7 @@ import uuid
 
 from django import forms
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from .models import (
     Applicant, Application, ApplicationAnswer, ApplicationStageTransition
@@ -12,7 +13,7 @@ from .models import (
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Applicant
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'email', 'resume')
 
     def __init__(self, *args, **kwargs):
         self.opening = kwargs.pop('opening')
@@ -40,6 +41,24 @@ class ApplicationForm(forms.ModelForm):
         for field in self.fields:
             if self.fields[field].required:
                 self.fields[field].label += '*'
+
+    def clean_resume(self):
+        """
+        Make sure we really have a pdf file
+        """
+        resume = self.cleaned_data['resume']
+
+        if resume:
+            if not resume.name.endswith('.pdf'):
+                raise forms.ValidationError(_('File type is not supported'))
+
+            # mime type of a pdf is application/pdf
+            type = resume.content_type.split('/')
+
+            if len(type) > 1 and type[1] != 'pdf':
+                raise forms.ValidationError(_('File type is not supported'))
+
+        return resume
 
     def _assure_directory_exists(self):
         """
@@ -83,7 +102,8 @@ class ApplicationForm(forms.ModelForm):
             applicant = Applicant(
                 first_name=self.cleaned_data['first_name'],
                 last_name=self.cleaned_data['last_name'],
-                email=self.cleaned_data['email']
+                email=self.cleaned_data['email'],
+                resume=self.cleaned_data['resume']
             )
             applicant.save()
 
@@ -97,18 +117,23 @@ class ApplicationForm(forms.ModelForm):
         for field in self.cleaned_data:
             if field.startswith('q_'):
                 question = questions.filter(slug=field[2:])[0]
+                answer = None
 
                 if isinstance(self.fields[field], forms.FileField):
                     self._assure_directory_exists()
-                    answer = self._save_file(self.files[field])
+                    temp_file = self.files.get(field, None)
+
+                    if temp_file:
+                        answer = self._save_file(self.files[field])
                 else:
                     answer = self.cleaned_data[field]
 
-                application_answer = ApplicationAnswer()
-                application_answer.application = application
-                application_answer.question = question
-                application_answer.answer = answer
-                application_answer.save()
+                if answer is not None:
+                    application_answer = ApplicationAnswer()
+                    application_answer.application = application
+                    application_answer.question = question
+                    application_answer.answer = answer
+                    application_answer.save()
 
 
 class ApplicationStageTransitionForm(forms.ModelForm):

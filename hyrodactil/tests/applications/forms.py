@@ -24,17 +24,20 @@ class ApplicationFormTests(TestCase):
         'q_multi-line': 'Lololo'
     }
 
-    def _get_temporary_text_file(self):
+    def _get_temporary_file(self, type='application/pdf', extension='pdf'):
         io = StringIO.StringIO()
         io.write('foo')
-        text_file = InMemoryUploadedFile(io, None, 'foo.txt', 'text', io.len, None)
+        text_file = InMemoryUploadedFile(
+            io, None, 'foo.%s' % extension, type, io.len, None
+        )
         text_file.seek(0)
         return text_file
 
     def test_application_without_questions_valid(self):
         opening = OpeningFactory()
 
-        form = ApplicationForm(data=self.form_data, opening=opening)
+        files = { 'resume': self._get_temporary_file() }
+        form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertTrue(form.is_valid())
 
     def test_application_without_questions_invalid(self):
@@ -42,7 +45,8 @@ class ApplicationFormTests(TestCase):
         invalid = dict(self.form_data)
         del invalid['first_name']
 
-        form = ApplicationForm(data=invalid, opening=opening)
+        files = { 'resume': self._get_temporary_file() }
+        form = ApplicationForm(invalid, files, opening=opening)
         self.assertFalse(form.is_valid())
 
     def test_application_with_questions_valid(self):
@@ -50,7 +54,8 @@ class ApplicationFormTests(TestCase):
         data = dict(self.form_data)
         data.update(self.question_data)
 
-        form = ApplicationForm(data=data, opening=opening)
+        files = { 'resume': self._get_temporary_file() }
+        form = ApplicationForm(data, files, opening=opening)
         self.assertTrue(form.is_valid())
 
     def test_application_with_questions_invalid(self):
@@ -59,7 +64,19 @@ class ApplicationFormTests(TestCase):
         data.update(self.question_data)
         del data['q_single-line']
 
-        form = ApplicationForm(data=data, opening=opening)
+        files = { 'resume': self._get_temporary_file() }
+        form = ApplicationForm(data, files, opening=opening)
+        self.assertFalse(form.is_valid())
+
+    def test_should_not_be_valid_if_resume_not_pdf(self):
+        opening = OpeningFactory()
+
+        files = { 'resume': self._get_temporary_file(type='evil/hacker') }
+        form = ApplicationForm(self.form_data, files, opening=opening)
+        self.assertFalse(form.is_valid())
+
+        files = { 'resume': self._get_temporary_file(extension='py') }
+        form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertFalse(form.is_valid())
 
     def test_assure_directory_exists(self):
@@ -77,18 +94,18 @@ class ApplicationFormTests(TestCase):
     def test_get_random_filename(self):
         opening = OpeningFactory()
         form = ApplicationForm(opening=opening)
-        file = self._get_temporary_text_file()
+        file = self._get_temporary_file()
         filename = form._get_random_filename(file.name)
 
-        self.assertNotEqual(filename, 'foo.txt')
-        self.assertEqual(filename.split('.')[-1], 'txt')
+        self.assertNotEqual(filename, 'foo.pdf')
+        self.assertEqual(filename.split('.')[-1], 'pdf')
 
     def test_save_file(self):
         opening = OpeningFactory()
         dir = '%s/uploads/%d' % (settings.MEDIA_ROOT, opening.company.id)
 
         form = ApplicationForm(opening=opening)
-        file = self._get_temporary_text_file()
+        file = self._get_temporary_file()
 
         form._assure_directory_exists()
         self.assertEqual(len(os.listdir(dir)), 0)
@@ -103,7 +120,8 @@ class ApplicationFormTests(TestCase):
         ApplicantFactory(email='bob@marley.jah')
         opening = OpeningFactory()
 
-        form = ApplicationForm(data=self.form_data, opening=opening)
+        files = { 'resume': self._get_temporary_file() }
+        form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertTrue(form.is_valid())
 
         form.save()
