@@ -39,7 +39,8 @@ class CompanySettingsViewsTests(WebTest):
     def test_create_department_invalid(self):
         url = reverse('companysettings:create_department')
 
-        page = self.app.get(url, user=self.user)
+        page = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['name'] = ''
         response = form.submit()
@@ -123,7 +124,8 @@ class CompanySettingsViewsTests(WebTest):
     def test_create_question_invalid(self):
         url = reverse('companysettings:create_question')
 
-        page = self.app.get(url, user=self.user)
+        page = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['name'] = ''
         form['is_required'] = False
@@ -203,7 +205,8 @@ class CompanySettingsViewsTests(WebTest):
     def test_create_stage_invalid(self):
         url = reverse('companysettings:create_stage')
 
-        page = self.app.get(url, user=self.user)
+        page = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['name'] = ''
         response = form.submit()

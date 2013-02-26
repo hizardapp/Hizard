@@ -18,7 +18,8 @@ class JobsViewsTests(WebTest):
     def test_arriving_on_opening_creation_page(self):
         url = reverse('openings:create_opening')
 
-        response = self.app.get(url, user=self.user)
+        response = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
 
         self.assertEqual(response.status_code, 200)
 
@@ -55,14 +56,16 @@ class JobsViewsTests(WebTest):
             company=CompanyFactory())
 
         url = reverse('openings:create_opening')
-        page = self.app.get(url, user=self.user)
+        page = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         self.assertContains(page, same_company_question.name)
         self.assertNotContains(page, other_company_question.name)
 
     def test_opening_creation_invalid(self):
         url = reverse('openings:create_opening')
 
-        page = self.app.get(url, user=self.user)
+        page = self.app.get(url, user=self.user,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['title'] = 'Software Developer'
         form['description'] = ''
@@ -107,12 +110,14 @@ class JobsViewsTests(WebTest):
     def test_can_only_edit_from_the_same_company(self):
         opening = OpeningFactory.create(title='Op', company=CompanyFactory())
         url = reverse('openings:update_opening', args=(opening.id,))
-        self.app.get(url, user=self.user, status=404)
+        self.app.get(url, user=self.user, status=404,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
 
     def test_can_only_delete_from_the_same_company(self):
         opening = OpeningFactory.create(title='Op', company=CompanyFactory())
         url = reverse('openings:delete_opening', args=(opening.id,))
-        self.app.get(url, user=self.user, status=404)
+        self.app.get(url, user=self.user, status=404,
+                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         self.assertTrue(opening in Opening.objects.all())
 
     def test_opening_listing(self):

@@ -141,10 +141,10 @@ MIDDLEWARE_CLASSES = (
 
     # Default Django middleware.
     'django.middleware.common.CommonMiddleware',
-    'core.middleware.SubdomainMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.SubdomainMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
