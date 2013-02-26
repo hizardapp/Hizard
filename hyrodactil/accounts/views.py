@@ -2,6 +2,7 @@ from braces.views import LoginRequiredMixin
 
 from django.contrib.auth import login, logout
 import django.contrib.auth.forms as auth_forms
+from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import Http404, HttpResponseRedirect
@@ -72,7 +73,16 @@ class LogoutView(LoginRequiredMixin, View):
     """
     def get(self, *args, **kwargs):
         logout(self.request)
-        return HttpResponseRedirect(reverse('public:home'))
+
+        scheme = "https" if self.request.is_secure() else "http"
+        server_port = int(self.request.environ['SERVER_PORT'])
+        if server_port not in (80, 443):
+            host_part = "%s://%s:%s" % (scheme, settings.SITE_URL, server_port)
+        else:
+            host_part = "%s://%s" % (scheme, settings.SITE_URL)
+
+        url = "%s%s" % (host_part, reverse('public:home'))
+        return HttpResponseRedirect(url)
 
 
 class PasswordChangeView(LoginRequiredMixin, FormView):

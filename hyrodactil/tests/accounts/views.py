@@ -166,7 +166,7 @@ class AccountsViewsTests(WebTest):
         response = self.app.get(reverse('auth:logout'), user=user,
                 headers=dict(Host="%s.h.com" % user.company.subdomain))
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(reverse('public:home') in response["Location"])
+        self.assertEqual("http://hyrodactil.com/", response["Location"])
         self.assertNotIn('_auth_user_id', self.app.session)
 
     def test_get_logout_while_logged_out(self):
