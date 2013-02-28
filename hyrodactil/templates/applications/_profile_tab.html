@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<table>
+  <tbody>
+  <tr>
+    <td>First Name</td>
+    <td>{{ application.applicant.first_name }}</td>
+  </tr>
+  <tr>
+    <td>Last Name</td>
+    <td>{{ application.applicant.last_name }}</td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td>{{ application.applicant.email }}</td>
+  </tr>
+  </tbody>
+</table>
+
+
+<table>
+  <tbody>
+  {% for answer in answers %}
+    <tr>
+      <td>{{ answer.question.name }}</td>
+      <td>{{ answer.answer }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

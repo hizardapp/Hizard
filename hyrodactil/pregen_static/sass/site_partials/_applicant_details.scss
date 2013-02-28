@@ -5,20 +5,8 @@ header.applicant {
   h1 {
     @include column(12);
   }
-
-  div {
-    @include outerRow();
-    span {
-      font-weight: bold;
-      font-size: ms(1);
-      @include push(1);
-      @include column(11);
-    }
-  }
 }
 
-.answers {
-  .answer {
-    @include outerRow();
-  }
+.tabs-content li {
+  min-height: 600px;
 }

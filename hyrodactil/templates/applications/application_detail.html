@@ -5,55 +5,24 @@
 {% block content %}
   <header class="applicant">
     <h1>{{ application.applicant.first_name }} {{ application.applicant.last_name }}</h1>
-    <div>
-      <span>{{ application.applicant.email }}</span>
-    </div>
   </header>
 
   <br><br>
 
-  Resume at {{ application.applicant.resume.url }}
+  <dl class="tabs contained">
+      <dd class="active"><a href="#dashboard">{% trans 'Dashboard' %}</a></dd>
+      <dd><a href="#profile">{% trans 'Profile' %}</a></dd>
+      <dd><a href="#resume">{% trans 'Resume' %}</a></dd>
+      <dd><a href="#notes">{% trans 'Notes' %}</a></dd>
+      <dd><a href="#history">{% trans 'History' %}</a></dd>
+  </dl>
 
-  <div class="answers">
-    {% for answer in answers %}
-       <div class="answer">
-         {{ answer.question.name }}: {{ answer.answer }}
-       </div>
-    {% endfor %}
-  </div>
-
-  <ul>
-    {% for transition in application.stage_transitions.all %}
-    <li>
-      {% blocktrans with stage=transition.stage user=transition.user created=transition.created|date:"d/m/Y H:m" %}
-        Moved to {{ stage }} by {{ user }} on {{ created }}
-      {% endblocktrans %}
-    </li>
-    {% endfor %}
+  <ul class="tabs-content contained">
+      <li class="active" id="dashboardTab">{% include 'applications/_dashboard_tab.html' with form=form %}</li>
+      <li id="profileTab">{% include 'applications/_profile_tab.html' with application=application %}</li>
+      <li id="resumeTab">resume here</li>
+      <li id="notesTab">notes here</li>
+      <li id="historyTab">{% include 'applications/_history_tab.html' with application=application %}</li>
   </ul>
-
-  <form action="" method="POST"> {% csrf_token %}
-    {% for field in form %}
-      <div class="row">
-        <div class="two columns">
-          <label class="right inline">{{ field.label }}</label>
-        </div>
-
-        <div class="four columns end">
-          {{ field }}
-        </div>
-      </div>
-    {% endfor %}
-
-    <div class="row">
-      <div class="form-actions six columns end">
-        <div class="right">
-          <input type="submit" value="{% trans 'Move to' %}" class="button" />
-        </div>
-      </div>
-    </div>
-  </form>
-
-  <br><br>
 
 {% endblock %}

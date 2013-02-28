@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<form action="" method="POST"> {% csrf_token %}
+  {% for field in form %}
+    <div class="row">
+      <div class="two columns">
+        <label class="right inline">{{ field.label }}</label>
+      </div>
+
+      <div class="four columns end">
+        {{ field }}
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="row">
+    <div class="form-actions six columns end">
+      <div class="right">
+        <input type="submit" value="{% trans 'Move to' %}" class="button" />
+      </div>
+    </div>
+  </div>
+</form>
