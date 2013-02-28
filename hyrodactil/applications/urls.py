@@ -14,7 +14,7 @@ urlpatterns = patterns('',
         name='list_applications'
     ),
     url(
-        r'^application/(?P<pk>\d+)$',
+        r'^(?P<pk>\d+)$',
         views.ApplicationDetailView.as_view(),
         name='application_detail'
     ),
