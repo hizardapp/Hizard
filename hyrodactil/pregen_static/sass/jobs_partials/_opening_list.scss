@@ -4,14 +4,14 @@
 
 }
 .content {
-  @include outerRow();
+  @include grid-row();
   padding-top: 20px;
 
   section {
-    @include column(6);
+    @include grid-column(6);
 
     .opening {
-      @include innerRow();
+      @include grid-row();
 
       &:first-of-type {
         border-top: 1px solid #e6e6e6;
@@ -28,7 +28,7 @@
   }
 
   aside {
-    @include column(6);
+    @include grid-column(6);
   }
 
 }

@@ -2,14 +2,14 @@
 
 
 header {
-  @include outerRow();
+  @include grid-row();
 
   h1 {
-    @include column(10);
+    @include grid-column(10);
   }
 
   a {
-    @include column(2);
+    @include grid-column(2);
     line-height: 80px;
   }
 
@@ -17,15 +17,15 @@ header {
 }
 
 .apply-header {
-  @include outerRow();
+  @include grid-row();
   padding-top: 10px;
 
   h3 {
-    @include column(10);
+    @include grid-column(10);
   }
 
   a {
-    @include column(2);
+    @include grid-column(2);
     line-height: 50px;
   }
 

@@ -1,58 +1,59 @@
 <!DOCTYPE html>
 
 {% load i18n %}
-
+{% load staticfiles %}
 
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}hyrodactil{% endblock title %}</title>
+    <title>{% block title %}Hizard{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Hiring made easy">
+    <meta name="author" content="Hizard">
 
-    <script src="{{ STATIC_URL }}js/jquery.js"></script>
-      <script src="{{ STATIC_URL }}js/modernizr.foundation.js"></script>
-      <script src="{{ STATIC_URL }}js/jquery.foundation.forms.js"></script>
-      <script src="{{ STATIC_URL }}js/jquery.foundation.tabs.js"></script>
-      <script src="{{ STATIC_URL }}js/app.js"></script>
-
-    <link href="{{ STATIC_URL }}css/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
+    <link rel="stylesheet" href="{% static "css/app.css" %}" />
+    <script src="{% static "js/vendor/custom.modernizr.js" %}"></script>
   </head>
 
   <body>
 
-    <header class="main">
-      <h1 class="one column">Hyrodactil</h1>
+    <div class="sticky">
+      <nav class="top-bar">
+        <ul class="title-area">
+          <li class="name">
+            <h1><a href="#">Hizard</a></h1>
+          </li>
+          <li class="toggle-topbar menu-icon"><a href="#"><span>{% trans 'Menu' %}</span></a></li>
+        </ul>
 
-      {% if user.is_authenticated %}
-        <nav class="six columns push-two main">
-          <ul class="list-inline">
-            <li><a href={% url 'public:home' %}><i class="icon-home icon-large"></i>{% trans 'Home' %}</a></li>
-            <li><a href={% url 'openings:list_openings' %}><i class="icon-tasks icon-large"></i>{% trans 'Openings' %}</a></li>
-            <li><a href="{% url 'applications:list_all_applications' %}"><i class="icon-group icon-large"></i>Applicants</a></li>
-            <li><a href="#"><i class="icon-calendar icon-large"></i>Calendar</a></li>
-            <li><a href={% url 'companysettings:settings_home' %}><i class="icon-cog icon-large"></i>{% trans 'Settings' %}</a></li>
+        <section class="top-bar-section">
+          <ul class="left">
+            {% if user.is_authenticated %}
+              <li><a href={% url 'public:home' %}>{% trans 'Home' %}</a></li>
+              <li class="divider"></li>
+              <li><a href={% url 'openings:list_openings' %}>{% trans 'Openings' %}</a></li>
+              <li class="divider"></li>
+              <li><a href={% url 'applications:list_all_applications' %}>{% trans 'Applicants' %}</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Calendar</a></li>
+              <li class="divider"></li>
+              <li><a href={% url 'companysettings:settings_home' %}>{% trans 'Settings' %}</a></li>
+            {% endif %}
           </ul>
-        </nav>
 
-        <nav class="three columns secondary">
-          <ul class="list-inline">
-            <li><a href="#"><i class="icon-pushpin icon-large"></i>Notifications</a></li>
-            <li><a href={% url 'auth:logout' %}><i class="icon-off icon-large"></i>{% trans 'Logout' %}</a></li>
+          <ul class="right">
+            {% if user.is_authenticated %}
+              <li><a href={% url 'auth:logout' %}>  {% trans 'Logout' %}</a></li>
+            {% else %}
+              <li><a href={% url 'accounts:register' %}>{% trans 'Register' %}</a></li>
+              <li class="divider"></li>
+              <li><a href={% url 'auth:login' %}>{% trans 'Login' %}</a></li>
+            {% endif %}
           </ul>
-        </nav>
-      {% else %}
-        <nav class="three columns secondary">
-          <ul class="list-inline">
-            <li><a href={% url 'accounts:register' %}><i class="icon-pushpin icon-large"></i>{% trans 'Register' %}</a></li>
-            <li><a href={% url 'auth:login' %}><i class="icon-off icon-large"></i>{% trans 'Login' %}</a></li>
-          </ul>
-        </nav>
-      {% endif %}
-
-    </header>
-
+        </section>
+      </nav>
+    </div>
 
     <div class="container row">
 
@@ -69,6 +70,21 @@
       {% endblock content %}
     </div>
 
+
+    <script>
+        document.write('<script src=' +
+                ('__proto__' in {} ? '{% static "js/vendor/zepto" %}' : '{% static "js/vendor/jquery" %}') +
+                '.js><\/script>')
+    </script>
+
+    <script src="{% static "js/foundation/foundation.js" %}"></script>
+
+
+    <script src="{% static "js/foundation/foundation.topbar.js" %}"></script>
+
+    <script>
+        $(document).foundation();
+    </script>
 
   </body>
 </html>

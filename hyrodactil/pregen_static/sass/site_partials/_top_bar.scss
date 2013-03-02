@@ -1,0 +1,10 @@
+@import "../variables";
+
+.top-bar-section ul li.active a {
+  background: $deep-blue;
+}
+
+.top-bar-section li a:not(.button):hover {
+  background: $deep-blue;
+  color: yellow;
+}

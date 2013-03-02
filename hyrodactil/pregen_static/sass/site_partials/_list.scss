@@ -1,8 +1,0 @@
-
-@import "compass/typography/lists/inline-block-list";
-
-.list-inline {
-  @include inline-block-list;
-  // Gets rid of space between inline block elements
-  font-size: 0;
-}
