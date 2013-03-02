@@ -9,20 +9,44 @@
 
   <br><br>
 
-  <dl class="tabs contained">
-      <dd class="active"><a href="#dashboard">{% trans 'Dashboard' %}</a></dd>
-      <dd><a href="#profile">{% trans 'Profile' %}</a></dd>
-      <dd><a href="#resume">{% trans 'Resume' %}</a></dd>
-      <dd><a href="#notes">{% trans 'Notes' %}</a></dd>
-      <dd><a href="#history">{% trans 'History' %}</a></dd>
-  </dl>
+  <div class="section-container tabs" data-section="" data-options="deep_linking: true">
 
-  <ul class="tabs-content contained">
-      <li class="active" id="dashboardTab">{% include 'applications/_dashboard_tab.html' with form=form %}</li>
-      <li id="profileTab">{% include 'applications/_profile_tab.html' with application=application %}</li>
-      <li id="resumeTab">resume here</li>
-      <li id="notesTab">notes here</li>
-      <li id="historyTab">{% include 'applications/_history_tab.html' with application=application %}</li>
-  </ul>
+    <section class="section active">
+      <p class="title"><a href="#dashboard">{% trans 'Dashboard' %}</a></p>
+      <div class="content" data-slug="dashboard">
+        {% include 'applications/_dashboard_tab.html' with form=form %}
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="title"><a href="#profile">{% trans 'Profile' %}</a></p>
+      <div class="content" data-slug="profile">
+        {% include 'applications/_profile_tab.html' with application=application %}
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="title"><a href="#resume">{% trans 'Resume' %}</a></p>
+      <div class="content" data-slug="resume">
+        <p>TODO</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="title"><a href="#notes">{% trans 'Notes' %}</a></p>
+      <div class="content" data-slug="notes">
+        <p>TODO</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="title"><a href="#history">{% trans 'History' %}</a></p>
+      <div class="content" data-slug="history">
+        {% include 'applications/_history_tab.html' with application=application %}
+      </div>
+    </section>
+
+  </div>
+
 
 {% endblock %}

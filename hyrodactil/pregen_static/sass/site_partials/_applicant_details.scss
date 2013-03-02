@@ -1,12 +1,4 @@
 
-header.applicant {
-  @include outerRow();
-
-  h1 {
-    @include column(12);
-  }
-}
-
-.tabs-content li {
+.section-container .content {
   min-height: 600px;
 }

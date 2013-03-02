@@ -19,13 +19,13 @@
 // @import "foundation/components/dropdown-buttons";
 // @import "foundation/components/split-buttons";
 // @import "foundation/components/flex-video";
-// @import "foundation/components/section";
+@import "foundation/components/section";
 @import "foundation/components/top-bar";
 // @import "foundation/components/orbit";
 // @import "foundation/components/reveal";
 // @import "foundation/components/joyride";
 // @import "foundation/components/clearing";
-// @import "foundation/components/alert-boxes";
+@import "foundation/components/alert-boxes";
 // @import "foundation/components/breadcrumbs";
 // @import "foundation/components/keystrokes";
 // @import "foundation/components/labels";
@@ -46,3 +46,4 @@
 
 @import "site_partials/top_bar";
 @import "site_partials/container";
+@import "site_partials/applicant_details";
