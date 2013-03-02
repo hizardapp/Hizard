@@ -4,7 +4,8 @@
 
 {% block content %}
 
-  <table class="twelve">
+
+  <table class="large-12 columns">
     <thead>
       <tr>
         <th>{% trans "Title" %}</th>
@@ -36,5 +37,6 @@
   </table>
 
   <a href="{% url 'openings:create_opening' %}" class="button">{% trans "Create an opening" %}</a>
+
 
 {% endblock content %}
