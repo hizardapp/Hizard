@@ -8,10 +8,10 @@
 
     {% for field in form %}
       <div class="row">
-        <div class="two columns">
+        <div class="large-2 columns">
           <label class="right inline">{{ field.label }}</label>
         </div>
-        <div class="ten columns">
+        <div class="large-10 columns">
           {{ field }}
         </div>
       </div>
@@ -19,7 +19,7 @@
 
 
     <div class="row">
-      <div class="form-actions twelve columns end">
+      <div class="form-actions large-12 columns end">
         <div class="right">
           {% block form-actions %}
             <input type="submit" value="{% trans 'Save' %}" class="button" />
