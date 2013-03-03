@@ -8,15 +8,22 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Company.subdomain'
-        db.add_column(u'companies_company', 'subdomain',
-                      self.gf('django.db.models.fields.SlugField')(default='', unique=True, max_length=50),
-                      keep_default=False)
+        # Adding model 'Company'
+        db.create_table(u'companies_company', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
+            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('subdomain', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
+            ('website', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
+            ('introduction', self.gf('django.db.models.fields.TextField')(blank=True)),
+        ))
+        db.send_create_signal(u'companies', ['Company'])
 
 
     def backwards(self, orm):
-        # Deleting field 'Company.subdomain'
-        db.delete_column(u'companies_company', 'subdomain')
+        # Deleting model 'Company'
+        db.delete_table(u'companies_company')
 
 
     models = {

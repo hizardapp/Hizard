@@ -24,7 +24,7 @@ class Migration(SchemaMigration):
             ('first_name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('last_name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('activation_key', self.gf('django.db.models.fields.CharField')(max_length=40, blank=True)),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(related_name='employees', to=orm['companies.Company'])),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='employees', null=True, to=orm['companies.Company'])),
         ))
         db.send_create_signal(u'accounts', ['CustomUser'])
 
@@ -61,7 +61,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'CustomUser'},
             'activation_key': ('django.db.models.fields.CharField', [], {'max_length': '40', 'blank': 'True'}),
             'avatar': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'employees'", 'to': u"orm['companies.Company']"}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'employees'", 'null': 'True', 'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -94,8 +94,11 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Company'},
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'introduction': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'subdomain': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
+            'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
