@@ -12,3 +12,5 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+STATIC_ROOT = '/home/app/static/'
