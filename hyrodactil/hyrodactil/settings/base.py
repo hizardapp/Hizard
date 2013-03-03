@@ -266,4 +266,4 @@ SKIP_ACTIVATION = False
 SITE_URL = "hizard.com"
 SESSION_COOKIE_DOMAIN = "." + SITE_URL
 
-ALLOWED_HOSTS = ("hizard.com",)
+ALLOWED_HOSTS = ("*.hizard.com", "hizard.com")
