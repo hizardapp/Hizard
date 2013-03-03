@@ -263,5 +263,5 @@ DEFAULT_FROM_EMAIL = 'Hyrodactil'
 LOGIN_URL = '/login/'
 SKIP_ACTIVATION = False
 
-SITE_URL = "hyrodactil.com"
+SITE_URL = "hizard.com"
 SESSION_COOKIE_DOMAIN = "." + SITE_URL
