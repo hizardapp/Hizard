@@ -19,6 +19,8 @@ class Application(TimeStampedModel):
     applicant = models.ForeignKey(Applicant)
     opening = models.ForeignKey(Opening)
 
+    rating = models.IntegerField(blank=True, null=True)
+
 
 class ApplicationStageTransition(TimeStampedModel):
     application = models.ForeignKey(Application, related_name="stage_transitions")
