@@ -24,5 +24,5 @@ class CoreMiddlewareTests(WebTest):
         user = UserFactory.create()
         response = self.app.get(url, user=user)
         self.assertEqual(response.status_code, 302)
-        expected = "http://%s.hyrodactil.com%s" % (user.company.subdomain, url)
+        expected = "http://%s.hizard.com%s" % (user.company.subdomain, url)
         self.assertTrue(expected in response["Location"])
