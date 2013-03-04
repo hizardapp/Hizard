@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from .models import CustomUser
@@ -26,8 +27,17 @@ class UserCreationForm(forms.ModelForm):
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
+
         if password1 and password2 and password1 != password2:
-            msg = _('Passwords don\'t match')
+            msg = _("Passwords don't match")
+            raise forms.ValidationError(msg)
+
+        # No insecure passwords !
+        if len(password2) < settings.MIN_PASSWORD_LENGTH:
+            msg = _(
+                "Password is too short. Should be at least %d characters"
+                % settings.MIN_PASSWORD_LENGTH
+            )
             raise forms.ValidationError(msg)
         return password2
 
