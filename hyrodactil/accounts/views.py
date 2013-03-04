@@ -1,7 +1,7 @@
 from braces.views import LoginRequiredMixin
 
 from django.contrib.auth import login, logout
-import django.contrib.auth.forms as auth_forms
+from django.contrib.auth import forms as auth_forms
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, FormView, View
 
 from core.utils import build_subdomain_url
-from .forms import UserCreationForm
+from .forms import UserCreationForm, MinLengthSetPasswordForm, MinLengthChangePasswordForm
 from .models import CustomUser
 
 
@@ -89,7 +89,7 @@ class PasswordChangeView(LoginRequiredMixin, FormView):
     """
     Change password view, only for logged in users
     """
-    form_class = auth_forms.PasswordChangeForm
+    form_class = MinLengthChangePasswordForm
     template_name = 'accounts/password_change_form.html'
     success_url = reverse_lazy('public:home')
 
@@ -107,6 +107,10 @@ class PasswordChangeView(LoginRequiredMixin, FormView):
 
 
 class PasswordResetView(FormView):
+    """
+    View with a form containing only an email field to which send the reset
+    email
+    """
     form_class = auth_forms.PasswordResetForm
     template_name = 'accounts/password_reset_form.html'
     success_url = reverse_lazy('public:home')
@@ -127,7 +131,7 @@ class PasswordResetView(FormView):
 
 
 class PasswordConfirmResetView(FormView):
-    form_class = auth_forms.SetPasswordForm
+    form_class = MinLengthSetPasswordForm
     template_name = 'accounts/password_reset_confirm.html'
     success_url = reverse_lazy('public:home')
 

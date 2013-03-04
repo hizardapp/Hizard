@@ -58,7 +58,7 @@ class AccountsViewsTests(WebTest):
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
-        error = "Passwords don't match"
+        error = "The two password fields didn't match."
         self.assertFormError(response, 'form', 'password2', error)
         self.assertEqual(CustomUser.objects.count(), 0)
         self.assertEqual(len(mail.outbox), 0)
@@ -203,16 +203,36 @@ class AccountsViewsTests(WebTest):
                 headers=dict(Host="%s.h.com" % user.company.subdomain))
         form = page.forms['action-form']
         form['old_password'] = 'bob'
-        form['new_password1'] = 'new'
-        form['new_password2'] = 'new'
+        form['new_password1'] = 'a secure password'
+        form['new_password2'] = 'a secure password'
         response = form.submit()
 
         user_found = CustomUser.objects.get()
         self.assertEqual(response.status_code, 302)
         self.assertTrue(reverse('public:home') in response["Location"])
-        self.assertTrue(user_found.check_password('new'))
+        self.assertTrue(user_found.check_password('a secure password'))
 
-    def test_post_change_password_failure(self):
+    def test_post_change_password_failure_too_short(self):
+        """
+        POST the change password page
+        Should display the error and not change the password
+        """
+        user = UserFactory.create()
+
+        page = self.app.get(reverse('auth:change_password'), user=user,
+            headers=dict(Host="%s.h.com" % user.company.subdomain))
+        form = page.forms['action-form']
+        form['old_password'] = 'bob'
+        form['new_password1'] = 'nop'
+        form['new_password2'] = 'nop'
+        response = form.submit()
+
+        user_found = CustomUser.objects.get()
+        error = "Password is too short. Should be at least 7 characters."
+        self.assertFormError(response, 'form', 'new_password2', error)
+        self.assertFalse(user_found.check_password('nop'))
+
+    def test_post_change_password_failure_not_matching(self):
         """
         POST the change password page
         Should display the error and not change the password
@@ -341,7 +361,35 @@ class AccountsViewsTests(WebTest):
         self.assertTrue(user_found.check_password('password'))
         self.assertFalse(user_found.check_password('bob'))
 
-    def test_post_password_confirm_failure(self):
+    def test_post_password_confirm_failure_short_password(self):
+        """
+        POST the reset password confirmation page
+        Should not change the password and shows the errors
+        """
+        user = UserFactory.create()
+        uidb36 = int_to_base36(user.pk)
+        token = default_token_generator.make_token(user)
+        page = self.app.get(
+            reverse(
+                'auth:confirm_reset_password',
+                kwargs={
+                    'uidb36': uidb36,
+                    'token': token
+                }
+            )
+        )
+        form = page.forms['action-form']
+        form['new_password1'] = 'bad'
+        form['new_password2'] = 'bad'
+        response = form.submit()
+
+        user_found = CustomUser.objects.get()
+
+        self.assertContains(response, 'Password is too short')
+        self.assertFalse(user_found.check_password('bad'))
+        self.assertTrue(user_found.check_password('bob'))
+
+    def test_post_password_confirm_failure_password_mismatch(self):
         """
         POST the reset password confirmation page
         Should not change the password and shows the errors
