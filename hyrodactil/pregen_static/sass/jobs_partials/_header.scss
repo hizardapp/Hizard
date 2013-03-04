@@ -1,15 +1,8 @@
-@import "../_variables";
+@import "../variables";
 
 
 header {
-  @include grid-row();
-
-  h1 {
-    @include grid-column(10);
-  }
-
   a {
-    @include grid-column(2);
     line-height: 80px;
   }
 
@@ -17,15 +10,9 @@ header {
 }
 
 .apply-header {
-  @include grid-row();
   padding-top: 10px;
 
-  h3 {
-    @include grid-column(10);
-  }
-
   a {
-    @include grid-column(2);
     line-height: 50px;
   }
 

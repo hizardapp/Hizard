@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% load i18n %}
-
+{% load staticfiles %}
 
 <html lang="en">
 <head>
@@ -11,26 +11,27 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <link href="{{ STATIC_URL }}css/jobs.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
+  <link rel="stylesheet" href="{% static "css/jobs.css" %}" />
 </head>
 
 <body>
 
-  <header>
-    <h1>{% block header %}{% endblock header %}</h1>
-    <a href="#">{% trans 'Back to our website' %}</a>
+  <header class="row">
+    <h1 class="large-9 columns">{% block header %}{% endblock header %}</h1>
+    <a href="#" class="large-3 columns">{% trans 'Back to our website' %}</a>
   </header>
 
   {% block apply-header %}
   {% endblock apply-header %}
 
-  <div class="content">
-    <section>
+  <div class="content row">
+    <section class="large-6 columns">
       {% block section %}
       {% endblock section %}
     </section>
 
-    <aside>
+    <aside class="large-6 columns">
       {% block aside %}
       {% endblock aside %}
     </aside>
