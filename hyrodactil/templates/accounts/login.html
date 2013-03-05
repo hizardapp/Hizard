@@ -4,6 +4,12 @@
 
 {% block content %}
 
+  {% if from_activation %}
+    <div class="row from-activation">
+      <h1>{% trans "Login to get started." %}</h1>
+    </div>
+  {% endif %}
+
   <div class="hizard-form large-6 columns large-centered panel">
 
     <form action="." method="POST" id="action-form">

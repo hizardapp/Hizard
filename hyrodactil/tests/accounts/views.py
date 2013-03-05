@@ -67,11 +67,12 @@ class AccountsViewsTests(WebTest):
         user = UserFactory(is_active=False)
         url = reverse('accounts:activate', args=(user.activation_key,))
 
-        response = self.client.get(url,
-                headers=dict(Host="%s.h.com" % user.company.subdomain))
+        response = self.app.get(url,
+                headers=dict(Host="%s.h.com" % user.company.subdomain)).follow()
         user_found = CustomUser.objects.get()
 
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Login to get started.')
         self.assertTrue(user_found.is_active)
 
     def test_get_invalid_activation(self):

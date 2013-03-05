@@ -37,7 +37,8 @@ class ActivateView(View):
         activated = CustomUser.objects.activate_user(activation_key)
 
         if activated:
-            return HttpResponseRedirect(reverse('public:home'))
+            self.request.session['from_activation'] = True
+            return HttpResponseRedirect(reverse('auth:login'))
         else:
             raise Http404
 
@@ -56,6 +57,13 @@ class LoginView(FormView):
             return HttpResponseRedirect(self.get_success_url())
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(LoginView, self).get_context_data(**kwargs)
+        if self.request.session.get('from_activation', False):
+            context['from_activation'] = True
+            del self.request.session['from_activation']
+        return context
 
     def form_valid(self, form):
         user = form.get_user()
