@@ -20,17 +20,26 @@ class UserCreationForm(forms.ModelForm):
 
     password1 = forms.CharField(
         label=_('Password'),
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={
+            'placeholder': _('Enter your password')
+        })
     )
 
     password2 = forms.CharField(
         label=_('Password confirmation'),
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={
+            'placeholder': _('Re-enter your password')
+        })
     )
 
     class Meta:
         model = CustomUser
         fields = ('email',)
+        widgets = {
+            'email': forms.TextInput(
+                attrs={'placeholder': _('Enter your email')}
+            ),
+        }
 
     def clean_password2(self):
         # Check that the two password entries match
