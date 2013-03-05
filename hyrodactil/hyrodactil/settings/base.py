@@ -264,7 +264,11 @@ LOGIN_URL = '/login/'
 SKIP_ACTIVATION = False
 MIN_PASSWORD_LENGTH = 7
 
-SITE_URL = "hizard.com"
-SESSION_COOKIE_DOMAIN = "." + SITE_URL
+########## SITE SPECIFIC
+SITE_URL = 'hizard.com'
+DISPLAY_SITE_NAME = 'Hizard'
+DEFAULT_FROM_EMAIL = 'vincent@hizard.com'
 
-ALLOWED_HOSTS = (".hizard.com",)
+SESSION_COOKIE_DOMAIN = '.' + SITE_URL
+
+ALLOWED_HOSTS = ('.hizard.com',)

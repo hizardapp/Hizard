@@ -194,7 +194,8 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         context = {
             'activation_key': self.activation_key,
             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-            'site': None
+            'site_name': settings.DISPLAY_SITE_NAME,
+            'site_url': settings.SITE_URL
         }
 
         subject = render_to_string('accounts/activation_email_subject.txt', context)

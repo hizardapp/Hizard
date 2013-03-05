@@ -57,3 +57,4 @@ DEBUG_TOOLBAR_CONFIG = {
 
 ######## REGISTRATION
 SKIP_ACTIVATION = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
