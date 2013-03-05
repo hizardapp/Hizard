@@ -1,6 +1,56 @@
-{% extends "core/base_form_narrow.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
-{% block form-actions %}
-  <input type="submit" class="button" value="{% trans 'Log in' %}" />
-{% endblock %}
+
+{% block content %}
+
+  <div class="hizard-form large-6 columns large-centered panel">
+
+    <form action="." method="POST" id="action-form">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <small class="error">{{ form.non_field_errors }}</small>
+      {% endif %}
+
+      <div class="row">
+        <div class="large-12 columns form-title">
+          <h1>{% trans "Login" %}</h1>
+        </div>
+      </div>
+
+      <div class="row collapse">
+        <div class="large-2 columns">
+          <span class="icon-envelope icon-large prefix"></span>
+        </div>
+        <div class="large-10 columns {% if form.username.errors %} error {% endif %}">
+          {{ form.username }}
+          {% if form.username.errors %}
+            <small class="error">{{ form.username.errors }}</small>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row collapse">
+        <div class="large-2 columns">
+          <span class="icon-lock icon-large prefix"></span>
+        </div>
+        <div class="large-10 columns {% if form.password.errors %} error {% endif %}">
+          {{ form.password }}
+          {% if form.password.errors %}
+            <small class="error">{{ form.password.errors }}</small>
+          {% endif %}
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="large-12 columns submit-button">
+          <input type="submit" class="button" value="{% trans 'Login' %}" />
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+{% endblock content %}

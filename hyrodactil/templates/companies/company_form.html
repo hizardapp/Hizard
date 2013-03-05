@@ -1,3 +1,71 @@
-{% extends "core/base_form_narrow.html" %}
+{% extends "base.html" %}
+{% load i18n %}
 
-{% block action %}{% url 'companies:create' %}{% endblock %}
+
+{% block content %}
+
+  <div class="hizard-form large-6 columns large-centered panel">
+
+    <form action="." method="POST" id="action-form">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <small class="error">{{ form.non_field_errors }}</small>
+      {% endif %}
+
+      <div class="row">
+        <div class="large-12 columns form-title">
+          <h1>{% trans "Create your company" %}</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="large-2 columns">
+          <label for="id_name" class="right inline">{{ form.name.label }}</label>
+        </div>
+        <div class="large-10 columns">
+            {{ form.name }}
+        </div>
+        {% if form.name.errors %}
+          <small class="error">{{ form.name.errors }}</small>
+        {% endif %}
+      </div>
+
+      <div class="row">
+        <div class="large-12 columns subdomain-help">
+          {% trans "Create your own address (example: example.hizard.com)" %}
+          <br>
+          {% trans "Only letters and numbers." %}
+        </div>
+      </div>
+
+      <div class="row collapse">
+
+        <div class="large-2 columns">
+          <span class="prefix">http://</span>
+        </div>
+
+        <div class="large-7 columns {% if form.subdomain.errors %} error {% endif %}">
+          {{ form.subdomain }}
+          {% if form.subdomain.errors %}
+            <small class="error">{{ form.subdomain.errors }}</small>
+          {% endif %}
+        </div>
+
+        <div class="large-3 columns">
+          <span class="postfix">.hizard.com</span>
+        </div>
+
+      </div>
+
+
+      <div class="row">
+        <div class="large-12 columns submit-button">
+          <input type="submit" class="button" value="{% trans 'Start using Hizard' %}" />
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+{% endblock content %}

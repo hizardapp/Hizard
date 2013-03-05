@@ -29,7 +29,7 @@
 
         <section class="top-bar-section">
           <ul class="left">
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.company %}
               <li><a href={% url 'public:home' %}>{% trans 'Home' %}</a></li>
               <li class="divider"></li>
               <li><a href={% url 'openings:list_openings' %}>{% trans 'Openings' %}</a></li>

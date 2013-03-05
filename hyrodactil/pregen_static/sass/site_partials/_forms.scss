@@ -1,0 +1,31 @@
+@import "../variables";
+
+.hizard-form {
+
+  margin-top: 80px;
+
+  .form-title {
+    text-align: center;
+    font-size: .8em;
+    margin-bottom: 30px;
+    border-bottom: 1px solid $light-grey;
+  }
+
+  // overrides font awesome settings to display correctly
+  .prefix, .postfix {
+    display: block !important;
+    // Ugly to set value manually but it works, inherit doesn't
+    height: 2.3125em;
+    line-height: 2.3125em;
+  }
+
+  .submit-button {
+    input[type="submit"] {
+      display: block;
+      margin: 0 auto;
+      margin-top: 20px;
+    }
+    margin-top: 20px;
+    border-top: 1px solid $light-grey;
+  }
+}

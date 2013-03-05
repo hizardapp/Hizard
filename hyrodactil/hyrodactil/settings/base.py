@@ -182,13 +182,13 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
+    'accounts',
     'companies',
     'companysettings',
     'openings',
-    'public_jobs',
-    'accounts',
-    'public',
     'applications',
+    'public_jobs',
+    'public',
     'core' # Contains views/methods used in other apps, not an app itself
 )
 

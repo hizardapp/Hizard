@@ -4332,49 +4332,49 @@ ul.icons li [class*=" icon-"] {
   content: "\f115";
 }
 
-/* line 3, ../../pregen_static/sass/site_partials/_register.scss */
-.register-form {
+/* line 3, ../../pregen_static/sass/site_partials/_forms.scss */
+.hizard-form {
   margin-top: 80px;
 }
-/* line 7, ../../pregen_static/sass/site_partials/_register.scss */
-.register-form .form-title {
+/* line 7, ../../pregen_static/sass/site_partials/_forms.scss */
+.hizard-form .form-title {
   text-align: center;
   font-size: .8em;
   margin-bottom: 30px;
   border-bottom: 1px solid #e6e6e6;
 }
-/* line 15, ../../pregen_static/sass/site_partials/_register.scss */
-.register-form .prefix {
+/* line 15, ../../pregen_static/sass/site_partials/_forms.scss */
+.hizard-form .prefix, .hizard-form .postfix {
   display: block !important;
   height: 2.3125em;
   line-height: 2.3125em;
 }
-/* line 22, ../../pregen_static/sass/site_partials/_register.scss */
-.register-form .submit-button {
+/* line 22, ../../pregen_static/sass/site_partials/_forms.scss */
+.hizard-form .submit-button {
   margin-top: 20px;
   border-top: 1px solid #e6e6e6;
 }
-/* line 23, ../../pregen_static/sass/site_partials/_register.scss */
-.register-form .submit-button input[type="submit"] {
+/* line 23, ../../pregen_static/sass/site_partials/_forms.scss */
+.hizard-form .submit-button input[type="submit"] {
   display: block;
   margin: 0 auto;
   margin-top: 20px;
 }
 
-/* line 34, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 3, ../../pregen_static/sass/site_partials/_register.scss */
 .registration-confirmation {
   margin-top: 60px !important;
 }
-/* line 37, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 6, ../../pregen_static/sass/site_partials/_register.scss */
 .registration-confirmation h1 {
   text-align: center;
   margin-bottom: 40px;
 }
-/* line 42, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 11, ../../pregen_static/sass/site_partials/_register.scss */
 .registration-confirmation p {
   text-align: center;
 }
-/* line 44, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 13, ../../pregen_static/sass/site_partials/_register.scss */
 .registration-confirmation p i {
   vertical-align: middle;
 }
@@ -4398,4 +4398,11 @@ ul.icons li [class*=" icon-"] {
 /* line 2, ../../pregen_static/sass/site_partials/_applicant_details.scss */
 .section-container .content {
   min-height: 600px;
+}
+
+/* line 2, ../../pregen_static/sass/site_partials/_companies.scss */
+.subdomain-help {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

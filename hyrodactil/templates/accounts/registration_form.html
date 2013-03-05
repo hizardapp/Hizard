@@ -4,10 +4,14 @@
 
 {% block content %}
 
-  <div class="register-form large-6 columns large-centered panel">
+  <div class="hizard-form large-6 columns large-centered panel">
 
     <form action="." method="POST" id="action-form">
       {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <small class="error">{{ form.non_field_errors }}</small>
+      {% endif %}
 
       <div class="row">
         <div class="large-12 columns form-title">
