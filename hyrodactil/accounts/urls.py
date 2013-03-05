@@ -9,6 +9,11 @@ urlpatterns = patterns('',
         name='register'
     ),
     url(
+        r'^confirmation/$',
+        views.RegistrationConfirmationView.as_view(),
+        name='register_confirmation'
+    ),
+    url(
         r'^activate/(?P<activation_key>\w+)$',
         views.ActivateView.as_view(),
         name='activate'

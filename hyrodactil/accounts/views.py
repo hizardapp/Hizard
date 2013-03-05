@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.utils.http import base36_to_int
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import CreateView, FormView, View
+from django.views.generic import CreateView, FormView, View, TemplateView
 
 from core.utils import build_subdomain_url
 from .forms import UserCreationForm, MinLengthSetPasswordForm, MinLengthChangePasswordForm
@@ -20,8 +20,12 @@ from .models import CustomUser
 class RegistrationView(CreateView):
     model = CustomUser
     form_class = UserCreationForm
-    success_url = reverse_lazy('public:home')
+    success_url = reverse_lazy('accounts:register_confirmation')
     template_name = 'accounts/registration_form.html'
+
+
+class RegistrationConfirmationView(TemplateView):
+    template_name = 'accounts/registration_confirmation.html'
 
 
 class ActivateView(View):

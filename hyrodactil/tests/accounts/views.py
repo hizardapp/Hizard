@@ -39,7 +39,7 @@ class AccountsViewsTests(WebTest):
 
         response = form.submit()
 
-        self.assertRedirects(response, reverse('public:home'))
+        self.assertRedirects(response, reverse('accounts:register_confirmation'))
         self.assertEqual(CustomUser.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
 

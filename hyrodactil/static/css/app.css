@@ -4361,6 +4361,24 @@ ul.icons li [class*=" icon-"] {
   margin-top: 20px;
 }
 
+/* line 34, ../../pregen_static/sass/site_partials/_register.scss */
+.registration-confirmation {
+  margin-top: 60px !important;
+}
+/* line 37, ../../pregen_static/sass/site_partials/_register.scss */
+.registration-confirmation h1 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+/* line 42, ../../pregen_static/sass/site_partials/_register.scss */
+.registration-confirmation p {
+  text-align: center;
+}
+/* line 44, ../../pregen_static/sass/site_partials/_register.scss */
+.registration-confirmation p i {
+  vertical-align: middle;
+}
+
 /* line 3, ../../pregen_static/sass/site_partials/_top_bar.scss */
 .top-bar-section ul li.active a {
   background: #123c54;
