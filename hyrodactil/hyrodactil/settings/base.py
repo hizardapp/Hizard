@@ -182,9 +182,9 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'accounts',
     'companies',
     'companysettings',
+    'accounts',
     'openings',
     'applications',
     'public_jobs',
@@ -272,3 +272,5 @@ DEFAULT_FROM_EMAIL = 'vincent@hizard.com'
 SESSION_COOKIE_DOMAIN = '.' + SITE_URL
 
 ALLOWED_HOSTS = ('.hizard.com',)
+
+DJANGO_WYSIWYG_FLAVOR = "tinymce"
