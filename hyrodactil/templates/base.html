@@ -13,6 +13,10 @@
 
     <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
     <link rel="stylesheet" href="{% static "css/app.css" %}" />
+
+    {% block extra-head %}
+    {% endblock extra-head %}
+
     <script src="{% static "js/vendor/custom.modernizr.js" %}"></script>
   </head>
 
@@ -65,22 +69,17 @@
         </div>
       {% endif %}
 
-
       {% block content %}
       {% endblock content %}
     </div>
 
-
-    <script>
-        document.write('<script src=' +
-                ('__proto__' in {} ? '{% static "js/vendor/zepto" %}' : '{% static "js/vendor/jquery" %}') +
-                '.js><\/script>')
-    </script>
-
+    <script src="{% static "js/vendor/jquery.js" %}"></script>
     <script src="{% static "js/foundation/foundation.js" %}"></script>
-
     <script src="{% static "js/foundation/foundation.topbar.js" %}"></script>
     <script src="{% static "js/foundation/foundation.section.js" %}"></script>
+
+    {% block extra-js %}
+    {% endblock extra-js %}
 
     <script>
         $(document).foundation();
