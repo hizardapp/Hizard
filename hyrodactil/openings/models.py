@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from django_countries import CountryField
 from model_utils.models import TimeStampedModel
@@ -13,9 +14,9 @@ class Opening(TimeStampedModel):
     is_private = models.BooleanField(default=False)
     department = models.ForeignKey(Department, blank=True, null=True)
     closing_date = models.DateTimeField(blank=True, null=True)
-    loc_country = CountryField(blank=True)
-    loc_city = models.CharField(max_length=128, blank=True)
-    loc_postcode = models.CharField(max_length=64, blank=True)
+    loc_country = CountryField(_("Country"), blank=True)
+    loc_city = models.CharField(_("City"), max_length=128, blank=True)
+    loc_postcode = models.CharField(_("Post-code"), max_length=64, blank=True)
 
     company = models.ForeignKey(Company)
     questions = models.ManyToManyField(Question, blank=True, null=True)

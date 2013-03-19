@@ -3,6 +3,7 @@ from django.test import TestCase
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
 from ..factories._companysettings import SingleLineQuestionFactory
+from companysettings.models import Department
 from openings.forms import OpeningForm
 
 
@@ -65,3 +66,13 @@ class OpeningsFormsTests(TestCase):
         questions_qs = form.fields["questions"].queryset
         self.assertFalse(other_company_question in questions_qs)
         self.assertTrue(self.first_question in questions_qs)
+
+    def test_opening_form_create_new_department(self):
+        new_dept_data = dict(self.form_data)
+        new_dept_data['new_department'] = "HR"
+        form = self.Form(self.user.company, data=new_dept_data)
+        self.assertTrue(form.is_valid())
+        opening = form.save()
+        self.assertTrue(Department.objects.filter(name="HR").exists())
+        self.assertTrue(opening.department)
+        self.assertEqual(opening.department.name, "HR")

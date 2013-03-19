@@ -28,4 +28,20 @@
     margin-top: 20px;
     border-top: 1px solid $light-grey;
   }
+
+  .fixed-height-row {
+    min-height: 47px;
+  }
+
+  textarea { 
+    height: auto;
+  }
+
+  form ul li {
+      width: 160px;
+      height: 2em;
+      display: inline-block;
+      vertical-align: top;
+      margin: 5px;
+  }
 }

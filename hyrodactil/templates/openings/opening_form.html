@@ -1,1 +1,162 @@
 {% extends "core/base_form.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block content %}
+  {{ form.errors }}
+  {% csrf_token %}
+
+  <div class="hizard-form large-12 columns large-centered panel">
+
+    <form action="{% block action %}{% endblock %}" method="POST">
+
+      <div class="row">
+        <div class="large-2 columns">
+          {{ form.title.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.title }}
+          {{ form.title.help_text }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="large-2 columns">
+          {{ form.description.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.description }}
+          {{ form.description.help_text }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="large-2 columns">
+          {{ form.is_private.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.is_private }}
+          {{ form.is_private.help_text }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="large-2 columns">
+          {{ form.department.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.department }}
+          {{ form.department.help_text }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="large-2 columns">
+          {{ form.loc_country.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.loc_country }}
+          {{ form.loc_country.help_text }}
+        </div>
+      </div>
+
+      <div class="row short-input-row">
+        <div class="large-2 columns">
+          {{ form.loc_city.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.loc_city }}
+          {{ form.loc_city.help_text }}
+        </div>
+      </div>
+
+      <div class="row short-input-row">
+        <div class="large-2 columns">
+          {{ form.loc_postcode.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.loc_postcode }}
+          {{ form.loc_postcode.help_text }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="large-2 columns">
+          {{ form.questions.label }}
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.questions }}
+          {{ form.questions.help_text }}
+          <a href="#" data-reveal-id="myModal">Click Me For A Modal</a>
+        </div>
+      </div>
+
+      {% for field in form.visible_fields %}
+      {% endfor %}
+
+      {% for field in form.hidden_fields %}
+        {{ field }}
+      {% endfor %}
+
+      <div class="row">
+        <div class="form-actions large-12 columns end">
+          <div class="right">
+            {% block form-actions %}
+              <input type="submit" value="{% trans 'Save' %}" class="button" />
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="myModal" class="reveal-modal">
+    <h2>Awesome. I have it.</h2>
+    <p class="lead">Your couch.  It is mine.</p>
+    <p>Im a cool paragraph that lives inside of an even cooler modal. Wins</p>
+    <a class="close-reveal-modal">&#215;</a>
+  </div>
+
+{% endblock content %}
+
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static "css/select2.css" %}" />
+  <style>
+    .short-input-row input {
+      width: 50%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="{% static "css/select2.css" %}" />               
+{% endblock %}                                                                  
+                                                                                
+{% block extrajs %}                                                             
+  <script src="{% static "js/select2.js" %}"></script> 
+  <script src="{% static "js/foundation/foundation.reveal.js" %}"></script> 
+  <script>
+    $(document).ready(function() {
+
+      $("#id_loc_country").select2({width: '50%'})
+      var options = $.map($("#id_department option"), function (el) {
+        return el.text;
+      });
+
+      $("#id_department").select2({
+        width: '50%',
+        createSearchChoice: function (term, data) {
+          if ($(options).filter(function () {
+            return term.toLowerCase() == this.toLowerCase();
+          }).length === 0) {
+            return {id: "-1", text: term};
+          }
+        },
+        prepareElementUpdate: function (data) {
+          if (data.id == "-1") {
+            $("#id_new_department").val(data.text);
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}
