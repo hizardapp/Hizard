@@ -32,10 +32,10 @@ class OpeningWithQuestionsFactory(OpeningFactory):
                     company=opening.company),
 
                 _companysettings.CheckboxQuestionFactory(
-                    is_required=False, company=opening.company),
+                    company=opening.company),
 
                 _companysettings.FileQuestionFactory(
-                    is_required=False, company=opening.company)
+                    company=opening.company)
             )
 
         return opening

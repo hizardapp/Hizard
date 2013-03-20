@@ -56,17 +56,8 @@ class ApplicationFormTests(TestCase):
 
         files = { 'resume': self._get_temporary_file() }
         form = ApplicationForm(data, files, opening=opening)
+
         self.assertTrue(form.is_valid())
-
-    def test_application_with_questions_invalid(self):
-        opening = OpeningWithQuestionsFactory()
-        data = dict(self.form_data)
-        data.update(self.question_data)
-        del data['q_single-line']
-
-        files = { 'resume': self._get_temporary_file() }
-        form = ApplicationForm(data, files, opening=opening)
-        self.assertFalse(form.is_valid())
 
     def test_should_not_be_valid_if_resume_not_pdf(self):
         opening = OpeningFactory()

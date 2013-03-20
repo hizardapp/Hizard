@@ -20,9 +20,7 @@ class OpeningForm(forms.ModelForm):
 
         question_field = self.fields['questions']
         question_field.help_text = ''
-        question_field.queryset = Question.objects.filter(
-            company_id=company.id, is_default=False
-        )
+        question_field.queryset = Question.objects.filter(company_id=company.id)
 
         self.fields['is_private'].label = _("Private opening")
         self.fields['questions'].label = _("Included questions")

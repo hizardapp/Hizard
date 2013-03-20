@@ -24,14 +24,8 @@ def build_subdomain_url(request, url):
 
 def setup_company(company):
     questions = [
-        Question(
-            name=_('Website'), type='textbox', is_default=True,
-            is_required=True
-        ),
-        Question(
-            name=_('Phone number'), type='textbox', is_default=True,
-            is_required=True
-        )
+        Question(name=_('Website'), type='textbox'),
+        Question(name=_('Phone number'), type='textbox')
     ]
 
     for question in questions:
