@@ -19,4 +19,12 @@ class Opening(TimeStampedModel):
     loc_postcode = models.CharField(_("Post-code"), max_length=64, blank=True)
 
     company = models.ForeignKey(Company)
-    questions = models.ManyToManyField(Question, blank=True, null=True)
+    questions = models.ManyToManyField(
+        Question, blank=True, null=True, through='OpeningQuestion'
+    )
+
+
+class OpeningQuestion(TimeStampedModel):
+    opening = models.ForeignKey(Opening)
+    question = models.ForeignKey(Question)
+    required = models.BooleanField(default=False)

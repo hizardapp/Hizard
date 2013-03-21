@@ -1,18 +1,20 @@
 {% extends "core/base_form.html" %}
+
 {% load staticfiles %}
 {% load i18n %}
+{% load basic %}
 
 {% block content %}
   {{ form.errors }}
-  {% csrf_token %}
 
-  <div class="hizard-form large-12 columns large-centered panel">
+  <div class="hizard-form large-12 columns panel">
 
-    <form action="{% block action %}{% endblock %}" method="POST">
+    <form action="." method="POST" id="action-form">
+      {% csrf_token %}
 
       <div class="row">
         <div class="large-2 columns">
-          {{ form.title.label }}
+          <label for="id_title" class="left inline">{% trans 'Job Title' %}*</label>
         </div>
         <div class="large-9 columns fixed-height-row">
           {{ form.title }}
@@ -22,7 +24,7 @@
 
       <div class="row">
         <div class="large-2 columns">
-          {{ form.description.label }}
+          <label for="id_description" class="left inline">{% trans 'Job Description' %}</label>
         </div>
         <div class="large-9 columns fixed-height-row">
           {{ form.description }}
@@ -32,7 +34,7 @@
 
       <div class="row">
         <div class="large-2 columns">
-          {{ form.is_private.label }}
+          <label for="id_is_private" class="left inline">{% trans 'Do not display publicly' %}</label>
         </div>
         <div class="large-9 columns fixed-height-row">
           {{ form.is_private }}
@@ -42,7 +44,7 @@
 
       <div class="row">
         <div class="large-2 columns">
-          {{ form.department.label }}
+          <label for="id_department" class="left inline">{% trans 'Department' %}</label>
         </div>
         <div class="large-9 columns fixed-height-row">
           {{ form.department }}
@@ -52,7 +54,7 @@
 
       <div class="row">
         <div class="large-2 columns">
-          {{ form.loc_country.label }}
+          <label for="id_loc_country" class="left inline">{% trans 'Country' %}</label>
         </div>
         <div class="large-9 columns fixed-height-row">
           {{ form.loc_country }}
@@ -62,7 +64,7 @@
 
       <div class="row short-input-row">
         <div class="large-2 columns">
-          {{ form.loc_city.label }}
+          <label for="id_loc_city" class="left inline">{% trans 'City' %}</label>
         </div>
         <div class="large-9 columns fixed-height-row">
           {{ form.loc_city }}
@@ -72,7 +74,7 @@
 
       <div class="row short-input-row">
         <div class="large-2 columns">
-          {{ form.loc_postcode.label }}
+          <label for="id_loc_postcode" class="left inline">{% trans 'Post code' %}</label>
         </div>
         <div class="large-9 columns fixed-height-row">
           {{ form.loc_postcode }}
@@ -82,11 +84,50 @@
 
       <div class="row">
         <div class="large-2 columns">
-          {{ form.questions.label }}
+          <label>{% trans 'Included questions' %}</label>
         </div>
-        <div class="large-9 columns fixed-height-row">
-          {{ form.questions }}
-          {{ form.questions.help_text }}
+        <div class="large-9 columns">
+          <p class="help-text">You can add questions blablab</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-9 columns large-offset-3 fixed-height-row">
+          <div class="row">
+            <table class="included-questions large-7 columns large-centered">
+              <thead>
+                <tr>
+                  <th class="select">{% trans 'Select' %}</th>
+                  <th class="name"></th>
+                  <th class="required">{% trans 'Required ?' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for question in form.questions_objects %}
+                  <tr>
+                    <td>
+                      <input
+                        id="id_questions"
+                        name="questions"
+                        type="checkbox"
+                        value="{{ question.id }}"
+                        {% if form.editing and question.id|inside:form.saved_questions %}checked{% endif %}>
+                    </td>
+                    <td><label>{{ question }}</label></td>
+                    <td>
+                      <input
+                        id="id_questions_required"
+                        name="questions_required"
+                        type="checkbox"
+                        value="{{ question.id }}"
+                        {% if form.editing and form.saved_questions|lookup:question.id %}checked{% endif %}>
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+          </div>
+
+
           <a href="#" data-reveal-id="myModal">Click Me For A Modal</a>
         </div>
       </div>

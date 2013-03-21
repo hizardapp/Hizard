@@ -6,7 +6,7 @@ from ..factories._openings import OpeningFactory
 from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._companies import CompanyFactory
 
-from openings.models import Opening
+from openings.models import Opening, OpeningQuestion
 
 
 class JobsViewsTests(WebTest):
@@ -29,20 +29,21 @@ class JobsViewsTests(WebTest):
         page = self.app.get(url, user=self.user,
                 headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
+
         form['title'] = 'Software Developer'
         form['description'] = 'Fait des logiciels.'
         form['is_private'] = ''
         form['loc_country'] = 'FR'
         form['loc_city'] = 'Cannes'
         form['loc_postcode'] = '93100'
-        form['questions'] = [self.question]
+        form['questions'] = [True]
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Opening created.")
 
         opening_created = Opening.objects.get()
-
+        #print OpeningQuestion.objects.all()
         self.assertEqual(opening_created.company, self.user.company)
         self.assertEqual(opening_created.title, 'Software Developer')
         self.assertEqual(opening_created.questions.count(), 1)

@@ -14,7 +14,7 @@ urlpatterns = patterns('',
         name='create_opening'
     ),
     url(
-        r'^(?P<pk>\d+)$',
+        r'^(?P<pk>\d+)/$',
         views.OpeningUpdateView.as_view(),
         name='update_opening'
     ),

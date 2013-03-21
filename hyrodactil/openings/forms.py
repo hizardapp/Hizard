@@ -7,25 +7,32 @@ from .models import Opening
 
 class OpeningForm(forms.ModelForm):
     new_department = forms.CharField(required=False, widget=forms.HiddenInput)
+    questions = forms.MultipleChoiceField(required=False, widget=forms.CheckboxInput())
+    questions_required = forms.MultipleChoiceField(required=False, widget=forms.CheckboxInput())
 
     class Meta:
         model = Opening
         fields = ('title', 'description', 'is_private', 'department',
-                  'loc_country', 'loc_city', 'loc_postcode', 'questions',)
-        widgets = {'questions': forms.CheckboxSelectMultiple}
+                  'loc_country', 'loc_city', 'loc_postcode',)
 
-    def __init__(self, company, *args, **kwargs):
+    def __init__(self, company, opening_questions=None, *args, **kwargs):
         super(OpeningForm, self).__init__(*args, **kwargs)
         self.company = company
 
-        question_field = self.fields['questions']
-        question_field.help_text = ''
-        question_field.queryset = Question.objects.filter(company_id=company.id)
+        self.saved_questions =  {}
+        self.editing = False
+
+        if opening_questions:
+            for opening_question in opening_questions:
+                self.saved_questions[opening_question.id] = opening_question.required
+                self.editing = True
+
+        self.questions_objects = Question.objects.filter(company_id=company.id)
 
         self.fields['is_private'].label = _("Private opening")
-        self.fields['questions'].label = _("Included questions")
 
     def save(self, *args, **kwargs):
+        #print self.cleaned_data['questions']
         if (self.cleaned_data["new_department"] and
                 not self.cleaned_data["department"]):
             self.instance.department = Department.objects.create(

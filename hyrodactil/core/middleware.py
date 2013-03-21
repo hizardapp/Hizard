@@ -1,6 +1,7 @@
 from django.http.response import HttpResponseRedirect
 from core.utils import build_subdomain_url
 
+
 class SubdomainMiddleware(object):
     def process_request(self, request):
         domain_parts = request.get_host().split('.')

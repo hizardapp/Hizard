@@ -2,7 +2,7 @@ import factory
 
 import _companies
 import _companysettings
-from openings.models import Opening
+from openings.models import Opening, OpeningQuestion
 
 
 class OpeningFactory(factory.Factory):
@@ -24,17 +24,29 @@ class OpeningWithQuestionsFactory(OpeningFactory):
         opening = super(OpeningWithQuestionsFactory, cls)._prepare(create, **kwargs)
 
         if opening.id:
-            opening.questions.add(
-                _companysettings.SingleLineQuestionFactory(
+            OpeningQuestion(
+                opening=opening,
+                question=_companysettings.SingleLineQuestionFactory(
                     company=opening.company),
+                required=True
+            )
 
-                _companysettings.MultiLineQuestionFactory(
+            OpeningQuestion(
+                opening=opening,
+                question=_companysettings.MultiLineQuestionFactory(
+                    company=opening.company)
+            )
+
+            OpeningQuestion(
+                opening=opening,
+                question=_companysettings.CheckboxQuestionFactory(
                     company=opening.company),
+                required=True
+            )
 
-                _companysettings.CheckboxQuestionFactory(
-                    company=opening.company),
-
-                _companysettings.FileQuestionFactory(
+            OpeningQuestion(
+                opening=opening,
+                question=_companysettings.CheckboxQuestionFactory(
                     company=opening.company)
             )
 

@@ -10,8 +10,8 @@ from openings.forms import OpeningForm
 class OpeningsFormsTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
-        self.first_question = SingleLineQuestionFactory.create(company=self.user.company)
-        SingleLineQuestionFactory.create(company=self.user.company)
+        self.first_question = SingleLineQuestionFactory(company=self.user.company)
+        SingleLineQuestionFactory(company=self.user.company)
 
         self.form_data = {'title': 'Software Developer',
                           'description': 'Fait des logiciels.',
@@ -59,13 +59,13 @@ class OpeningsFormsTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_opening_form_only_contains_questions_from_same_company(self):
-        other_company_question = SingleLineQuestionFactory.create(
+        other_company_question = SingleLineQuestionFactory(
             name='Your 5 strenghts and weaknesses',
-            company=CompanyFactory())
-        form = self.Form(self.user.company, self.user.company)
-        questions_qs = form.fields["questions"].queryset
-        self.assertFalse(other_company_question in questions_qs)
-        self.assertTrue(self.first_question in questions_qs)
+            company=CompanyFactory()
+        )
+        form = self.Form(self.user.company, data=self.form_data)
+        self.assertFalse(other_company_question in form.questions)
+        self.assertTrue(self.first_question in form.questions)
 
     def test_opening_form_create_new_department(self):
         new_dept_data = dict(self.form_data)
