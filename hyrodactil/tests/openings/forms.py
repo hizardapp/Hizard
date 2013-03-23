@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
-from ..factories._openings import OpeningFactory
+from ..factories._openings import OpeningFactory, OpeningQuestionFactory
 from ..factories._companysettings import SingleLineQuestionFactory, MultiLineQuestionFactory
 from companysettings.models import Department
 from openings.forms import OpeningForm, OpeningQuestionFormset
@@ -82,6 +82,13 @@ class OpeningsFormsTests(TestCase):
 
         self.assertEqual(1, OpeningQuestion.objects.count())
 
+    def test_opening_update_related_questions(self):
+        opening = OpeningFactory(company=self.user.company)
+        OpeningQuestionFactory(question=self.first_question, opening=opening)
+        form = self.Form(self.user.company, instance=opening)
+        self.assertEqual(form.opening_questions.forms[0].initial,
+            {'included': True, 'required': False})
+
 
 class OpeningQuestionFormsetTests(TestCase):
 
@@ -130,3 +137,30 @@ class OpeningQuestionFormsetTests(TestCase):
         formset.save(opening)
 
         self.assertEqual(1, OpeningQuestion.objects.count())
+
+    def test_initialize_with_opening(self):
+        opening = OpeningFactory(company=self.company)
+        OpeningQuestionFactory(opening=opening, question=self.question1)
+
+        formset = OpeningQuestionFormset(company=self.company, opening=opening)
+
+        self.assertEqual(len(formset.forms), self.company.question_set.count())
+
+        self.assertEqual(formset.forms[0].initial, {'included': True,
+                                                    'required': False})
+        self.assertEqual(formset.forms[1].initial, {})
+
+    def test_update_opening_questions(self):
+        data = {
+            'oq-1-included': True,
+            'oq-1-required': True,
+        }
+        opening = OpeningFactory(company=self.company)
+        OpeningQuestionFactory(opening=opening, question=self.question1)
+
+        formset = OpeningQuestionFormset(company=self.company, opening=opening, data=data)
+        formset.is_valid()
+        formset.save(opening)
+
+        self.assertEqual(1, OpeningQuestion.objects.count())
+        self.assertEqual(True, OpeningQuestion.objects.get().required)

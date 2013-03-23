@@ -2,7 +2,6 @@
 
 {% load staticfiles %}
 {% load i18n %}
-{% load basic %}
 
 {% block content %}
   {{ form.errors }}
@@ -141,13 +140,6 @@
 
 {% block extrahead %}
   <link rel="stylesheet" href="{% static "css/select2.css" %}" />
-  <style>
-    .short-input-row input {
-      width: 50%;
-    }
-  </style>
-
-  <link rel="stylesheet" href="{% static "css/select2.css" %}" />               
 {% endblock %}                                                                  
                                                                                 
 {% block extrajs %}                                                             

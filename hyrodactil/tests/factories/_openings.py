@@ -17,6 +17,14 @@ class OpeningFactory(factory.Factory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
+class OpeningQuestionFactory(factory.Factory):
+    FACTORY_FOR = OpeningQuestion
+
+    question = factory.SubFactory(_companysettings.Question)
+    opening = factory.SubFactory(OpeningFactory)
+    required = False
+
+
 class OpeningWithQuestionsFactory(OpeningFactory):
 
     @classmethod

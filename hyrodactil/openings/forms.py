@@ -23,15 +23,22 @@ class OpeningQuestionForm(forms.Form):
 
 
 class OpeningQuestionFormset(object):
-    def __init__(self, company, data=None):
+    def __init__(self, company, opening=None, data=None):
         self.company = company
         self.questions = company.question_set.all()
         self.forms = []
 
+        initials = dict()
+        if opening:
+            for opening_question in opening.openingquestion_set.all():
+                initials[opening_question.question_id] = dict(included=True,
+                    required=opening_question.required)
+
         for question in self.questions:
             prefix = 'oq-%d' % question.id
             self.forms.append(
-                OpeningQuestionForm(question=question, prefix=prefix, data=data)
+                OpeningQuestionForm(question=question, prefix=prefix, data=data,
+                    initial=initials.get(question.id))
             )
 
     def __iter__(self):
@@ -43,12 +50,19 @@ class OpeningQuestionFormset(object):
 
     def save(self, opening):
         for form in self.forms:
+            opening_question, created = OpeningQuestion.objects.get_or_create(
+                opening=opening,
+                question=form.question
+            )
+
             if form.cleaned_data.get('included'):
-                OpeningQuestion.objects.create(
-                    opening=opening,
-                    question=form.question,
-                    required=form.cleaned_data['required']
-                )
+                if form.cleaned_data.get('required') != opening_question.required:
+                    opening_question.required = form.cleaned_data.get('required')
+                    opening_question.save()
+            else:
+                opening_question.delete()
+
+
 
 
 class OpeningForm(forms.ModelForm):
@@ -59,11 +73,14 @@ class OpeningForm(forms.ModelForm):
         fields = ('title', 'description', 'is_private', 'department',
                   'loc_country', 'loc_city', 'loc_postcode',)
 
-    def __init__(self, company, opening_questions=None, *args, **kwargs):
+    def __init__(self, company, *args, **kwargs):
         super(OpeningForm, self).__init__(*args, **kwargs)
         self.company = company
 
-        self.opening_questions = OpeningQuestionFormset(company=company, data=kwargs.get('data'))
+        self.opening_questions = OpeningQuestionFormset(company=company,
+            data=kwargs.get('data'),
+            opening=self.instance
+        )
 
         self.fields['is_private'].label = _("Private opening")
 

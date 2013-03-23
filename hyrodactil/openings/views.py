@@ -35,27 +35,10 @@ class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     success_message = _('Opening updated.')
 
     def get_form(self, form_class):
-        opening_questions = OpeningQuestion.objects.filter(opening=self.object)
         return form_class(
-            self.request.user.company, opening_questions, **self.get_form_kwargs()
+            self.request.user.company, **self.get_form_kwargs()
         )
 
-    def _form_valid(self, form):
-        instance = form.save()
-        questions = self.request.POST.getlist('questions')
-        questions_required = self.request.POST.getlist('questions_required')
-        OpeningQuestion.objects.filter(opening=instance).delete()
-
-        for id in questions:
-            question = Question.objects.filter(id=id, company=self.request.user.company)[0]
-            if question:
-                opening_question = OpeningQuestion(
-                    opening=instance, question=question
-                )
-                if id in questions_required:
-                    opening_question.required = True
-                opening_question.save()
-        return HttpResponseRedirect(self.get_success_url())
 
 
 class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):
