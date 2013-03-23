@@ -117,13 +117,8 @@
               </table>
           </div>
 
-
-          <a href="#" data-reveal-id="myModal">Click Me For A Modal</a>
         </div>
       </div>
-
-      {% for field in form.visible_fields %}
-      {% endfor %}
 
       {% for field in form.hidden_fields %}
         {{ field }}
@@ -141,13 +136,6 @@
     </form>
   </div>
 
-  <div id="myModal" class="reveal-modal">
-    <h2>Awesome. I have it.</h2>
-    <p class="lead">Your couch.  It is mine.</p>
-    <p>Im a cool paragraph that lives inside of an even cooler modal. Wins</p>
-    <a class="close-reveal-modal">&#215;</a>
-  </div>
-
 {% endblock content %}
 
 
@@ -163,8 +151,7 @@
 {% endblock %}                                                                  
                                                                                 
 {% block extrajs %}                                                             
-  <script src="{% static "js/select2.js" %}"></script> 
-  <script src="{% static "js/foundation/foundation.reveal.js" %}"></script> 
+  <script src="{% static "js/select2.js" %}"></script>
   <script>
     $(document).ready(function() {
 
