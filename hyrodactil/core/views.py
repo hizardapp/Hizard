@@ -26,7 +26,7 @@ class RestrictedQuerysetMixin(object):
         company = self.request.user.company
         query_set = query_set.filter(company=company)
 
-        if self.request.subdomain != company.subdomain or len(query_set) == 0:
+        if self.request.subdomain != company.subdomain:
             raise Http404
         else:
             return query_set
