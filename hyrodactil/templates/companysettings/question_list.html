@@ -4,36 +4,40 @@
 
 {% block content %}
 
-  <table class="large-12 columns">
-    <thead>
-      <tr>
-        <th>{% trans "Name" %}</th>
-        <th>{% trans "Type" %}</th>
-        <th>{% trans "Edit" %}</th>
-        <th>{% trans "Delete" %}</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for question in question_list %}
+  {% if question_list %}
+    <table class="large-12 columns">
+      <thead>
         <tr>
-          <td>
-            {{ question.name }}
-          </td>
-          <td>
-            {{ question.type }}
-          </td>
-          <td>
-            <a href="{% url 'companysettings:update_question' question.id %}" class="button">{% trans "Edit" %}</a>
-          </td>
-          <td>
-            <a href="{% url 'companysettings:delete_question' question.id %}" class="alert button">{% trans "Delete" %}</a>
-          </td>
+          <th>{% trans "Name" %}</th>
+          <th>{% trans "Type" %}</th>
+          <th>{% trans "Edit" %}</th>
+          <th>{% trans "Delete" %}</th>
         </tr>
-      {% endfor %}
-    </tbody>
+      </thead>
 
-  </table>
+      <tbody>
+        {% for question in question_list %}
+          <tr>
+            <td>
+              {{ question.name }}
+            </td>
+            <td>
+              {{ question.type }}
+            </td>
+            <td>
+              <a href="{% url 'companysettings:update_question' question.id %}" class="button">{% trans "Edit" %}</a>
+            </td>
+            <td>
+              <a href="{% url 'companysettings:delete_question' question.id %}" class="alert button">{% trans "Delete" %}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  {% else %}
+    <p>{% trans "No questions yet" %}</p>
+  {% endif %}
 
   <a href="{% url 'companysettings:create_question' %}" class="button">{% trans "Create a question" %}</a>
 

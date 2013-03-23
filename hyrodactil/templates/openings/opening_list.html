@@ -5,36 +5,40 @@
 {% block content %}
 
 
-  <table class="large-12 columns">
-    <thead>
-      <tr>
-        <th>{% trans "Title" %}</th>
-        <th>{% trans "Created" %}</th>
-        <th>{% trans "Edit" %}</th>
-        <th>{% trans "Delete" %}</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for opening in opening_list %}
+  {% if opening_list %}
+    <table class="large-12 columns">
+      <thead>
         <tr>
-          <td>
-            <a href="{% url 'applications:list_applications' opening.id %}">{{ opening.title }}</a>
-          </td>
-          <td>
-            {{ opening.created|date:"d/m/Y" }}
-          </td>
-          <td>
-            <a href="{% url 'openings:update_opening' opening.id %}" class="button">{% trans "Edit" %}</a>
-          </td>
-          <td>
-            <a href="{% url 'openings:delete_opening' opening.id %}" class="alert button">{% trans "Delete" %}</a>
-          </td>
+          <th>{% trans "Title" %}</th>
+          <th>{% trans "Created" %}</th>
+          <th>{% trans "Edit" %}</th>
+          <th>{% trans "Delete" %}</th>
         </tr>
-      {% endfor %}
-    </tbody>
+      </thead>
 
-  </table>
+      <tbody>
+        {% for opening in opening_list %}
+          <tr>
+            <td>
+              <a href="{% url 'applications:list_applications' opening.id %}">{{ opening.title }}</a>
+            </td>
+            <td>
+              {{ opening.created|date:"d/m/Y" }}
+            </td>
+            <td>
+              <a href="{% url 'openings:update_opening' opening.id %}" class="button">{% trans "Edit" %}</a>
+            </td>
+            <td>
+              <a href="{% url 'openings:delete_opening' opening.id %}" class="alert button">{% trans "Delete" %}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  {% else %}
+    <p>{% trans "No opening created yet, use the button below" %}</p>
+  {% endif %}
 
   <a href="{% url 'openings:create_opening' %}" class="button">{% trans "Create an opening" %}</a>
 
