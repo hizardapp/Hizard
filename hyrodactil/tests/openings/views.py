@@ -43,7 +43,7 @@ class JobsViewsTests(WebTest):
         self.assertContains(response, "Opening created.")
 
         opening_created = Opening.objects.get()
-        #print OpeningQuestion.objects.all()
+
         self.assertEqual(opening_created.company, self.user.company)
         self.assertEqual(opening_created.title, 'Software Developer')
         self.assertEqual(opening_created.questions.count(), 1)

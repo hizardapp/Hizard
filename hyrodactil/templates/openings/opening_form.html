@@ -102,24 +102,14 @@
                 </tr>
               </thead>
               <tbody>
-                {% for question in form.questions_objects %}
+                {% for question_form in form.opening_questions %}
                   <tr>
                     <td>
-                      <input
-                        id="id_questions"
-                        name="questions"
-                        type="checkbox"
-                        value="{{ question.id }}"
-                        {% if form.editing and question.id|inside:form.saved_questions %}checked{% endif %}>
+                      {{ question_form.included }}
                     </td>
-                    <td><label>{{ question }}</label></td>
+                    <td><label for="{{ question_form.included.auto_id }}">{{ question_form.question }}</label></td>
                     <td>
-                      <input
-                        id="id_questions_required"
-                        name="questions_required"
-                        type="checkbox"
-                        value="{{ question.id }}"
-                        {% if form.editing and form.saved_questions|lookup:question.id %}checked{% endif %}>
+                      {{ question_form.required }}
                     </td>
                   </tr>
                 {% endfor %}

@@ -26,10 +26,6 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     def get_form(self, form_class):
         return form_class(self.request.user.company, **self.get_form_kwargs())
 
-    def form_valid(self, form):
-        form.save()
-        return super(OpeningCreateView, self).form_valid(form)
-
 
 class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = Opening

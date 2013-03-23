@@ -1,10 +1,13 @@
+from django import forms
 from django.test import TestCase
 
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
-from ..factories._companysettings import SingleLineQuestionFactory
+from ..factories._openings import OpeningFactory
+from ..factories._companysettings import SingleLineQuestionFactory, MultiLineQuestionFactory
 from companysettings.models import Department
-from openings.forms import OpeningForm
+from openings.forms import OpeningForm, OpeningQuestionFormset
+from openings.models import OpeningQuestion
 
 
 class OpeningsFormsTests(TestCase):
@@ -52,21 +55,6 @@ class OpeningsFormsTests(TestCase):
         self._form_is_invalid_without('title')
         self._form_is_invalid_without('description')
 
-    def test_invalid_opening_form_nonexisting_question(self):
-        wrong_data = dict(self.form_data)
-        wrong_data['questions'] = [1, 2, 3]
-        form = self.Form(self.user.company, data=wrong_data)
-        self.assertFalse(form.is_valid())
-
-    def test_opening_form_only_contains_questions_from_same_company(self):
-        other_company_question = SingleLineQuestionFactory(
-            name='Your 5 strenghts and weaknesses',
-            company=CompanyFactory()
-        )
-        form = self.Form(self.user.company, data=self.form_data)
-        self.assertFalse(other_company_question in form.questions)
-        self.assertTrue(self.first_question in form.questions)
-
     def test_opening_form_create_new_department(self):
         new_dept_data = dict(self.form_data)
         new_dept_data['new_department'] = "HR"
@@ -76,3 +64,69 @@ class OpeningsFormsTests(TestCase):
         self.assertTrue(Department.objects.filter(name="HR").exists())
         self.assertTrue(opening.department)
         self.assertEqual(opening.department.name, "HR")
+
+    def test_opening_form_save_opening_questions(self):
+        data = dict(self.form_data)
+
+        data.update(
+            {
+                'oq-2-included': True,
+                'oq-2-required': True,
+            }
+        )
+
+        form = self.Form(self.user.company, data=data)
+        self.assertTrue(form.is_valid())
+
+        form.save()
+
+        self.assertEqual(1, OpeningQuestion.objects.count())
+
+
+class OpeningQuestionFormsetTests(TestCase):
+
+    def setUp(self):
+        self.company = CompanyFactory()
+        self.question1 = SingleLineQuestionFactory(company=self.company)
+        self.question2 = MultiLineQuestionFactory(company=self.company)
+
+    def test_initialize_with_company(self):
+        formset = OpeningQuestionFormset(company=self.company)
+
+        self.assertEqual(len(formset.questions), self.company.question_set.count())
+        self.assertEqual(len(formset.forms), self.company.question_set.count())
+
+        self.assertEqual(formset.forms[0].prefix, 'oq-1')
+        self.assertEqual(formset.forms[1].prefix, 'oq-2')
+
+    def test_iterate_opening_question_formset(self):
+        formset = OpeningQuestionFormset(company=self.company)
+
+        self.assertEqual(2, len(list(formset)))
+
+    def test_save_invalid_opening_questions(self):
+        data = {
+            'oq-2-required': True,
+        }
+
+        formset = OpeningQuestionFormset(company=self.company, data=data)
+
+        self.assertFalse(formset.is_valid())
+        self.assertEqual(1, len(formset.forms[1].errors))
+
+    def test_empty_is_valid(self):
+        formset = OpeningQuestionFormset(company=self.company, data={})
+
+        self.assertTrue(formset.is_valid())
+
+    def test_save_opening_questions(self):
+        data = {
+            'oq-2-included': True,
+            'oq-2-required': True,
+        }
+        opening = OpeningFactory(company=self.company)
+        formset = OpeningQuestionFormset(company=self.company, data=data)
+        formset.is_valid()
+        formset.save(opening)
+
+        self.assertEqual(1, OpeningQuestion.objects.count())
