@@ -1,8 +1,8 @@
 django==1.5
 bpython==0.12
-django-braces==0.2.1
-django-model-utils==1.1.0
+django-braces==1.0.0
+django-model-utils==1.2.0
 South==0.7.6
 django-countries==1.5
-pillow==1.7.8
+pillow==2.0.0
 django-autoslug==1.6.1
