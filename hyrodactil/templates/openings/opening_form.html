@@ -1,116 +1,170 @@
 {% extends "base.html" %}
 
-{% load i18n %}
 {% load staticfiles %}
-
-{% block extra-head %}
-  <link rel="stylesheet" href="{% static "css/select2.css" %}" />
-{% endblock extra-head %}
-
+{% load i18n %}
 
 {% block content %}
-
+  {{ form.errors }}
   <div class="hizard-form large-12 columns panel">
 
     <form action="." method="POST" id="action-form">
       {% csrf_token %}
 
       <div class="row">
-        <div class="large-12 columns form-title">
-          <h1>{% trans "Create job opening" %}</h1>
+        <div class="large-2 columns">
+          <label for="id_title" class="left inline">{% trans 'Job Title' %}*</label>
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.title }}
+          {{ form.title.help_text }}
         </div>
       </div>
 
       <div class="row">
-        <div class="large-8 columns large-centered">
-          <div class="row">
-            <div class="large-3 columns">
-              <label for="id_title" class="left inline">{% trans 'Job Title' %}*</label>
-            </div>
-            <div class="large-9 columns">
-              {{ form.title }}
-            </div>
-          </div>
+        <div class="large-2 columns">
+          <label for="id_description" class="left inline">{% trans 'Job Description' %}</label>
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.description }}
+          {{ form.description.help_text }}
         </div>
       </div>
 
       <div class="row">
-        <div class="large-8 columns large-centered">
-          <div class="row">
-            <div class="large-3 columns">
-              <label for="id_department" class="left inline">{% trans 'Department' %}</label>
-            </div>
-            <div class="large-9 columns">
-              {{ form.department }}
-            </div>
-          </div>
+        <div class="large-2 columns">
+          <label for="id_is_private" class="left inline">{% trans 'Do not display publicly' %}</label>
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.is_private }}
+          {{ form.is_private.help_text }}
         </div>
       </div>
 
       <div class="row">
-        <div class="large-8 columns large-centered">
-          <div class="row">
-            <div class="large-3 columns">
-              <label for="id_description" class="left inline">{% trans 'Job Description' %}</label>
-            </div>
-            <div class="large-9 columns">
-              {{ form.description }}
-            </div>
-          </div>
+        <div class="large-2 columns">
+          <label for="id_department" class="left inline">{% trans 'Department' %}</label>
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.department }}
+          {{ form.department.help_text }}
         </div>
       </div>
 
       <div class="row">
-        <div class="large-8 columns large-centered">
-          <div class="row">
-            <div class="large-3 columns">
-              <label for="id_loc_country" class="left inline">{% trans 'Country' %}</label>
-            </div>
-            <div class="large-9 columns">
-              {{ form.loc_country }}
-            </div>
-          </div>
+        <div class="large-2 columns">
+          <label for="id_loc_country" class="left inline">{% trans 'Country' %}</label>
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.loc_country }}
+          {{ form.loc_country.help_text }}
+        </div>
+      </div>
+
+      <div class="row short-input-row">
+        <div class="large-2 columns">
+          <label for="id_loc_city" class="left inline">{% trans 'City' %}</label>
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.loc_city }}
+          {{ form.loc_city.help_text }}
+        </div>
+      </div>
+
+      <div class="row short-input-row">
+        <div class="large-2 columns">
+          <label for="id_loc_postcode" class="left inline">{% trans 'Post code' %}</label>
+        </div>
+        <div class="large-9 columns fixed-height-row">
+          {{ form.loc_postcode }}
+          {{ form.loc_postcode.help_text }}
         </div>
       </div>
 
       <div class="row">
-        <div class="large-8 columns large-centered">
-          <div class="row">
-            <div class="large-3 columns">
-              <label for="id_loc_city" class="left inline">{% trans 'City' %}</label>
-            </div>
-            <div class="large-9 columns">
-              {{ form.loc_city }}
-            </div>
-          </div>
+        <div class="large-2 columns">
+          <label>{% trans 'Included questions' %}</label>
+        </div>
+        <div class="large-9 columns">
+          <p class="help-text">You can add questions blablab</p>
         </div>
       </div>
+      <div class="row">
+        <div class="large-9 columns large-offset-3 fixed-height-row">
+          <div class="row">
+            <table class="included-questions large-7 columns large-centered">
+              <thead>
+                <tr>
+                  <th class="select">{% trans 'Select' %}</th>
+                  <th class="name"></th>
+                  <th class="required">{% trans 'Required ?' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for question_form in form.opening_questions %}
+                  <tr>
+                    <td>
+                      {{ question_form.included }}
+                    </td>
+                    <td><label for="{{ question_form.included.auto_id }}">{{ question_form.question }}</label></td>
+                    <td>
+                      {{ question_form.required }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+          </div>
+
+        </div>
+      </div>
+
+      {% for field in form.hidden_fields %}
+        {{ field }}
+      {% endfor %}
 
       <div class="row">
-        <div class="large-8 columns large-centered">
-          <div class="row">
-            <div class="large-3 columns">
-              <label for="id_loc_postcode" class="left inline">{% trans 'Post code' %}</label>
-            </div>
-            <div class="large-9 columns">
-              {{ form.loc_postcode }}
-            </div>
+        <div class="form-actions large-12 columns end">
+          <div class="right">
+            {% block form-actions %}
+              <input type="submit" value="{% trans 'Save' %}" class="button" />
+            {% endblock %}
           </div>
         </div>
       </div>
-
     </form>
-
   </div>
 
 {% endblock content %}
 
-
-{% block extra-js %}
-  <script src="{% static "js/vendor/select2.min.js" %}"></script>
-    <script>
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static "css/select2.css" %}" />
+{% endblock %}                                                                  
+                                                                                
+{% block extrajs %}                                                             
+  <script src="{% static "js/select2.js" %}"></script>
+  <script>
     $(document).ready(function() {
-      //$('#id_loc_country').select2({  placeholder: "ALL", width: 'resolve' })
+
+      $("#id_loc_country").select2({width: '50%'})
+      var options = $.map($("#id_department option"), function (el) {
+        return el.text;
+      });
+
+      $("#id_department").select2({
+        width: '50%',
+        createSearchChoice: function (term, data) {
+          if ($(options).filter(function () {
+            return term.toLowerCase() == this.toLowerCase();
+          }).length === 0) {
+            return {id: "-1", text: term};
+          }
+        },
+        prepareElementUpdate: function (data) {
+          if (data.id == "-1") {
+            $("#id_new_department").val(data.text);
+          }
+        }
+      });
     });
-    </script>
-{% endblock extra-js %}
+  </script>
+{% endblock %}

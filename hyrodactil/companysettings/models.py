@@ -26,7 +26,6 @@ class Question(TimeStampedModel):
 
     name = models.CharField(max_length=200)
     slug = AutoSlugField(populate_from='name')
-    is_required = models.BooleanField()
 
     type = models.CharField(
         choices=TYPE_QUESTIONS,

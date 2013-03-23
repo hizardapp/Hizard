@@ -18,6 +18,7 @@
     {% endblock extra-head %}
 
     <script src="{% static "js/vendor/custom.modernizr.js" %}"></script>
+    {% block extrahead %}{% endblock %}
   </head>
 
   <body>
@@ -60,7 +61,6 @@
     </div>
 
     <div class="container row">
-
       {% if messages %}
         <div class="alert-box sucess">
           {% for message in messages %}
@@ -82,8 +82,9 @@
     {% endblock extra-js %}
 
     <script>
-        $(document).foundation();
+      $(document).foundation();
     </script>
 
+    {% block extrajs %}{% endblock %}
   </body>
 </html>

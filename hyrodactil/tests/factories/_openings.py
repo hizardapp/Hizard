@@ -2,7 +2,7 @@ import factory
 
 import _companies
 import _companysettings
-from openings.models import Opening
+from openings.models import Opening, OpeningQuestion
 
 
 class OpeningFactory(factory.Factory):
@@ -17,6 +17,14 @@ class OpeningFactory(factory.Factory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
+class OpeningQuestionFactory(factory.Factory):
+    FACTORY_FOR = OpeningQuestion
+
+    question = factory.SubFactory(_companysettings.Question)
+    opening = factory.SubFactory(OpeningFactory)
+    required = False
+
+
 class OpeningWithQuestionsFactory(OpeningFactory):
 
     @classmethod
@@ -24,18 +32,30 @@ class OpeningWithQuestionsFactory(OpeningFactory):
         opening = super(OpeningWithQuestionsFactory, cls)._prepare(create, **kwargs)
 
         if opening.id:
-            opening.questions.add(
-                _companysettings.SingleLineQuestionFactory(
+            OpeningQuestionFactory(
+                opening=opening,
+                question=_companysettings.SingleLineQuestionFactory(
                     company=opening.company),
+                required=True
+            )
 
-                _companysettings.MultiLineQuestionFactory(
+            OpeningQuestionFactory(
+                opening=opening,
+                question=_companysettings.MultiLineQuestionFactory(
+                    company=opening.company)
+            )
+
+            OpeningQuestionFactory(
+                opening=opening,
+                question=_companysettings.CheckboxQuestionFactory(
                     company=opening.company),
+                required=True
+            )
 
-                _companysettings.CheckboxQuestionFactory(
-                    is_required=False, company=opening.company),
-
-                _companysettings.FileQuestionFactory(
-                    is_required=False, company=opening.company)
+            OpeningQuestionFactory(
+                opening=opening,
+                question=_companysettings.FileQuestionFactory(
+                    company=opening.company)
             )
 
         return opening

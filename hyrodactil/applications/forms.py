@@ -35,8 +35,7 @@ class ApplicationForm(forms.ModelForm):
             elif question.type == 'file':
                 self.fields[field_name] = forms.FileField(label=question.name)
 
-            if not question.is_required:
-                self.fields[field_name].required = False
+            self.fields[field_name].required = False
 
         for field in self.fields:
             if self.fields[field].required:

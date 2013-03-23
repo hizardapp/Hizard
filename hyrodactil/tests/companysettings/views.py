@@ -110,7 +110,6 @@ class CompanySettingsViewsTests(WebTest):
                 headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['name'] = 'Cover letter'
-        form['is_required'] = True
         form['type'] = 'textbox'
 
         response = form.submit().follow()
@@ -128,7 +127,6 @@ class CompanySettingsViewsTests(WebTest):
                 headers=dict(Host="%s.h.com" % self.user.company.subdomain))
         form = page.forms['action-form']
         form['name'] = ''
-        form['is_required'] = False
         form['type'] = 'textbox'
         response = form.submit()
 

@@ -39,7 +39,8 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(page, self.opening.company.name)
         self.assertContains(page, self.opening.description)
         self.assertContains(page, self.opening.title)
-        self.assertContains(page, self.opening.questions.all()[0].name)
+
+        self.assertContains(page, self.opening.openingquestion_set.all()[0].question.name)
 
     def test_valid_post_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))

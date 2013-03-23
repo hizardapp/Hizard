@@ -1,13 +1,15 @@
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView
 
 from braces.views import LoginRequiredMixin
 
 from .forms import OpeningForm
-from .models import Opening
+from .models import Opening, OpeningQuestion
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 from core.views import RestrictedDeleteView
+from companysettings.models import Question
 
 
 class OpeningRestrictedListView(LoginRequiredMixin, RestrictedListView):
@@ -24,13 +26,6 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     def get_form(self, form_class):
         return form_class(self.request.user.company, **self.get_form_kwargs())
 
-    def form_valid(self, form):
-        opening = form.save(commit=False)
-        opening.company = self.request.user.company
-        opening.save()
-        form.save_m2m()
-        return super(OpeningCreateView, self).form_valid(form)
-
 
 class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = Opening
@@ -40,7 +35,10 @@ class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     success_message = _('Opening updated.')
 
     def get_form(self, form_class):
-        return form_class(self.request.user.company, **self.get_form_kwargs())
+        return form_class(
+            self.request.user.company, **self.get_form_kwargs()
+        )
+
 
 
 class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):
