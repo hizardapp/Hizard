@@ -36,7 +36,7 @@ class JobsViewsTests(WebTest):
         form['loc_country'] = 'FR'
         form['loc_city'] = 'Cannes'
         form['loc_postcode'] = '93100'
-        form['questions'] = [True]
+        form['oq-1-included'] = True
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
@@ -46,7 +46,7 @@ class JobsViewsTests(WebTest):
 
         self.assertEqual(opening_created.company, self.user.company)
         self.assertEqual(opening_created.title, 'Software Developer')
-        self.assertEqual(opening_created.questions.count(), 1)
+        self.assertEqual(opening_created.openingquestion_set.count(), 1)
 
     def test_opening_form_only_contains_questions_from_same_company(self):
         same_company_question = SingleLineQuestionFactory.create(
@@ -74,7 +74,7 @@ class JobsViewsTests(WebTest):
         form['loc_country'] = 'FR'
         form['loc_city'] = 'Cannes'
         form['loc_postcode'] = '93100'
-        form['questions'] = [1]
+        form['oq-1-included'] = True
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)

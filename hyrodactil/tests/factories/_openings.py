@@ -32,29 +32,29 @@ class OpeningWithQuestionsFactory(OpeningFactory):
         opening = super(OpeningWithQuestionsFactory, cls)._prepare(create, **kwargs)
 
         if opening.id:
-            OpeningQuestion(
+            OpeningQuestionFactory(
                 opening=opening,
                 question=_companysettings.SingleLineQuestionFactory(
                     company=opening.company),
                 required=True
             )
 
-            OpeningQuestion(
+            OpeningQuestionFactory(
                 opening=opening,
                 question=_companysettings.MultiLineQuestionFactory(
                     company=opening.company)
             )
 
-            OpeningQuestion(
+            OpeningQuestionFactory(
                 opening=opening,
                 question=_companysettings.CheckboxQuestionFactory(
                     company=opening.company),
                 required=True
             )
 
-            OpeningQuestion(
+            OpeningQuestionFactory(
                 opening=opening,
-                question=_companysettings.CheckboxQuestionFactory(
+                question=_companysettings.FileQuestionFactory(
                     company=opening.company)
             )
 
