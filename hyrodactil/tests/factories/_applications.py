@@ -13,6 +13,7 @@ class ApplicantFactory(factory.Factory):
     email = 'bilbon@shire.com'
     resume = 'resume.pdf'
 
+
 class ApplicationFactory(factory.Factory):
     FACTORY_FOR = Application
 

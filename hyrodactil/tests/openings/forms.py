@@ -4,7 +4,9 @@ from django.test import TestCase
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningQuestionFactory
-from ..factories._companysettings import SingleLineQuestionFactory, MultiLineQuestionFactory
+from ..factories._companysettings import (
+    SingleLineQuestionFactory, MultiLineQuestionFactory
+)
 from companysettings.models import Department
 from openings.forms import OpeningForm, OpeningQuestionFormset
 from openings.models import OpeningQuestion
@@ -86,8 +88,10 @@ class OpeningsFormsTests(TestCase):
         opening = OpeningFactory(company=self.user.company)
         OpeningQuestionFactory(question=self.first_question, opening=opening)
         form = self.Form(self.user.company, instance=opening)
-        self.assertEqual(form.opening_questions.forms[0].initial,
-            {'included': True, 'required': False})
+        self.assertEqual(
+            form.opening_questions.forms[0].initial,
+            {'included': True, 'required': False}
+        )
 
 
 class OpeningQuestionFormsetTests(TestCase):
@@ -155,7 +159,6 @@ class OpeningQuestionFormsetTests(TestCase):
             'disabled'
         )
 
-
     def test_update_opening_questions(self):
         data = {
             'oq-1-included': True,
@@ -164,7 +167,9 @@ class OpeningQuestionFormsetTests(TestCase):
         opening = OpeningFactory(company=self.company)
         OpeningQuestionFactory(opening=opening, question=self.question1)
 
-        formset = OpeningQuestionFormset(company=self.company, opening=opening, data=data)
+        formset = OpeningQuestionFormset(
+            company=self.company, opening=opening, data=data
+        )
         formset.is_valid()
         formset.save(opening)
 

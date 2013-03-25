@@ -34,14 +34,16 @@ class OpeningQuestionFormset(object):
         initials = dict()
         if opening:
             for opening_question in opening.openingquestion_set.all():
-                initials[opening_question.question_id] = dict(included=True,
-                    required=opening_question.required)
+                initials[opening_question.question_id] = dict(
+                    included=True, required=opening_question.required)
 
         for question in self.questions:
             prefix = 'oq-%d' % question.id
             self.forms.append(
-                OpeningQuestionForm(question=question, prefix=prefix, data=data,
-                    initial=initials.get(question.id))
+                OpeningQuestionForm(
+                    question=question, prefix=prefix, data=data,
+                    initial=initials.get(question.id)
+                )
             )
 
     def __iter__(self):
@@ -66,8 +68,6 @@ class OpeningQuestionFormset(object):
                 opening_question.delete()
 
 
-
-
 class OpeningForm(forms.ModelForm):
     new_department = forms.CharField(required=False, widget=forms.HiddenInput)
 
@@ -80,7 +80,8 @@ class OpeningForm(forms.ModelForm):
         super(OpeningForm, self).__init__(*args, **kwargs)
         self.company = company
 
-        self.opening_questions = OpeningQuestionFormset(company=company,
+        self.opening_questions = OpeningQuestionFormset(
+            company=company,
             data=kwargs.get('data'),
             opening=self.instance
         )
@@ -99,8 +100,9 @@ class OpeningForm(forms.ModelForm):
         if (self.cleaned_data.get("new_department") and
                 not self.cleaned_data.get("department")):
             self.instance.department = Department.objects.create(
-                    name=self.cleaned_data.get("new_department"),
-                    company=self.company)
+                name=self.cleaned_data.get("new_department"),
+                company=self.company
+            )
         self.instance.company = self.company
         opening = super(OpeningForm, self).save(*args, **kwargs)
 

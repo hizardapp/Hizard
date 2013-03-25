@@ -6,7 +6,7 @@ from ..factories._openings import OpeningFactory
 from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._companies import CompanyFactory
 
-from openings.models import Opening, OpeningQuestion
+from openings.models import Opening
 
 
 class JobsViewsTests(WebTest):
@@ -18,16 +18,22 @@ class JobsViewsTests(WebTest):
     def test_arriving_on_opening_creation_page(self):
         url = reverse('openings:create_opening')
 
-        response = self.app.get(url, user=self.user,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
 
         self.assertEqual(response.status_code, 200)
 
     def test_opening_creation(self):
         url = reverse('openings:create_opening')
 
-        page = self.app.get(url, user=self.user,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
         form = page.forms['action-form']
 
         form['title'] = 'Software Developer'
@@ -57,16 +63,22 @@ class JobsViewsTests(WebTest):
             company=CompanyFactory())
 
         url = reverse('openings:create_opening')
-        page = self.app.get(url, user=self.user,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
         self.assertContains(page, same_company_question.name)
         self.assertNotContains(page, other_company_question.name)
 
     def test_opening_creation_invalid(self):
         url = reverse('openings:create_opening')
 
-        page = self.app.get(url, user=self.user,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
         form = page.forms['action-form']
         form['title'] = 'Software Developer'
         form['description'] = ''
@@ -85,8 +97,11 @@ class JobsViewsTests(WebTest):
         opening = OpeningFactory.create(title='DevOps', company=self.user.company)
         url = reverse('openings:update_opening', args=(opening.id,))
 
-        page = self.app.get(url, user=self.user,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
         form = page.forms['action-form']
         form['title'] = 'Software Developer'
         response = form.submit().follow()
@@ -100,9 +115,11 @@ class JobsViewsTests(WebTest):
                                         company=self.user.company)
         url = reverse('openings:delete_opening', args=(opening.id,))
 
-        response = self.app.get(url, user=self.user,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-                ).follow()
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        ).follow()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.request.path, reverse('openings:list_openings'))
         self.assertNotContains(response, 'DevOps')
@@ -111,19 +128,30 @@ class JobsViewsTests(WebTest):
     def test_can_only_edit_from_the_same_company(self):
         opening = OpeningFactory.create(title='Op', company=CompanyFactory())
         url = reverse('openings:update_opening', args=(opening.id,))
-        self.app.get(url, user=self.user, status=404,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        self.app.get(
+            url,
+            user=self.user,
+            status=404,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
 
     def test_can_only_delete_from_the_same_company(self):
         opening = OpeningFactory.create(title='Op', company=CompanyFactory())
         url = reverse('openings:delete_opening', args=(opening.id,))
-        self.app.get(url, user=self.user, status=404,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        self.app.get(
+            url,
+            user=self.user,
+            status=404,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
         self.assertTrue(opening in Opening.objects.all())
 
     def test_opening_listing(self):
         url = reverse('openings:list_openings')
         opening = OpeningFactory.create(title='DevOps', company=self.user.company)
-        response = self.app.get(url, user=self.user,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
         self.assertContains(response, opening.title)

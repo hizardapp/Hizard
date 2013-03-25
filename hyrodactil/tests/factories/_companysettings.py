@@ -19,6 +19,7 @@ class SingleLineQuestionFactory(factory.Factory):
 
     company = factory.SubFactory(_companies.CompanyFactory)
 
+
 class MultiLineQuestionFactory(factory.Factory):
     FACTORY_FOR = Question
 
@@ -26,6 +27,7 @@ class MultiLineQuestionFactory(factory.Factory):
     type = 'textarea'
 
     company = factory.SubFactory(_companies.CompanyFactory)
+
 
 class CheckboxQuestionFactory(factory.Factory):
     FACTORY_FOR = Question
@@ -35,6 +37,7 @@ class CheckboxQuestionFactory(factory.Factory):
 
     company = factory.SubFactory(_companies.CompanyFactory)
 
+
 class FileQuestionFactory(factory.Factory):
     FACTORY_FOR = Question
 
@@ -42,6 +45,7 @@ class FileQuestionFactory(factory.Factory):
     type = 'file'
 
     company = factory.SubFactory(_companies.CompanyFactory)
+
 
 class InterviewStageFactory(factory.Factory):
     FACTORY_FOR = InterviewStage

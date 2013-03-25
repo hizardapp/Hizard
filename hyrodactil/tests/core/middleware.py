@@ -3,11 +3,14 @@ from django.core.urlresolvers import reverse
 
 from tests.factories._accounts import UserFactory
 
+
 class CoreMiddlewareTests(WebTest):
     def test_middleware_adds_subdomain_to_request(self):
         url = reverse('accounts:register')
-        response = self.app.get(url,
-                extra_environ=dict(HTTP_HOST="google.hyrodactil.com"))
+        response = self.app.get(
+            url,
+            extra_environ=dict(HTTP_HOST="google.hyrodactil.com")
+        )
         request = response.context["request"]
         self.assertTrue(hasattr(request, "subdomain"))
         self.assertEqual(request.subdomain, "google")

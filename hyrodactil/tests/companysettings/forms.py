@@ -35,4 +35,3 @@ class CompanySettingsFormsTests(TestCase):
         form_data = {'name': ''}
         form = InterviewStageForm(data=form_data)
         self.assertFalse(form.is_valid())
-

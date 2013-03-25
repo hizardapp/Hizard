@@ -40,7 +40,6 @@ class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
         )
 
 
-
 class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = Opening
     success_url = reverse_lazy('openings:list_openings')

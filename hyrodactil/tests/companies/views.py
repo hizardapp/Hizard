@@ -38,8 +38,9 @@ class CompaniesViewsTests(WebTest):
         form['name'] = 'ACME'
         form['subdomain'] = 'acmememe'
         response = form.submit()
-        expected = "http://acmememe.%s%s" % (settings.SITE_URL,
-                reverse("openings:list_openings"))
+        expected = "http://acmememe.%s%s" % (
+            settings.SITE_URL, reverse("openings:list_openings")
+        )
         self.assertEqual(response["Location"], expected)
         self.assertEqual(response.status_code, 302)
 
@@ -52,4 +53,3 @@ class CompaniesViewsTests(WebTest):
 
         self.assertTrue(len(company_created.question_set.all()) > 0)
         self.assertTrue(len(company_created.interviewstage_set.all()) > 0)
-

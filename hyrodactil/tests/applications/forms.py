@@ -36,7 +36,7 @@ class ApplicationFormTests(TestCase):
     def test_application_without_questions_valid(self):
         opening = OpeningFactory()
 
-        files = { 'resume': self._get_temporary_file() }
+        files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertTrue(form.is_valid())
 
@@ -45,7 +45,7 @@ class ApplicationFormTests(TestCase):
         invalid = dict(self.form_data)
         del invalid['first_name']
 
-        files = { 'resume': self._get_temporary_file() }
+        files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(invalid, files, opening=opening)
         self.assertFalse(form.is_valid())
 
@@ -54,7 +54,7 @@ class ApplicationFormTests(TestCase):
         data = dict(self.form_data)
         data.update(self.question_data)
 
-        files = { 'resume': self._get_temporary_file() }
+        files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(data, files, opening=opening)
 
         self.assertTrue(form.is_valid())
@@ -62,11 +62,11 @@ class ApplicationFormTests(TestCase):
     def test_should_not_be_valid_if_resume_not_pdf(self):
         opening = OpeningFactory()
 
-        files = { 'resume': self._get_temporary_file(type='evil/hacker') }
+        files = {'resume': self._get_temporary_file(type='evil/hacker')}
         form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertFalse(form.is_valid())
 
-        files = { 'resume': self._get_temporary_file(extension='py') }
+        files = {'resume': self._get_temporary_file(extension='py')}
         form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertFalse(form.is_valid())
 
@@ -111,7 +111,7 @@ class ApplicationFormTests(TestCase):
         ApplicantFactory(email='bob@marley.jah')
         opening = OpeningFactory()
 
-        files = { 'resume': self._get_temporary_file() }
+        files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertTrue(form.is_valid())
 

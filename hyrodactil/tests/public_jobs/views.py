@@ -11,6 +11,7 @@ from ..factories._openings import OpeningWithQuestionsFactory
 from applications.models import Application, ApplicationAnswer
 from companysettings.models import Question
 
+
 class ApplicationViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory()
@@ -20,8 +21,10 @@ class ApplicationViewsTests(WebTest):
     def test_get_list_openings(self):
         url = reverse('public_jobs:list_openings')
 
-        page = self.app.get(url,
-                headers=dict(Host="%s.h.com" % self.user.company.subdomain))
+        page = self.app.get(
+            url,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
 
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, self.opening.title)
@@ -40,7 +43,9 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(page, self.opening.description)
         self.assertContains(page, self.opening.title)
 
-        self.assertContains(page, self.opening.openingquestion_set.all()[0].question.name)
+        self.assertContains(
+            page, self.opening.openingquestion_set.all()[0].question.name
+        )
 
     def test_valid_post_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))
