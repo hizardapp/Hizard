@@ -150,6 +150,12 @@ class OpeningQuestionFormsetTests(TestCase):
                                                     'required': False})
         self.assertEqual(formset.forms[1].initial, {})
 
+        self.assertEqual(
+            formset.forms[1].fields['required'].widget.attrs['disabled'],
+            'disabled'
+        )
+
+
     def test_update_opening_questions(self):
         data = {
             'oq-1-included': True,

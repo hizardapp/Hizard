@@ -151,6 +151,18 @@
           controls: "bold italic underline | bullets numbering | outdent indent " +
                   "| alignleft center alignright justify | undo redo |  link unlink | source"
       });
+
+      $('input[id$="included"]').click(function() {
+          var $required = $(this).parent().siblings().find('input[id$="required"]');
+
+          if ($(this).is(':checked')) {
+            $required.removeAttr("disabled");
+          } else {
+            $required.prop('checked', false);
+            $required.attr("disabled", true);
+          }
+      });
+
       $("#id_loc_country").select2({width: '50%'})
       var options = $.map($("#id_department option"), function (el) {
         return el.text;

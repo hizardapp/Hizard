@@ -14,6 +14,9 @@ class OpeningQuestionForm(forms.Form):
         super(OpeningQuestionForm, self).__init__(*args, **kwargs)
         self.question = question
 
+        if not kwargs.get('initial'):
+            self.fields['required'].widget.attrs['disabled'] = 'disabled'
+
     def clean(self):
         cleaned_data = super(OpeningQuestionForm, self).clean()
         if cleaned_data.get('required') and not cleaned_data.get('included'):
