@@ -1,23 +1,23 @@
-{% extends "base_openings.html" %}
+{% extends "base_jobs.html" %}
 
 {% load i18n %}
 
 
 {% block title %}
-    Confirmation - {{ opening.title }} - {{ opening.company.name }}
+  Confirmation - {{ opening.title }} - {{ opening.company.name }}
 {% endblock title %}
 
 
 {% block header %}
-    {{ opening.company.name }}
+  {{ opening.company.name }}
 {% endblock header %}
 
 
 {% block apply-header %}
-    <div class="apply-header">
-        <h3>{{ opening.title }}</h3>
-        <a href="{% url 'public_jobs:list_openings' %}">{% trans 'Back to the job listing' %}</a>
-    </div>
+  <div class="apply-header large-12 columns">
+    <h3>{{ opening.title }}</h3>
+    <a href="{% url 'public_jobs:list_openings' %}">{% trans 'Back to the job listing' %}</a>
+  </div>
 {% endblock apply-header %}
 
 
