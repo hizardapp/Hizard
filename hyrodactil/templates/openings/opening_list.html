@@ -12,6 +12,7 @@
           <th>{% trans "Title" %}</th>
           <th>{% trans "Created" %}</th>
           <th>{% trans "Edit" %}</th>
+          <th>{% trans "Applicants" %}</th>
           <th>{% trans "Delete" %}</th>
         </tr>
       </thead>
@@ -20,13 +21,22 @@
         {% for opening in opening_list %}
           <tr>
             <td>
-              <a href="{% url 'applications:list_applications' opening.id %}">{{ opening.title }}</a>
+              {{ opening.title }}
             </td>
             <td>
               {{ opening.created|date:"d/m/Y" }}
             </td>
             <td>
               <a href="{% url 'openings:update_opening' opening.id %}" class="button">{% trans "Edit" %}</a>
+            </td>
+            <td>
+              <a href="{% url 'applications:list_applications' opening.id %}">
+                {% if opening.application_set.count %}
+                  {{ opening.application_set.count }}
+                {% else %}
+                    {% trans "No applications" %}
+                {% endif %}
+              </a>
             </td>
             <td>
               <a href="{% url 'openings:delete_opening' opening.id %}" class="alert button">{% trans "Delete" %}</a>

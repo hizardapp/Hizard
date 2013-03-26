@@ -1,15 +1,13 @@
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView
 
 from braces.views import LoginRequiredMixin
 
 from .forms import OpeningForm
-from .models import Opening, OpeningQuestion
+from .models import Opening
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 from core.views import RestrictedDeleteView
-from companysettings.models import Question
 
 
 class OpeningRestrictedListView(LoginRequiredMixin, RestrictedListView):
