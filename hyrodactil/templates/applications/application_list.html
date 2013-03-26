@@ -5,6 +5,15 @@
 {% block content %}
 
   {% if application_list %}
+
+    {% if context_opening %}
+      <h2>
+      {% blocktrans with opening=context_opening.title %}
+        Applicants for {{ opening }}
+      {% endblocktrans %}
+      </h2>
+    {% endif %}
+
     <table class="large-12 columns">
       <thead>
         <tr>
@@ -18,11 +27,13 @@
         {% regroup application_list by opening as opening_applications %}
 
         {% for opening in opening_applications %}
-          <tr>
-            <td colspan="3">
-              {{ opening.grouper.title }} for {{ opening.grouper.department }}
-            </td>
-          </tr>
+          {% if not context_opening %}
+            <tr>
+              <td colspan="3">
+                {{ opening.grouper.title }} for {{ opening.grouper.department }}
+              </td>
+            </tr>
+          {% endif %}
 
           {% for application in opening.list %}
             <tr>

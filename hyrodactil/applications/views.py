@@ -11,6 +11,12 @@ from openings.models import Opening
 
 
 class ApplicationListView(LoginRequiredMixin, RestrictedListView):
+    def get_context_data(self, **kwargs):
+        kwargs['context_opening'] = get_object_or_404(
+            Opening, pk=self.kwargs['opening_id']
+        )
+        return super(ApplicationListView, self).get_context_data(**kwargs)
+
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
         return Application.objects.filter(opening=opening)
