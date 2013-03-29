@@ -144,5 +144,8 @@ class ApplicationStageTransitionForm(forms.ModelForm):
 
 class ApplicationMessageForm(forms.ModelForm):
     class Meta:
+        widgets = {
+            'parent': forms.HiddenInput(),
+        }
         model = ApplicationMessage
-        fields = ('body',)
+        fields = ('body', 'parent')

@@ -111,6 +111,8 @@ class ApplicationViewsTests(WebTest):
 
     def test_discuss_an_application(self):
         application = ApplicationFactory.create(opening=self.opening)
+        colleague = UserFactory.create(email='bill@company.com',
+                company=self.user.company)
         url = reverse('applications:application_detail', args=(application.id,))
 
         response = self.app.get(
@@ -121,8 +123,20 @@ class ApplicationViewsTests(WebTest):
 
         form = response.forms['new-message-form']
         form['body'] = 'This guy is good'
+        form['parent'] = ''
         response = form.submit().follow()
         self.assertContains(response, "This guy is good")
+        parent_message = ApplicationMessage.objects.get()
+        self.assertEqual(self.user, parent_message.user)
+
+        form = response.forms['new-message-form']
+        form['body'] = "I beg to differ"
+        form['parent'] = parent_message.pk
+        response = form.submit(user=colleague).follow(user=colleague)
+        self.assertContains(response, "This guy is good")
+        self.assertContains(response, "I beg to differ")
+        new_message = ApplicationMessage.objects.get(parent=parent_message)
+        self.assertEqual(colleague, new_message.user)
 
     def test_only_allowed_user_can_participate_to_application_discussion(self):
         application = ApplicationFactory.create(opening=self.opening)
@@ -137,5 +151,6 @@ class ApplicationViewsTests(WebTest):
 
         form = response.forms['new-message-form']
         form['body'] = 'This guy is good'
+        form['parent'] = ''
         response = form.submit(user=attacker, status=404)
         self.assertFalse(ApplicationMessage.objects.all().exists())

@@ -41,6 +41,7 @@ class ApplicationAnswer(TimeStampedModel):
 class ApplicationMessage(TimeStampedModel):
     application = models.ForeignKey(Application)
     user = models.ForeignKey(CustomUser)
+    parent = models.ForeignKey('ApplicationMessage', null=True, blank=True)
 
     body = models.TextField()
 
