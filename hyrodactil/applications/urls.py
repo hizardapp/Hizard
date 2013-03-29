@@ -18,4 +18,9 @@ urlpatterns = patterns('',
         views.ApplicationDetailView.as_view(),
         name='application_detail'
     ),
+    url(
+        r'^(?P<application_id>\d+)/create_message$',
+        views.ApplicationMessageCreateView.as_view(),
+        name='create_message'
+    ),
 )

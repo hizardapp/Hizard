@@ -1,11 +1,12 @@
+from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
 
 from braces.views import LoginRequiredMixin
 
-from .forms import ApplicationStageTransitionForm
-from applications.models import Application, ApplicationAnswer
+from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
+from .models import Application, ApplicationAnswer, ApplicationMessage
 from core.views import RestrictedListView
 from openings.models import Opening
 
@@ -28,6 +29,29 @@ class AllApplicationListView(LoginRequiredMixin, RestrictedListView):
             opening__company=self.request.user.company).order_by("opening")
 
 
+class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
+    model = ApplicationMessage
+    form_class = ApplicationMessageForm
+    action = 'created'
+
+    def dispatch(self, request, application_id, **kwargs):
+        self.application = get_object_or_404(Application,
+                opening__company=self.request.user.company,
+                pk=application_id)
+        return super(ApplicationMessageCreateView, self).dispatch(
+                request, application_id, **kwargs)
+
+    def get_success_url(self):
+        return "%s#notes" % reverse('applications:application_detail',
+                args=(self.application.id,))
+
+    def form_valid(self, form):
+        new_message = form.save(commit=False)
+        new_message.application = self.application
+        new_message.user = self.request.user
+        return super(ApplicationMessageCreateView, self).form_valid(form)
+
+
 class ApplicationDetailView(LoginRequiredMixin, FormView):
     model = Application
     form_class = ApplicationStageTransitionForm
@@ -44,7 +68,9 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super(ApplicationDetailView, self).get_context_data(**kwargs)
+        context['user'] = self.request.user
         context['application'] = self.get_application()
+        context['new_message_form'] = ApplicationMessageForm()
         context['answers'] = ApplicationAnswer.objects.filter(
             application=context['application'])
         return context

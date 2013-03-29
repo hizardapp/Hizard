@@ -6,7 +6,8 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from .models import (
-    Applicant, Application, ApplicationAnswer, ApplicationStageTransition
+    Applicant, Application, ApplicationAnswer, ApplicationStageTransition,
+    ApplicationMessage
 )
 
 
@@ -139,3 +140,9 @@ class ApplicationStageTransitionForm(forms.ModelForm):
     class Meta:
         model = ApplicationStageTransition
         fields = ('stage',)
+
+
+class ApplicationMessageForm(forms.ModelForm):
+    class Meta:
+        model = ApplicationMessage
+        fields = ('body',)

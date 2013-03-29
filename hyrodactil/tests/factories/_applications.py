@@ -28,7 +28,3 @@ class ApplicationAnswerFactory(factory.Factory):
     answer = 'Some clever answer'
     application = factory.SubFactory(ApplicationFactory)
     question = factory.SubFactory(_companysettings.SingleLineQuestionFactory)
-
-
-class ApplicationMessageFactory(factory.Factory):
-    FACTORY_FOR = ApplicationMessage

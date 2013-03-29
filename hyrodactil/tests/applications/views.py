@@ -3,12 +3,13 @@ from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
 from ..factories._applications import (
-    ApplicationFactory, ApplicationAnswerFactory, ApplicationMessageFactory
+    ApplicationFactory, ApplicationAnswerFactory
 )
 from ..factories._companysettings import (
     SingleLineQuestionFactory, InterviewStageFactory
 )
 from ..factories._openings import OpeningWithQuestionsFactory
+from applications.models import ApplicationMessage
 
 
 class ApplicationViewsTests(WebTest):
@@ -97,7 +98,7 @@ class ApplicationViewsTests(WebTest):
             url,
             headers=dict(Host="%s.h.com" % self.user.company.subdomain)
         )
-        form = response.form
+        form = response.forms['transition-form']
         form['stage'] = '%s' % phoned.pk
         response = form.submit().follow()
 
@@ -108,12 +109,8 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(response, transition.user)
         self.assertContains(response, transition.stage)
 
-    def test_show_discussion(self):
+    def test_discuss_an_application(self):
         application = ApplicationFactory.create(opening=self.opening)
-        ApplicationMessageFactory.create(application=application,
-                body="This guy is good",
-                user=self.user,
-        )
         url = reverse('applications:application_detail', args=(application.id,))
 
         response = self.app.get(
@@ -122,4 +119,23 @@ class ApplicationViewsTests(WebTest):
             headers=dict(Host="%s.h.com" % self.opening.company.subdomain)
         )
 
+        form = response.forms['new-message-form']
+        form['body'] = 'This guy is good'
+        response = form.submit().follow()
         self.assertContains(response, "This guy is good")
+
+    def test_only_allowed_user_can_participate_to_application_discussion(self):
+        application = ApplicationFactory.create(opening=self.opening)
+        attacker = UserFactory.create(email='red@red.com')
+        url = reverse('applications:application_detail', args=(application.id,))
+
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.opening.company.subdomain)
+        )
+
+        form = response.forms['new-message-form']
+        form['body'] = 'This guy is good'
+        response = form.submit(user=attacker, status=404)
+        self.assertFalse(ApplicationMessage.objects.all().exists())
