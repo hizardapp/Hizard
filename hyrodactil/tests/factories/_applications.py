@@ -3,6 +3,7 @@ import factory
 import _companysettings
 import _openings
 from applications.models import Applicant, Application, ApplicationAnswer
+from applications.models import ApplicationMessage
 
 
 class ApplicantFactory(factory.Factory):
@@ -27,3 +28,7 @@ class ApplicationAnswerFactory(factory.Factory):
     answer = 'Some clever answer'
     application = factory.SubFactory(ApplicationFactory)
     question = factory.SubFactory(_companysettings.SingleLineQuestionFactory)
+
+
+class ApplicationMessageFactory(factory.Factory):
+    FACTORY_FOR = ApplicationMessage

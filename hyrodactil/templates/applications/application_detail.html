@@ -35,7 +35,9 @@
     <section class="section">
       <p class="title"><a href="#notes">{% trans 'Notes' %}</a></p>
       <div class="content" data-slug="notes">
-        <p>TODO</p>
+        {% for message in application.applicationmessage_set.all %}
+          <p>{{ message.user }} said : {{ message.body }}  </p>
+        {% endfor %}
       </div>
     </section>
 

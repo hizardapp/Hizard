@@ -3,7 +3,7 @@ from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
 from ..factories._applications import (
-    ApplicationFactory, ApplicationAnswerFactory
+    ApplicationFactory, ApplicationAnswerFactory, ApplicationMessageFactory
 )
 from ..factories._companysettings import (
     SingleLineQuestionFactory, InterviewStageFactory
@@ -107,3 +107,19 @@ class ApplicationViewsTests(WebTest):
 
         self.assertContains(response, transition.user)
         self.assertContains(response, transition.stage)
+
+    def test_show_discussion(self):
+        application = ApplicationFactory.create(opening=self.opening)
+        ApplicationMessageFactory.create(application=application,
+                body="This guy is good",
+                user=self.user,
+        )
+        url = reverse('applications:application_detail', args=(application.id,))
+
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.opening.company.subdomain)
+        )
+
+        self.assertContains(response, "This guy is good")

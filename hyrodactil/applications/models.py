@@ -36,3 +36,13 @@ class ApplicationAnswer(TimeStampedModel):
 
     question = models.ForeignKey(Question)
     application = models.ForeignKey(Application)
+
+
+class ApplicationMessage(TimeStampedModel):
+    application = models.ForeignKey(Application)
+    user = models.ForeignKey(CustomUser)
+
+    body = models.TextField()
+
+    class Meta:
+        ordering = ('-created',)
