@@ -7,6 +7,7 @@ from braces.views import LoginRequiredMixin
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
 from .models import Application, ApplicationAnswer, ApplicationMessage
+from .threaded_discussion import group
 from core.views import RestrictedListView
 from openings.models import Opening
 
@@ -69,7 +70,9 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super(ApplicationDetailView, self).get_context_data(**kwargs)
         context['user'] = self.request.user
-        context['application'] = self.get_application()
+        application = self.get_application()
+        context['application'] = application
+        context['discussion'] = group(application.applicationmessage_set.all())
         context['new_message_form'] = ApplicationMessageForm()
         context['answers'] = ApplicationAnswer.objects.filter(
             application=context['application'])

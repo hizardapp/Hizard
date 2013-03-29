@@ -35,33 +35,7 @@
     <section class="section">
       <p class="title"><a href="#notes">{% trans 'Notes' %}</a></p>
       <div class="content" data-slug="notes">
-        {% for message in application.applicationmessage_set.all %}
-          <p>{{ message.user }} said : {{ message.body }}  </p>
-        {% endfor %}
-
-        <form action="{% url 'applications:create_message' application.id %}"
-          method="POST"
-          id="new-message-form"> {% csrf_token %}
-            <div class="row">
-              <div class="two columns">
-                <label class="right inline">{{ new_message_form.body.label }}</label>
-              </div>
-
-              <div class="four columns end">
-                {{ new_message_form.body }}
-              </div>
-            </div>
-
-          <div class="row">
-            <div class="form-actions six columns end">
-              <div class="right">
-                {{ new_message_form.parent }}
-                <input type="submit" value="{% trans 'Save message' %}" class="button" />
-              </div>
-            </div>
-          </div>
-        </form>
-
+        {% include 'applications/_discussion_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
       </div>
     </section>
 
