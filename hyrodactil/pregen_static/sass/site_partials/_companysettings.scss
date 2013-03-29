@@ -1,0 +1,36 @@
+@import "../variables";
+
+
+.company-settings {
+  ul {
+    list-style: none;
+  }
+
+  li {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px solid $grey;
+
+    &:first-of-type {
+      border-top: 1px solid darken($grey, 20);
+    }
+
+    &:last-of-type {
+      border-bottom: 1px solid darken($grey, 20);
+    }
+
+    h3 {
+      float: left;
+      font-size: emCalc(18px);
+      margin: 0;
+    }
+
+    .setting-desc {
+      color: grey;
+    }
+
+    .manage-link {
+      text-align: right;
+    }
+  }
+}
