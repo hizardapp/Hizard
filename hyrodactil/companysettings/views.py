@@ -7,6 +7,7 @@ from braces.views import LoginRequiredMixin
 from .forms import DepartmentForm, QuestionForm, InterviewStageForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
+from accounts.models import CustomUser
 from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
 from core.views import RestrictedDeleteView
 
@@ -109,3 +110,11 @@ class InterviewStageDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = InterviewStage
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage deleted.')
+
+
+class UsersListView(LoginRequiredMixin, RestrictedListView):
+    template_name = "companysettings/customuser_list.html"
+    model = CustomUser
+
+    def get_queryset(self):
+        return self.model.objects.filter(company=self.request.user.company)

@@ -310,3 +310,19 @@ class CompanySettingsViewsTests(WebTest):
                          reverse('companysettings:list_stages'))
         self.assertNotContains(response, "Interview")
         self.assertContains(response, "Stage deleted.")
+
+    def test_list_users(self):
+        url = reverse('companysettings:list_users')
+        colleague = UserFactory.create(company=self.user.company,
+            first_name="Steve",
+            email="steve@example.com")
+        not_colleague = UserFactory.create(first_name="Bill",
+            email="bill@example.com")
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+
+        self.assertContains(page, colleague.first_name)
+        self.assertNotContains(page, not_colleague.first_name)

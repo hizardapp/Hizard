@@ -66,6 +66,12 @@ urlpatterns = patterns('',
         name='delete_stage'
     ),
 
+    url(
+        r'^users/$',
+        views.UsersListView.as_view(),
+        name='list_users'
+    ),
+
 
     url(
         r'^$',
