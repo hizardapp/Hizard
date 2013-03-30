@@ -28,7 +28,7 @@
 @import "foundation/components/alert-boxes";
 // @import "foundation/components/breadcrumbs";
 // @import "foundation/components/keystrokes";
-// @import "foundation/components/labels";
+@import "foundation/components/labels";
 // @import "foundation/components/inline-lists";
 // @import "foundation/components/pagination";
 @import "foundation/components/panels";
@@ -48,6 +48,7 @@
 
 // Styles common to all website
 @import "site_partials/forms";
+@import "site_partials/section_modals";
 
 // Styles specific to app/pages
 @import "site_partials/register";

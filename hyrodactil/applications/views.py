@@ -83,4 +83,5 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         transition.application = self.get_application()
         transition.user = self.request.user
         transition.save()
-        return redirect('applications:application_detail', pk=self.kwargs['pk'])
+        return redirect('applications:application_detail',
+            pk=self.kwargs['pk'])

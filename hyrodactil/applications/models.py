@@ -21,6 +21,10 @@ class Application(TimeStampedModel):
 
     rating = models.IntegerField(blank=True, null=True)
 
+    def current_stage(self):
+        transitions = self.stage_transitions.all()
+        if transitions:
+            return transitions[0].stage
 
 class ApplicationStageTransition(TimeStampedModel):
     application = models.ForeignKey(Application, related_name="stage_transitions")
@@ -29,7 +33,7 @@ class ApplicationStageTransition(TimeStampedModel):
     note = models.TextField()
 
     class Meta:
-        ordering = "created",
+        ordering = "-created",
 
 
 class ApplicationAnswer(TimeStampedModel):

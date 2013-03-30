@@ -1,23 +1,37 @@
 {% load i18n %}
 
-<form action="" method="POST" id="transition-form"> {% csrf_token %}
-  {% for field in form %}
-    <div class="row">
-      <div class="two columns">
-        <label class="right inline">{{ field.label }}</label>
-      </div>
+<div id="transition-form-modal" class="reveal-modal">
+  <form action="#transition-form" method="POST" id="transition-form"> {% csrf_token %}
+    <h3>Current stage : {{ application.current_stage }}</h3>
+    {{ form.errors }}
+    {{ form.stage.label_tag }}
+    {{ form.stage }}
+    {{ form.note.label_tag }}
+    {{ form.note }}
+    <input type="submit" value="{% trans 'Move to' %}" class="button" />
+  </form>
+  <a class="close-reveal-modal">&#215;</a>
+</div>
 
-      <div class="four columns end">
-        {{ field }}
-      </div>
-    </div>
-  {% endfor %}
-
-  <div class="row">
-    <div class="form-actions six columns end">
-      <div class="right">
-        <input type="submit" value="{% trans 'Move to' %}" class="button" />
-      </div>
-    </div>
+<div class="row">
+  <div class="twelve columns">
+    <p><a href="#" data-reveal-id="transition-form-modal">
+      Change the stage of this application</a></p>
   </div>
-</form>
+</div>
+
+<div class="row">
+  <div class="twelve columns">
+    {% for transition in application.stage_transitions.all %}
+      <p>
+        <span class="label">{{ transition.stage }}</span>
+        {{ transition.user.first_name }} {{ transition.user.last_name }}
+        {{ transition.created|date:"SHORT_DATETIME_FORMAT" }}<br/>
+        {{ transition.note|linebreaks }}
+      </p>
+      {% if not forloop.last %}
+        <hr/>
+      {% endif %}
+    {% endfor %}
+  </div>
+<div>
