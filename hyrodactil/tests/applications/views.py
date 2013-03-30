@@ -100,11 +100,13 @@ class ApplicationViewsTests(WebTest):
         )
         form = response.forms['transition-form']
         form['stage'] = '%s' % phoned.pk
+        form['note'] = 'Yep, looks good'
         response = form.submit().follow()
 
         transition = application.stage_transitions.get()
         self.assertEqual(transition.user, self.user)
         self.assertEqual(transition.stage, phoned)
+        self.assertEqual(transition.note, "Yep, looks good")
 
         self.assertContains(response, transition.user)
         self.assertContains(response, transition.stage)

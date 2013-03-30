@@ -26,6 +26,7 @@ class ApplicationStageTransition(TimeStampedModel):
     application = models.ForeignKey(Application, related_name="stage_transitions")
     user = models.ForeignKey(CustomUser)
     stage = models.ForeignKey(InterviewStage)
+    note = models.TextField()
 
     class Meta:
         ordering = "created",

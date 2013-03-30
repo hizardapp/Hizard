@@ -139,7 +139,7 @@ class ApplicationForm(forms.ModelForm):
 class ApplicationStageTransitionForm(forms.ModelForm):
     class Meta:
         model = ApplicationStageTransition
-        fields = ('stage',)
+        fields = ('stage', 'note')
 
 
 class ApplicationMessageForm(forms.ModelForm):
