@@ -38,14 +38,6 @@
         {% include 'applications/_discussion_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
       </div>
     </section>
-
-    <section class="section">
-      <p class="title"><a href="#history">{% trans 'History' %}</a></p>
-      <div class="content" data-slug="history">
-        {% include 'applications/_history_tab.html' with application=application %}
-      </div>
-    </section>
-
   </div>
 {% endblock %}
 
