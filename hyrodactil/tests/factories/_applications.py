@@ -3,7 +3,6 @@ import factory
 import _companysettings
 import _openings
 from applications.models import Applicant, Application, ApplicationAnswer
-from applications.models import ApplicationMessage
 
 
 class ApplicantFactory(factory.Factory):
@@ -12,7 +11,7 @@ class ApplicantFactory(factory.Factory):
     first_name = 'Bilbon'
     last_name = 'Sacquet'
     email = 'bilbon@shire.com'
-    resume = 'resume.pdf'
+    resume = 'resumes/resume.pdf'
 
 
 class ApplicationFactory(factory.Factory):

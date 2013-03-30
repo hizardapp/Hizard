@@ -48,6 +48,7 @@ class ApplicationViewsTests(WebTest):
         )
 
     def test_valid_post_application_form(self):
+        shutil.rmtree(settings.MEDIA_ROOT)
         url = reverse('public_jobs:apply', args=(self.opening.id,))
         form = self.app.get(url).form
 
@@ -69,7 +70,7 @@ class ApplicationViewsTests(WebTest):
         applicant = Application.objects.get(id=1).applicant
 
         self.assertEqual(applicant.first_name, 'Bilbon')
-        self.assertEqual(applicant.resume.url, 'resumes/resume.pdf')
+        self.assertEqual(applicant.resume.url, '/media/resumes/resume.pdf')
 
         # 2 required, 2 not required, we still record the 4 though
         self.assertEqual(ApplicationAnswer.objects.count(), 4)
@@ -83,7 +84,6 @@ class ApplicationViewsTests(WebTest):
 
         # Making sure we delete the folders and the files inside
         shutil.rmtree(dir)
-        shutil.rmtree('%s/resumes' % settings.MEDIA_ROOT)
 
     def test_invalid_post_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))
