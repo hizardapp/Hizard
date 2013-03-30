@@ -1,10 +1,12 @@
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import CreateView, TemplateView
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
 
 from .forms import DepartmentForm, QuestionForm, InterviewStageForm
+from .forms import CustomUserInviteForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
 from accounts.models import CustomUser
@@ -118,3 +120,16 @@ class UsersListView(LoginRequiredMixin, RestrictedListView):
 
     def get_queryset(self):
         return self.model.objects.filter(company=self.request.user.company)
+
+
+class InviteUserCreateView(LoginRequiredMixin, CreateView):
+    template_name = "companysettings/customuser_form.html"
+    model = CustomUser
+    form_class = CustomUserInviteForm
+    #action = 'created'
+    success_url = reverse_lazy('companysettings:list_users')
+    #success_message = _('Department created.')
+
+    def form_valid(self, form):
+        form.save(company=self.request.user.company)
+        return redirect(self.success_url)

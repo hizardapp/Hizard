@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.core import mail
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
@@ -6,6 +7,7 @@ from ..factories._companysettings import (
     DepartmentFactory, SingleLineQuestionFactory, InterviewStageFactory
 )
 from companysettings.models import Department, Question, InterviewStage
+from accounts.models import CustomUser
 
 
 class CompanySettingsViewsTests(WebTest):
@@ -326,3 +328,20 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertContains(page, colleague.first_name)
         self.assertNotContains(page, not_colleague.first_name)
+
+    def test_create_invite_user(self):
+        url = reverse('companysettings:invite_user')
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+
+        form = page.form
+        form["email"] = "steve@example.com"
+        page = form.submit().follow()
+        self.assertTrue(
+            CustomUser.objects.filter(email="steve@example.com").exists())
+        self.assertEqual(len(mail.outbox), 1)
+        new_user = CustomUser.objects.get(email="steve@example.com")
+        self.assertEqual(new_user.company, self.user.company)
