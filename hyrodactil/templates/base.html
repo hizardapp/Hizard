@@ -43,12 +43,13 @@
               <li class="divider"></li>
               <li><a href="#">Calendar</a></li>
               <li class="divider"></li>
-              <li><a href={% url 'companysettings:settings_home' %}>{% trans 'Settings' %}</a></li>
+              <li><a href={% url 'companysettings:settings_home' %}>{% trans 'Company settings' %}</a></li>
             {% endif %}
           </ul>
 
           <ul class="right">
             {% if user.is_authenticated %}
+              <li><a href={% url 'auth:logout' %}>  {% trans 'User settings' %}</a></li>
               <li><a href={% url 'auth:logout' %}>  {% trans 'Logout' %}</a></li>
             {% else %}
               <li><a href={% url 'accounts:register' %}>{% trans 'Register' %}</a></li>

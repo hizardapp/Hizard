@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-
 {% block content %}
 
   {% if from_activation %}
@@ -49,6 +48,11 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="large-12 columns">
+          <a href={% url 'auth:reset_password' %} title="{% trans 'Reset password' %}">{% trans 'Reset password' %}</a>
+        </div>
+      </div>
 
       <div class="row">
         <div class="large-12 columns submit-button">
