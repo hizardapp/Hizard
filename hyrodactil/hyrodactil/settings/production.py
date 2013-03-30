@@ -14,3 +14,4 @@ DATABASES = {
 }
 
 STATIC_ROOT = '/home/app/static/'
+MEDIA_URL = 'http://hizard.com/media/'
