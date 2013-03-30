@@ -42,6 +42,8 @@ class AccountsViewsTests(WebTest):
         self.assertRedirects(response, reverse('accounts:register_confirmation'))
         self.assertEqual(CustomUser.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
+        new_user = CustomUser.objects.get()
+        self.assertTrue(new_user.is_company_admin)
 
     def test_post_registration_view_failure(self):
         """

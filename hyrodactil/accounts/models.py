@@ -134,6 +134,8 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
+    is_company_admin = models.BooleanField(default=True)
+
     avatar = models.ImageField(
         verbose_name=_('Avatar'),
         blank=True,
