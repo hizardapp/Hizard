@@ -33,7 +33,7 @@
     </section>
 
     <section class="section">
-      <p class="title"><a href="#notes">{% trans 'Notes' %}</a></p>
+      <p class="title"><a href="#notes">{% trans 'Discussion' %}</a></p>
       <div class="content" data-slug="notes">
         {% include 'applications/_discussion_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
       </div>
@@ -47,6 +47,18 @@
     </section>
 
   </div>
-
-
 {% endblock %}
+
+{% block extra-js %}
+<script type="text/javascript">
+  $("a.reply-link").click(function (event) {
+      var new_form = $("#new-message-form").clone(),
+          link = $(this),
+          small_parent = $(link.parents("small")[0]),
+          parent_message = link.attr("reply-to");
+      small_parent.after(new_form);
+      new_form.find("#id_parent").val(parent_message);
+      event.preventDefault();
+  });
+</script>
+{% endblock extra-js %}

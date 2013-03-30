@@ -2,3 +2,25 @@
 .section-container .content {
   min-height: 600px;
 }
+
+.message {
+  margin-bottom: .5em;
+  padding-left: 4px;
+}
+.message-thread {
+  border-left: 1px dotted black;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.message-level-0 {
+  margin-left: 16px;
+}
+.message-level-1 {
+  margin-left: 32px;
+}
+.message-level-2 {
+  margin-left: 48px;
+}
+.message-level-3 {
+  margin-left: 64px;
+}

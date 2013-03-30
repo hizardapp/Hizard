@@ -1,17 +1,38 @@
 {% load i18n %}
 
-{% for level, message in discussion %}
-  <p>{{ level }}({{ message.pk }}) | {{ message.user }} said : {{ message.body }}  </p>
-{% endfor %}
+<div class="row">
+  <div class="twelve columns">
+    {% for level, message in discussion %}
+      {% ifchanged level %}
+
+        {% if not forloop.first %}
+           {% ifchanged level %}
+           </div>
+           {% endifchanged %}
+        {% endif %}
+
+        <div class="message-level-{{ level }} message-thread">
+      {% endifchanged %}
+
+        <div class="message">
+          <p>
+          <small>{{ level }} {{ message.user.first_name }} {{ message.user.last_name }}  {{ message.created|date:"SHORT_DATETIME_FORMAT" }}<br/></small>
+            {{ message.body }} <br/>
+            <small><a href="#" id="" reply-to="{{ message.pk }}" class="reply-link">{% trans 'Reply' %}</a></small>
+          </p>
+        </div>
+
+      {% if forloop.last %}
+       </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+<div>
 
 <form action="{% url 'applications:create_message' application.id %}"
   method="POST"
   id="new-message-form"> {% csrf_token %}
     <div class="row">
-      <div class="two columns">
-        <label class="right inline">{{ new_message_form.body.label }}</label>
-      </div>
-
       <div class="four columns end">
         {{ new_message_form.body }}
       </div>
@@ -26,4 +47,3 @@
     </div>
   </div>
 </form>
-
