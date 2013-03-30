@@ -78,14 +78,11 @@
     <script src="{% static "js/foundation/foundation.topbar.js" %}"></script>
     <script src="{% static "js/foundation/foundation.section.js" %}"></script>
     <script src="{% static "js/foundation/foundation.reveal.js" %}"></script>
-
-    {% block extra-js %}
-    {% endblock extra-js %}
-
     <script>
       $(document).foundation();
     </script>
 
-    {% block extrajs %}{% endblock %}
+    {% block extra-js %}
+    {% endblock extra-js %}
   </body>
 </html>
