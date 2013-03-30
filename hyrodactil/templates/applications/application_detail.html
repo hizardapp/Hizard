@@ -28,7 +28,11 @@
     <section class="section">
       <p class="title"><a href="#resume">{% trans 'Resume' %}</a></p>
       <div class="content" data-slug="resume">
-        <p>TODO</p>
+        {% with application.applicant.resume as resume %}
+          {{ resume.name }} ({{ resume.size|filesizeformat }})
+          <a href="{{ application.applicant.resume.url }}" target="_blank">{% trans 'Download' %}</a>
+          <a href="#" target="_blank" resume-url="{{ application.applicant.resume.url }}" id="view-resume">{% trans 'View' %}</a>
+        {% endwith %}
       </div>
     </section>
 
@@ -52,13 +56,23 @@
 {% block extra-js %}
 <script type="text/javascript">
   $("a.reply-link").click(function (event) {
+      event.preventDefault();
       var new_form = $("#new-message-form").clone(),
           link = $(this),
           small_parent = $(link.parents("small")[0]),
           parent_message = link.attr("reply-to");
       small_parent.after(new_form);
       new_form.find("#id_parent").val(parent_message);
+  });
+
+  $("a#view-resume").click(function (event) {
       event.preventDefault();
+      var link = $(this),
+          resume_url = link.attr("resume-url"),
+          viewer_url = "http://docs.google.com/gview?url=" + resume_url + "&embedded=true",
+          iframe = $("<iframe style=\"width:100%; height:100%;\" frameborder=\"0\">");
+      iframe.attr("src", viewer_url);
+      link.after(iframe);
   });
 </script>
 {% endblock extra-js %}
