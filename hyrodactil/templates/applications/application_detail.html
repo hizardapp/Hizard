@@ -28,14 +28,7 @@
     <section class="section">
       <p class="title"><a href="#resume">{% trans 'Resume' %}</a></p>
       <div class="content" data-slug="resume">
-        {% with application.applicant.resume as resume %}
-          {{ resume.name }} ({{ resume.size|filesizeformat }})
-          <a href="{{ application.applicant.resume.url }}" target="_blank">{% trans 'Download' %}</a>
-          <iframe src="http://docs.google.com/gview?url={{ application.applicant.resume.url }}&embedded=true"
-            style="width:100%; height:1280px;"
-            frameborder="0">
-          </iframe>
-        {% endwith %}
+        {% include 'applications/_resume_tab.html' with application=application %}
       </div>
     </section>
 
