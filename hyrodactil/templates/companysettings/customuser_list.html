@@ -46,6 +46,6 @@
     <p>{% trans "No user yet" %}</p>
   {% endif %}
 
-  <a href="" class="button">{% trans "Create a user" %}</a>
+  <a href="{% url 'companysettings:invite_user' %}" class="button">{% trans "Create a user" %}</a>
 
 {% endblock content %}

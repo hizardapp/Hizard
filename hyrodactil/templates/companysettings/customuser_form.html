@@ -1,1 +1,42 @@
-{% extends "core/base_form.html" %}
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="hizard-form large-6 columns large-centered panel">
+
+    <form action="" method="POST" id="action-form">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <small class="error">{{ form.non_field_errors }}</small>
+      {% endif %}
+
+      <div class="row">
+        <div class="large-12 columns form-title">
+          <h1>{% trans "Invite a new user" %}</h1>
+        </div>
+      </div>
+
+      {% for field in form %}
+        <div class="row collapse">
+          <div class="large-2 columns">
+            <span class="icon-envelope icon-large prefix"></span>
+          </div>
+          <div class="large-10 columns {% if field.errors %} error {% endif %}">
+            {{ field }}
+            {% if field.errors %}
+              <small class="error">{{ field.errors }}</small>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="row">
+        <div class="large-12 columns submit-button">
+          <input type="submit" class="button" value="{% trans 'Invite' %}" />
+        </div>
+      </div>
+    </form>
+
+  </div>
+{% endblock content %}
