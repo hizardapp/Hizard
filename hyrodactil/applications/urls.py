@@ -9,6 +9,11 @@ urlpatterns = patterns('',
         name='list_all_applications'
     ),
     url(
+        r'^board$',
+        views.BoardView.as_view(),
+        name='test_board'
+    ),
+    url(
         r'^(?P<opening_id>\d+)/applications$',
         views.ApplicationListView.as_view(),
         name='list_applications'

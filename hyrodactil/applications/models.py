@@ -26,6 +26,7 @@ class Application(TimeStampedModel):
         if transitions:
             return transitions[0].stage
 
+
 class ApplicationStageTransition(TimeStampedModel):
     application = models.ForeignKey(Application, related_name="stage_transitions")
     user = models.ForeignKey(CustomUser)

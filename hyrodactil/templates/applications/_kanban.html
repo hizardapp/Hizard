@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load core_extra %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="kanban-board">
+  {% for column in board %}
+    <div class="kanban-list">
+      <div class="kanban-list-header"><h2>{{ column.name }}</h2></div>
+      <div class="kanban-list-cards">
+        {% for application in board|get_item:column %}
+          <div class="kanban-card">
+            <span>{{ application.applicant.first_name }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock content %}
+
+{% block extra-js %}
+  <script src="{% static "js/vendor/jquery.ui.js" %}"></script>
+  <script src="{% static "js/kanban.js" %}"></script>
+  <script>
+    $(function () {
+      $('.kanban-board').kanban();
+    });
+  </script>
+{% endblock extra-js %}

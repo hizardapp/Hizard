@@ -1,13 +1,14 @@
+from collections import defaultdict
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import FormView, CreateView
-
+from django.views.generic import FormView, CreateView, TemplateView
 from braces.views import LoginRequiredMixin
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
 from .models import Application, ApplicationAnswer, ApplicationMessage
 from .threaded_discussion import group
+from companysettings.models import InterviewStage
 from core.views import RestrictedListView
 from openings.models import Opening
 
@@ -85,3 +86,25 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         transition.save()
         return redirect('applications:application_detail',
             pk=self.kwargs['pk'])
+
+
+class BoardView(LoginRequiredMixin, TemplateView):
+    template_name = "applications/_kanban.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(BoardView, self).get_context_data(**kwargs)
+
+        board_data = defaultdict(list)
+
+        stages = InterviewStage.objects.filter(company=self.request.user.company)
+        applications = Application.objects.filter(opening__company=self.request.user.company).prefetch_related("stage_transitions__stage")
+
+        for stage in stages:
+            board_data[stage] = []
+            for application in applications:
+                if stage == application.current_stage():
+                    board_data[stage].append(application)
+
+        context['board'] = board_data
+
+        return context
