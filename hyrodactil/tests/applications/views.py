@@ -166,13 +166,14 @@ class ApplicationAjaxViewsTests(WebTest):
         self.question = SingleLineQuestionFactory(company=self.user.company)
         self.opening = OpeningWithQuestionsFactory(company=self.user.company)
 
-    def test_saving_position_applications_valid(self):
-        application1 = ApplicationFactory.create(opening=self.opening)
-        application2 = ApplicationFactory.create(opening=self.opening)
+    def test_saving_position_applications_valid_with_stage(self):
+        application1 = ApplicationFactory(opening=self.opening)
+        application2 = ApplicationFactory(opening=self.opening)
+        stage = InterviewStageFactory(company=self.user.company)
 
         url = reverse('applications:update_positions')
         data = {
-            'stage': 1,
+            'stage': stage.id,
             'positions':[(application1.id, 0), (application2.id, 1)]
         }
 
@@ -186,12 +187,19 @@ class ApplicationAjaxViewsTests(WebTest):
 
         json_response = json.loads(response.content)
         self.assertEqual(json_response['status'], 'success')
-        self.assertEqual(0, Application.objects.get(id=application1.id).position)
-        self.assertEqual(1, Application.objects.get(id=application2.id).position)
+
+        application1 = Application.objects.get(id=application1.id)
+        application2 = Application.objects.get(id=application2.id)
+
+        self.assertEqual(0, application1.position)
+        self.assertEqual(stage.id, application1.current_stage().id)
+
+        self.assertEqual(1, application2.position)
+        self.assertEqual(stage.id, application1.current_stage().id)
 
     def test_saving_position_applications_valid_without_stage(self):
-        application1 = ApplicationFactory.create(opening=self.opening)
-        application2 = ApplicationFactory.create(opening=self.opening)
+        application1 = ApplicationFactory(opening=self.opening)
+        application2 = ApplicationFactory(opening=self.opening)
 
         url = reverse('applications:update_positions')
         data = {

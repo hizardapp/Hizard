@@ -136,7 +136,7 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
 
                 if data.get('stage'):
                     current_stage = application.current_stage()
-                    if current_stage and current_stage.id != stage:
+                    if not current_stage or current_stage.id != stage:
                         ApplicationStageTransition.objects.create(
                             application=application,
                             user = self.request.user,
