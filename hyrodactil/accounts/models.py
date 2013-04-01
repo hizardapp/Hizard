@@ -172,6 +172,14 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.email
 
+    def get_status(self):
+        if self.is_active:
+            return _("Active")
+        elif self.activation_key:
+            return _("Invited")
+        else:
+            return _("Disabled")
+
     def activation_key_expired(self):
         """
         Determines if the activation key is expired.

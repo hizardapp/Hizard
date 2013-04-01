@@ -360,3 +360,27 @@ class CompanySettingsViewsTests(WebTest):
         new_user = CustomUser.objects.get(pk=new_user.pk)
         self.assertTrue(new_user.is_active)
         self.assertEqual(new_user.company, self.user.company)
+
+    def test_disable_user(self):
+        colleague = CustomUser.objects.create_user(email="steve@example.com",
+            active=True,
+            company=self.user.company)
+        url = reverse('companysettings:list_users')
+        response = self.app.get(url,
+                user=self.user,
+                headers=dict(Host="%s.h.com" % colleague.company.subdomain))
+        toggle_status_url = reverse('accounts:toggle_status', args=(colleague.pk,))
+        self.assertContains(response, toggle_status_url)
+        response = self.app.get(toggle_status_url,
+                user=self.user,
+                headers=dict(Host="%s.h.com" % colleague.company.subdomain),
+                status=302)
+        self.assertTrue(CustomUser.objects.filter(pk=colleague.pk,
+          is_active=False).exists())
+
+        response = self.app.get(toggle_status_url,
+                user=self.user,
+                headers=dict(Host="%s.h.com" % colleague.company.subdomain),
+                status=302)
+        self.assertTrue(CustomUser.objects.filter(pk=colleague.pk,
+          is_active=True).exists())

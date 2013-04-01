@@ -13,8 +13,7 @@
           <th>{% trans "Name" %}</th>
           <th>{% trans "Status" %}</th>
           <th>{% trans "Role" %}</th>
-          <th>{% trans "Edit" %}</th>
-          <th>{% trans "Delete" %}</th>
+          <th>{% trans "Actions" %}</th>
         </tr>
       </thead>
 
@@ -28,18 +27,25 @@
               {{ user.first_name }} {{ user.last_name }}
             </td>
             <td>
-              {% if user.is_active %}Active{% else %}Invited{% endif %}
+              {{ user.get_status }}
             </td>
             <td>
               {% if user.is_company_admin %}
-                Administrator
+                {% trans 'Administrator' %}
               {% else %}
-                User
+                {% trans 'User' %}
               {% endif %}
             </td>
             <td>
-            </td>
-            <td>
+              {% if not user.activation_key %}
+                <a href="{% url 'accounts:toggle_status' user.pk %}">
+                  {% if user.is_active %}
+                    {% trans 'Disable' %}
+                  {% else %}
+                    {% trans 'Enable' %}
+                  {% endif %}
+                </a>
+              {% endif %}
             </td>
           </tr>
         {% endfor %}

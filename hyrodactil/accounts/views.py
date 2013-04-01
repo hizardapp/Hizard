@@ -212,3 +212,10 @@ class PasswordConfirmResetView(FormView):
         check_token = default_token_generator.check_token(self.user, token)
         self.valid_link = bool(self.user is not None and check_token)
         return self.valid_link
+
+class ToggleStatusView(View):
+    def get(self, request, user_pk):
+        user = get_object_or_404(CustomUser, pk=user_pk)
+        user.is_active = not user.is_active
+        user.save()
+        return HttpResponseRedirect(reverse("companysettings:list_users"))
