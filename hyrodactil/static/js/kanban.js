@@ -6,7 +6,7 @@
 
   $.fn.extend({
     kanban: function(options) {
-      var load, settings, _createColumn;
+      var settings, _savePositions;
 
       settings = {
         opacity: 0.8,
@@ -18,55 +18,40 @@
         change: function(event, ui) {
           return ui.placeholder.addClass('kanban-card-placeholder');
         },
+        stop: function(event, ui) {
+          var $column, card, data, i, _i, _len, _ref;
+
+          $column = ui.item.parent();
+          data = {
+            stage: $column.data('stage-id'),
+            positions: []
+          };
+          _ref = $column.children();
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            card = _ref[i];
+            data.positions.push([$(card).data('id'), i]);
+          }
+          return _savePositions(data);
+        },
         others: {
           containerClass: 'kanban-list-cards',
           columnClass: 'kanban-list',
           columnHeaderClass: 'kanban-list-header',
           cardClass: 'kanban-card',
-          data: null
+          data: null,
+          updatePositionsURL: ''
         }
       };
       settings = $.extend(true, settings, options);
-      _createColumn = function(title) {
-        var column;
-
-        column = "<div class='" + settings.others.columnClass + "'>";
-        column += "<div class='" + settings.others.columnHeaderClass + "'>";
-        column += "<h2>" + title + "</h2>";
-        column += "<div class='" + settings.others.containerClass + "'>";
-        column += "</div>";
-        column += "</div>";
-        column += "</div>";
-        return $(column);
-      };
-      load = function($board) {
-        var $column, $container, boardContent, card, column, number, position, _ref, _ref1, _results;
-
-        boardContent = '';
-        _ref = settings.others.data;
-        _results = [];
-        for (number in _ref) {
-          column = _ref[number];
-          $column = _createColumn(column.name);
-          _ref1 = column.cards;
-          for (position in _ref1) {
-            card = _ref1[position];
-            $container = $column.find('.' + settings.others.containerClass);
-            $container.append($(card.content));
-          }
-          _results.push(console.log($column));
-        }
-        return _results;
+      _savePositions = function(data) {
+        return $.post(settings.others.updatePositionsURL, {
+          data: JSON.stringify(data)
+        }, function(result) {
+          return true;
+        });
       };
       return this.each(function() {
-        var others;
-
-        others = settings.others;
-        if (others.data != null) {
-          $(this).html(others.data);
-        }
-        delete settings.others;
-        return $('.' + others.containerClass).sortable(settings);
+        return $('.' + settings.others.containerClass).sortable(settings);
       });
     }
   });

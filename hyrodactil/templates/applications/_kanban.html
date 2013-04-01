@@ -6,12 +6,12 @@
 
 {% block content %}
 <div class="kanban-board">
-  {% for column in board %}
+  {% for stage in board %}
     <div class="kanban-list">
-      <div class="kanban-list-header"><h2>{{ column.name }}</h2></div>
-      <div class="kanban-list-cards">
-        {% for application in board|get_item:column %}
-          <div class="kanban-card">
+      <div class="kanban-list-header"><h2>{{ stage.name }}</h2></div>
+      <div class="kanban-list-cards" data-stage-id="{{ stage.id }}">
+        {% for application in board|get_item:stage %}
+          <div class="kanban-card" data-id="{{ application.id }}" data-position="{{ application.position }}">
             <span>{{ application.applicant.first_name }}</span>
           </div>
         {% endfor %}
@@ -24,9 +24,14 @@
 {% block extra-js %}
   <script src="{% static "js/vendor/jquery.ui.js" %}"></script>
   <script src="{% static "js/kanban.js" %}"></script>
+  <script src="{% static "js/csrf.js" %}"></script>
   <script>
     $(function () {
-      $('.kanban-board').kanban();
+      $('.kanban-board').kanban({
+        others: {
+          updatePositionsURL: "{% url 'applications:update_positions' %}"
+        }
+      });
     });
   </script>
 {% endblock extra-js %}

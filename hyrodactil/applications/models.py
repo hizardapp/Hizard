@@ -20,6 +20,10 @@ class Application(TimeStampedModel):
     opening = models.ForeignKey(Opening)
 
     rating = models.IntegerField(blank=True, null=True)
+    position = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = 'position',
 
     def current_stage(self):
         transitions = self.stage_transitions.all()
@@ -31,7 +35,7 @@ class ApplicationStageTransition(TimeStampedModel):
     application = models.ForeignKey(Application, related_name="stage_transitions")
     user = models.ForeignKey(CustomUser)
     stage = models.ForeignKey(InterviewStage)
-    note = models.TextField()
+    note = models.TextField(blank=True)
 
     class Meta:
         ordering = "-created",

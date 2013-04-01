@@ -1,3 +1,4 @@
+import json
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
@@ -9,7 +10,7 @@ from ..factories._companysettings import (
     SingleLineQuestionFactory, InterviewStageFactory
 )
 from ..factories._openings import OpeningWithQuestionsFactory
-from applications.models import ApplicationMessage
+from applications.models import ApplicationMessage, Application
 
 
 class ApplicationViewsTests(WebTest):
@@ -156,3 +157,34 @@ class ApplicationViewsTests(WebTest):
         form['parent'] = ''
         response = form.submit(user=attacker, status=404)
         self.assertFalse(ApplicationMessage.objects.all().exists())
+
+class ApplicationAjaxViewsTests(WebTest):
+    csrf_checks = False
+
+    def setUp(self):
+        self.user = UserFactory()
+        self.question = SingleLineQuestionFactory(company=self.user.company)
+        self.opening = OpeningWithQuestionsFactory(company=self.user.company)
+
+    def test_saving_position_applications_valid(self):
+        application1 = ApplicationFactory.create(opening=self.opening)
+        application2 = ApplicationFactory.create(opening=self.opening)
+
+        url = reverse('applications:update_positions')
+        data = {
+            'stage': 1,
+            'positions':[(application1.id, 0), (application2.id, 1)]
+        }
+
+        response = self.app.post(
+            url,
+            {'data' :json.dumps(data)},
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain),
+            extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        )
+
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response['status'], 'success')
+        self.assertEqual(0, Application.objects.get(id=application1.id).position)
+        self.assertEqual(1, Application.objects.get(id=application2.id).position)

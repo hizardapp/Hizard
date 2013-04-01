@@ -1,12 +1,13 @@
 from collections import defaultdict
+import json
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import FormView, CreateView, TemplateView
-from braces.views import LoginRequiredMixin
+from django.views.generic import FormView, CreateView, TemplateView, View
+from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
-from .models import Application, ApplicationAnswer, ApplicationMessage
+from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition
 from .threaded_discussion import group
 from companysettings.models import InterviewStage
 from core.views import RestrictedListView
@@ -97,8 +98,9 @@ class BoardView(LoginRequiredMixin, TemplateView):
         board_data = defaultdict(list)
 
         stages = InterviewStage.objects.filter(company=self.request.user.company)
-        applications = Application.objects.filter(opening__company=self.request.user.company).prefetch_related("stage_transitions__stage")
-
+        applications = Application.objects.filter(
+            opening__company=self.request.user.company
+        ).prefetch_related("stage_transitions__stage")
         for stage in stages:
             board_data[stage] = []
             for application in applications:
@@ -108,3 +110,37 @@ class BoardView(LoginRequiredMixin, TemplateView):
         context['board'] = board_data
 
         return context
+
+
+class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
+    def post_ajax(self, request, *args, **kwargs):
+        data = json.loads(request.POST.get('data'))
+
+        stage = int(data.get('stage'))
+        positions = data.get('positions')
+
+        if positions:
+            for position in positions:
+                application_id = position[0]
+                new_position = position[1]
+
+                application = Application.objects.get(
+                    id=int(application_id),
+                    opening__company=self.request.user.company
+                )
+
+                application.position = new_position
+                application.save()
+
+                current_stage = application.current_stage()
+                if current_stage and current_stage.id != stage:
+                    ApplicationStageTransition.objects.create(
+                        application=application,
+                        user = self.request.user,
+                        stage=InterviewStage.objects.get(id=stage)
+                    )
+                result = {'status': 'success'}
+        else:
+            result = {'status': 'error'}
+
+        return self.render_json_response(result)

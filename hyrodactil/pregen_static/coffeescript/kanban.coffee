@@ -19,50 +19,36 @@ $.fn.extend
       connectWith: '.kanban-list-cards'
       change: (event, ui) ->
         ui.placeholder.addClass 'kanban-card-placeholder'
+      stop: (event, ui) ->
+        $column = ui.item.parent()
+
+        data =
+          stage: $column.data 'stage-id'
+          positions: []
+
+        for card, i in $column.children()
+          data.positions.push [$(card).data('id'), i]
+
+        _savePositions data
       others:
         containerClass: 'kanban-list-cards'
         columnClass: 'kanban-list'
         columnHeaderClass: 'kanban-list-header'
         cardClass: 'kanban-card'
         data: null
+        updatePositionsURL: ''
 
     # Merge default settings with options recursively (the true argument)
     settings = $.extend true, settings, options
 
-    # Creates the DOM for a column in the board and returns the jquery object
-    # representing it
-    _createColumn = (title) ->
-      column = "<div class='#{settings.others.columnClass}'>"
+    # Do an ajax call to save the positioning on the server
+    _savePositions = (data) ->
+      $.post settings.others.updatePositionsURL,
+      {data: JSON.stringify(data)},
+        (result) ->
+          true
 
-      column += "<div class='#{settings.others.columnHeaderClass}'>"
-      column += "<h2>#{title}</h2>"
-      column += "<div class='#{settings.others.containerClass}'>"
-      column += "</div>"
-      column += "</div>"
-
-      column += "</div>"
-
-      $(column)
-
-    # Called if some initial has been provided
-    load = ($board) ->
-      boardContent = ''
-      for number, column of settings.others.data
-        $column = _createColumn column.name
-
-        for position, card of column.cards
-          $container = $column.find('.' + settings.others.containerClass)
-          $container.append $(card.content)
-
-        console.log $column
 
     # Calls .sortable and setup the callbacks
     @each ()->
-      others = settings.others
-
-      if others.data?
-        $(this).html others.data
-
-      delete settings.others
-
-      $('.' + others.containerClass).sortable settings
+      $('.' + settings.others.containerClass).sortable settings

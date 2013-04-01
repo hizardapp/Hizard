@@ -14,6 +14,11 @@ urlpatterns = patterns('',
         name='test_board'
     ),
     url(
+        r'^update_positions$',
+        views.UpdatePositionsAjaxView.as_view(),
+        name='update_positions'
+    ),
+    url(
         r'^(?P<opening_id>\d+)/applications$',
         views.ApplicationListView.as_view(),
         name='list_applications'
