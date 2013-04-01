@@ -188,3 +188,26 @@ class ApplicationAjaxViewsTests(WebTest):
         self.assertEqual(json_response['status'], 'success')
         self.assertEqual(0, Application.objects.get(id=application1.id).position)
         self.assertEqual(1, Application.objects.get(id=application2.id).position)
+
+    def test_saving_position_applications_valid_without_stage(self):
+        application1 = ApplicationFactory.create(opening=self.opening)
+        application2 = ApplicationFactory.create(opening=self.opening)
+
+        url = reverse('applications:update_positions')
+        data = {
+            'stage': None,
+            'positions':[(application1.id, 0), (application2.id, 1)]
+        }
+
+        response = self.app.post(
+            url,
+            {'data' :json.dumps(data)},
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain),
+            extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        )
+
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response['status'], 'success')
+        self.assertEqual(0, Application.objects.get(id=application1.id).position)
+        self.assertEqual(1, Application.objects.get(id=application2.id).position)

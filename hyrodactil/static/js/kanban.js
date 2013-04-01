@@ -6,8 +6,9 @@
 
   $.fn.extend({
     kanban: function(options) {
-      var settings, _savePositions;
+      var differentSortable, settings, _savePositions;
 
+      differentSortable = false;
       settings = {
         opacity: 0.8,
         containment: 'document',
@@ -18,20 +19,11 @@
         change: function(event, ui) {
           return ui.placeholder.addClass('kanban-card-placeholder');
         },
+        receive: function(event, ui) {
+          return differentSortable = true;
+        },
         stop: function(event, ui) {
-          var $column, card, data, i, _i, _len, _ref;
-
-          $column = ui.item.parent();
-          data = {
-            stage: $column.data('stage-id'),
-            positions: []
-          };
-          _ref = $column.children();
-          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-            card = _ref[i];
-            data.positions.push([$(card).data('id'), i]);
-          }
-          return _savePositions(data);
+          return _savePositions(ui.item.parent());
         },
         others: {
           containerClass: 'kanban-list-cards',
@@ -43,10 +35,23 @@
         }
       };
       settings = $.extend(true, settings, options);
-      _savePositions = function(data) {
-        return $.post(settings.others.updatePositionsURL, {
+      _savePositions = function($column) {
+        var card, data, dataToSend, i, _i, _len, _ref;
+
+        data = {
+          stage: differentSortable ? $column.data('stage-id') : null,
+          positions: []
+        };
+        _ref = $column.children();
+        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+          card = _ref[i];
+          data.positions.push([$(card).data('id'), i]);
+        }
+        dataToSend = {
           data: JSON.stringify(data)
-        }, function(result) {
+        };
+        differentSortable = false;
+        return $.post(settings.others.updatePositionsURL, dataToSend, function(result) {
           return true;
         });
       };

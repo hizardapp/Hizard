@@ -116,7 +116,9 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
     def post_ajax(self, request, *args, **kwargs):
         data = json.loads(request.POST.get('data'))
 
-        stage = int(data.get('stage'))
+        if data.get('stage'):
+            stage = int(data.get('stage'))
+
         positions = data.get('positions')
 
         if positions:
@@ -124,21 +126,23 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
                 application_id = position[0]
                 new_position = position[1]
 
-                application = Application.objects.get(
+                application = Application.objects.filter(
                     id=int(application_id),
                     opening__company=self.request.user.company
-                )
+                ).prefetch_related("stage_transitions__stage")[0]
 
                 application.position = new_position
                 application.save()
 
-                current_stage = application.current_stage()
-                if current_stage and current_stage.id != stage:
-                    ApplicationStageTransition.objects.create(
-                        application=application,
-                        user = self.request.user,
-                        stage=InterviewStage.objects.get(id=stage)
-                    )
+                if data.get('stage'):
+                    current_stage = application.current_stage()
+                    if current_stage and current_stage.id != stage:
+                        ApplicationStageTransition.objects.create(
+                            application=application,
+                            user = self.request.user,
+                            stage=InterviewStage.objects.get(id=stage)
+                        )
+
                 result = {'status': 'success'}
         else:
             result = {'status': 'error'}
