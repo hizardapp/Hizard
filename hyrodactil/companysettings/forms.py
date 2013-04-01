@@ -27,7 +27,7 @@ class CustomUserInviteForm(forms.ModelForm):
         model = CustomUser
         fields = ('email',)
 
-    def save(self, commit=True, company=None):
+    def save(self, commit=True, company=None, is_company_admin=False):
         """
         Save the user using the manager to make sure it creates the
         activation token and sens the activation email
@@ -39,5 +39,6 @@ class CustomUserInviteForm(forms.ModelForm):
                     email=email,
                     password=None,
                     active=False,
+                    is_company_admin=is_company_admin,
                     company=company)
             return user

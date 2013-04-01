@@ -37,14 +37,16 @@
               {% endif %}
             </td>
             <td>
-              {% if not user.activation_key %}
-                <a href="{% url 'accounts:toggle_status' user.pk %}">
-                  {% if user.is_active %}
-                    {% trans 'Disable' %}
-                  {% else %}
-                    {% trans 'Enable' %}
-                  {% endif %}
-                </a>
+              {% if request.user.is_company_admin and request.user != user %}
+                {% if not user.activation_key %}
+                  <a href="{% url 'accounts:toggle_status' user.pk %}">
+                    {% if user.is_active %}
+                      {% trans 'Disable' %}
+                    {% else %}
+                      {% trans 'Enable' %}
+                    {% endif %}
+                  </a>
+                {% endif %}
               {% endif %}
             </td>
           </tr>

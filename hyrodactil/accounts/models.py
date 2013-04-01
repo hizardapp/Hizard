@@ -23,7 +23,8 @@ class CustomUserManager(BaseUserManager):
     Manager for the custom user, responsible for creating new users and
     activating them
     """
-    def create_user(self, email, password=None, active=True, company=None):
+    def create_user(self, email, password=None, active=True, company=None,
+            is_company_admin=False):
         """
         Creates a basic user which is active by default.
         If we want to create an inactive one, an activation key is generated
@@ -36,6 +37,7 @@ class CustomUserManager(BaseUserManager):
             active = True
 
         user = self.model(email=CustomUserManager.normalize_email(email),
+            is_company_admin=is_company_admin,
             company=company)
         user.set_password(password)
 

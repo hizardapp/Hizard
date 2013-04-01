@@ -64,7 +64,10 @@ class UserCreationForm(forms.ModelForm):
         password = self.cleaned_data["password1"]
 
         if commit:
-            user = CustomUser.objects.create_user(email, password, False)
+            user = CustomUser.objects.create_user(email,
+                    password=password,
+                    active=False,
+                    is_company_admin=True)
             return user
 
 

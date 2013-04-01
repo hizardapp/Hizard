@@ -126,9 +126,7 @@ class InviteUserCreateView(LoginRequiredMixin, CreateView):
     template_name = "companysettings/customuser_form.html"
     model = CustomUser
     form_class = CustomUserInviteForm
-    #action = 'created'
     success_url = reverse_lazy('companysettings:list_users')
-    #success_message = _('Department created.')
 
     def form_valid(self, form):
         form.save(company=self.request.user.company)
