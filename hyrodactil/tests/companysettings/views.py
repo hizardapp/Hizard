@@ -329,7 +329,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(page, colleague.first_name)
         self.assertNotContains(page, not_colleague.first_name)
 
-    def test_create_invite_user(self):
+    def test_invite_user(self):
         url = reverse('companysettings:invite_user')
         page = self.app.get(
             url,
@@ -344,4 +344,19 @@ class CompanySettingsViewsTests(WebTest):
             CustomUser.objects.filter(email="steve@example.com").exists())
         self.assertEqual(len(mail.outbox), 1)
         new_user = CustomUser.objects.get(email="steve@example.com")
+        self.assertEqual(new_user.company, self.user.company)
+
+    def test_user_logins_from_invitation(self):
+        new_user = CustomUser.objects.create_user(email="steve@example.com",
+            active=False,
+            company=self.user.company)
+        url = reverse('accounts:activate', args=(new_user.activation_key,))
+        response = self.app.get(url,
+                headers=dict(Host="%s.h.com" % new_user.company.subdomain))
+        form = response.form
+        form['password1'] = '1234567'
+        form['password2'] = '1234567'
+        form.submit().follow()
+        new_user = CustomUser.objects.get(pk=new_user.pk)
+        self.assertTrue(new_user.is_active)
         self.assertEqual(new_user.company, self.user.company)

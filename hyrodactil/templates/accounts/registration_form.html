@@ -6,7 +6,7 @@
 
   <div class="hizard-form large-6 columns large-centered panel">
 
-    <form action="." method="POST" id="action-form">
+    <form action="" method="POST" id="action-form">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
@@ -19,6 +19,7 @@
         </div>
       </div>
 
+      {% if form.email %}
       <div class="row collapse">
         <div class="large-2 columns">
           <span class="icon-envelope icon-large prefix"></span>
@@ -30,6 +31,7 @@
           {% endif %}
         </div>
       </div>
+      {% endif %}
 
       <div class="row collapse">
         <div class="large-2 columns">

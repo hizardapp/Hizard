@@ -66,11 +66,10 @@ class AccountsViewsTests(WebTest):
         self.assertEqual(len(mail.outbox), 0)
 
     def test_get_valid_activation(self):
-        user = UserFactory(is_active=False)
+        user = UserFactory(is_active=False, company=None)
         url = reverse('accounts:activate', args=(user.activation_key,))
 
-        response = self.app.get(url,
-                headers=dict(Host="%s.h.com" % user.company.subdomain)).follow()
+        response = self.app.get(url).follow()
         user_found = CustomUser.objects.get()
 
         self.assertEqual(response.status_code, 200)

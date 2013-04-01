@@ -4,19 +4,21 @@ from django.utils.translation import ugettext_lazy as _
 from companysettings.models import Question, InterviewStage
 
 
-def build_subdomain_url(request, url):
+def build_subdomain_url(request, url, user=None):
     scheme = "https" if request.is_secure() else "http"
     server_port = int(request.environ['SERVER_PORT'])
+    if user is None:
+      user = request.user
     if server_port not in (80, 443):
         host_part = "%s://%s.%s:%s" % (
             scheme,
-            request.user.company.subdomain,
+            user.company.subdomain,
             settings.SITE_URL,
             server_port)
     else:
         host_part = "%s://%s.%s" % (
             scheme,
-            request.user.company.subdomain,
+            user.company.subdomain,
             settings.SITE_URL)
 
     return "%s%s" % (host_part, url)

@@ -1,11 +1,12 @@
 from braces.views import LoginRequiredMixin
 
-from django.contrib.auth import login, logout
-from django.contrib.auth import forms as auth_forms
 from django.conf import settings
+from django.contrib.auth import forms as auth_forms
+from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.http import base36_to_int
 from django.views.decorators.cache import never_cache
@@ -13,7 +14,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, FormView, View, TemplateView
 
 from core.utils import build_subdomain_url
-from .forms import UserCreationForm, MinLengthSetPasswordForm, MinLengthChangePasswordForm
+from .forms import UserCreationForm, MinLengthSetPasswordForm
+from .forms import MinLengthChangePasswordForm, InvitedRegistrationForm
 from .models import CustomUser
 
 
@@ -28,17 +30,41 @@ class RegistrationConfirmationView(TemplateView):
     template_name = 'accounts/registration_confirmation.html'
 
 
-class ActivateView(View):
-    """
-    Called with an activation key as a parameter
-    """
-    def get(self, *args, **kwargs):
-        activation_key = kwargs['activation_key']
-        activated = CustomUser.objects.activate_user(activation_key)
+class ActivateView(FormView):
+    form_class = InvitedRegistrationForm
+    template_name = "accounts/registration_form.html"
 
-        if activated:
-            self.request.session['from_activation'] = True
-            return HttpResponseRedirect(reverse('auth:login'))
+    def dispatch(self, *args, **kwargs):
+        self.activation_key = kwargs['activation_key']
+        self.user = get_object_or_404(CustomUser,
+                activation_key=self.activation_key)
+        return super(ActivateView, self).dispatch(*args, **kwargs)
+
+    def get(self, *args, **kwargs):
+        # if has a company show the changepassword form
+        if self.user.company:
+            return super(ActivateView, self).get(*args, **kwargs)
+        else:
+            user = CustomUser.objects.activate_user(self.activation_key)
+
+            if user:
+                self.request.session['from_activation'] = True
+                return HttpResponseRedirect(reverse('auth:login'))
+            else:
+                raise Http404
+
+    def get_form_kwargs(self):
+        kwargs = super(ActivateView, self).get_form_kwargs()
+        kwargs['instance'] = self.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        user = CustomUser.objects.activate_user(self.activation_key)
+        if user:
+            return HttpResponseRedirect(build_subdomain_url(self.request,
+                    reverse("public:home"),
+                    user=user))
         else:
             raise Http404
 

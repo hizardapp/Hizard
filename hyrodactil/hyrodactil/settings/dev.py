@@ -56,7 +56,7 @@ DEBUG_TOOLBAR_CONFIG = {
 ########## END TOOLBAR CONFIGURATION
 
 ######## REGISTRATION
-SKIP_ACTIVATION = True
+SKIP_ACTIVATION = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_URL = 'spp.com'
 ALLOWED_HOSTS = ('.spp.com',)
