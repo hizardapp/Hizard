@@ -29,7 +29,8 @@ class ApplicationListView(LoginRequiredMixin, RestrictedListView):
 class AllApplicationListView(LoginRequiredMixin, RestrictedListView):
     def get_queryset(self):
         return Application.objects.filter(
-            opening__company=self.request.user.company).order_by("opening")
+            opening__company=self.request.user.company
+        ).order_by("opening").prefetch_related("applicant", "opening")
 
 
 class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
