@@ -84,6 +84,7 @@ class OpeningForm(forms.ModelForm):
             data=kwargs.get('data'),
             opening=self.instance
         )
+        self.fields["department"].queryset = self.company.department_set.all()
 
         self.fields['is_private'].label = _("Private opening")
 

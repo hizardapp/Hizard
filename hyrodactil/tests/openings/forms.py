@@ -1,11 +1,10 @@
-from django import forms
 from django.test import TestCase
 
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningQuestionFactory
 from ..factories._companysettings import (
-    SingleLineQuestionFactory, MultiLineQuestionFactory
+    SingleLineQuestionFactory, MultiLineQuestionFactory, DepartmentFactory
 )
 from companysettings.models import Department
 from openings.forms import OpeningForm, OpeningQuestionFormset
@@ -66,6 +65,18 @@ class OpeningsFormsTests(TestCase):
         self.assertTrue(Department.objects.filter(name="HR").exists())
         self.assertTrue(opening.department)
         self.assertEqual(opening.department.name, "HR")
+        self.assertEqual(opening.department.company, self.user.company)
+
+    def test_opening_form_only_list_company_department(self):
+        form = self.Form(self.user.company)
+        capcom = DepartmentFactory.create(company=self.user.company,
+                name="CAPCOM")
+        control = DepartmentFactory.create(company=CompanyFactory(),
+                name="CONTROL")
+        def just_pks(choices): return (pk for pk, choice in choices)
+        pks = just_pks(form.fields["department"].choices)
+        self.assertTrue(capcom.pk in pks)
+        self.assertTrue(control.pk not in pks)
 
     def test_opening_form_save_opening_questions(self):
         data = dict(self.form_data)
