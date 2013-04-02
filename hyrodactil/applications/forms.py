@@ -5,6 +5,7 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+from companysettings.models import InterviewStage
 from .models import (
     Applicant, Application, ApplicationAnswer, ApplicationStageTransition,
     ApplicationMessage
@@ -137,6 +138,11 @@ class ApplicationForm(forms.ModelForm):
 
 
 class ApplicationStageTransitionForm(forms.ModelForm):
+    def __init__(self, company, *args, **kwargs):
+        super(ApplicationStageTransitionForm, self).__init__(*args, **kwargs)
+        self.fields["stage"].queryset = InterviewStage.objects.filter(
+                company=company)
+
     class Meta:
         model = ApplicationStageTransition
         fields = ('stage', 'note')

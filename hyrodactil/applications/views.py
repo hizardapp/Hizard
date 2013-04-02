@@ -70,6 +70,11 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         except Application.DoesNotExist:
             raise Http404
 
+    def get_form_kwargs(self):
+        default_kwargs = super(ApplicationDetailView, self).get_form_kwargs()
+        default_kwargs["company"] = self.request.user.company
+        return default_kwargs
+
     def get_context_data(self, **kwargs):
         context = super(ApplicationDetailView, self).get_context_data(**kwargs)
         context['user'] = self.request.user

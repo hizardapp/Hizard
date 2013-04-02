@@ -7,8 +7,10 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase
 
 from ..factories._applications import ApplicantFactory
+from ..factories._companysettings import InterviewStageFactory
+from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningWithQuestionsFactory
-from applications.forms import ApplicationForm
+from applications.forms import ApplicationForm, ApplicationStageTransitionForm
 from applications.models import Applicant
 
 
@@ -118,3 +120,14 @@ class ApplicationFormTests(TestCase):
         form.save()
 
         self.assertEqual(Applicant.objects.count(), 1)
+
+    def test_only_show_company_stages(self):
+        coca_cola = CompanyFactory()
+        s_ic = InterviewStageFactory(name="S-IC", company=coca_cola)
+        s_ii = InterviewStageFactory(name="S-II", company=CompanyFactory())
+        form = ApplicationStageTransitionForm(coca_cola)
+
+        def just_pks(choices): return [pk for pk, choice in choices]
+        pks = just_pks(form["stage"].field.choices)
+        self.assertTrue(s_ic.pk in pks)
+        self.assertTrue(s_ii.pk not in pks)
