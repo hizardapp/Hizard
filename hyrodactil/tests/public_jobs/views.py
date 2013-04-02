@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
-from ..factories._companysettings import SingleLineQuestionFactory
+from ..factories._companysettings import SingleLineQuestionFactory, InterviewStageFactory
 from ..factories._openings import OpeningWithQuestionsFactory
 from applications.models import Application, ApplicationAnswer
 from companysettings.models import Question
@@ -50,6 +50,7 @@ class ApplicationViewsTests(WebTest):
     def test_valid_post_application_form(self):
         shutil.rmtree(settings.MEDIA_ROOT)
         url = reverse('public_jobs:apply', args=(self.opening.id,))
+        stage = InterviewStageFactory(initial=True, company=self.opening.company)
         form = self.app.get(url).form
 
         form['first_name'] = 'Bilbon'
@@ -67,10 +68,12 @@ class ApplicationViewsTests(WebTest):
             reverse('public_jobs:confirmation', args=(self.opening.id,))
         )
         self.assertEqual(Application.objects.count(), 1)
-        applicant = Application.objects.get(id=1).applicant
+        application = Application.objects.get(id=1)
+        applicant = application.applicant
 
         self.assertEqual(applicant.first_name, 'Bilbon')
         self.assertEqual(applicant.resume.url, '/media/resumes/resume.pdf')
+        self.assertEqual(application.current_stage(), stage)
 
         # 2 required, 2 not required, we still record the 4 though
         self.assertEqual(ApplicationAnswer.objects.count(), 4)

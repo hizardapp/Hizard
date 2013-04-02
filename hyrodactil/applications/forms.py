@@ -4,6 +4,7 @@ import uuid
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from companysettings.models import InterviewStage
 
 from companysettings.models import InterviewStage
 from .models import (
@@ -113,6 +114,15 @@ class ApplicationForm(forms.ModelForm):
             opening=self.opening
         )
         application.save()
+
+        stage = InterviewStage.objects.filter(company=self.opening.company)[0]
+
+        if stage:
+            ApplicationStageTransition.objects.create(
+                application=application,
+                stage=stage
+            )
+
         questions = self.opening.questions.all()
 
         for field in self.cleaned_data:

@@ -41,6 +41,7 @@ class Question(TimeStampedModel):
 
 class InterviewStage(TimeStampedModel):
     name = models.CharField(max_length=100)
+    initial = models.BooleanField(default=False)
 
     company = models.ForeignKey(Company)
 

@@ -33,7 +33,7 @@ class Application(TimeStampedModel):
 
 class ApplicationStageTransition(TimeStampedModel):
     application = models.ForeignKey(Application, related_name="stage_transitions")
-    user = models.ForeignKey(CustomUser)
+    user = models.ForeignKey(CustomUser, null=True)
     stage = models.ForeignKey(InterviewStage)
     note = models.TextField(blank=True)
 

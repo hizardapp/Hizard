@@ -34,7 +34,7 @@ def setup_company(company):
         company.question_set.add(question)
 
     interview_stages = [
-        InterviewStage(name=_('Received')),
+        InterviewStage(name=_('Received'), initial=True),
         InterviewStage(name=_('Phone interview')),
         InterviewStage(name=_('In-person interview')),
         InterviewStage(name=_('Rejected'))
