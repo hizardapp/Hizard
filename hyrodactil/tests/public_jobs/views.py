@@ -48,7 +48,6 @@ class ApplicationViewsTests(WebTest):
         )
 
     def test_valid_post_application_form(self):
-        shutil.rmtree(settings.MEDIA_ROOT)
         url = reverse('public_jobs:apply', args=(self.opening.id,))
         stage = InterviewStageFactory(initial=True, company=self.opening.company)
         form = self.app.get(url).form
@@ -86,7 +85,7 @@ class ApplicationViewsTests(WebTest):
         self.assertTrue(os.path.exists(path))
 
         # Making sure we delete the folders and the files inside
-        shutil.rmtree(dir)
+        shutil.rmtree(settings.MEDIA_ROOT)
 
     def test_invalid_post_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))

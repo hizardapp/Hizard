@@ -93,6 +93,11 @@ class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage created.')
 
+    def get_form_kwargs(self):
+        kwargs = super(InterviewStageCreateView, self).get_form_kwargs()
+        kwargs.update({'company': self.request.user.company})
+        return kwargs
+
     def form_valid(self, form):
         stage = form.save(commit=False)
         stage.company = self.request.user.company

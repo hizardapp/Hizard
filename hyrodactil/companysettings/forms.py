@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Department, Question, InterviewStage
 from accounts.models import CustomUser
@@ -19,7 +20,25 @@ class QuestionForm(forms.ModelForm):
 class InterviewStageForm(forms.ModelForm):
     class Meta:
         model = InterviewStage
-        fields = ('name',)
+        fields = ('name', 'initial',)
+
+    def __init__(self, *args, **kwargs):
+        self.company = kwargs.pop('company')
+        super(InterviewStageForm, self).__init__(*args, **kwargs)
+
+    def clean_initial(self):
+        data = self.cleaned_data['initial']
+
+        if data:
+            existing_initial = InterviewStage.objects.filter(
+                company=self.company, initial=True
+            ).count()
+            if existing_initial > 0:
+                raise forms.ValidationError(
+                    _('You can only one initial stage at a given time')
+                )
+
+        return data
 
 
 class CustomUserInviteForm(forms.ModelForm):

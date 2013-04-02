@@ -3,6 +3,8 @@ from django.test import TestCase
 from companysettings.forms import (
     DepartmentForm, QuestionForm, InterviewStageForm
 )
+from ..factories._companies import CompanyFactory
+from ..factories._companysettings import InterviewStageFactory
 
 
 class CompanySettingsFormsTests(TestCase):
@@ -27,11 +29,20 @@ class CompanySettingsFormsTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_stage_form_valid(self):
-        form_data = {'name': 'Phone interview'}
-        form = InterviewStageForm(data=form_data)
+        company = CompanyFactory()
+        form_data = {'name': 'Phone interview', 'initial': True}
+        form = InterviewStageForm(data=form_data, **{'company': company})
         self.assertTrue(form.is_valid())
 
     def test_stage_form_invalid(self):
+        company = CompanyFactory()
         form_data = {'name': ''}
-        form = InterviewStageForm(data=form_data)
+        form = InterviewStageForm(data=form_data, **{'company': company})
+        self.assertFalse(form.is_valid())
+
+    def test_stage_form_invalid_already_initial(self):
+        company = CompanyFactory()
+        stage = InterviewStageFactory(initial=True, company=company)
+        form_data = {'name': 'Wrong', 'initial': True}
+        form = InterviewStageForm(data=form_data, **{'company': company})
         self.assertFalse(form.is_valid())
