@@ -112,6 +112,11 @@ class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdat
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage updated.')
 
+    def get_form_kwargs(self):
+        kwargs = super(InterviewStageUpdateView, self).get_form_kwargs()
+        kwargs.update({'company': self.request.user.company})
+        return kwargs
+
 
 class InterviewStageDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = InterviewStage
