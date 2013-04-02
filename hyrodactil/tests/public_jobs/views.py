@@ -56,7 +56,7 @@ class ApplicationViewsTests(WebTest):
         form['last_name'] = 'Sacquet'
         form['email'] = 'bilbon@shire.com'
         # name of file, content of file
-        form['resume'] = 'resume.pdf', "My resume"
+        form['resume'] = 'bilbon_cv.pdf', "My resume"
         form['q_single-line'] = 'Lalala'
         form['q_multi-line'] = 'Lalala'
         form['q_file'] = 'mypicture.jpg', "me"
@@ -71,21 +71,24 @@ class ApplicationViewsTests(WebTest):
         applicant = application.applicant
 
         self.assertEqual(applicant.first_name, 'Bilbon')
-        self.assertEqual(applicant.resume.url, '/media/resumes/resume.pdf')
+        self.assertEqual(applicant.resume.url, '/media/resumes/bilbon_cv.pdf')
         self.assertEqual(application.current_stage(), stage)
 
         # 2 required, 2 not required, we still record the 4 though
         self.assertEqual(ApplicationAnswer.objects.count(), 4)
 
         # Testing the file has been properly updated
-        dir = '%s/uploads/%d' % (settings.MEDIA_ROOT, self.opening.company.id)
+        company_dir = '%s/uploads/%d' % (settings.MEDIA_ROOT,
+                self.opening.company.id)
         file_question = Question.objects.get(type='file')
         filepath = ApplicationAnswer.objects.get(question=file_question).answer
         path = '%s/%s' % (settings.MEDIA_ROOT, filepath)
         self.assertTrue(os.path.exists(path))
 
-        # Making sure we delete the folders and the files inside
-        shutil.rmtree(settings.MEDIA_ROOT)
+        # Remove the uploaded files only
+        shutil.rmtree(company_dir)
+        # And the resume we just created
+        os.unlink(applicant.resume.path)
 
     def test_invalid_post_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))
