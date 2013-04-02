@@ -12,6 +12,8 @@ from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningWithQuestionsFactory
 from applications.forms import ApplicationForm, ApplicationStageTransitionForm
 from applications.models import Applicant
+from tests.factories._companies import CompanyFactory
+from tests.factories._companysettings import InterviewStageFactory
 
 
 class ApplicationFormTests(TestCase):
@@ -111,7 +113,9 @@ class ApplicationFormTests(TestCase):
 
     def test_should_not_create_new_applicant_if_exists(self):
         ApplicantFactory(email='bob@marley.jah')
-        opening = OpeningFactory()
+        company = CompanyFactory()
+        opening = OpeningFactory(company=company)
+        stage = InterviewStageFactory(company=company)
 
         files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(self.form_data, files, opening=opening)
