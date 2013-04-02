@@ -100,7 +100,7 @@ class BoardView(LoginRequiredMixin, TemplateView):
         stages = InterviewStage.objects.filter(company=self.request.user.company)
         applications = Application.objects.filter(
             opening__company=self.request.user.company
-        ).prefetch_related("stage_transitions__stage")
+        ).prefetch_related("stage_transitions__stage", "applicant")
         for stage in stages:
             board_data[stage] = []
             for application in applications:
