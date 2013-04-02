@@ -1,8 +1,7 @@
-
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from companysettings.models import Question, Department
+from companysettings.models import Department
 from .models import Opening, OpeningQuestion
 
 
