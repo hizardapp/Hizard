@@ -42,7 +42,7 @@ class CompanySettingsFormsTests(TestCase):
 
     def test_stage_form_invalid_already_initial(self):
         company = CompanyFactory()
-        stage = InterviewStageFactory(initial=True, company=company)
+        InterviewStageFactory(initial=True, company=company)
         form_data = {'name': 'Wrong', 'initial': True}
         form = InterviewStageForm(data=form_data, **{'company': company})
         self.assertFalse(form.is_valid())

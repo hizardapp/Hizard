@@ -260,6 +260,26 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
 
+    def test_create_stage_invalid_already_one_initial(self):
+        InterviewStageFactory(initial=True, company=self.user.company)
+        url = reverse('companysettings:create_stage')
+
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+        form = page.forms['action-form']
+        form['name'] = 'Wrong'
+        form['initial'] = True
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(
+            response, 'form', 'initial',
+            'You can only one initial stage at a given time'
+        )
+
     def test_update_stage_valid(self):
         stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
         url = reverse('companysettings:update_stage', args=(stage.id,))
@@ -297,6 +317,31 @@ class CompanySettingsViewsTests(WebTest):
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'name', self.required)
+
+    def test_update_stage_invalid_already_one_initial(self):
+        InterviewStageFactory(initial=True, company=self.user.company)
+        stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
+        url = reverse('companysettings:update_stage', args=(stage.id,))
+
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+        form = page.forms['action-form']
+        form['name'] = 'Wrong'
+        form['initial'] = True
+
+        self.assertContains(page, stage.name)
+
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(
+            response, 'form', 'initial',
+            'You can only one initial stage at a given time'
+        )
 
     def test_delete_stage(self):
         stage = InterviewStageFactory.create(name='Interview',
