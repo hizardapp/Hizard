@@ -1,5 +1,4 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 
 from .models import Department, Question, InterviewStage
 from accounts.models import CustomUser
@@ -32,11 +31,11 @@ class InterviewStageForm(forms.ModelForm):
         if data:
             existing_initial = InterviewStage.objects.filter(
                 company=self.company, initial=True
-            ).count()
-            if existing_initial > 0:
-                raise forms.ValidationError(
-                    _('You can only one initial stage at a given time')
-                )
+            )
+            # Should never have more than 1 but safer to loop there, in case
+            for stage in existing_initial:
+                stage.initial = False
+                stage.save()
 
         return data
 
