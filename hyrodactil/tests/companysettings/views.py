@@ -358,6 +358,22 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(response, "Interview")
         self.assertContains(response, "Stage deleted.")
 
+    def test_delete_initial_stage(self):
+        stage = InterviewStageFactory.create(initial= True,
+            company=self.user.company)
+        url = reverse('companysettings:delete_stage', args=(stage.id,))
+
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        ).follow()
+
+        self.assertEqual(response.request.path,
+            reverse('companysettings:list_stages'))
+        self.assertContains(response, stage.name)
+        self.assertContains(response, "You cannot delete the initial stage.")
+
     def test_list_users(self):
         url = reverse('companysettings:list_users')
         colleague = UserFactory.create(company=self.user.company,

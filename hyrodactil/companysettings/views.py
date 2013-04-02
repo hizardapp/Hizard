@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 from django.shortcuts import redirect
@@ -122,6 +123,17 @@ class InterviewStageDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = InterviewStage
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage deleted.')
+
+    def get(self, *args, **kwargs):
+        self.object = self.get_object()
+
+        if not self.object.initial:
+            return super(InterviewStageDeleteView, self).get(*args, **kwargs)
+        else:
+            messages.info(
+                self.request, _('You cannot delete the initial stage.')
+            )
+            return redirect(self.success_url)
 
 
 class UsersListView(LoginRequiredMixin, RestrictedListView):
