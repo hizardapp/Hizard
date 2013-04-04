@@ -353,8 +353,9 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(response, "Stage deleted.")
 
     def test_delete_initial_stage(self):
-        stage = InterviewStageFactory.create(initial= True,
-            company=self.user.company)
+        stage = InterviewStageFactory.create(
+            initial=True, company=self.user.company
+        )
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
         response = self.app.get(
@@ -363,18 +364,24 @@ class CompanySettingsViewsTests(WebTest):
             headers=dict(Host="%s.h.com" % self.user.company.subdomain)
         ).follow()
 
-        self.assertEqual(response.request.path,
-            reverse('companysettings:list_stages'))
+        self.assertEqual(
+            response.request.path,
+            reverse('companysettings:list_stages')
+        )
         self.assertContains(response, stage.name)
         self.assertContains(response, "You cannot delete the initial stage.")
 
     def test_list_users(self):
         url = reverse('companysettings:list_users')
-        colleague = UserFactory.create(company=self.user.company,
+        colleague = UserFactory.create(
+            company=self.user.company,
             first_name="Steve",
-            email="steve@example.com")
-        not_colleague = UserFactory.create(first_name="Bill",
-            email="bill@example.com")
+            email="steve@example.com"
+        )
+        not_colleague = UserFactory.create(
+            first_name="Bill",
+            email="bill@example.com"
+        )
         page = self.app.get(
             url,
             user=self.user,
@@ -403,12 +410,16 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFalse(new_user.is_company_admin)
 
     def test_user_logins_from_invitation(self):
-        new_user = CustomUser.objects.create_user(email="steve@example.com",
+        new_user = CustomUser.objects.create_user(
+            email="steve@example.com",
             active=False,
-            company=self.user.company)
+            company=self.user.company
+        )
         url = reverse('accounts:activate', args=(new_user.activation_key,))
-        response = self.app.get(url,
-                headers=dict(Host="%s.h.com" % new_user.company.subdomain))
+        response = self.app.get(
+            url,
+            headers=dict(Host="%s.h.com" % new_user.company.subdomain)
+        )
         form = response.form
         form['password1'] = '1234567'
         form['password2'] = '1234567'
@@ -418,45 +429,65 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(new_user.company, self.user.company)
 
     def test_disable_user(self):
-        colleague = CustomUser.objects.create_user(email="steve@example.com",
-                active=True,
-                company=self.user.company)
-        toggle_status_url = reverse('accounts:toggle_status',
-                args=(colleague.pk,))
+        colleague = CustomUser.objects.create_user(
+            email="steve@example.com",
+            active=True,
+            company=self.user.company
+        )
+        toggle_status_url = reverse(
+            'accounts:toggle_status',
+            args=(colleague.pk,)
+        )
 
-        self.app.get(toggle_status_url,
-                user=self.user,
-                headers=dict(Host="%s.h.com" % colleague.company.subdomain),
-                status=302)
-        self.assertTrue(CustomUser.objects.filter(pk=colleague.pk,
-            is_active=False).exists())
+        self.app.get(
+            toggle_status_url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % colleague.company.subdomain),
+            status=302
+        )
+        self.assertTrue(
+            CustomUser.objects.filter(pk=colleague.pk, is_active=False).exists()
+        )
 
-        self.app.get(toggle_status_url,
-                user=self.user,
-                headers=dict(Host="%s.h.com" % colleague.company.subdomain),
-                status=302)
-        self.assertTrue(CustomUser.objects.filter(pk=colleague.pk,
-            is_active=True).exists())
+        self.app.get(
+            toggle_status_url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % colleague.company.subdomain),
+            status=302
+        )
+        self.assertTrue(
+            CustomUser.objects.filter(pk=colleague.pk, is_active=True).exists()
+        )
 
     def test_disable_user_access(self):
-        colleague = CustomUser.objects.create_user(email="steve@example.com",
-                active=True,
-                is_company_admin=False,
-                company=self.user.company)
-        toggle_colleague_status_url = reverse('accounts:toggle_status',
-                args=(colleague.pk,))
-        toggle_self_status_url = reverse('accounts:toggle_status',
-                args=(self.user.pk,))
+        colleague = CustomUser.objects.create_user(
+            email="steve@example.com",
+            active=True,
+            is_company_admin=False,
+            company=self.user.company
+        )
+        toggle_colleague_status_url = reverse(
+            'accounts:toggle_status',
+            args=(colleague.pk,)
+        )
+        toggle_self_status_url = reverse(
+            'accounts:toggle_status',
+            args=(self.user.pk,)
+        )
         url = reverse('companysettings:list_users')
 
-        response = self.app.get(url,
-                user=self.user,
-                headers=dict(Host="%s.h.com" % colleague.company.subdomain))
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % colleague.company.subdomain)
+        )
         self.assertContains(response, toggle_colleague_status_url)
         self.assertNotContains(response, toggle_self_status_url)
 
-        response = self.app.get(url,
-                user=colleague,
-                headers=dict(Host="%s.h.com" % colleague.company.subdomain))
+        response = self.app.get(
+            url,
+            user=colleague,
+            headers=dict(Host="%s.h.com" % colleague.company.subdomain)
+        )
         self.assertNotContains(response, toggle_colleague_status_url)
         self.assertNotContains(response, toggle_self_status_url)

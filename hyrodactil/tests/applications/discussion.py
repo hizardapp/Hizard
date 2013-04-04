@@ -15,9 +15,10 @@ class ThreadedDiscussionTests(unittest.TestCase):
         m4 = Message(4, 1, 'yo too')
 
         raw_messages = [m1, m2, m3, m4]
-        self.assertEqual(group(raw_messages),
-                [(0, m1),
-                 (1, m3),
-                 (1, m4),
-                 (0, m2)]
+        self.assertEqual(
+            group(raw_messages),
+            [(0, m1),
+             (1, m3),
+             (1, m4),
+             (0, m2)]
         )

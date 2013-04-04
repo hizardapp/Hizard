@@ -78,8 +78,10 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(ApplicationAnswer.objects.count(), 4)
 
         # Testing the file has been properly updated
-        company_dir = '%s/uploads/%d' % (settings.MEDIA_ROOT,
-                self.opening.company.id)
+        company_dir = '%s/uploads/%d' % (
+            settings.MEDIA_ROOT,
+            self.opening.company.id
+        )
         file_question = Question.objects.get(type='file')
         filepath = ApplicationAnswer.objects.get(question=file_question).answer
         path = '%s/%s' % (settings.MEDIA_ROOT, filepath)

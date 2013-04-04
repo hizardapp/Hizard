@@ -69,11 +69,17 @@ class OpeningsFormsTests(TestCase):
 
     def test_opening_form_only_list_company_department(self):
         form = self.Form(self.user.company)
-        capcom = DepartmentFactory.create(company=self.user.company,
-                name="CAPCOM")
-        control = DepartmentFactory.create(company=CompanyFactory(),
-                name="CONTROL")
-        def just_pks(choices): return (pk for pk, choice in choices)
+        capcom = DepartmentFactory.create(
+            company=self.user.company,
+            name="CAPCOM"
+        )
+        control = DepartmentFactory.create(
+            company=CompanyFactory(),
+            name="CONTROL"
+        )
+
+        def just_pks(choices):
+            return (pk for pk, choice in choices)
         pks = just_pks(form.fields["department"].choices)
         self.assertTrue(capcom.pk in pks)
         self.assertTrue(control.pk not in pks)

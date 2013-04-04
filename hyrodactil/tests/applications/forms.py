@@ -131,7 +131,8 @@ class ApplicationFormTests(TestCase):
         s_ii = InterviewStageFactory(name="S-II", company=CompanyFactory())
         form = ApplicationStageTransitionForm(coca_cola)
 
-        def just_pks(choices): return [pk for pk, choice in choices]
+        def just_pks(choices):
+            return [pk for pk, choice in choices]
         pks = just_pks(form["stage"].field.choices)
         self.assertTrue(s_ic.pk in pks)
         self.assertTrue(s_ii.pk not in pks)

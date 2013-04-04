@@ -114,8 +114,9 @@ class ApplicationViewsTests(WebTest):
 
     def test_discuss_an_application(self):
         application = ApplicationFactory.create(opening=self.opening)
-        colleague = UserFactory.create(email='bill@company.com',
-                company=self.user.company)
+        colleague = UserFactory.create(
+            email='bill@company.com', company=self.user.company
+        )
         url = reverse('applications:application_detail', args=(application.id,))
 
         response = self.app.get(
@@ -158,6 +159,7 @@ class ApplicationViewsTests(WebTest):
         response = form.submit(user=attacker, status=404)
         self.assertFalse(ApplicationMessage.objects.all().exists())
 
+
 class ApplicationAjaxViewsTests(WebTest):
     csrf_checks = False
 
@@ -174,12 +176,12 @@ class ApplicationAjaxViewsTests(WebTest):
         url = reverse('applications:update_positions')
         data = {
             'stage': stage.id,
-            'positions':[(application1.id, 0), (application2.id, 1)]
+            'positions': [(application1.id, 0), (application2.id, 1)]
         }
 
         response = self.app.post(
             url,
-            {'data' :json.dumps(data)},
+            {'data': json.dumps(data)},
             user=self.user,
             headers=dict(Host="%s.h.com" % self.user.company.subdomain),
             extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -204,12 +206,12 @@ class ApplicationAjaxViewsTests(WebTest):
         url = reverse('applications:update_positions')
         data = {
             'stage': None,
-            'positions':[(application1.id, 0), (application2.id, 1)]
+            'positions': [(application1.id, 0), (application2.id, 1)]
         }
 
         response = self.app.post(
             url,
-            {'data' :json.dumps(data)},
+            {'data': json.dumps(data)},
             user=self.user,
             headers=dict(Host="%s.h.com" % self.user.company.subdomain),
             extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')

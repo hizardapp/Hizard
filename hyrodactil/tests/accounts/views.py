@@ -123,23 +123,31 @@ class AccountsViewsTests(WebTest):
         form['username'] = user.email
         form['password'] = 'bob'
 
-        response = form.submit(headers=dict(Host="%s.h.com" %
-                user.company.subdomain))
+        response = form.submit(
+            headers=dict(Host="%s.h.com" % user.company.subdomain)
+        )
         self.assertEqual(response.status_code, 302)
-        location = "http://%s.%s%s" % (user.company.subdomain,
-                                    settings.SITE_URL,
-                                    reverse('public:home'))
+        location = "http://%s.%s%s" % (
+            user.company.subdomain,
+            settings.SITE_URL,
+            reverse('public:home')
+        )
         self.assertTrue(location in response["Location"])
         self.assertIn('_auth_user_id', self.app.session)
 
     def test_already_loggedin(self):
         "Testing that logged in users get redirected to home page"
         user = UserFactory.create()
-        response = self.app.get(reverse('auth:login'), user=user,
-                headers=dict(Host="%s.h.com" % user.company.subdomain))
-        location = "http://%s.%s%s" % (user.company.subdomain,
-                                    settings.SITE_URL,
-                                    reverse('public:home'))
+        response = self.app.get(
+            reverse('auth:login'),
+            user=user,
+            headers=dict(Host="%s.h.com" % user.company.subdomain)
+        )
+        location = "http://%s.%s%s" % (
+            user.company.subdomain,
+            settings.SITE_URL,
+            reverse('public:home')
+        )
         self.assertTrue(location in response["Location"])
 
     def test_post_login_view_failure_inactive_user(self):
@@ -165,8 +173,11 @@ class AccountsViewsTests(WebTest):
         Should redirect to the home page and be logged out
         """
         user = UserFactory.create()
-        response = self.app.get(reverse('auth:logout'), user=user,
-                headers=dict(Host="%s.h.com" % user.company.subdomain))
+        response = self.app.get(
+            reverse('auth:logout'),
+            user=user,
+            headers=dict(Host="%s.h.com" % user.company.subdomain)
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual("http://hizard.com/", response["Location"])
         self.assertNotIn('_auth_user_id', self.app.session)
@@ -187,8 +198,11 @@ class AccountsViewsTests(WebTest):
         GET the change password page (accessible only while logged in)
         """
         user = UserFactory.create()
-        response = self.app.get(reverse('auth:change_password'), user=user,
-                headers=dict(Host="%s.h.com" % user.company.subdomain))
+        response = self.app.get(
+            reverse('auth:change_password'),
+            user=user,
+            headers=dict(Host="%s.h.com" % user.company.subdomain)
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'accounts/password_change_form.html')
@@ -201,8 +215,11 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory.create()
 
-        page = self.app.get(reverse('auth:change_password'), user=user,
-                headers=dict(Host="%s.h.com" % user.company.subdomain))
+        page = self.app.get(
+            reverse('auth:change_password'),
+            user=user,
+            headers=dict(Host="%s.h.com" % user.company.subdomain)
+        )
         form = page.forms['action-form']
         form['old_password'] = 'bob'
         form['new_password1'] = 'a secure password'
@@ -221,8 +238,11 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory.create()
 
-        page = self.app.get(reverse('auth:change_password'), user=user,
-            headers=dict(Host="%s.h.com" % user.company.subdomain))
+        page = self.app.get(
+            reverse('auth:change_password'),
+            user=user,
+            headers=dict(Host="%s.h.com" % user.company.subdomain)
+        )
         form = page.forms['action-form']
         form['old_password'] = 'bob'
         form['new_password1'] = 'nop'
@@ -241,8 +261,11 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory.create()
 
-        page = self.app.get(reverse('auth:change_password'), user=user,
-                headers=dict(Host="%s.h.com" % user.company.subdomain))
+        page = self.app.get(
+            reverse('auth:change_password'),
+            user=user,
+            headers=dict(Host="%s.h.com" % user.company.subdomain)
+        )
         form = page.forms['action-form']
         form['old_password'] = 'bob'
         form['new_password1'] = 'new'
