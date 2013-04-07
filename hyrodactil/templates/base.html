@@ -61,7 +61,7 @@
       </nav>
     </div>
 
-    <div class="container row">
+    <div class="container {% if not full_width %}row{% endif %}">
       {% if messages %}
         <div class="alert-box sucess">
           {% for message in messages %}

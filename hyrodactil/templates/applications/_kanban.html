@@ -11,9 +11,15 @@
       <div class="kanban-list-header"><h2>{{ stage.name }}</h2></div>
       <div class="kanban-list-cards" data-stage-id="{{ stage.id }}">
         {% for application in board|get_item:stage %}
+
           <div class="kanban-card" data-id="{{ application.id }}" data-position="{{ application.position }}">
-            <span>{{ application.applicant.first_name }}</span>
+            <span>{{ application.applicant.first_name }} {{ application.applicant.last_name }}</span>
+            <br>
+            <span>
+              <a href="{% url 'openings:update_opening' application.opening.id %}">{{ application.opening.title }}</a>
+            </span>
           </div>
+
         {% endfor %}
       </div>
     </div>

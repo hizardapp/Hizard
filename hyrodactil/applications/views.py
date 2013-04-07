@@ -114,7 +114,7 @@ class BoardView(LoginRequiredMixin, TemplateView):
                     board_data[stage].append(application)
 
         context['board'] = board_data
-
+        context['full_width'] = True
         return context
 
 
