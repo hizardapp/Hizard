@@ -129,8 +129,7 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
 
         if positions:
             for position in positions:
-                application_id = position[0]
-                new_position = position[1]
+                application_id, new_position = position
 
                 application = Application.objects.filter(
                     id=int(application_id),
