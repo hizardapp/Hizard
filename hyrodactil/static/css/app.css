@@ -4660,6 +4660,13 @@ ul.icons li [class*=" icon-"] {
 }
 
 /* line 3, ../../pregen_static/sass/site_partials/_kanban.scss */
+.toggle-list-applications {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+/* line 10, ../../pregen_static/sass/site_partials/_kanban.scss */
 .kanban-board {
   overflow-x: auto;
   height: 600px;
@@ -4667,7 +4674,7 @@ ul.icons li [class*=" icon-"] {
   margin-left: 20px;
   font-size: 14px;
 }
-/* line 10, ../../pregen_static/sass/site_partials/_kanban.scss */
+/* line 17, ../../pregen_static/sass/site_partials/_kanban.scss */
 .kanban-board .kanban-list {
   position: relative;
   width: 220px;
@@ -4683,25 +4690,25 @@ ul.icons li [class*=" icon-"] {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 21, ../../pregen_static/sass/site_partials/_kanban.scss */
+/* line 28, ../../pregen_static/sass/site_partials/_kanban.scss */
 .kanban-board .kanban-list .kanban-list-header h2 {
   min-height: 20px;
   font-size: 16px;
   margin: 10px 0 0 10px;
 }
-/* line 27, ../../pregen_static/sass/site_partials/_kanban.scss */
+/* line 34, ../../pregen_static/sass/site_partials/_kanban.scss */
 .kanban-board .kanban-list .kanban-list-cards {
   min-height: 40px;
   z-index: 1;
   padding: 4px;
 }
-/* line 32, ../../pregen_static/sass/site_partials/_kanban.scss */
+/* line 39, ../../pregen_static/sass/site_partials/_kanban.scss */
 .kanban-board .kanban-list .kanban-list-cards .kanban-card-placeholder {
   visibility: visible !important;
   background-color: #b9b9b9 !important;
   opacity: 0.5;
 }
-/* line 38, ../../pregen_static/sass/site_partials/_kanban.scss */
+/* line 45, ../../pregen_static/sass/site_partials/_kanban.scss */
 .kanban-board .kanban-list .kanban-list-cards .kanban-card {
   background-color: white;
   margin-bottom: 5px;
@@ -4716,7 +4723,7 @@ ul.icons li [class*=" icon-"] {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 48, ../../pregen_static/sass/site_partials/_kanban.scss */
+/* line 55, ../../pregen_static/sass/site_partials/_kanban.scss */
 .kanban-board .kanban-list .kanban-list-cards .kanban-card:hover {
   border: 1px solid #868686;
 }

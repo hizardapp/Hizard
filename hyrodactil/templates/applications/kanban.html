@@ -5,6 +5,11 @@
 {% load staticfiles %}
 
 {% block content %}
+
+<div class="toggle-list-applications">
+  <a href={% url 'applications:list_all_applications' %}>{% trans 'Show as list' %}</a>
+</div>
+
 <div class="kanban-board">
   {% for stage in board %}
     <div class="kanban-list">

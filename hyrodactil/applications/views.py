@@ -96,7 +96,7 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
 
 
 class BoardView(LoginRequiredMixin, TemplateView):
-    template_name = "applications/_kanban.html"
+    template_name = "applications/kanban.html"
 
     def get_context_data(self, **kwargs):
         context = super(BoardView, self).get_context_data(**kwargs)

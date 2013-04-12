@@ -3,15 +3,15 @@ from django.conf.urls import patterns, url
 import views
 
 urlpatterns = patterns('',
+   url(
+       r'^$',
+       views.BoardView.as_view(),
+       name='board_applications'
+   ),
     url(
-        r'^$',
+        r'^list$',
         views.AllApplicationListView.as_view(),
         name='list_all_applications'
-    ),
-    url(
-        r'^board$',
-        views.BoardView.as_view(),
-        name='test_board'
     ),
     url(
         r'^update_positions$',
@@ -19,7 +19,7 @@ urlpatterns = patterns('',
         name='update_positions'
     ),
     url(
-        r'^(?P<opening_id>\d+)/applications$',
+        r'^(?P<opening_id>\d+)/list',
         views.ApplicationListView.as_view(),
         name='list_applications'
     ),
