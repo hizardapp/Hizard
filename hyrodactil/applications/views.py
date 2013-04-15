@@ -1,16 +1,18 @@
 from collections import defaultdict
 import json
-from django.core.urlresolvers import reverse
+
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, CreateView, TemplateView, View
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
-from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
-from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition
+from .forms import ApplicationStageTransitionForm, ApplicationMessageForm, ApplicationForm
+from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
 from .threaded_discussion import group
 from companysettings.models import InterviewStage
-from core.views import RestrictedListView
+from core.views import RestrictedListView, MessageMixin
 from openings.models import Opening
 
 
@@ -39,15 +41,19 @@ class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
     action = 'created'
 
     def dispatch(self, request, application_id, **kwargs):
-        self.application = get_object_or_404(Application,
-                opening__company=self.request.user.company,
-                pk=application_id)
+        self.application = get_object_or_404(
+            Application,
+            opening__company=self.request.user.company,
+            pk=application_id
+        )
         return super(ApplicationMessageCreateView, self).dispatch(
-                request, application_id, **kwargs)
+            request, application_id, **kwargs)
 
     def get_success_url(self):
-        return "%s#notes" % reverse('applications:application_detail',
-                args=(self.application.id,))
+        return "%s#notes" % reverse(
+            'applications:application_detail',
+            args=(self.application.id,)
+        )
 
     def form_valid(self, form):
         new_message = form.save(commit=False)
@@ -91,12 +97,35 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         transition.application = self.get_application()
         transition.user = self.request.user
         transition.save()
-        return redirect('applications:application_detail',
-            pk=self.kwargs['pk'])
+        return redirect(
+            'applications:application_detail',
+            pk=self.kwargs['pk']
+        )
+
+
+class ManualApplicationView(LoginRequiredMixin, MessageMixin, CreateView):
+    model = Applicant
+    form_class = ApplicationForm
+    template_name = 'applications/manual_application.html'
+    success_message = _('Application manually added.')
+
+    def get_form_kwargs(self):
+        kwargs = super(ManualApplicationView, self).get_form_kwargs()
+        kwargs.update(
+            {'opening': get_object_or_404(Opening, id=self.kwargs['opening_id'])}
+        )
+        return kwargs
+
+    def form_valid(self, form):
+        self.success_url = reverse(
+            'applications:list_applications',
+            kwargs={'opening_id': form.opening.id}
+        )
+        return super(ManualApplicationView, self).form_valid(form)
 
 
 class BoardView(LoginRequiredMixin, TemplateView):
-    template_name = "applications/kanban.html"
+    template_name = 'applications/kanban.html'
 
     def get_context_data(self, **kwargs):
         context = super(BoardView, self).get_context_data(**kwargs)
@@ -106,7 +135,7 @@ class BoardView(LoginRequiredMixin, TemplateView):
         stages = InterviewStage.objects.filter(company=self.request.user.company)
         applications = Application.objects.filter(
             opening__company=self.request.user.company
-        ).prefetch_related("stage_transitions__stage", "applicant")
+        ).prefetch_related('stage_transitions__stage', 'applicant')
         for stage in stages:
             board_data[stage] = []
             for application in applications:
@@ -144,7 +173,7 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
                     if not current_stage or current_stage.id != stage:
                         ApplicationStageTransition.objects.create(
                             application=application,
-                            user = self.request.user,
+                            user=self.request.user,
                             stage=InterviewStage.objects.get(id=stage)
                         )
 

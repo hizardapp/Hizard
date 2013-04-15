@@ -4,6 +4,10 @@
 
 {% block content %}
 
+  {% if context_opening %}
+    <p>Add an application manually <a href="{% url 'applications:manual_application' context_opening.id %}">here</a></p>
+  {% endif %}
+
   {% if application_list %}
 
     {% if context_opening %}

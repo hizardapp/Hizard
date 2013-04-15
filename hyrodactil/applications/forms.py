@@ -6,7 +6,6 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from companysettings.models import InterviewStage
 
-from companysettings.models import InterviewStage
 from .models import (
     Applicant, Application, ApplicationAnswer, ApplicationStageTransition,
     ApplicationMessage
@@ -97,7 +96,7 @@ class ApplicationForm(forms.ModelForm):
 
         return upload_path
 
-    def save(self):
+    def save(self, commit=True):
         try:
             applicant = Applicant.objects.get(email=self.cleaned_data['email'])
         except Applicant.DoesNotExist:
@@ -115,7 +114,10 @@ class ApplicationForm(forms.ModelForm):
         )
         application.save()
 
-        stage = InterviewStage.objects.filter(company=self.opening.company)[0]
+        stage = InterviewStage.objects.filter(
+            company=self.opening.company,
+            initial=True
+        )[0]
 
         if stage:
             ApplicationStageTransition.objects.create(
@@ -145,6 +147,8 @@ class ApplicationForm(forms.ModelForm):
                     application_answer.question = question
                     application_answer.answer = answer
                     application_answer.save()
+
+        return applicant
 
 
 class ApplicationStageTransitionForm(forms.ModelForm):

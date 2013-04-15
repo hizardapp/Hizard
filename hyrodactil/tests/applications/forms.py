@@ -12,8 +12,6 @@ from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningWithQuestionsFactory
 from applications.forms import ApplicationForm, ApplicationStageTransitionForm
 from applications.models import Applicant
-from tests.factories._companies import CompanyFactory
-from tests.factories._companysettings import InterviewStageFactory
 
 
 class ApplicationFormTests(TestCase):
@@ -115,7 +113,7 @@ class ApplicationFormTests(TestCase):
         ApplicantFactory(email='bob@marley.jah')
         company = CompanyFactory()
         opening = OpeningFactory(company=company)
-        stage = InterviewStageFactory(company=company)
+        stage = InterviewStageFactory(company=company, initial=True)
 
         files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(self.form_data, files, opening=opening)

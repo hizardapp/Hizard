@@ -1,4 +1,8 @@
 import json
+import os
+import shutil
+
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
@@ -10,7 +14,7 @@ from ..factories._companysettings import (
     SingleLineQuestionFactory, InterviewStageFactory
 )
 from ..factories._openings import OpeningWithQuestionsFactory
-from applications.models import ApplicationMessage, Application
+from applications.models import ApplicationMessage, Application, Applicant
 
 
 class ApplicationViewsTests(WebTest):
@@ -158,6 +162,31 @@ class ApplicationViewsTests(WebTest):
         form['parent'] = ''
         response = form.submit(user=attacker, status=404)
         self.assertFalse(ApplicationMessage.objects.all().exists())
+
+    def test_create_manual_application(self):
+        InterviewStageFactory(company=self.user.company, initial=True)
+        url = reverse('applications:manual_application', args=(self.opening.id,))
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+        form = page.forms['action-form']
+        form['first_name'] = 'Bilbo'
+        form['last_name'] = 'Sacquet'
+        form['email'] = 'bilbo@shire.com'
+        form['resume'] = 'bilbon_cv.pdf', "My resume"
+
+        response = form.submit().follow()
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(Application.objects.count(), 1)
+        company_dir = '%s/uploads/%d' % (
+            settings.MEDIA_ROOT,
+            self.opening.company.id
+        )
+        shutil.rmtree(company_dir)
+        os.unlink(Applicant.objects.get(id=1).resume.path)
 
 
 class ApplicationAjaxViewsTests(WebTest):
