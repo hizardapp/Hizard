@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block content %}
-<p>HOME</p>
+
+{% if request.user.company.opening_set.count == 0 %}
+  <div class="large-12 columns">
+    <p>
+      {% url 'openings:create_opening' as opening_url %}
+      {% blocktrans %}
+        You do not have any opening ! Create one <a href="{{ opening_url }}">here</a>.
+      {% endblocktrans %}
+    </p>
+  </div>
+{% endif %}
+
 {% endblock content %}
