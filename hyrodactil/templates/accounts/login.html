@@ -15,7 +15,7 @@
       {% csrf_token %}
 
       {% if form.non_field_errors %}
-        <small class="error">{{ form.non_field_errors }}</small>
+        <small class="error">{{ form.non_field_errors.as_text }}</small>
       {% endif %}
 
       <div class="row">
@@ -31,7 +31,7 @@
         <div class="large-10 columns {% if form.username.errors %} error {% endif %}">
           {{ form.username }}
           {% if form.username.errors %}
-            <small class="error">{{ form.username.errors }}</small>
+            <small class="error">{{ form.username.errors.as_text }}</small>
           {% endif %}
         </div>
       </div>
@@ -43,7 +43,7 @@
         <div class="large-10 columns {% if form.password.errors %} error {% endif %}">
           {{ form.password }}
           {% if form.password.errors %}
-            <small class="error">{{ form.password.errors }}</small>
+            <small class="error">{{ form.password.errors.as_text }}</small>
           {% endif %}
         </div>
       </div>

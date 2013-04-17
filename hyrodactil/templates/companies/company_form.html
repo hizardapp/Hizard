@@ -10,7 +10,7 @@
       {% csrf_token %}
 
       {% if form.non_field_errors %}
-        <small class="error">{{ form.non_field_errors }}</small>
+        <small class="error">{{ form.non_field_errors.as_text }}</small>
       {% endif %}
 
       <div class="row">
@@ -27,7 +27,7 @@
             {{ form.name }}
         </div>
         {% if form.name.errors %}
-          <small class="error">{{ form.name.errors }}</small>
+          <small class="error">{{ form.name.errors.as_text }}</small>
         {% endif %}
       </div>
 
@@ -48,7 +48,7 @@
         <div class="large-7 columns {% if form.subdomain.errors %} error {% endif %}">
           {{ form.subdomain }}
           {% if form.subdomain.errors %}
-            <small class="error">{{ form.subdomain.errors }}</small>
+            <small class="error">{{ form.subdomain.errors.as_text }}</small>
           {% endif %}
         </div>
 

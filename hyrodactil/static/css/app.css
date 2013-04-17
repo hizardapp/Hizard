@@ -4504,12 +4504,8 @@ ul.icons li [class*=" icon-"] {
   height: auto;
 }
 /* line 40, ../../pregen_static/sass/site_partials/_forms.scss */
-.hizard-form form ul li {
-  width: 160px;
-  height: 2em;
-  display: inline-block;
-  vertical-align: top;
-  margin: 5px;
+.hizard-form .error {
+  padding: 10px;
 }
 
 /* line 2, ../../pregen_static/sass/site_partials/_section_modals.scss */
@@ -4518,29 +4514,29 @@ ul.icons li [class*=" icon-"] {
   z-index: 10;
 }
 
-/* line 3, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 3, ../../pregen_static/sass/site_partials/_accounts.scss */
 .registration-confirmation {
   margin-top: 60px !important;
 }
-/* line 6, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 6, ../../pregen_static/sass/site_partials/_accounts.scss */
 .registration-confirmation h1 {
   text-align: center;
   margin-bottom: 40px;
 }
-/* line 11, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 11, ../../pregen_static/sass/site_partials/_accounts.scss */
 .registration-confirmation p {
   text-align: center;
 }
-/* line 13, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 13, ../../pregen_static/sass/site_partials/_accounts.scss */
 .registration-confirmation p i {
   vertical-align: middle;
 }
 
-/* line 20, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 20, ../../pregen_static/sass/site_partials/_accounts.scss */
 .from-activation {
   margin-top: 60px !important;
 }
-/* line 22, ../../pregen_static/sass/site_partials/_register.scss */
+/* line 22, ../../pregen_static/sass/site_partials/_accounts.scss */
 .from-activation h1 {
   text-align: center;
 }

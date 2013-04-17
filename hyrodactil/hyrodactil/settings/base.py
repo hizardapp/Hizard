@@ -272,5 +272,3 @@ DEFAULT_FROM_EMAIL = 'vincent@hizard.com'
 SESSION_COOKIE_DOMAIN = '.' + SITE_URL
 
 ALLOWED_HOSTS = ('.hizard.com',)
-
-DJANGO_WYSIWYG_FLAVOR = "tinymce"
