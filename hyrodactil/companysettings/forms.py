@@ -1,4 +1,5 @@
 from django import forms
+from companies.models import Company
 
 from .models import Department, Question, InterviewStage
 from accounts.models import CustomUser
@@ -54,9 +55,16 @@ class CustomUserInviteForm(forms.ModelForm):
 
         if commit:
             user = CustomUser.objects.create_user(
-                    email=email,
-                    password=None,
-                    active=False,
-                    is_company_admin=is_company_admin,
-                    company=company)
+                email=email,
+                password=None,
+                active=False,
+                is_company_admin=is_company_admin,
+                company=company
+            )
             return user
+
+
+class CompanyInformationForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('website', 'description',)

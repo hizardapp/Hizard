@@ -1,8 +1,8 @@
 from django.test import TestCase
 
 from companysettings.forms import (
-    DepartmentForm, QuestionForm, InterviewStageForm
-)
+    DepartmentForm, QuestionForm, InterviewStageForm,
+    CompanyInformationForm)
 from companysettings.models import InterviewStage
 from ..factories._companies import CompanyFactory
 from ..factories._companysettings import InterviewStageFactory
@@ -43,9 +43,25 @@ class CompanySettingsFormsTests(TestCase):
 
     def test_stage_form_valid_already_initial(self):
         company = CompanyFactory()
-        stage = InterviewStageFactory(initial=True, company=company)
+        InterviewStageFactory(initial=True, company=company)
         form_data = {'name': 'Wrong', 'initial': True}
         form = InterviewStageForm(data=form_data, **{'company': company})
         self.assertTrue(form.is_valid())
 
         self.assertFalse(InterviewStage.objects.get(id=1).initial)
+
+    def test_company_information_valid(self):
+        form_data = {
+            'website': 'www.google.com',
+            'description': 'We do some cool stuff'
+        }
+        form = CompanyInformationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_company_information_invalid(self):
+        form_data = {
+            'website': 'www.goog',
+            'description': 'We do some cool stuff'
+        }
+        form = CompanyInformationForm(data=form_data)
+        self.assertTrue(form.is_valid())

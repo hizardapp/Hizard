@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, UpdateView
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
 
-from .forms import DepartmentForm, QuestionForm, InterviewStageForm
+from .forms import DepartmentForm, QuestionForm, InterviewStageForm, CompanyInformationForm
 from .forms import CustomUserInviteForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
@@ -153,3 +153,15 @@ class InviteUserCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.save(company=self.request.user.company)
         return redirect(self.success_url)
+
+
+class UpdateCompanyInformationView(LoginRequiredMixin, MessageMixin, UpdateView):
+    model = Company
+    form_class = CompanyInformationForm
+    action = 'updated'
+    success_url = reverse_lazy('companysettings:settings_home')
+    success_message = _('Company informations updated.')
+    template_name = 'companysettings/information_form.html'
+
+    def get_object(self):
+        return self.request.user.company

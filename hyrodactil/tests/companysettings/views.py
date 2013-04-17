@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.core import mail
 from django_webtest import WebTest
+from companies.models import Company
 
 from ..factories._accounts import UserFactory
 from ..factories._companysettings import (
@@ -491,3 +492,38 @@ class CompanySettingsViewsTests(WebTest):
         )
         self.assertNotContains(response, toggle_colleague_status_url)
         self.assertNotContains(response, toggle_self_status_url)
+
+    def test_modify_company_information_valid(self):
+        url = reverse('companysettings:update_information')
+
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+        form = page.forms['action-form']
+        form['website'] = 'www.google.com'
+        form['description'] = 'Cool stuff.'
+        response = form.submit().follow()
+
+        self.assertEqual(response.status_code, 200)
+        company = Company.objects.get(id=1)
+
+        self.assertEqual(company.website, 'http://www.google.com/')
+        self.assertEqual(company.description, 'Cool stuff.')
+
+    def test_modify_company_information_invalid(self):
+        url = reverse('companysettings:update_information')
+
+        page = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+        form = page.forms['action-form']
+        form['website'] = 'goog'
+        form['description'] = 'Cool stuff.'
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, 'form', 'website', 'Enter a valid URL.')

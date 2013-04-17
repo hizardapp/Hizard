@@ -7,7 +7,7 @@ class Company(TimeStampedModel):
     name = models.CharField(max_length=100)
     subdomain = models.SlugField(unique=True)
     website = models.URLField(blank=True)
-    introduction = models.TextField(blank=True)
+    description = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = 'companies'
