@@ -47,7 +47,7 @@
 
           <ul class="right">
             {% if user.is_authenticated %}
-              <li><a href={% url 'auth:logout' %}>  {% trans 'User settings' %}</a></li>
+              <li><a href='#'>  {% trans 'User settings' %}</a></li>
               <li><a href={% url 'auth:logout' %}>  {% trans 'Logout' %}</a></li>
             {% else %}
               <li><a href={% url 'accounts:register' %}>{% trans 'Register' %}</a></li>
