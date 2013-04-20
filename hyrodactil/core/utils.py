@@ -2,6 +2,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from companysettings.models import Question, InterviewStage
+from openings.models import Opening
 
 
 def build_subdomain_url(request, url, user=None):
@@ -25,13 +26,10 @@ def build_subdomain_url(request, url, user=None):
 
 
 def setup_company(company):
-    questions = [
-        Question(name=_('Website'), type='textbox'),
-        Question(name=_('Phone number'), type='textbox')
-    ]
-
-    for question in questions:
-        company.question_set.add(question)
+    website_question = Question(name=_('Website'), type='textbox')
+    phone_question = Question(name=_('Phone number'), type='textbox')
+    company.question_set.add(website_question)
+    company.question_set.add(phone_question)
 
     interview_stages = [
         InterviewStage(name=_('Received'), initial=True),
@@ -42,3 +40,19 @@ def setup_company(company):
 
     for stage in interview_stages:
         company.interviewstage_set.add(stage)
+
+    Opening.objects.create(
+            company=company,
+            title=_("Professor of magic"),
+            description=_("""<p>We are looking for a talented magician to join our school in London.</p>
+
+            <p>The professor should be a master of Herbology, Potions and Time Travel. Previous experience in teaching would be an advantage.</p>
+
+            <p>As part of our teaching team you will be able to spend 30% of your time doing research.</p>
+
+            <p>We are a small but growing university with a bright future ahead of us, enabling hundred of students to learn about magic.</p>"""),
+            loc_country="United Kingdom",
+            loc_city="London",
+            loc_postcode="M4G 1C",
+    ).openingquestion_set.create(question=phone_question,
+            required=True)

@@ -5,7 +5,7 @@ from django_countries import CountryField
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
-from companysettings.models import Department, Question
+from companysettings.models import Department, Question, InterviewStage
 
 
 class Opening(TimeStampedModel):
@@ -22,6 +22,19 @@ class Opening(TimeStampedModel):
     questions = models.ManyToManyField(
         Question, blank=True, null=True, through='OpeningQuestion'
     )
+
+    def applicants_stats(self):
+        stages = []
+        stages_indexes = dict()
+        for i, stage in enumerate(InterviewStage.objects.filter(
+                company=self.company).only("id", "name")):
+            stages.append([stage.name, 0])
+            stages_indexes[stage.name] = i
+
+        for application in self.application_set.all():
+            stages[stages_indexes[application.current_stage().name]][1] += 1
+
+        return stages
 
 
 class OpeningQuestion(TimeStampedModel):
