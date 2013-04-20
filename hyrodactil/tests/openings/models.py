@@ -9,7 +9,7 @@ class OpeningsModelsTests(TestCase):
     def test_applicants_stats(self):
         opening = OpeningFactory()
         self.assertEqual(opening.applicants_stats(), [])
-        s1 = InterviewStageFactory(name="L220", initial=True,
+        s1 = InterviewStageFactory(name="L220",
                 company=opening.company)
         s2 = InterviewStageFactory(name="L33",
                 company=opening.company)
