@@ -4,12 +4,12 @@
 
 
 {% block title %}
-  Confirmation - {{ opening.title }} - {{ opening.company.name }}
+  Confirmation - {{ opening.title }} - {{ company.name }}
 {% endblock title %}
 
 
 {% block header %}
-  {{ opening.company.name }}
+  {{ company.name }}
 {% endblock header %}
 
 
@@ -22,5 +22,7 @@
 
 
 {% block section %}
-  Your application to {{ opening.title }} has been received.
+  {% blocktrans with title=opening.title %}
+    Your application to {{ title }} has been received.
+  {% endblocktrans %}
 {% endblock section %}

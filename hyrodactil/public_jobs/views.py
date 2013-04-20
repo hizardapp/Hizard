@@ -29,6 +29,7 @@ class ApplyView(TemplateView):
 
         context = {
             'opening': opening,
+            'company': opening.company,
             'form': ApplicationForm(opening=opening)
         }
 
@@ -47,6 +48,7 @@ class ApplyView(TemplateView):
         else:
             context = {
                 'opening': opening,
+                'company': opening.company,
                 'form': form
             }
             return self.render_to_response(context)
@@ -61,5 +63,8 @@ class ApplicationConfirmationView(TemplateView):
         except Opening.DoesNotExist:
             raise Http404
 
-        context = {'opening': opening}
+        context = {
+            'opening': opening,
+            'company': opening.company
+        }
         return self.render_to_response(context)

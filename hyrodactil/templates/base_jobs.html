@@ -19,7 +19,9 @@
 
   <header class="row">
     <h1 class="large-9 columns">{% block header %}{% endblock header %}</h1>
-    <a href="#" class="large-3 columns">{% trans 'Back to our website' %}</a>
+    {% if company.website %}
+        <a href="{{ company.website }}" class="large-3 columns">{% trans 'Back to our website' %}</a>
+    {% endif %}
   </header>
 
   <div class="row">

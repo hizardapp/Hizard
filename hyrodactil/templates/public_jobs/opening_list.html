@@ -19,7 +19,7 @@
       <a href="{% url 'public_jobs:apply' opening.id %}">{{ opening.title }}</a>
       <br>
       {% if opening.department %}
-        <span>Department: {{ opening.department }}</span>
+        <span>{% trans 'Department: ' %} {{ opening.department }}</span>
       {% endif %}
     </div>
   {% endfor %}
@@ -27,5 +27,7 @@
 
 
 {% block aside %}
-  Add company description field to the company model
+  {% if company.description %}
+    {{ company.description }}
+  {% endif %}
 {% endblock aside %}
