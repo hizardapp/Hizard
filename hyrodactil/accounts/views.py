@@ -62,7 +62,7 @@ class ActivateView(FormView):
         user = CustomUser.objects.activate_user(self.activation_key)
         if user:
             return HttpResponseRedirect(build_subdomain_url(self.request,
-                    reverse("public:home"),
+                    reverse("dashboard:dashboard"),
                     user=user))
         else:
             raise Http404
@@ -100,7 +100,7 @@ class LoginView(FormView):
         if self.request.user.company is None:
             return reverse('companies:create')
         else:
-            return build_subdomain_url(self.request, reverse("public:home"))
+            return build_subdomain_url(self.request, reverse("dashboard:dashboard"))
 
 
 class LogoutView(LoginRequiredMixin, View):
@@ -128,7 +128,7 @@ class PasswordChangeView(LoginRequiredMixin, FormView):
     """
     form_class = MinLengthChangePasswordForm
     template_name = 'accounts/password_change_form.html'
-    success_url = reverse_lazy('public:home')
+    success_url = reverse_lazy('dashboard:dashboard')
 
     def get_form_kwargs(self):
         """

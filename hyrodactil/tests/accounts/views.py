@@ -130,7 +130,7 @@ class AccountsViewsTests(WebTest):
         location = "http://%s.%s%s" % (
             user.company.subdomain,
             settings.SITE_URL,
-            reverse('public:home')
+            reverse('dashboard:dashboard')
         )
         self.assertTrue(location in response["Location"])
         self.assertIn('_auth_user_id', self.app.session)
@@ -146,7 +146,7 @@ class AccountsViewsTests(WebTest):
         location = "http://%s.%s%s" % (
             user.company.subdomain,
             settings.SITE_URL,
-            reverse('public:home')
+            reverse('dashboard:dashboard')
         )
         self.assertTrue(location in response["Location"])
 
@@ -228,7 +228,7 @@ class AccountsViewsTests(WebTest):
 
         user_found = CustomUser.objects.get()
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(reverse('public:home') in response["Location"])
+        self.assertTrue(reverse('dashboard:dashboard') in response["Location"])
         self.assertTrue(user_found.check_password('a secure password'))
 
     def test_post_change_password_failure_too_short(self):

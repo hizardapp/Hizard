@@ -5,22 +5,20 @@ from companysettings.models import Question, InterviewStage
 from openings.models import Opening
 
 
-def build_subdomain_url(request, url, user=None):
+def build_host_part(request, domain):
     scheme = "https" if request.is_secure() else "http"
     server_port = int(request.environ['SERVER_PORT'])
-    if user is None:
-      user = request.user
     if server_port not in (80, 443):
-        host_part = "%s://%s.%s:%s" % (
-            scheme,
-            user.company.subdomain,
-            settings.SITE_URL,
-            server_port)
+        return "%s://%s:%s" % (scheme, domain, server_port)
     else:
-        host_part = "%s://%s.%s" % (
-            scheme,
-            user.company.subdomain,
-            settings.SITE_URL)
+        return "%s://%s" % (scheme, domain)
+
+def build_subdomain_url(request, url, user=None):
+    if user is None:
+        user = request.user
+
+    host_part = build_host_part(request,
+            "%s.%s" % (user.company.subdomain, settings.SITE_URL))
 
     return "%s%s" % (host_part, url)
 

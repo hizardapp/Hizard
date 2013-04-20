@@ -61,6 +61,13 @@ urlpatterns = patterns('',
             app_name='public_jobs')
     ),
     url(
+        r'^dashboard/',
+        include(
+            'dashboard.urls',
+            namespace='dashboard',
+            app_name='dashboard')
+    ),
+    url(
         r'^',
         include(
             'public.urls',

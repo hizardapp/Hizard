@@ -1,36 +1,12 @@
 {% extends "base.html" %}
-
 {% load i18n %}
 
 {% block content %}
+<h1>
+  Welcome to Hizard!
+</h1>
 
-<div class="large-6 columns">
-  <h5>Last openings</h5>
-
-  <table class="large-12 columns">
-    <thead>
-      <tr>
-        <th>Position</th>
-        <th>Applications</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for opening in opening_list %}
-      <tr>
-        <td>{{ opening.title }}</td>
-        <td>
-          {% for stage, count in opening.applicants_stats %}
-            <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
-              {{ count }}
-            </a>
-            {% if not forloop.last %}/{% endif %}
-          {% endfor %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
+<p>
+  Hizard is a tool to make your hiring process easier.
+</p>
 {% endblock content %}

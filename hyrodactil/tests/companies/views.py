@@ -39,7 +39,7 @@ class CompaniesViewsTests(WebTest):
         form['subdomain'] = 'acmememe'
         response = form.submit()
         expected = "http://acmememe.%s%s" % (
-            settings.SITE_URL, reverse("public:home")
+            settings.SITE_URL, reverse("dashboard:dashboard")
         )
         self.assertEqual(response["Location"], expected)
         self.assertEqual(response.status_code, 302)

@@ -15,7 +15,7 @@ class CompanyCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return utils.build_subdomain_url(
             self.request,
-            reverse('public:home')
+            reverse('dashboard:dashboard')
         )
 
     def form_valid(self, form):
