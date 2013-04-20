@@ -1,5 +1,6 @@
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.http import Http404
+from django.views.generic import View
 from django_webtest import WebTest
 
 from companysettings.models import Department

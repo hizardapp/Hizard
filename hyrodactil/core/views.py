@@ -1,7 +1,30 @@
 from django.contrib import messages
+from django.conf import settings
 from django.http import Http404
 from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import BaseDeleteView
+
+from braces.views import AccessMixin, redirect_to_login, PermissionDenied
+
+from core.utils import build_host_part
+
+
+class DomainLoginRequiredMixin(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            if self.raise_exception:
+                raise PermissionDenied # return a forbidden response
+            else:
+                response = redirect_to_login(request.get_full_path(),
+                    self.get_login_url(), self.get_redirect_field_name())
+
+                response["Location"] = "%s%s" % (
+                        build_host_part(self.request, settings.SITE_URL),
+                        response["Location"])
+                return response
+
+        return super(DomainLoginRequiredMixin, self).dispatch(
+                request, *args, **kwargs)
 
 
 class RestrictedListView(ListView):
