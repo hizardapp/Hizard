@@ -1,6 +1,7 @@
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView, TemplateView, UpdateView
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+from django.views.generic import CreateView, TemplateView, UpdateView, View
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
@@ -134,6 +135,28 @@ class InterviewStageDeleteView(LoginRequiredMixin, RestrictedDeleteView):
                 self.request, _('You need to have at least one stage.')
             )
             return redirect(self.success_url)
+
+
+class InterviewStageReorderView(LoginRequiredMixin, MessageMixin, View):
+    def get(self, request, *args, **kwargs):
+        stage = InterviewStage.objects.get(id=kwargs.pop('pk'))
+        direction = kwargs.pop('direction')
+
+        if direction == 'up':
+            swapping_stage = stage.get_previous_stage()
+        else:
+            swapping_stage = stage.get_next_stage()
+
+        new_position = swapping_stage.position
+        swapping_stage.position = stage.position
+        stage.position = 99999
+        stage.save()
+        swapping_stage.save()
+
+        stage.position = new_position
+        stage.save()
+        messages.info(self.request, 'Stages reordered.')
+        return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
 class UsersListView(LoginRequiredMixin, RestrictedListView):

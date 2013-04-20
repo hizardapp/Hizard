@@ -6,42 +6,44 @@
 {% block content %}
   <h2>{% trans "Stages" %}</h2>
 
-  {% if interviewstage_list %}
-    <table class="large-12 columns">
-      <thead>
-        <tr>
-          <th>{% trans "Name" %}</th>
-          <th>{% trans "Position" %}</th>
-          <th>{% trans "Edit" %}</th>
-          <th>{% trans "Delete" %}</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="stages">
 
-      {% for stage in interviewstage_list %}
-        <tr>
-          <td>
-            {{ stage.name }}
-          </td>
-          <td>
-              {{ stage.position }}
-          </td>
-          <td>
-            <a href="{% url 'companysettings:update_stage' stage.id %}" class="button">{% trans "Edit" %}</a>
-          </td>
-          <td>
-            <a href="{% url 'companysettings:delete_stage' stage.id %}" class="alert button">{% trans "Delete" %}</a>
-          </td>
-        </tr>
-      {% endfor %}
+    {% for stage in interviewstage_list %}
+      <div class="row">
+        <div class="large-6 large-centered columns panel centered-text">
+          <div class="row">
+            {% if not forloop.last %}
+              <a href="{% url 'companysettings:reorder_stage' stage.id 'down' %}"><i class="icon-arrow-down icon-large large-1 column pointer links"></i></a>
+            {% endif %}
 
-      </tbody>
+            <span class="large-10 columns {% if forloop.last %} large-offset-1{% endif %}">
+              <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a> —
+              <a href="{% url 'companysettings:delete_stage' stage.id %}"><i class="icon-trash pointer links"></i></a>
+            </span>
 
-    </table>
-  {% else %}
-    <p>{% trans "No interview stage yet" %}</p>
-  {% endif %}
+            {% if not forloop.first %}
+                <a href="{% url 'companysettings:reorder_stage' stage.id 'up' %}"><i class="icon-arrow-up icon-large large-1 column pointer links"></i></a>
+            {% else %}
+              <span class="large-1 column"></span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
 
+      {% if not forloop.last %}
+        <div class="row">
+          <div class="large-6 large-centered columns centered-text">
+            <i class="icon-double-angle-down icon-2x"></i>
+          </div>
+        </div>
+        <br>
+      {% endif %}
+
+    {% endfor %}
+
+  </div>
+
+  <br><br>
   <a href="{% url 'companysettings:create_stage' %}" class="button">{% trans "Create a stage" %}</a>
 
 {% endblock content %}

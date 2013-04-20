@@ -65,6 +65,11 @@ urlpatterns = patterns('',
         views.InterviewStageDeleteView.as_view(),
         name='delete_stage'
     ),
+    url(
+        r'^stage/(?P<pk>\d+)/reorder/(?P<direction>[a-z]+)/$',
+        views.InterviewStageReorderView.as_view(),
+        name='reorder_stage'
+    ),
 
     url(
         r'^users/$',

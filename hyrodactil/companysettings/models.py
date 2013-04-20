@@ -47,9 +47,36 @@ class InterviewStage(TimeStampedModel):
 
     class Meta:
         unique_together = ('company', 'position')
+        ordering = ['position']
 
     def __unicode__(self):
         return self.name
+
+    def get_previous_stage(self):
+        previous_position = InterviewStage.objects.filter(
+            company=self.company,
+            position__lt=self.position
+        ).aggregate(models.Max('position'))['position__max']
+
+        previous = InterviewStage.objects.filter(
+            company=self.company,
+            position=previous_position
+        )[0]
+
+        return previous
+
+    def get_next_stage(self):
+        next_position = InterviewStage.objects.filter(
+            company=self.company,
+            position__gt=self.position
+        ).aggregate(models.Min('position'))['position__min']
+
+        next = InterviewStage.objects.filter(
+            company=self.company,
+            position=next_position
+        )[0]
+
+        return next
 
     def save(self, *args, **kwargs):
         if not self.pk:
