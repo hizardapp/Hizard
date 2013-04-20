@@ -245,6 +245,7 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertEqual(stage_created.company, self.user.company)
         self.assertEqual(stage_created.name, 'Phone interview')
+        self.assertEqual(stage_created.position, 1)
 
     def test_create_stage_invalid(self):
         url = reverse('companysettings:create_stage')
@@ -260,23 +261,6 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
-
-    def test_create_stage_valid_already_one_initial(self):
-        initial = InterviewStageFactory(initial=True, company=self.user.company)
-        url = reverse('companysettings:create_stage')
-
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
-        form = page.forms['action-form']
-        form['name'] = 'Wrong'
-        form['initial'] = True
-        response = form.submit().follow()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(InterviewStage.objects.get(id=initial.id).initial)
 
     def test_update_stage_valid(self):
         stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
@@ -317,30 +301,12 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
 
-    def test_update_stage_valid_already_one_initial(self):
-        initial = InterviewStageFactory(initial=True, company=self.user.company)
-        stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
-        url = reverse('companysettings:update_stage', args=(stage.id,))
-
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
-        form = page.forms['action-form']
-        form['name'] = 'Wrong'
-        form['initial'] = True
-
-        self.assertContains(page, stage.name)
-
-        response = form.submit().follow()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(InterviewStage.objects.get(id=initial.id).initial)
-
     def test_delete_stage(self):
-        stage = InterviewStageFactory.create(name='Interview',
-                                             company=self.user.company)
+        InterviewStageFactory(company=self.user.company)
+        stage = InterviewStageFactory(
+            name='Interview',
+            company=self.user.company
+        )
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
         response = self.app.get(
@@ -353,10 +319,8 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(response, "Interview")
         self.assertContains(response, "Stage deleted.")
 
-    def test_delete_initial_stage(self):
-        stage = InterviewStageFactory.create(
-            initial=True, company=self.user.company
-        )
+    def test_delete_last_stage(self):
+        stage = InterviewStageFactory.create(company=self.user.company)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
         response = self.app.get(
@@ -370,7 +334,7 @@ class CompanySettingsViewsTests(WebTest):
             reverse('companysettings:list_stages')
         )
         self.assertContains(response, stage.name)
-        self.assertContains(response, "You cannot delete the initial stage.")
+        self.assertContains(response, "You need to have at least one stage.")
 
     def test_list_users(self):
         url = reverse('companysettings:list_users')

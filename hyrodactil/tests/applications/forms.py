@@ -113,7 +113,7 @@ class ApplicationFormTests(TestCase):
         ApplicantFactory(email='bob@marley.jah')
         company = CompanyFactory()
         opening = OpeningFactory(company=company)
-        stage = InterviewStageFactory(company=company, initial=True)
+        stage = InterviewStageFactory(company=company)
 
         files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(self.form_data, files, opening=opening)

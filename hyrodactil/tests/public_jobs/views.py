@@ -49,7 +49,7 @@ class ApplicationViewsTests(WebTest):
 
     def test_valid_post_application_form(self):
         url = reverse('public_jobs:apply', args=(self.opening.id,))
-        stage = InterviewStageFactory(initial=True, company=self.opening.company)
+        stage = InterviewStageFactory(company=self.opening.company)
         form = self.app.get(url).form
 
         form['first_name'] = 'Bilbon'

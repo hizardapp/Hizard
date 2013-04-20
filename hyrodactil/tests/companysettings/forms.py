@@ -31,7 +31,7 @@ class CompanySettingsFormsTests(TestCase):
 
     def test_stage_form_valid(self):
         company = CompanyFactory()
-        form_data = {'name': 'Phone interview', 'initial': True}
+        form_data = {'name': 'Phone interview'}
         form = InterviewStageForm(data=form_data, **{'company': company})
         self.assertTrue(form.is_valid())
 
@@ -40,15 +40,6 @@ class CompanySettingsFormsTests(TestCase):
         form_data = {'name': ''}
         form = InterviewStageForm(data=form_data, **{'company': company})
         self.assertFalse(form.is_valid())
-
-    def test_stage_form_valid_already_initial(self):
-        company = CompanyFactory()
-        InterviewStageFactory(initial=True, company=company)
-        form_data = {'name': 'Wrong', 'initial': True}
-        form = InterviewStageForm(data=form_data, **{'company': company})
-        self.assertTrue(form.is_valid())
-
-        self.assertFalse(InterviewStage.objects.get(id=1).initial)
 
     def test_company_information_valid(self):
         form_data = {

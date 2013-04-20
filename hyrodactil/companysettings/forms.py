@@ -20,25 +20,11 @@ class QuestionForm(forms.ModelForm):
 class InterviewStageForm(forms.ModelForm):
     class Meta:
         model = InterviewStage
-        fields = ('name', 'initial',)
+        fields = ('name',)
 
     def __init__(self, *args, **kwargs):
         self.company = kwargs.pop('company')
         super(InterviewStageForm, self).__init__(*args, **kwargs)
-
-    def clean_initial(self):
-        data = self.cleaned_data['initial']
-
-        if data:
-            existing_initial = InterviewStage.objects.filter(
-                company=self.company, initial=True
-            )
-            # Should never have more than 1 but safer to loop there, in case
-            for stage in existing_initial:
-                stage.initial = False
-                stage.save()
-
-        return data
 
 
 class CustomUserInviteForm(forms.ModelForm):
