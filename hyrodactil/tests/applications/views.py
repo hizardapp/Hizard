@@ -164,7 +164,7 @@ class ApplicationViewsTests(WebTest):
         self.assertFalse(ApplicationMessage.objects.all().exists())
 
     def test_create_manual_application(self):
-        InterviewStageFactory(company=self.user.company, initial=True)
+        InterviewStageFactory(company=self.user.company)
         url = reverse('applications:manual_application', args=(self.opening.id,))
         page = self.app.get(
             url,

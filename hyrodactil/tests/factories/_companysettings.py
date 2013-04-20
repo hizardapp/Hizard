@@ -51,4 +51,5 @@ class InterviewStageFactory(factory.Factory):
     FACTORY_FOR = InterviewStage
 
     name = 'Phone interview'
+    position = factory.Sequence(lambda n: n)
     company = factory.SubFactory(_companies.CompanyFactory)

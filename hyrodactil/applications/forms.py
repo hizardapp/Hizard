@@ -115,9 +115,8 @@ class ApplicationForm(forms.ModelForm):
         application.save()
 
         stage = InterviewStage.objects.filter(
-            company=self.opening.company,
-            initial=True
-        )[0]
+            company=self.opening.company
+        ).order_by('-position')[0]
 
         if stage:
             ApplicationStageTransition.objects.create(

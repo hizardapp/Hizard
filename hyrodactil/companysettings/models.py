@@ -41,9 +41,25 @@ class Question(TimeStampedModel):
 
 class InterviewStage(TimeStampedModel):
     name = models.CharField(max_length=100)
-    initial = models.BooleanField(default=False)
+    position = models.PositiveIntegerField()
 
     company = models.ForeignKey(Company)
 
+    class Meta:
+        unique_together = ('company', 'position')
+
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            max_position = InterviewStage.objects.filter(
+                company=self.company
+            ).aggregate(models.Max('position'))['position__max']
+
+            if not max_position:
+                self.position = 1
+            else:
+                self.position = max_position + 1
+
+        super(InterviewStage, self).save(*args, **kwargs)

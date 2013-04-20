@@ -126,12 +126,12 @@ class InterviewStageDeleteView(LoginRequiredMixin, RestrictedDeleteView):
 
     def get(self, *args, **kwargs):
         self.object = self.get_object()
-
-        if not self.object.initial:
+        count_stages = InterviewStage.objects.filter(company=self.request.user.company).count()
+        if count_stages > 1:
             return super(InterviewStageDeleteView, self).get(*args, **kwargs)
         else:
-            messages.info(
-                self.request, _('You cannot delete the initial stage.')
+            messages.error(
+                self.request, _('You need to have at least one stage.')
             )
             return redirect(self.success_url)
 
