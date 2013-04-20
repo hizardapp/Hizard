@@ -42,5 +42,3 @@ def setup_company(company):
 
     for stage in interview_stages:
         company.interviewstage_set.add(stage)
-
-    company.save()

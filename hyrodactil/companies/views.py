@@ -19,8 +19,7 @@ class CompanyCreateView(LoginRequiredMixin, CreateView):
         )
 
     def form_valid(self, form):
-        company = form.save(commit=False)
-        company.save()
+        company = form.save()
 
         self.request.user.company = company
         self.request.user.save()
