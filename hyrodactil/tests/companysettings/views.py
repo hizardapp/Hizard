@@ -336,6 +336,57 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(response, stage.name)
         self.assertContains(response, "You need to have at least one stage.")
 
+    def test_reorder_stage_valid_up(self):
+        stage1 = InterviewStageFactory.create(company=self.user.company)
+        stage2 = InterviewStageFactory.create(company=self.user.company)
+        url = reverse('companysettings:reorder_stage', args=(stage2.id, 'up'))
+
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        ).follow()
+
+        self.assertEqual(
+            response.request.path,
+            reverse('companysettings:list_stages')
+        )
+        self.assertEqual(InterviewStage.objects.get(id=1).position, 2)
+
+    def test_reorder_stage_valid_down(self):
+        stage1 = InterviewStageFactory.create(company=self.user.company)
+        stage2 = InterviewStageFactory.create(company=self.user.company)
+        url = reverse('companysettings:reorder_stage', args=(stage1.id, 'down'))
+
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        ).follow()
+
+        self.assertEqual(
+            response.request.path,
+            reverse('companysettings:list_stages')
+        )
+        self.assertEqual(InterviewStage.objects.get(id=1).position, 2)
+
+    def test_reorder_stage_invalid(self):
+        stage1 = InterviewStageFactory.create(company=self.user.company)
+        stage2 = InterviewStageFactory.create(company=self.user.company)
+        url = reverse('companysettings:reorder_stage', args=(stage2.id, 'down'))
+
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        ).follow()
+
+        self.assertEqual(
+            response.request.path,
+            reverse('companysettings:list_stages')
+        )
+        self.assertEqual(InterviewStage.objects.get(id=1).position, 1)
+
     def test_list_users(self):
         url = reverse('companysettings:list_users')
         colleague = UserFactory.create(
