@@ -28,6 +28,7 @@ class Migration(SchemaMigration):
             ('applicant', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['applications.Applicant'])),
             ('opening', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['openings.Opening'])),
             ('rating', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('position', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
         db.send_create_signal(u'applications', ['Application'])
 
@@ -37,8 +38,9 @@ class Migration(SchemaMigration):
             ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
             ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
             ('application', self.gf('django.db.models.fields.related.ForeignKey')(related_name='stage_transitions', to=orm['applications.Application'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CustomUser'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CustomUser'], null=True)),
             ('stage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companysettings.InterviewStage'])),
+            ('note', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
         db.send_create_signal(u'applications', ['ApplicationStageTransition'])
 
@@ -52,6 +54,18 @@ class Migration(SchemaMigration):
             ('application', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['applications.Application'])),
         ))
         db.send_create_signal(u'applications', ['ApplicationAnswer'])
+
+        # Adding model 'ApplicationMessage'
+        db.create_table(u'applications_applicationmessage', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
+            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
+            ('application', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['applications.Application'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CustomUser'])),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['applications.ApplicationMessage'], null=True, blank=True)),
+            ('body', self.gf('django.db.models.fields.TextField')()),
+        ))
+        db.send_create_signal(u'applications', ['ApplicationMessage'])
 
 
     def backwards(self, orm):
@@ -67,6 +81,9 @@ class Migration(SchemaMigration):
         # Deleting model 'ApplicationAnswer'
         db.delete_table(u'applications_applicationanswer')
 
+        # Deleting model 'ApplicationMessage'
+        db.delete_table(u'applications_applicationmessage')
+
 
     models = {
         u'accounts.customuser': {
@@ -81,6 +98,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_company_admin': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
@@ -100,12 +118,13 @@ class Migration(SchemaMigration):
             'resume': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
         },
         u'applications.application': {
-            'Meta': {'object_name': 'Application'},
+            'Meta': {'ordering': "('position',)", 'object_name': 'Application'},
             'applicant': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['applications.Applicant']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'opening': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['openings.Opening']"}),
+            'position': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'rating': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'applications.applicationanswer': {
@@ -117,14 +136,25 @@ class Migration(SchemaMigration):
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companysettings.Question']"})
         },
+        u'applications.applicationmessage': {
+            'Meta': {'ordering': "('-created',)", 'object_name': 'ApplicationMessage'},
+            'application': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['applications.Application']"}),
+            'body': ('django.db.models.fields.TextField', [], {}),
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['applications.ApplicationMessage']", 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.CustomUser']"})
+        },
         u'applications.applicationstagetransition': {
-            'Meta': {'ordering': "('created',)", 'object_name': 'ApplicationStageTransition'},
+            'Meta': {'ordering': "('-created',)", 'object_name': 'ApplicationStageTransition'},
             'application': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'stage_transitions'", 'to': u"orm['applications.Application']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
+            'note': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'stage': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companysettings.InterviewStage']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.CustomUser']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.CustomUser']", 'null': 'True'})
         },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -142,8 +172,8 @@ class Migration(SchemaMigration):
         u'companies.company': {
             'Meta': {'object_name': 'Company'},
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'introduction': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'subdomain': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
@@ -158,19 +188,19 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'companysettings.interviewstage': {
-            'Meta': {'object_name': 'InterviewStage'},
+            'Meta': {'ordering': "['position']", 'unique_together': "(('company', 'position'),)", 'object_name': 'InterviewStage'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'position': ('django.db.models.fields.PositiveIntegerField', [], {})
         },
         u'companysettings.question': {
             'Meta': {'object_name': 'Question'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': "'name'"}),
@@ -196,8 +226,17 @@ class Migration(SchemaMigration):
             'loc_country': ('django_countries.fields.CountryField', [], {'max_length': '2', 'blank': 'True'}),
             'loc_postcode': ('django.db.models.fields.CharField', [], {'max_length': '64', 'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'questions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['companysettings.Question']", 'null': 'True', 'blank': 'True'}),
+            'questions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['companysettings.Question']", 'null': 'True', 'through': u"orm['openings.OpeningQuestion']", 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '770'})
+        },
+        u'openings.openingquestion': {
+            'Meta': {'object_name': 'OpeningQuestion'},
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
+            'opening': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['openings.Opening']"}),
+            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companysettings.Question']"}),
+            'required': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         }
     }
 

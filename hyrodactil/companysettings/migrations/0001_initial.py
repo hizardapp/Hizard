@@ -36,13 +36,19 @@ class Migration(SchemaMigration):
             ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
             ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('initial', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('position', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companies.Company'])),
         ))
         db.send_create_signal(u'companysettings', ['InterviewStage'])
 
+        # Adding unique constraint on 'InterviewStage', fields ['company', 'position']
+        db.create_unique(u'companysettings_interviewstage', ['company_id', 'position'])
+
 
     def backwards(self, orm):
+        # Removing unique constraint on 'InterviewStage', fields ['company', 'position']
+        db.delete_unique(u'companysettings_interviewstage', ['company_id', 'position'])
+
         # Deleting model 'Department'
         db.delete_table(u'companysettings_department')
 
@@ -57,8 +63,8 @@ class Migration(SchemaMigration):
         u'companies.company': {
             'Meta': {'object_name': 'Company'},
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'introduction': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'subdomain': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
@@ -73,13 +79,13 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'companysettings.interviewstage': {
-            'Meta': {'object_name': 'InterviewStage'},
+            'Meta': {'ordering': "['position']", 'unique_together': "(('company', 'position'),)", 'object_name': 'InterviewStage'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'initial': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'position': ('django.db.models.fields.PositiveIntegerField', [], {})
         },
         u'companysettings.question': {
             'Meta': {'object_name': 'Question'},

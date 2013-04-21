@@ -25,29 +25,32 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'openings', ['Opening'])
 
-        # Adding M2M table for field questions on 'Opening'
-        db.create_table(u'openings_opening_questions', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('opening', models.ForeignKey(orm[u'openings.opening'], null=False)),
-            ('question', models.ForeignKey(orm[u'companysettings.question'], null=False))
+        # Adding model 'OpeningQuestion'
+        db.create_table(u'openings_openingquestion', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
+            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
+            ('opening', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['openings.Opening'])),
+            ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companysettings.Question'])),
+            ('required', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.create_unique(u'openings_opening_questions', ['opening_id', 'question_id'])
+        db.send_create_signal(u'openings', ['OpeningQuestion'])
 
 
     def backwards(self, orm):
         # Deleting model 'Opening'
         db.delete_table(u'openings_opening')
 
-        # Removing M2M table for field questions on 'Opening'
-        db.delete_table('openings_opening_questions')
+        # Deleting model 'OpeningQuestion'
+        db.delete_table(u'openings_openingquestion')
 
 
     models = {
         u'companies.company': {
             'Meta': {'object_name': 'Company'},
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'introduction': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'subdomain': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
@@ -66,7 +69,6 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': "'name'"}),
@@ -85,8 +87,17 @@ class Migration(SchemaMigration):
             'loc_country': ('django_countries.fields.CountryField', [], {'max_length': '2', 'blank': 'True'}),
             'loc_postcode': ('django.db.models.fields.CharField', [], {'max_length': '64', 'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'questions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['companysettings.Question']", 'null': 'True', 'blank': 'True'}),
+            'questions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['companysettings.Question']", 'null': 'True', 'through': u"orm['openings.OpeningQuestion']", 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '770'})
+        },
+        u'openings.openingquestion': {
+            'Meta': {'object_name': 'OpeningQuestion'},
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
+            'opening': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['openings.Opening']"}),
+            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companysettings.Question']"}),
+            'required': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         }
     }
 
