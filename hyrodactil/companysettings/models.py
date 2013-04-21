@@ -53,30 +53,60 @@ class InterviewStage(TimeStampedModel):
         return self.name
 
     def get_previous_stage(self):
+        """
+        Finds out what's the stage before this one for the company.
+        Returns None if it's the first one already
+        """
         previous_position = InterviewStage.objects.filter(
             company=self.company,
             position__lt=self.position
         ).aggregate(models.Max('position'))['position__max']
 
-        previous = InterviewStage.objects.filter(
-            company=self.company,
-            position=previous_position
-        )[0]
+        try:
+            previous = InterviewStage.objects.filter(
+                company=self.company,
+                position=previous_position
+            )[0]
+        except IndexError:
+            return None
 
         return previous
 
     def get_next_stage(self):
+        """
+        Finds out what's the stage after this one for the company.
+        Returns None if it's the last one already
+        """
         next_position = InterviewStage.objects.filter(
             company=self.company,
             position__gt=self.position
         ).aggregate(models.Min('position'))['position__min']
-
-        next = InterviewStage.objects.filter(
-            company=self.company,
-            position=next_position
-        )[0]
+        try:
+            next = InterviewStage.objects.filter(
+                company=self.company,
+                position=next_position
+            )[0]
+        except IndexError:
+            return None
 
         return next
+
+    def swap_position(self, other_stage):
+        """
+        Swaps the position value of 2 stages
+        """
+        if not other_stage:
+            return False
+
+        new_position = other_stage.position
+        other_stage.position = self.position
+        self.position = 99999
+        self.save()
+        other_stage.save()
+
+        self.position = new_position
+        self.save()
+        return True
 
     def save(self, *args, **kwargs):
         if not self.pk:

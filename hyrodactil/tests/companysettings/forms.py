@@ -3,9 +3,7 @@ from django.test import TestCase
 from companysettings.forms import (
     DepartmentForm, QuestionForm, InterviewStageForm,
     CompanyInformationForm)
-from companysettings.models import InterviewStage
 from ..factories._companies import CompanyFactory
-from ..factories._companysettings import InterviewStageFactory
 
 
 class CompanySettingsFormsTests(TestCase):

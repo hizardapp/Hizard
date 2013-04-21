@@ -147,15 +147,10 @@ class InterviewStageReorderView(LoginRequiredMixin, MessageMixin, View):
         else:
             swapping_stage = stage.get_next_stage()
 
-        new_position = swapping_stage.position
-        swapping_stage.position = stage.position
-        stage.position = 99999
-        stage.save()
-        swapping_stage.save()
-
-        stage.position = new_position
-        stage.save()
-        messages.info(self.request, 'Stages reordered.')
+        if stage.swap_position(swapping_stage):
+            messages.info(self.request, 'Stages reordered.')
+        else:
+            messages.info(self.request, "Couldn't reorder the stages.")
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
