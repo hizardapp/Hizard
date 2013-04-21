@@ -6,7 +6,7 @@ from braces.views import LoginRequiredMixin
 
 from .forms import OpeningForm
 from .models import Opening
-from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
+from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView, RestrictedDetailView
 from core.views import RestrictedDeleteView
 
 
@@ -42,3 +42,7 @@ class OpeningDeleteView(LoginRequiredMixin, RestrictedDeleteView):
     model = Opening
     success_url = reverse_lazy('openings:list_openings')
     success_message = _('Opening deleted.')
+
+
+class OpeningDetailView(LoginRequiredMixin, RestrictedDetailView):
+    model = Opening

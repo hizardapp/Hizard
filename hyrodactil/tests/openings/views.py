@@ -55,10 +55,10 @@ class JobsViewsTests(WebTest):
         self.assertEqual(opening_created.openingquestion_set.count(), 1)
 
     def test_opening_form_only_contains_questions_from_same_company(self):
-        same_company_question = SingleLineQuestionFactory.create(
+        same_company_question = SingleLineQuestionFactory(
             name='To be or not to be?',
             company=self.user.company)
-        other_company_question = SingleLineQuestionFactory.create(
+        other_company_question = SingleLineQuestionFactory(
             name='Your 5 strenghts and weaknesses',
             company=CompanyFactory())
 
@@ -94,7 +94,7 @@ class JobsViewsTests(WebTest):
         self.assertEqual(Opening.objects.count(), 0)
 
     def test_opening_edit(self):
-        opening = OpeningFactory.create(title='DevOps', company=self.user.company)
+        opening = OpeningFactory(title='DevOps', company=self.user.company)
         url = reverse('openings:update_opening', args=(opening.id,))
 
         page = self.app.get(
@@ -111,8 +111,10 @@ class JobsViewsTests(WebTest):
         self.assertNotContains(response, 'DevOps')
 
     def test_opening_delete(self):
-        opening = OpeningFactory.create(title='DevOps',
-                                        company=self.user.company)
+        opening = OpeningFactory(
+            title='DevOps',
+            company=self.user.company
+        )
         url = reverse('openings:delete_opening', args=(opening.id,))
 
         response = self.app.get(
@@ -136,7 +138,7 @@ class JobsViewsTests(WebTest):
         )
 
     def test_can_only_delete_from_the_same_company(self):
-        opening = OpeningFactory.create(title='Op', company=CompanyFactory())
+        opening = OpeningFactory(title='Op', company=CompanyFactory())
         url = reverse('openings:delete_opening', args=(opening.id,))
         self.app.get(
             url,
@@ -148,7 +150,20 @@ class JobsViewsTests(WebTest):
 
     def test_opening_listing(self):
         url = reverse('openings:list_openings')
-        opening = OpeningFactory.create(title='DevOps', company=self.user.company)
+        opening = OpeningFactory(title='DevOps', company=self.user.company)
+        response = self.app.get(
+            url,
+            user=self.user,
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+        self.assertContains(response, opening.title)
+
+    def test_opening_detail_view(self):
+        opening = OpeningFactory(
+            title='DevOps',
+            company=self.user.company
+        )
+        url = reverse('openings:detail_opening', args=(opening.id,))
         response = self.app.get(
             url,
             user=self.user,

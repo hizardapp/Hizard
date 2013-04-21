@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.conf import settings
 from django.http import Http404
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, DetailView
 from django.views.generic.edit import BaseDeleteView
 
 from braces.views import AccessMixin, redirect_to_login, PermissionDenied
@@ -56,6 +56,10 @@ class RestrictedQuerysetMixin(object):
 
 
 class RestrictedUpdateView(RestrictedQuerysetMixin, UpdateView):
+    pass
+
+
+class RestrictedDetailView(RestrictedQuerysetMixin, DetailView):
     pass
 
 

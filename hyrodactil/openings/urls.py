@@ -14,13 +14,18 @@ urlpatterns = patterns('',
         name='create_opening'
     ),
     url(
-        r'^(?P<pk>\d+)/$',
+        r'^(?P<pk>\d+)/edit/$',
         views.OpeningUpdateView.as_view(),
         name='update_opening'
     ),
     url(
-        r'^(?P<pk>\d+)/delete$',
+        r'^(?P<pk>\d+)/delete/$',
         views.OpeningDeleteView.as_view(),
         name='delete_opening'
     ),
+    url(
+        r'^(?P<pk>\d+)/',
+        views.OpeningDetailView.as_view(),
+        name='detail_opening'
+    )
 )

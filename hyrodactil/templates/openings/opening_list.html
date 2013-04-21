@@ -21,7 +21,7 @@
         {% for opening in opening_list %}
           <tr>
             <td>
-              {{ opening.title }}
+                <a href="{% url 'openings:detail_opening' opening.id %}">{{ opening.title }}</a>
             </td>
             <td>
               {{ opening.created|date:"d/m/Y" }}
