@@ -1,0 +1,21 @@
+
+@import "../common/colours";
+
+.alert-success {
+  @include alert($alert-success-background);
+  color: $alert-success-text;
+
+  .close {
+    @include alert-close;
+  }
+}
+
+.alert-error {
+  @include alert($alert-error-background);
+  color: $alert-error-text;
+
+  .close {
+    @include alert-close;
+  }
+}
+

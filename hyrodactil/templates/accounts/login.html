@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load i18n %}
+
 
 {% block content %}
 
@@ -9,58 +11,42 @@
     </div>
   {% endif %}
 
-  <div class="hizard-form large-6 columns large-centered panel">
+  <form action="." method="POST" class="login-form">
+    {% csrf_token %}
 
-    <form action="." method="POST" id="action-form">
-      {% csrf_token %}
-
-      {% if form.non_field_errors %}
-        <small class="error">{{ form.non_field_errors.as_text }}</small>
-      {% endif %}
-
-      <div class="row">
-        <div class="large-12 columns form-title">
-          <h1>{% trans "Login" %}</h1>
-        </div>
+    <div class="row">
+      <div class="large-4 large-centered columns">
+        {% url 'accounts:register' as register_url %}
+        {% blocktrans %}
+          Don't have an account ? <a href="{{ register_url }}">Sign up</a>
+        {% endblocktrans %}
       </div>
+    </div>
 
-      <div class="row collapse">
-        <div class="large-2 columns">
-          <span class="icon-envelope icon-large prefix"></span>
-        </div>
-        <div class="large-10 columns {% if form.username.errors %} error {% endif %}">
-          {{ form.username }}
-          {% if form.username.errors %}
-            <small class="error">{{ form.username.errors.as_text }}</small>
-          {% endif %}
-        </div>
+    <br>
+
+    <div class="row">
+      <div class="large-4 large-centered columns">
+        {{ form.username.label_tag }}
+        {{ form.username }}
       </div>
+    </div>
 
-      <div class="row collapse">
-        <div class="large-2 columns">
-          <span class="icon-lock icon-large prefix"></span>
-        </div>
-        <div class="large-10 columns {% if form.password.errors %} error {% endif %}">
-          {{ form.password }}
-          {% if form.password.errors %}
-            <small class="error">{{ form.password.errors.as_text }}</small>
-          {% endif %}
-        </div>
+    <div class="row">
+      <div class="large-4 large-centered columns">
+        {{ form.password.label_tag }}
+        {{ form.password }}
       </div>
+    </div>
 
-      <div class="row">
-        <div class="large-12 columns">
-          <a href={% url 'auth:reset_password' %} title="{% trans 'Reset password' %}">{% trans 'Reset password' %}</a>
-        </div>
+    <div class="row">
+      <div class="large-4 large-centered columns text-right">
+        <a href="{% url 'auth:reset_password' %}" title="{% trans 'Reset password' %}">
+          {% trans 'Forgot your password?' %}
+        </a>
+        <input type="submit" class="button-positive" value="{% trans 'Login' %}" />
       </div>
-
-      <div class="row">
-        <div class="large-12 columns submit-button">
-          <input type="submit" class="button" value="{% trans 'Login' %}" />
-        </div>
-      </div>
-    </form>
-
-  </div>
+    </div>
+  </form>
 
 {% endblock content %}

@@ -12,7 +12,7 @@
     <meta name="author" content="Hizard">
 
     <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
-    <link rel="stylesheet" href="{% static "css/app.css" %}" />
+    <link rel="stylesheet" href="{% static "css/new.css" %}" />
 
     {% block extra-head %}
     {% endblock extra-head %}
@@ -22,57 +22,44 @@
   </head>
 
   <body>
+    <nav class="top-bar">
+      <ul class="title-area">
+        <!-- Title Area -->
+        <li class="name">
+          <h1><a href="#">Hizard</a></h1>
+        </li>
 
-    <div class="sticky">
-      <nav class="top-bar">
-        <ul class="title-area">
-          <li class="name">
-            <h1><a href="#">Hizard</a></h1>
-          </li>
-          <li class="toggle-topbar menu-icon"><a href="#"><span>{% trans 'Menu' %}</span></a></li>
+        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>{% trans 'Menu' %}</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <ul class="left">
+          <li><a href={% url 'dashboard:dashboard' %}>{% trans 'Dashboard' %}</a></li>
+          <li><a href={% url 'openings:list_openings' %}>{% trans 'Openings' %}</a></li>
+          <li><a href={% url 'applications:board_applications' %}>{% trans 'Applicants' %}</a></li>
+          <li><a href={% url 'companysettings:settings_home' %}>{% trans 'Settings' %}</a></li>
+          <li><a href={% url 'public_jobs:list_openings' %}>{% trans 'Jobs page' %}</a></li>
+          <li><a href={% url 'auth:logout' %}>  {% trans 'Logout' %}</a></li>
         </ul>
+      </section>
+    </nav>
 
-        <section class="top-bar-section">
-          <ul class="left">
-            {% if user.is_authenticated and user.company %}
-              <li><a href={% url 'dashboard:dashboard' %}>{% trans 'Dashboard' %}</a></li>
-              <li class="divider"></li>
-              <li><a href={% url 'openings:list_openings' %}>{% trans 'Openings' %}</a></li>
-              <li class="divider"></li>
-              <li><a href={% url 'applications:board_applications' %}>{% trans 'Applicants' %}</a></li>
-              <li class="divider"></li>
-              <li><a href={% url 'companysettings:settings_home' %}>{% trans 'Company settings' %}</a></li>
-              <li class="divider"></li>
-              <li><a href="{{ opening_list_url }}">{% trans 'Jobs page' %}</a></li>
-            {% endif %}
-          </ul>
+    <section id="main">
+      <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+              <div data-alert class="alert-{{ message.tags }}">
+                {{ message }}
+                <a href="#" class="close">&times;</a>
+              </div>
+            {% endfor %}
+        {% endif %}
 
-          <ul class="right">
-            {% if user.is_authenticated %}
-              <li><a href='#'>  {% trans 'User settings' %}</a></li>
-              <li><a href={% url 'auth:logout' %}>  {% trans 'Logout' %}</a></li>
-            {% else %}
-              <li><a href={% url 'accounts:register' %}>{% trans 'Register' %}</a></li>
-              <li class="divider"></li>
-              <li><a href={% url 'auth:login' %}>{% trans 'Login' %}</a></li>
-            {% endif %}
-          </ul>
-        </section>
-      </nav>
-    </div>
-
-    <div class="container {% if not full_width %}row{% endif %}">
-      {% if messages %}
-        <div class="alert-box sucess">
-          {% for message in messages %}
-            {{ message }}
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      {% block content %}
-      {% endblock content %}
-    </div>
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </section>
 
     <script src="{% static "js/vendor/jquery.js" %}"></script>
     <script src="{% static "js/foundation/foundation.js" %}"></script>
@@ -80,6 +67,7 @@
     <script src="{% static "js/foundation/foundation.section.js" %}"></script>
     <script src="{% static "js/foundation/foundation.reveal.js" %}"></script>
     <script src="{% static "js/foundation/foundation.tooltips.js" %}"></script>
+    <script src="{% static "js/foundation/foundation.alerts.js" %}"></script>
     <script>
       $(document).foundation();
     </script>

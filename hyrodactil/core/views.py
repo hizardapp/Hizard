@@ -53,5 +53,5 @@ class MessageMixin(object):
 
     def form_valid(self, form):
         message = self.success_message
-        messages.info(self.request, message)
+        messages.success(self.request, message)
         return super(MessageMixin, self).form_valid(form)

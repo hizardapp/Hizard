@@ -1,0 +1,12 @@
+
+@import "../common/colours";
+
+.button-positive {
+  @include button;
+  background-color: $emerland;
+  border: none;
+
+  &:hover {
+    background-color: lighten($emerland, 10);
+  }
+}

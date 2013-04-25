@@ -125,7 +125,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     name and an activation key
     """
     email = models.EmailField(
-        verbose_name=_('email address'),
+        verbose_name=_('Email'),
         max_length=255,
         unique=True,
         db_index=True,

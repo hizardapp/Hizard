@@ -1,0 +1,30 @@
+@import "../common/colours";
+
+
+@media #{$topbar-media-query} {
+  #main {
+    margin-left: 140px;
+    padding: 20px;
+  }
+}
+
+body {
+  background-color: $clouds;
+
+  #main {
+    padding: {
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+    }
+
+    .container {
+      background-color: white;
+      border: 1px solid $silver;
+      padding: 10px;
+      box-shadow: 0 0 3px $silver;
+    }
+  }
+
+}
+
