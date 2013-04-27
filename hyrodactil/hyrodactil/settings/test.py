@@ -7,6 +7,14 @@ TEST_DISCOVER_ROOT = join(SITE_ROOT, "tests")
 # Default is test*.py
 TEST_DISCOVER_PATTERN = "*"
 
+MIDDLEWARE_CLASSES = (
+    # Default Django middleware.
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)
+
 ########## IN-MEMORY TEST DATABASE
 DATABASES = {
     "default": {
