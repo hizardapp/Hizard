@@ -38,7 +38,6 @@ class DepartmentListView(LoginRequiredMixin, RestrictedListView):
 
         else:
             context['form'] = DepartmentForm()
-            context['has_errors'] = False
 
         return context
 

@@ -2,7 +2,7 @@
 
 {% load i18n %}
 {% load companysettings %}
-
+{% load staticfiles %}
 
 {% block content %}
   <h2 class="page-header">{% trans "Departments" %}</h2>
@@ -46,46 +46,12 @@
 {% endblock content %}
 
 {% block extra-js %}
+  <script src="{% static "js/form_dropdown.js" %}"></script>
   <script>
     $(document).ready(function() {
-      var hasErrors;
-      var deptId;
-
-      {% if has_errors %}
-        hasErrors = true;
-      {% endif %}
-
-      {% if error_dept_id %}
-        deptId = parseInt('{{ error_dept_id }}', 10);
-      {% endif %}
-
-      if (hasErrors) {
-        if (!deptId){
-          Foundation.libs.dropdown.toggle($('a.has-dropdown'));
-        } else {
-          var $td = $('td.has-dropdown[data-id='+ deptId +']');
-          fillEditDropdown($td);
-          Foundation.libs.dropdown.toggle($td);
-        }
-      }
-
-      $('td.has-dropdown').click(function() {
-        fillEditDropdown($(this));
-      });
-
-      $('a.has-dropdown').click(function() {
-        $('#create-dept').find('input[type=text]').focus();
-      });
-
-      function fillEditDropdown($elem) {
-        var dept = $elem.find('span').text();
-        var updateURL = $elem.data('url');
-
-        var editDropdown = $('#' + $elem.data('dropdown'));
-        editDropdown.find('form').attr('action', updateURL)
-        editDropdown.find('input[type=text]').val(dept);
-        editDropdown.find('input[type=text]').focus();
-      }
+      var formDropdown = new Hizard.FormDropdown(
+        '{{ has_errors }}', '{{ error_dept_id }}', 'a.has-dropdown', 'td.has-dropdown'
+      );
     });
   </script>
 {% endblock extra-js %}
