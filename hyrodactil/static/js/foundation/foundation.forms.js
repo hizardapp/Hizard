@@ -6,7 +6,7 @@
   Foundation.libs.forms = {
     name : 'forms',
 
-    version : '4.0.0',
+    version : '4.0.4',
 
     settings : {
       disable_class: 'no-custom'
@@ -33,11 +33,11 @@
     },
 
     assemble : function () {
-      $('form.custom input[type="radio"]').not('[data-customforms="disabled"]')
+      $('form.custom input[type="radio"]', $(this.scope)).not('[data-customforms="disabled"]')
         .each(this.append_custom_markup);
-      $('form.custom input[type="checkbox"]').not('[data-customforms="disabled"]')
+      $('form.custom input[type="checkbox"]', $(this.scope)).not('[data-customforms="disabled"]')
         .each(this.append_custom_markup);
-      $('form.custom select').not('[data-customforms="disabled"]')
+      $('form.custom select', $(this.scope)).not('[data-customforms="disabled"]')
         .each(this.append_custom_select);
     },
 
@@ -66,25 +66,17 @@
             if ($associatedElement.attr('type') === 'checkbox') {
               e.preventDefault();
               $customCheckbox = $(this).find('span.custom.checkbox');
-              //the checkbox might be outside after the label
+              //the checkbox might be outside after the label or inside of another element
               if ($customCheckbox.length == 0) {
-                $customCheckbox = $(this).next('span.custom.checkbox');
-              }
-              //the checkbox might be outside before the label
-              if ($customCheckbox.length == 0) {
-                $customCheckbox = $(this).prev('span.custom.checkbox');
+                $customCheckbox = $associatedElement.add(this).siblings('span.custom.checkbox').first();
               }
               self.toggle_checkbox($customCheckbox);
             } else if ($associatedElement.attr('type') === 'radio') {
               e.preventDefault();
               $customRadio = $(this).find('span.custom.radio');
-              //the radio might be outside after the label
+              //the radio might be outside after the label or inside of another element
               if ($customRadio.length == 0) {
-                $customRadio = $(this).next('span.custom.radio');
-              }
-              //the radio might be outside before the label
-              if ($customRadio.length == 0) {
-                $customRadio = $(this).prev('span.custom.radio');
+                $customRadio = $associatedElement.add(this).siblings('span.custom.radio').first();
               }
               self.toggle_radio($customRadio);
             }
@@ -152,6 +144,37 @@
           }
         });
 
+      $(window).on('keydown', function (e) {
+        var focus = document.activeElement,
+            dropdown = $('.custom.dropdown.open');
+
+        if (dropdown.length > 0) {
+          e.preventDefault();
+
+          if (e.which === 13) {
+            dropdown.find('li.selected').trigger('click');
+          }
+
+          if (e.which === 38) {
+            var current = dropdown.find('li.selected'),
+                prev = current.prev(':not(.disabled)');
+
+            if (prev.length > 0) {
+              current.removeClass('selected');
+              prev.addClass('selected');
+            }
+          } else if (e.which === 40) {
+            var current = dropdown.find('li.selected'),
+                next = current.next(':not(.disabled)');
+
+            if (next.length > 0) {
+              current.removeClass('selected');
+              next.addClass('selected');
+            }
+          }
+        }
+      });
+
       this.settings.init = true;
     },
 
@@ -177,6 +200,7 @@
           $selector = $customSelect.find( ".selector" ),
           $options = $this.find( 'option' ),
           $selectedOption = $options.filter( ':selected' ),
+          copyClasses = $this.attr('class') ? $this.attr('class').split(' ') : [],
           maxWidth = 0,
           liHtml = '',
           $listItems,
@@ -190,7 +214,7 @@
                                $this.hasClass( 'large' )   ? 'large'   :
                                $this.hasClass( 'expand' )  ? 'expand'  : '';
 
-        $customSelect = $('<div class="' + ['custom', 'dropdown', customSelectSize ].join( ' ' ) + '"><a href="#" class="selector"></a><ul /></div>');
+        $customSelect = $('<div class="' + ['custom', 'dropdown', customSelectSize ].concat(copyClasses).filter(function(item, idx,arr){ if(item == '') return false; return arr.indexOf(item) == idx; }).join( ' ' ) + '"><a href="#" class="selector"></a><ul /></div>');
         $selector = $customSelect.find(".selector");
         $customList = $customSelect.find("ul");
         liHtml = $options.map(function() { return "<li>" + $( this ).html() + "</li>"; } ).get().join( '' );

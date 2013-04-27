@@ -10,3 +10,13 @@
     background-color: lighten($emerland, 10);
   }
 }
+
+.button-negative {
+  @include button;
+  background-color: $alizaring;
+  border: none;
+
+  &:hover {
+    background-color: lighten($alizaring, 10);
+  }
+}
