@@ -29,7 +29,7 @@ DATABASES = {
 
 ######### FAST HASHING FOR PASSWORDS
 PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
 SOUTH_TESTS_MIGRATE = False
 
