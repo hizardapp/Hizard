@@ -1,7 +1,7 @@
 
 {% load i18n %}
 
-<div id="{{ dropdown_id }}" class="f-dropdown small content" data-dropdown-content>
+<div id="{{ dropdown_id }}" class="f-dropdown content" data-dropdown-content>
 
   <form action="{% url 'companysettings:create_department' %}" method="POST">
     {% csrf_token %}

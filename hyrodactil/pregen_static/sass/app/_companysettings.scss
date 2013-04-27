@@ -40,3 +40,14 @@
     color: black;
   }
 }
+
+table {
+  td.has-dropdown {
+    cursor: pointer;
+
+    &:hover {
+      background-color: $clouds;
+    }
+
+  }
+}

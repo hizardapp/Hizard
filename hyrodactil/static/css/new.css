@@ -2265,50 +2265,6 @@ small.error {
   color: #505050;
 }
 
-/* Tables */
-/* line 78, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.2/scss/foundation/components/_tables.scss */
-table {
-  background: white;
-  margin-bottom: 1.25em;
-  border: solid 1px #dddddd;
-}
-/* line 41, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.2/scss/foundation/components/_tables.scss */
-table thead,
-table tfoot {
-  background: whitesmoke;
-  font-weight: bold;
-}
-/* line 47, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.2/scss/foundation/components/_tables.scss */
-table thead tr th,
-table thead tr td,
-table tfoot tr th,
-table tfoot tr td {
-  padding: 0.5em 0.625em 0.625em;
-  font-size: 0.875em;
-  color: #222222;
-  text-align: left;
-}
-/* line 58, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.2/scss/foundation/components/_tables.scss */
-table tr th,
-table tr td {
-  padding: 0.5625em 0.625em;
-  font-size: 0.875em;
-  color: #222222;
-}
-/* line 66, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.2/scss/foundation/components/_tables.scss */
-table tr.even, table tr.alt, table tr:nth-of-type(even) {
-  background: #f9f9f9;
-}
-/* line 73, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.2/scss/foundation/components/_tables.scss */
-table thead tr th,
-table tfoot tr th,
-table tbody tr td,
-table tr td,
-table tfoot tr td {
-  display: table-cell;
-  line-height: 1.125em;
-}
-
 @media only screen and (max-width: 767px) {
   /* line 122, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.2/scss/foundation/components/_dropdown.scss */
   .f-dropdown {
@@ -4103,6 +4059,7 @@ body #main .container {
   border: 1px solid #bdc3c7;
   padding: 10px;
   box-shadow: 0 0 3px #bdc3c7;
+  padding-bottom: 40px;
 }
 
 /* line 4, ../../pregen_static/sass/app/_alerts.scss */
@@ -4239,6 +4196,46 @@ body #main .container {
 /* line 19, ../../pregen_static/sass/app/_buttons.scss */
 .button-negative:hover {
   background-color: #ed7669;
+}
+
+/* line 8, ../../pregen_static/sass/app/_table.scss */
+table {
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-color: #bdc3c7;
+}
+/* line 16, ../../pregen_static/sass/app/_table.scss */
+table thead tr th {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+/* line 24, ../../pregen_static/sass/app/_table.scss */
+table th,
+table td {
+  border-top: 1px solid #bdc3c7;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+  font-size: 1em;
+}
+/* line 37, ../../pregen_static/sass/app/_table.scss */
+table caption + thead tr:first-child th,
+table caption + thead tr:first-child td,
+table colgroup + thead tr:first-child th,
+table colgroup + thead tr:first-child td,
+table thead:first-child tr:first-child th,
+table thead:first-child tr:first-child td {
+  border-top: 0;
+}
+/* line 45, ../../pregen_static/sass/app/_table.scss */
+table thead tr th,
+table tfoot tr th,
+table tbody tr td,
+table tr td,
+table tfoot tr td {
+  display: table-cell;
+  line-height: 1.125em;
 }
 
 /* line 3, ../../pregen_static/sass/app/_common.scss */
@@ -4416,6 +4413,15 @@ body #main .container {
 /* line 39, ../../pregen_static/sass/app/_companysettings.scss */
 .stages .links {
   color: black;
+}
+
+/* line 45, ../../pregen_static/sass/app/_companysettings.scss */
+table td.has-dropdown {
+  cursor: pointer;
+}
+/* line 48, ../../pregen_static/sass/app/_companysettings.scss */
+table td.has-dropdown:hover {
+  background-color: #ecf0f1;
 }
 
 /* line 3, ../../pregen_static/sass/app/_kanban.scss */
