@@ -49,7 +49,7 @@ def setup_company(company):
             <p>As part of our teaching team you will be able to spend 30% of your time doing research.</p>
 
             <p>We are a small but growing university with a bright future ahead of us, enabling hundred of students to learn about magic.</p>"""),
-            loc_country="United Kingdom",
+            loc_country="GB",
             loc_city="London",
             loc_postcode="M4G 1C",
     ).openingquestion_set.create(question=phone_question,
