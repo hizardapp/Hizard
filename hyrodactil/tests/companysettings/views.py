@@ -20,22 +20,14 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:list_departments')
 
         department = DepartmentFactory.create(company=self.user.company)
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
 
         self.assertContains(page, department.name)
 
     def test_create_department_valid(self):
         url = reverse('companysettings:create_department')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'Engineering'
         response = form.submit().follow()
@@ -49,11 +41,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_create_department_invalid(self):
         url = reverse('companysettings:create_department')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = ''
         response = form.submit()
@@ -65,11 +53,7 @@ class CompanySettingsViewsTests(WebTest):
         dept = DepartmentFactory.create(name='Sales', company=self.user.company)
         url = reverse('companysettings:update_department', args=(dept.id,))
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'Engineering'
 
@@ -85,11 +69,7 @@ class CompanySettingsViewsTests(WebTest):
         dept = DepartmentFactory.create(name='Sales', company=self.user.company)
         url = reverse('companysettings:update_department', args=(dept.id,))
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = ''
 
@@ -104,11 +84,7 @@ class CompanySettingsViewsTests(WebTest):
         dept = DepartmentFactory.create(name='Sales', company=self.user.company)
         url = reverse('companysettings:delete_department', args=(dept.id,))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        ).follow()
+        response = self.app.get(url, user=self.user).follow()
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_departments'))
         self.assertNotContains(response, "Sales")
@@ -116,25 +92,14 @@ class CompanySettingsViewsTests(WebTest):
 
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')
-
         question = SingleLineQuestionFactory.create(company=self.user.company)
-
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
-
+        page = self.app.get(url, user=self.user)
         self.assertContains(page, question.name)
 
     def test_create_question_valid(self):
         url = reverse('companysettings:create_question')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'Cover letter'
         form['type'] = 'textbox'
@@ -150,11 +115,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_create_question_invalid(self):
         url = reverse('companysettings:create_question')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = ''
         form['type'] = 'textbox'
@@ -167,11 +128,7 @@ class CompanySettingsViewsTests(WebTest):
         question = SingleLineQuestionFactory.create(company=self.user.company)
         url = reverse('companysettings:update_question', args=(question.id,))
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'Last Name'
 
@@ -187,11 +144,7 @@ class CompanySettingsViewsTests(WebTest):
         question = SingleLineQuestionFactory.create(company=self.user.company)
         url = reverse('companysettings:update_question', args=(question.id,))
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = ''
 
@@ -206,11 +159,7 @@ class CompanySettingsViewsTests(WebTest):
         )
         url = reverse('companysettings:delete_question', args=(question.id,))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        ).follow()
+        response = self.app.get(url, user=self.user).follow()
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_questions'))
         self.assertNotContains(response, "ninja")
@@ -220,22 +169,14 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:list_stages')
 
         stage = InterviewStageFactory.create(company=self.user.company)
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
 
         self.assertContains(page, stage.name)
 
     def test_create_stage_valid(self):
         url = reverse('companysettings:create_stage')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'Phone interview'
         response = form.submit().follow()
@@ -250,11 +191,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_create_stage_invalid(self):
         url = reverse('companysettings:create_stage')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = ''
         response = form.submit()
@@ -266,11 +203,7 @@ class CompanySettingsViewsTests(WebTest):
         stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
         url = reverse('companysettings:update_stage', args=(stage.id,))
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = 'Coding'
 
@@ -286,11 +219,7 @@ class CompanySettingsViewsTests(WebTest):
         stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
         url = reverse('companysettings:update_stage', args=(stage.id,))
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['name'] = ''
 
@@ -309,11 +238,7 @@ class CompanySettingsViewsTests(WebTest):
         )
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        ).follow()
+        response = self.app.get(url, user=self.user).follow()
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_stages'))
         self.assertNotContains(response, "Interview")
@@ -323,11 +248,7 @@ class CompanySettingsViewsTests(WebTest):
         stage = InterviewStageFactory.create(company=self.user.company)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        ).follow()
+        response = self.app.get(url, user=self.user).follow()
 
         self.assertEqual(
             response.request.path,
@@ -341,11 +262,7 @@ class CompanySettingsViewsTests(WebTest):
         stage2 = InterviewStageFactory.create(company=self.user.company)
         url = reverse('companysettings:reorder_stage', args=(stage2.id, 'up'))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        ).follow()
+        response = self.app.get(url, user=self.user).follow()
 
         self.assertEqual(
             response.request.path,
@@ -358,11 +275,7 @@ class CompanySettingsViewsTests(WebTest):
         stage2 = InterviewStageFactory.create(company=self.user.company)
         url = reverse('companysettings:reorder_stage', args=(stage1.id, 'down'))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        ).follow()
+        response = self.app.get(url, user=self.user).follow()
 
         self.assertEqual(
             response.request.path,
@@ -375,11 +288,7 @@ class CompanySettingsViewsTests(WebTest):
         stage2 = InterviewStageFactory.create(company=self.user.company)
         url = reverse('companysettings:reorder_stage', args=(stage2.id, 'down'))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        ).follow()
+        response = self.app.get(url, user=self.user).follow()
 
         self.assertEqual(
             response.request.path,
@@ -398,22 +307,14 @@ class CompanySettingsViewsTests(WebTest):
             first_name="Bill",
             email="bill@example.com"
         )
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
 
         self.assertContains(page, colleague.first_name)
         self.assertNotContains(page, not_colleague.first_name)
 
     def test_invite_user(self):
         url = reverse('companysettings:invite_user')
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
 
         form = page.form
         form["email"] = "steve@example.com"
@@ -432,10 +333,7 @@ class CompanySettingsViewsTests(WebTest):
             company=self.user.company
         )
         url = reverse('accounts:activate', args=(new_user.activation_key,))
-        response = self.app.get(
-            url,
-            headers=dict(Host="%s.h.com" % new_user.company.subdomain)
-        )
+        response = self.app.get(url)
         form = response.form
         form['password1'] = '1234567'
         form['password2'] = '1234567'
@@ -455,22 +353,12 @@ class CompanySettingsViewsTests(WebTest):
             args=(colleague.pk,)
         )
 
-        self.app.get(
-            toggle_status_url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % colleague.company.subdomain),
-            status=302
-        )
+        self.app.get(toggle_status_url, user=self.user, status=302)
         self.assertTrue(
             CustomUser.objects.filter(pk=colleague.pk, is_active=False).exists()
         )
 
-        self.app.get(
-            toggle_status_url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % colleague.company.subdomain),
-            status=302
-        )
+        self.app.get(toggle_status_url, user=self.user, status=302)
         self.assertTrue(
             CustomUser.objects.filter(pk=colleague.pk, is_active=True).exists()
         )
@@ -492,30 +380,18 @@ class CompanySettingsViewsTests(WebTest):
         )
         url = reverse('companysettings:list_users')
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % colleague.company.subdomain)
-        )
+        response = self.app.get(url, user=self.user)
         self.assertContains(response, toggle_colleague_status_url)
         self.assertNotContains(response, toggle_self_status_url)
 
-        response = self.app.get(
-            url,
-            user=colleague,
-            headers=dict(Host="%s.h.com" % colleague.company.subdomain)
-        )
+        response = self.app.get(url, user=colleague)
         self.assertNotContains(response, toggle_colleague_status_url)
         self.assertNotContains(response, toggle_self_status_url)
 
     def test_modify_company_information_valid(self):
         url = reverse('companysettings:update_information')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['website'] = 'www.google.com'
         form['description'] = 'Cool stuff.'
@@ -530,11 +406,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_modify_company_information_invalid(self):
         url = reverse('companysettings:update_information')
 
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['website'] = 'goog'
         form['description'] = 'Cool stuff.'

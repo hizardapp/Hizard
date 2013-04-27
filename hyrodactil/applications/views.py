@@ -1,22 +1,23 @@
 from collections import defaultdict
 import json
 
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, CreateView, TemplateView, View
+from django.views.generic import ListView
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm, ApplicationForm
 from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
 from .threaded_discussion import group
 from companysettings.models import InterviewStage
-from core.views import RestrictedListView, MessageMixin
+from core.views import MessageMixin
 from openings.models import Opening
 
 
-class ApplicationListView(LoginRequiredMixin, RestrictedListView):
+class ApplicationListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         kwargs['context_opening'] = get_object_or_404(
             Opening, pk=self.kwargs['opening_id']
@@ -28,7 +29,7 @@ class ApplicationListView(LoginRequiredMixin, RestrictedListView):
         return Application.objects.filter(opening=opening)
 
 
-class AllApplicationListView(LoginRequiredMixin, RestrictedListView):
+class AllApplicationListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Application.objects.filter(
             opening__company=self.request.user.company

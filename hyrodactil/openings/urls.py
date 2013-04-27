@@ -5,7 +5,7 @@ import views
 urlpatterns = patterns('',
     url(
         r'^$',
-        views.OpeningRestrictedListView.as_view(),
+        views.OpeningListView.as_view(),
         name='list_openings'
     ),
     url(

@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
 from django.views.generic import CreateView
 
 from braces.views import LoginRequiredMixin
@@ -11,12 +11,7 @@ from .models import Company
 class CompanyCreateView(LoginRequiredMixin, CreateView):
     model = Company
     form_class = CompanyForm
-
-    def get_success_url(self):
-        return utils.build_subdomain_url(
-            self.request,
-            reverse('dashboard:dashboard')
-        )
+    success_url = reverse_lazy('dashboard:dashboard')
 
     def form_valid(self, form):
         company = form.save()

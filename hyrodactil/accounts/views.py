@@ -13,7 +13,6 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, FormView, View, TemplateView
 
-from core.utils import build_subdomain_url
 from .forms import UserCreationForm, MinLengthSetPasswordForm
 from .forms import MinLengthChangePasswordForm, InvitedRegistrationForm
 from .models import CustomUser
@@ -61,9 +60,7 @@ class ActivateView(FormView):
         form.save()
         user = CustomUser.objects.activate_user(self.activation_key)
         if user:
-            return HttpResponseRedirect(build_subdomain_url(self.request,
-                    reverse("dashboard:dashboard"),
-                    user=user))
+            return HttpResponseRedirect(reverse("dashboard:dashboard"))
         else:
             raise Http404
 
@@ -100,7 +97,7 @@ class LoginView(FormView):
         if self.request.user.company is None:
             return reverse('companies:create')
         else:
-            return build_subdomain_url(self.request, reverse("dashboard:dashboard"))
+            return reverse("dashboard:dashboard")
 
 
 class LogoutView(LoginRequiredMixin, View):

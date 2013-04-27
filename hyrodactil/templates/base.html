@@ -43,7 +43,7 @@
               <li class="divider"></li>
               <li><a href={% url 'companysettings:settings_home' %}>{% trans 'Company settings' %}</a></li>
               <li class="divider"></li>
-              <li><a href={% url 'public_jobs:list_openings' %}>{% trans 'Jobs page' %}</a></li>
+              <li><a href="{{ opening_list_url }}">{% trans 'Jobs page' %}</a></li>
             {% endif %}
           </ul>
 

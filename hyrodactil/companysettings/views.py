@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, TemplateView, UpdateView, View
+from django.views.generic import ListView
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
@@ -12,15 +13,14 @@ from .forms import CustomUserInviteForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
 from accounts.models import CustomUser
-from core.views import MessageMixin, RestrictedListView, RestrictedUpdateView
-from core.views import RestrictedDeleteView
+from core.views import MessageMixin, QuickDeleteView
 
 
 class SettingsHomeView(LoginRequiredMixin, TemplateView):
     template_name = 'companysettings/settings.html'
 
 
-class DepartmentRestrictedListView(LoginRequiredMixin, RestrictedListView):
+class DepartmentListView(LoginRequiredMixin, ListView):
     model = Department
 
 
@@ -38,7 +38,7 @@ class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(DepartmentCreateView, self).form_valid(form)
 
 
-class DepartmentUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
+class DepartmentUpdateView(LoginRequiredMixin, MessageMixin, UpdateView):
     model = Department
     form_class = DepartmentForm
     action = 'updated'
@@ -46,13 +46,13 @@ class DepartmentUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateVie
     success_message = _('Department updated.')
 
 
-class DepartmentDeleteView(LoginRequiredMixin, RestrictedDeleteView):
+class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):
     model = Department
     success_url = reverse_lazy('companysettings:list_departments')
     success_message = _('Department deleted.')
 
 
-class QuestionRestrictedListView(LoginRequiredMixin, RestrictedListView):
+class QuestionListView(LoginRequiredMixin, ListView):
     model = Question
 
 
@@ -70,7 +70,7 @@ class QuestionCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(QuestionCreateView, self).form_valid(form)
 
 
-class QuestionUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
+class QuestionUpdateView(LoginRequiredMixin, MessageMixin, UpdateView):
     model = Question
     form_class = QuestionForm
     action = 'updated'
@@ -78,13 +78,13 @@ class QuestionUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView)
     success_message = _('Question updated.')
 
 
-class QuestionDeleteView(LoginRequiredMixin, RestrictedDeleteView):
+class QuestionDeleteView(LoginRequiredMixin, QuickDeleteView):
     model = Question
     success_url = reverse_lazy('companysettings:list_questions')
     success_message = _('Question deleted.')
 
 
-class InterviewStageRestrictedListView(LoginRequiredMixin, RestrictedListView):
+class InterviewStageListView(LoginRequiredMixin, ListView):
     model = InterviewStage
 
 
@@ -107,7 +107,7 @@ class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(InterviewStageCreateView, self).form_valid(form)
 
 
-class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
+class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin, UpdateView):
     model = InterviewStage
     form_class = InterviewStageForm
     action = 'updated'
@@ -120,14 +120,15 @@ class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdat
         return kwargs
 
 
-class InterviewStageDeleteView(LoginRequiredMixin, RestrictedDeleteView):
+class InterviewStageDeleteView(LoginRequiredMixin, QuickDeleteView):
     model = InterviewStage
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage deleted.')
 
     def get(self, *args, **kwargs):
         self.object = self.get_object()
-        count_stages = InterviewStage.objects.filter(company=self.request.user.company).count()
+        count_stages = InterviewStage.objects.filter(
+                company=self.request.user.company).count()
         if count_stages > 1:
             return super(InterviewStageDeleteView, self).get(*args, **kwargs)
         else:
@@ -154,7 +155,7 @@ class InterviewStageReorderView(LoginRequiredMixin, MessageMixin, View):
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
-class UsersListView(LoginRequiredMixin, RestrictedListView):
+class UsersListView(LoginRequiredMixin, ListView):
     template_name = "companysettings/customuser_list.html"
     model = CustomUser
 

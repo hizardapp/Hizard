@@ -26,16 +26,9 @@ class ApplicationViewsTests(WebTest):
     def test_listing_applicants(self):
         application = ApplicationFactory.create(opening=self.opening)
 
-        url = reverse(
-            'applications:list_applications',
-            args=(self.opening.id,)
-        )
+        url = reverse('applications:list_applications', args=(self.opening.id,))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
@@ -46,11 +39,7 @@ class ApplicationViewsTests(WebTest):
 
         url = reverse('applications:list_all_applications')
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
@@ -63,11 +52,7 @@ class ApplicationViewsTests(WebTest):
         )
 
         url = reverse('applications:application_detail', args=(application.id,))
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.opening.company.subdomain)
-        )
+        response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
@@ -79,12 +64,7 @@ class ApplicationViewsTests(WebTest):
 
         url = reverse('applications:application_detail', args=(application.id,))
 
-        self.app.get(
-            url,
-            user=user,
-            status=404,
-            headers=dict(Host="%s.h.com" % self.opening.company.subdomain)
-        )
+        self.app.get(url, user=user, status=404)
 
     def test_applicant_details_update_stage(self):
         application = ApplicationFactory.create(opening=self.opening)
@@ -93,16 +73,9 @@ class ApplicationViewsTests(WebTest):
         url = reverse(
             'applications:application_detail', args=(application.id,)
         )
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        response = self.app.get(url, user=self.user)
         self.assertEqual(response.status_code, 200)
-        response = self.app.get(
-            url,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        response = self.app.get(url)
         form = response.forms['transition-form']
         form['stage'] = '%s' % phoned.pk
         form['note'] = 'Yep, looks good'
@@ -123,11 +96,7 @@ class ApplicationViewsTests(WebTest):
         )
         url = reverse('applications:application_detail', args=(application.id,))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.opening.company.subdomain)
-        )
+        response = self.app.get(url, user=self.user)
 
         form = response.forms['new-message-form']
         form['body'] = 'This guy is good'
@@ -151,11 +120,7 @@ class ApplicationViewsTests(WebTest):
         attacker = UserFactory.create(email='red@red.com')
         url = reverse('applications:application_detail', args=(application.id,))
 
-        response = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.opening.company.subdomain)
-        )
+        response = self.app.get(url, user=self.user)
 
         form = response.forms['new-message-form']
         form['body'] = 'This guy is good'
@@ -166,11 +131,7 @@ class ApplicationViewsTests(WebTest):
     def test_create_manual_application(self):
         InterviewStageFactory(company=self.user.company)
         url = reverse('applications:manual_application', args=(self.opening.id,))
-        page = self.app.get(
-            url,
-            user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['first_name'] = 'Bilbo'
         form['last_name'] = 'Sacquet'
@@ -212,7 +173,6 @@ class ApplicationAjaxViewsTests(WebTest):
             url,
             {'data': json.dumps(data)},
             user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain),
             extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         )
 
@@ -242,7 +202,6 @@ class ApplicationAjaxViewsTests(WebTest):
             url,
             {'data': json.dumps(data)},
             user=self.user,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain),
             extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         )
 

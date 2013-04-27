@@ -1,78 +1,26 @@
 from django.contrib import messages
-from django.conf import settings
-from django.http import Http404
-from django.views.generic import ListView, UpdateView, DetailView
 from django.views.generic.edit import BaseDeleteView
 
-from braces.views import AccessMixin, redirect_to_login, PermissionDenied
 
-from core.utils import build_host_part
-
-
-class DomainLoginRequiredMixin(AccessMixin):
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            if self.raise_exception:
-                raise PermissionDenied # return a forbidden response
-            else:
-                response = redirect_to_login(request.get_full_path(),
-                    self.get_login_url(), self.get_redirect_field_name())
-
-                response["Location"] = "%s%s" % (
-                        build_host_part(self.request, settings.SITE_URL),
-                        response["Location"])
-                return response
-
-        return super(DomainLoginRequiredMixin, self).dispatch(
-                request, *args, **kwargs)
-
-
-class RestrictedListView(ListView):
-    """
-    Filter on object by the user's company
-    """
-    def get_queryset(self):
-        company = self.request.user.company
-
-        if company and company.subdomain == self.request.subdomain:
-            return self.model.objects.filter(company=company)
+class SubdomainMixin(object):
+    def dispatch(self, *args, **kwargs):
+        domain_parts = self.request.get_host().split('.')
+        if len(domain_parts) > 2:
+            self.request.subdomain = domain_parts[0]
         else:
-            raise Http404
+            self.request.subdomain = None
 
-
-class RestrictedQuerysetMixin(object):
-    """
-    Checks if the user is allowed to do actions on this object
-    """
-    def get_queryset(self):
-        query_set = super(RestrictedQuerysetMixin, self).get_queryset()
-        company = self.request.user.company
-        query_set = query_set.filter(company=company)
-
-        if self.request.subdomain != company.subdomain:
-            raise Http404
-        else:
-            return query_set
-
-
-class RestrictedUpdateView(RestrictedQuerysetMixin, UpdateView):
-    pass
-
-
-class RestrictedDetailView(RestrictedQuerysetMixin, DetailView):
-    pass
+        return super(SubdomainMixin, self).dispatch(*args, **kwargs)
 
 
 class QuickDeleteView(BaseDeleteView):
     def get(self, *args, **kwargs):
         return self.delete(*args, **kwargs)
 
-
-class RestrictedDeleteView(RestrictedQuerysetMixin, QuickDeleteView):
     def delete(self, request, *args, **kwargs):
         message = self.success_message
         messages.info(self.request, message)
-        return super(RestrictedDeleteView, self).delete(request, *args, **kwargs)
+        return super(QuickDeleteView, self).delete(request, *args, **kwargs)
 
 
 class MessageMixin(object):

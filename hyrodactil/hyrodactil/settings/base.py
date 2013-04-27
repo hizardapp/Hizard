@@ -119,6 +119,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
+    'core.context_processors.opening_lists',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
@@ -145,7 +146,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'core.middleware.SubdomainMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
@@ -187,7 +187,6 @@ LOCAL_APPS = (
     'accounts',
     'openings',
     'applications',
-    'public_jobs',
     'public',
     'core' # Contains views/methods used in other apps, not an app itself
 )

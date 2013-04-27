@@ -5,7 +5,7 @@ import views
 urlpatterns = patterns('',
     url(
         r'^departments/$',
-        views.DepartmentRestrictedListView.as_view(),
+        views.DepartmentListView.as_view(),
         name='list_departments'
     ),
     url(
@@ -26,7 +26,7 @@ urlpatterns = patterns('',
 
     url(
         r'^questions/$',
-        views.QuestionRestrictedListView.as_view(),
+        views.QuestionListView.as_view(),
         name='list_questions'
     ),
     url(
@@ -47,7 +47,7 @@ urlpatterns = patterns('',
 
     url(
         r'^stages/$',
-        views.InterviewStageRestrictedListView.as_view(),
+        views.InterviewStageListView.as_view(),
         name='list_stages'
     ),
     url(

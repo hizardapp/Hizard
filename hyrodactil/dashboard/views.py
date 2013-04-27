@@ -1,11 +1,11 @@
 from django.views.generic.base import TemplateView
 
-from core.views import DomainLoginRequiredMixin
+from braces.views import LoginRequiredMixin
 
 from openings.models import Opening
 
 
-class DashboardView(DomainLoginRequiredMixin, TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/dashboard.html'
 
     def get_context_data(self, **kwargs):
