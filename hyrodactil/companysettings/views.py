@@ -30,6 +30,12 @@ class DepartmentListView(LoginRequiredMixin, RestrictedListView):
             context['form'] = form_with_errors
             context['has_errors'] = True
             del self.request.session['dept_form']
+            dept_id = self.request.session.get('dept_id', None)
+
+            if dept_id:
+                context['error_dept_id'] = dept_id
+                del self.request.session['dept_id']
+
         else:
             context['form'] = DepartmentForm()
             context['has_errors'] = False
@@ -40,7 +46,6 @@ class DepartmentListView(LoginRequiredMixin, RestrictedListView):
 class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = Department
     form_class = DepartmentForm
-    action = 'created'
     success_url = reverse_lazy('companysettings:list_departments')
     success_message = _('Department created.')
 
@@ -59,9 +64,13 @@ class DepartmentUpdateView(LoginRequiredMixin, MessageMixin,
         RestrictedUpdateView):
     model = Department
     form_class = DepartmentForm
-    action = 'updated'
     success_url = reverse_lazy('companysettings:list_departments')
     success_message = _('Department updated.')
+
+    def form_invalid(self, form):
+        self.request.session['dept_form'] = form
+        self.request.session['dept_id'] = self.object.id
+        return redirect(self.success_url)
 
 
 class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):

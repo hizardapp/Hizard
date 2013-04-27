@@ -57,7 +57,7 @@
       });
 
       $(window).on('resize.fndtn.dropdown', self.throttle(function () {
-        self.resize.call(self);
+        //self.resize.call(self);
       }, 50)).trigger('resize');
 
       this.settings.init = true;

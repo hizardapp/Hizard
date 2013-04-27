@@ -1,0 +1,30 @@
+
+{% load i18n %}
+
+<div id="{{ dropdown_id }}" class="f-dropdown small content" data-dropdown-content>
+
+  <form action="{% url 'companysettings:create_department' %}" method="POST">
+    {% csrf_token %}
+
+    <div class="row {% if form.name.errors and error_dept_id == dept_id %} error {% endif %}">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+
+      {% if form.name.errors and error_dept_id == dept_id  %}
+        <small class="error">
+          {% for error in form.name.errors %}
+            {{ error }}
+          {% endfor %}
+        </small>
+      {% endif %}
+    </div>
+
+    <br>
+
+    <div class="right">
+      <input type="submit" class=" button-positive" value="{% trans 'Save' %}" />
+    </div>
+
+  </form>
+
+</div>

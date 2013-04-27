@@ -1,39 +1,15 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load companysettings %}
+
 
 {% block content %}
   <h2 class="page-header">{% trans "Departments" %}</h2>
 
   <a href="#" class="button-positive has-dropdown" data-dropdown="create-dept">{% trans "Create a department" %}</a>
 
-  <div id="create-dept" class="f-dropdown small content" data-dropdown-content>
-
-    <form action="{% url 'companysettings:create_department' %}" method="POST">
-      {% csrf_token %}
-
-      <div class="row {% if form.name.errors %} error {% endif %}">
-        {{ form.name.label_tag }}
-        {{ form.name }}
-
-        {% if form.name.errors %}
-          <small class="error">
-            {% for error in form.name.errors %}
-              {{ error }}
-            {% endfor %}
-          </small>
-        {% endif %}
-      </div>
-
-      <br>
-
-      <div class="right">
-        <input type="submit" class=" button-positive" value="{% trans 'Save' %}" />
-      </div>
-
-    </form>
-
-  </div>
+  {% include 'companysettings/_department_form.html' with dropdown_id='create-dept' dept_id=None %}
 
   {% if department_list %}
     <div class="row">
@@ -48,13 +24,17 @@
       <tbody>
         {% for department in department_list %}
           <tr>
-            <td>
-              {{ department.name }}
-            </td>
-            <td>
-              <a href="{% url 'companysettings:update_department' department.id %}" class="button-positive">{% trans "Edit" %}</a>
-              <a href="{% url 'companysettings:delete_department' department.id %}" class="button-negative">{% trans "Delete" %}</a>
-            </td>
+            {% with dropdown_id='edit-dept-'|concatenate:department.id %}
+              {% include 'companysettings/_department_form.html' with dropdown_id=dropdown_id dept_id=department.id %}
+
+              <td class="has-dropdown" data-dropdown="{{ dropdown_id  }}" data-id="{{ department.id }}" data-url="{% url 'companysettings:update_department' department.id %}">
+                <span>{{ department.name }}</span>
+                <i class="icon-pencil icon-large has-dropdown"></i>
+              </td>
+              <td>
+                <a href="{% url 'companysettings:delete_department' department.id %}" class="button-negative">{% trans "Delete" %}</a>
+              </td>
+          {% endwith %}
           </tr>
         {% endfor %}
       </tbody>
@@ -67,12 +47,45 @@
 
 {% block extra-js %}
   <script>
-  {% if has_errors %}
-    var hasErrors = true;
-  {% endif %}
+  $(document).ready(function() {
+    var hasErrors;
+    var deptId;
 
-  if (hasErrors) {
-    Foundation.libs.dropdown.toggle($('.has-dropdown'));
-  }
+    {% if has_errors %}
+      hasErrors = true;
+    {% endif %}
+
+    {% if error_dept_id %}
+      deptId = parseInt('{{ error_dept_id }}', 10);
+    {% endif %}
+
+    if (hasErrors) {
+      if (!deptId){
+        Foundation.libs.dropdown.toggle($('a.has-dropdown'));
+      } else {
+        var $td = $('td.has-dropdown[data-id='+ deptId +']');
+        fillEditDropdown($td);
+        Foundation.libs.dropdown.toggle($td);
+      }
+    }
+
+    $('td.has-dropdown').click(function() {
+      fillEditDropdown($(this));
+    });
+
+    $('a.has-dropdown').click(function() {
+      $('#create-dept').find('input[type=text]').focus();
+    });
+
+    function fillEditDropdown($elem) {
+      var dept = $elem.find('span').text();
+      var updateURL = $elem.data('url');
+
+      var editDropdown = $('#' + $elem.data('dropdown'));
+      editDropdown.find('form').attr('action', updateURL)
+      editDropdown.find('input[type=text]').val(dept);
+      editDropdown.find('input[type=text]').focus();
+    }
+  });
   </script>
 {% endblock extra-js %}
