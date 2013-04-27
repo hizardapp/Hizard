@@ -25,7 +25,15 @@ class DepartmentListView(LoginRequiredMixin, RestrictedListView):
 
     def get_context_data(self, **kwargs):
         context = super(DepartmentRestrictedListView, self).get_context_data(**kwargs)
-        context['form'] = DepartmentForm()
+        form_with_errors = self.request.session.get('dept_form', None)
+        if form_with_errors:
+            context['form'] = form_with_errors
+            context['has_errors'] = True
+            del self.request.session['dept_form']
+        else:
+            context['form'] = DepartmentForm()
+            context['has_errors'] = False
+
         return context
 
 
@@ -41,6 +49,10 @@ class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         department.company = Company.objects.get(id=self.request.user.company.id)
         department.save()
         return super(DepartmentCreateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        self.request.session['dept_form'] = form
+        return redirect(self.success_url)
 
 
 class DepartmentUpdateView(LoginRequiredMixin, MessageMixin,

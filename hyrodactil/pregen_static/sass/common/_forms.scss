@@ -2,10 +2,17 @@
 @import "variables";
 @import "compass/css3/border-radius";
 
-input {
-  @include border-radius($radius-form);
-}
+form {
+  input {
+    @include border-radius($radius-form);
+  }
 
-label {
-  font-weight: bold;
+  label {
+    font-weight: bold;
+  }
+
+  .error {
+    @include border-bottom-radius($radius-form);
+    padding: 8px;
+  }
 }

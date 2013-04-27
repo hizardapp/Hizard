@@ -4038,18 +4038,27 @@ ul.icons li [class*=" icon-"] {
   content: "\f115";
 }
 
-/* line 5, ../../pregen_static/sass/common/_forms.scss */
-input {
+/* line 6, ../../pregen_static/sass/common/_forms.scss */
+form input {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-
-/* line 9, ../../pregen_static/sass/common/_forms.scss */
-label {
+/* line 10, ../../pregen_static/sass/common/_forms.scss */
+form label {
   font-weight: bold;
+}
+/* line 14, ../../pregen_static/sass/common/_forms.scss */
+form .error {
+  -moz-border-radius-bottomleft: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 8px;
 }
 
 @media only screen and (min-width: 58.75em) {
