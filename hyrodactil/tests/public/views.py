@@ -10,7 +10,8 @@ from ..factories._companysettings import SingleLineQuestionFactory, InterviewSta
 from ..factories._openings import OpeningWithQuestionsFactory
 
 from applications.models import Application, ApplicationAnswer
-from companysettings.models import Question, InterviewStage
+from companysettings.models import Question
+
 
 
 class PublicViewsTests(WebTest):
