@@ -10,7 +10,7 @@ from ..factories._companysettings import SingleLineQuestionFactory, InterviewSta
 from ..factories._openings import OpeningWithQuestionsFactory
 
 from applications.models import Application, ApplicationAnswer
-from companysettings.models import Question
+from companysettings.models import Question, InterviewStage
 
 
 class PublicViewsTests(WebTest):
@@ -57,7 +57,10 @@ class ApplicationViewsTests(WebTest):
 
     def test_valid_post_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))
-        stage = InterviewStageFactory(company=self.opening.company)
+        stage1 = InterviewStageFactory(company=self.opening.company,
+            position=0, name="Received")
+        InterviewStageFactory(company=self.opening.company,
+            position=1, name="Accepted")
         form = self.app.get(url).form
 
         form['first_name'] = 'Bilbon'
@@ -80,7 +83,7 @@ class ApplicationViewsTests(WebTest):
 
         self.assertEqual(applicant.first_name, 'Bilbon')
         self.assertEqual(applicant.resume.url, '/media/resumes/bilbon_cv.pdf')
-        self.assertEqual(application.current_stage(), stage)
+        self.assertEqual(application.current_stage(), stage1)
 
         # 2 required, 2 not required, we still record the 4 though
         self.assertEqual(ApplicationAnswer.objects.count(), 4)

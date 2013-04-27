@@ -116,7 +116,7 @@ class ApplicationForm(forms.ModelForm):
 
         stage = InterviewStage.objects.filter(
             company=self.opening.company
-        ).order_by('-position')[0]
+        ).order_by('position')[0]
 
         if stage:
             ApplicationStageTransition.objects.create(
