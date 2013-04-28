@@ -25,10 +25,11 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(page, department.name)
 
     def test_create_department_valid(self):
-        url = reverse('companysettings:create_department')
+        url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+        form.action = reverse('companysettings:create_department')
         form['name'] = 'Engineering'
         response = form.submit().follow()
 
@@ -39,22 +40,24 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(department_created.name, 'Engineering')
 
     def test_create_department_invalid(self):
-        url = reverse('companysettings:create_department')
+        url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+        form.action = reverse('companysettings:create_department')
         form['name'] = ''
-        response = form.submit()
+        response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_update_department_valid(self):
         dept = DepartmentFactory.create(name='Sales', company=self.user.company)
-        url = reverse('companysettings:update_department', args=(dept.id,))
+        url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+        form.action = reverse('companysettings:update_department', args=(dept.id,))
         form['name'] = 'Engineering'
 
         self.assertContains(page, dept.name)
@@ -67,15 +70,17 @@ class CompanySettingsViewsTests(WebTest):
 
     def test_update_department_invalid(self):
         dept = DepartmentFactory.create(name='Sales', company=self.user.company)
-        url = reverse('companysettings:update_department', args=(dept.id,))
+        url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+
+        form.action = reverse('companysettings:update_department', args=(dept.id,))
         form['name'] = ''
 
         self.assertContains(page, dept.name)
 
-        response = form.submit()
+        response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
@@ -97,10 +102,11 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(page, question.name)
 
     def test_create_question_valid(self):
-        url = reverse('companysettings:create_question')
+        url = reverse('companysettings:list_questions')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+        form.action = reverse('companysettings:create_question')
         form['name'] = 'Cover letter'
         form['type'] = 'textbox'
 
@@ -113,23 +119,25 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(question_created.name, 'Cover letter')
 
     def test_create_question_invalid(self):
-        url = reverse('companysettings:create_question')
+        url = reverse('companysettings:list_questions')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+        form.action = reverse('companysettings:create_question')
         form['name'] = ''
         form['type'] = 'textbox'
-        response = form.submit()
+        response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_update_question_valid(self):
         question = SingleLineQuestionFactory.create(company=self.user.company)
-        url = reverse('companysettings:update_question', args=(question.id,))
+        url = reverse('companysettings:list_questions')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+        form.action = reverse('companysettings:update_question', args=(question.id,))
         form['name'] = 'Last Name'
 
         self.assertContains(page, question.name)
@@ -142,13 +150,14 @@ class CompanySettingsViewsTests(WebTest):
 
     def test_update_question_invalid(self):
         question = SingleLineQuestionFactory.create(company=self.user.company)
-        url = reverse('companysettings:update_question', args=(question.id,))
+        url = reverse('companysettings:list_questions')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
+        form.action = reverse('companysettings:update_question', args=(question.id,))
         form['name'] = ''
 
-        response = form.submit()
+        response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
@@ -313,10 +322,11 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(page, not_colleague.first_name)
 
     def test_invite_user(self):
-        url = reverse('companysettings:invite_user')
+        url = reverse('companysettings:list_users')
         page = self.app.get(url, user=self.user)
 
         form = page.form
+        form.action = reverse('companysettings:invite_user')
         form["email"] = "steve@example.com"
         page = form.submit().follow()
         self.assertTrue(

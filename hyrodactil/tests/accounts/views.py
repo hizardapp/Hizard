@@ -102,7 +102,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create(company=None)
         page = self.app.get(reverse('auth:login'))
 
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['username'] = user.email
         form['password'] = 'bob'
 
@@ -118,7 +118,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create()
         page = self.app.get(reverse('auth:login'))
 
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['username'] = user.email
         form['password'] = 'bob'
 
@@ -141,7 +141,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create(is_active=False)
         page = self.app.get(reverse('auth:login'))
 
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['username'] = user.email
         form['password'] = 'bob'
 
