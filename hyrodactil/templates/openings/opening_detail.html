@@ -3,5 +3,40 @@
 {% load i18n %}
 
 {% block content %}
-  {{ opening.title }}
+<div class="row">
+  <span style="display: block">
+  <h2 style="display: inline">{{ opening.title }}</h2>
+  <a href="{% url 'openings:update_opening' opening.pk %}" style="display: inline">{% trans 'Edit' %}</a>
+  </span>
+
+  <div class="large-3 columns">
+    <dl>
+      <dt>{% trans 'Department' %}</dt>
+      <dd>{{ opening.department }}</dd>
+
+      <dt>{% trans 'Do not display publicly' %}</dt>
+      <dd>{{ opening.is_private }}</dd>
+
+      <dt>{% trans 'Closing date' %}</dt>
+      <dd>{{ opening.closing_date }}</dd>
+
+      <dt>{% trans 'Country' %}</dt>
+      <dd>{{ opening.loc_country.name }}</dd>
+
+      <dt>{% trans 'City' %}</dt>
+      <dd>{{ opening.loc_city }}</dd>
+
+      <dt>{% trans 'Post-code' %}</dt>
+      <dd>{{ opening.loc_postcode }}</dd>
+    </dl>
+  </div>
+
+  <div class="large-9 columns">
+    <dl>
+      <dt>{% trans 'Description' %}</dt>
+      <dt>{{ opening.description|safe }}</dt>
+    </dl>
+  </div>
+</div>
+
 {% endblock %}
