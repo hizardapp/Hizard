@@ -1,45 +1,45 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load companysettings %}
+{% load staticfiles %}
 
 {% block content %}
-  <h2>{% trans "Questions" %}</h2>
+  <h2 class="page-header">{% trans "Questions" %}</h2>
+
+  <a href="#" class="button-positive has-dropdown" data-dropdown="create-question">{% trans "Create a question" %}</a>
 
   {% if question_list %}
-    <table class="large-12 columns">
-      <thead>
+    <div class="row">
+      <table class="large-6 large-centered columns">
+        <thead>
         <tr>
           <th>{% trans "Name" %}</th>
-          <th>{% trans "Type" %}</th>
-          <th>{% trans "Edit" %}</th>
-          <th>{% trans "Delete" %}</th>
+          <th></th>
         </tr>
-      </thead>
+        </thead>
 
-      <tbody>
+        <tbody>
         {% for question in question_list %}
-          <tr>
-            <td>
-              {{ question.name }}
-            </td>
-            <td>
-              {{ question.type }}
-            </td>
-            <td>
-              <a href="{% url 'companysettings:update_question' question.id %}" class="button">{% trans "Edit" %}</a>
-            </td>
-            <td>
-              <a href="{% url 'companysettings:delete_question' question.id %}" class="alert button">{% trans "Delete" %}</a>
-            </td>
+          <tr class="row">
+            {% with dropdown_id='edit-dept-'|concatenate:question.id %}
+              {% include 'companysettings/_dropdown_form.html' with dropdown_id=dropdown_id dept_id=question.id %}
+
+              <td class="has-dropdown large-9 columns" data-dropdown="{{ dropdown_id  }}" data-id="{{ question.id }}" data-url="{% url 'companysettings:update_question' question.id %}">
+                <i class="icon-pencil icon-large"></i>
+                <span>{{ question.name }}</span>
+              </td>
+              <td class="large-3 columns text-right">
+                <a href="{% url 'companysettings:delete_question' question.id %}">{% trans "Delete" %}</a>
+              </td>
+            {% endwith %}
           </tr>
         {% endfor %}
-      </tbody>
+        </tbody>
 
-    </table>
-  {% else %}
-    <p>{% trans "No questions yet" %}</p>
+      </table>
+    </div>
+
   {% endif %}
-
-  <a href="{% url 'companysettings:create_question' %}" class="button">{% trans "Create a question" %}</a>
 
 {% endblock content %}

@@ -7,9 +7,11 @@
 {% block content %}
   <h2 class="page-header">{% trans "Departments" %}</h2>
 
-  <a href="#" class="button-positive has-dropdown" data-dropdown="create-dept">{% trans "Create a department" %}</a>
+  <a href="#" class="button-positive has-dropdown" data-dropdown="create-dept" data-url="{% url 'companysettings:create_department' %}">
+    {% trans "Create a department" %}
+  </a>
 
-  {% include 'companysettings/_department_form.html' with dropdown_id='create-dept' dept_id=None %}
+  {% include 'companysettings/_dropdown_form.html' with dropdown_id='create-dept' dept_id=None %}
 
   {% if department_list %}
     <div class="row">
@@ -25,7 +27,7 @@
           {% for department in department_list %}
             <tr class="row">
               {% with dropdown_id='edit-dept-'|concatenate:department.id %}
-                {% include 'companysettings/_department_form.html' with dropdown_id=dropdown_id dept_id=department.id %}
+                {% include 'companysettings/_dropdown_form.html' with dropdown_id=dropdown_id object_id=department.id %}
 
                 <td class="has-dropdown large-9 columns" data-dropdown="{{ dropdown_id  }}" data-id="{{ department.id }}" data-url="{% url 'companysettings:update_department' department.id %}">
                   <i class="icon-pencil icon-large"></i>
@@ -50,7 +52,7 @@
   <script>
     $(document).ready(function() {
       var formDropdown = new Hizard.FormDropdown(
-        '{{ has_errors }}', '{{ error_dept_id }}', 'a.has-dropdown', 'td.has-dropdown'
+        '{{ has_errors }}', '{{ error_object_id }}', 'a.has-dropdown', 'td.has-dropdown'
       );
     });
   </script>

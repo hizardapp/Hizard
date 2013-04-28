@@ -4235,7 +4235,7 @@ table tbody tr td,
 table tr td,
 table tfoot tr td {
   display: table-cell;
-  line-height: 1.125em;
+  line-height: 1.5625em;
 }
 
 /* line 3, ../../pregen_static/sass/app/_common.scss */

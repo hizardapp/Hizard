@@ -27,15 +27,26 @@
     }
 
     FormDropdown.prototype._setupEvents = function() {
-      var _fillEditDropdown;
+      var _fillCreateDropdown, _fillEditDropdown;
 
       _fillEditDropdown = this._fillEditDropdown;
+      _fillCreateDropdown = this._fillCreateDropdown;
       $(this.updateSelector).click(function() {
         return _fillEditDropdown($(this));
       });
       return $(this.createSelector).click(function() {
-        return $("#" + $(this).data("dropdown")).find("input[type=text]").focus();
+        return _fillCreateDropdown($(this));
       });
+    };
+
+    FormDropdown.prototype._fillCreateDropdown = function($elem) {
+      var createDropdown, createURL;
+
+      createURL = $elem.data("url");
+      createDropdown = $("#" + $elem.data("dropdown"));
+      createDropdown.find("form").attr("action", createURL);
+      console.log(createDropdown);
+      return createDropdown.find("input[type=text]").focus();
     };
 
     FormDropdown.prototype._fillEditDropdown = function($elem) {

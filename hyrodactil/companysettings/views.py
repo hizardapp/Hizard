@@ -33,7 +33,7 @@ class DepartmentListView(LoginRequiredMixin, RestrictedListView):
             dept_id = self.request.session.get('dept_id', None)
 
             if dept_id:
-                context['error_dept_id'] = dept_id
+                context['error_object_id'] = dept_id
                 del self.request.session['dept_id']
 
         else:

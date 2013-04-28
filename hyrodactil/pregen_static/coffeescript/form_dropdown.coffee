@@ -22,11 +22,20 @@ class FormDropdown
   # If creating a record, autofocus the first field
   _setupEvents: () ->
     _fillEditDropdown = @_fillEditDropdown
+    _fillCreateDropdown = @_fillCreateDropdown
+
     $(@updateSelector).click ->
       _fillEditDropdown $(this)
 
     $(@createSelector).click ->
-      $("#" + $(this).data("dropdown")).find("input[type=text]").focus()
+      _fillCreateDropdown $(this)
+
+  _fillCreateDropdown: ($elem) ->
+    createURL = $elem.data("url")
+    createDropdown = $("#" + $elem.data("dropdown"))
+    createDropdown.find("form").attr "action", createURL
+    console.log createDropdown
+    createDropdown.find("input[type=text]").focus()
 
   # Replace the action and field values of the dropdown when updating and
   # put autofocus on the first field
