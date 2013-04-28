@@ -90,6 +90,11 @@ class JobsViewsTests(WebTest):
         self.assertContains(response, 'Software Developer')
         self.assertNotContains(response, 'DevOps')
 
+    def test_cant_edit_other_company_opening(self):
+        opening = OpeningFactory(title='DevOps', company=CompanyFactory())
+        url = reverse('openings:update_opening', args=(opening.id,))
+        self.app.get(url, user=self.user, status=404)
+
     def test_opening_delete(self):
         opening = OpeningFactory(title='DevOps', company=self.user.company)
         url = reverse('openings:delete_opening', args=(opening.id,))

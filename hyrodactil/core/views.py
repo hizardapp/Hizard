@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.views.generic.edit import BaseDeleteView
+from django.views.generic import UpdateView, DetailView, ListView
 
 
 class SubdomainMixin(object):
@@ -21,6 +22,27 @@ class QuickDeleteView(BaseDeleteView):
         message = self.success_message
         messages.info(self.request, message)
         return super(QuickDeleteView, self).delete(request, *args, **kwargs)
+
+
+class RestrictedQuerysetMixin(object):
+    """
+    Checks if the user is allowed to do actions on this object
+    """
+    def get_queryset(self):
+        query_set = super(RestrictedQuerysetMixin, self).get_queryset()
+        return query_set.filter(company=self.request.user.company)
+
+
+class RestrictedUpdateView(RestrictedQuerysetMixin, UpdateView):
+    pass
+
+
+class RestrictedDetailView(RestrictedQuerysetMixin, DetailView):
+    pass
+
+
+class RestrictedListView(RestrictedQuerysetMixin, ListView):
+    pass
 
 
 class MessageMixin(object):

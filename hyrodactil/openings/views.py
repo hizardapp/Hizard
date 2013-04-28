@@ -1,15 +1,16 @@
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django.views.generic import CreateView
 
 from braces.views import LoginRequiredMixin
 
 from .forms import OpeningForm
 from .models import Opening
-from core.views import MessageMixin, QuickDeleteView
+from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
+from core.views import RestrictedDetailView, RestrictedListView
 
 
-class OpeningListView(LoginRequiredMixin, ListView):
+class OpeningListView(LoginRequiredMixin, RestrictedListView):
     model = Opening
 
 
@@ -24,7 +25,7 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return form_class(self.request.user.company, **self.get_form_kwargs())
 
 
-class OpeningUpdateView(LoginRequiredMixin, MessageMixin, UpdateView):
+class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = Opening
     form_class = OpeningForm
     action = 'updated'
@@ -41,5 +42,5 @@ class OpeningDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_message = _('Opening deleted.')
 
 
-class OpeningDetailView(LoginRequiredMixin, DetailView):
+class OpeningDetailView(LoginRequiredMixin, RestrictedDetailView):
     model = Opening

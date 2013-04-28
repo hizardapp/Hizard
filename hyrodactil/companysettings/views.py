@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, TemplateView, UpdateView, View
-from django.views.generic import ListView
+from django.views.generic import CreateView, TemplateView, View
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
@@ -13,14 +12,15 @@ from .forms import CustomUserInviteForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
 from accounts.models import CustomUser
-from core.views import MessageMixin, QuickDeleteView
+from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
+from core.views import RestrictedListView
 
 
 class SettingsHomeView(LoginRequiredMixin, TemplateView):
     template_name = 'companysettings/settings.html'
 
 
-class DepartmentListView(LoginRequiredMixin, ListView):
+class DepartmentListView(LoginRequiredMixin, RestrictedListView):
     model = Department
 
 
@@ -38,7 +38,8 @@ class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(DepartmentCreateView, self).form_valid(form)
 
 
-class DepartmentUpdateView(LoginRequiredMixin, MessageMixin, UpdateView):
+class DepartmentUpdateView(LoginRequiredMixin, MessageMixin,
+        RestrictedUpdateView):
     model = Department
     form_class = DepartmentForm
     action = 'updated'
@@ -52,7 +53,7 @@ class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_message = _('Department deleted.')
 
 
-class QuestionListView(LoginRequiredMixin, ListView):
+class QuestionListView(LoginRequiredMixin, RestrictedListView):
     model = Question
 
 
@@ -70,7 +71,8 @@ class QuestionCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(QuestionCreateView, self).form_valid(form)
 
 
-class QuestionUpdateView(LoginRequiredMixin, MessageMixin, UpdateView):
+class QuestionUpdateView(LoginRequiredMixin, MessageMixin,
+        RestrictedUpdateView):
     model = Question
     form_class = QuestionForm
     action = 'updated'
@@ -84,7 +86,7 @@ class QuestionDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_message = _('Question deleted.')
 
 
-class InterviewStageListView(LoginRequiredMixin, ListView):
+class InterviewStageListView(LoginRequiredMixin, RestrictedListView):
     model = InterviewStage
 
 
@@ -107,7 +109,8 @@ class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(InterviewStageCreateView, self).form_valid(form)
 
 
-class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin, UpdateView):
+class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin,
+        RestrictedUpdateView):
     model = InterviewStage
     form_class = InterviewStageForm
     action = 'updated'
@@ -155,12 +158,9 @@ class InterviewStageReorderView(LoginRequiredMixin, MessageMixin, View):
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
-class UsersListView(LoginRequiredMixin, ListView):
+class UsersListView(LoginRequiredMixin, RestrictedListView):
     template_name = "companysettings/customuser_list.html"
     model = CustomUser
-
-    def get_queryset(self):
-        return self.model.objects.filter(company=self.request.user.company)
 
 
 class InviteUserCreateView(LoginRequiredMixin, CreateView):
@@ -174,7 +174,8 @@ class InviteUserCreateView(LoginRequiredMixin, CreateView):
         return redirect(self.success_url)
 
 
-class UpdateCompanyInformationView(LoginRequiredMixin, MessageMixin, UpdateView):
+class UpdateCompanyInformationView(LoginRequiredMixin, MessageMixin,
+        RestrictedUpdateView):
     model = Company
     form_class = CompanyInformationForm
     action = 'updated'
