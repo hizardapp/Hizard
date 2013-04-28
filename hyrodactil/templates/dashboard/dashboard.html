@@ -18,7 +18,7 @@
     <tbody>
       {% for opening in opening_list %}
       <tr>
-        <td>{{ opening.title }}</td>
+        <td><a href="{% url 'openings:detail_opening' opening.pk %}">{{ opening.title }}</a></td>
         <td>
           {% for stage, count in opening.applicants_stats %}
             <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
