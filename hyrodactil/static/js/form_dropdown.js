@@ -46,18 +46,22 @@
       createDropdown = $("#" + $elem.data("dropdown"));
       createDropdown.find("form").attr("action", createURL);
       console.log(createDropdown);
-      return createDropdown.find("input[type=text]").focus();
+      return createDropdown.find(':input:enabled:visible:first').focus();
     };
 
     FormDropdown.prototype._fillEditDropdown = function($elem) {
-      var dept, editDropdown, updateURL;
+      var editDropdown, updateURL, values;
 
-      dept = $elem.find("span").text();
+      values = $elem.find('span').map(function() {
+        return $(this).text();
+      });
       updateURL = $elem.data("url");
       editDropdown = $("#" + $elem.data("dropdown"));
       editDropdown.find("form").attr("action", updateURL);
-      editDropdown.find("input[type=text]").val(dept);
-      return editDropdown.find("input[type=text]").focus();
+      editDropdown.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
+        return $(e).val(values[index]);
+      });
+      return editDropdown.find(':input:enabled:visible:first').focus();
     };
 
     return FormDropdown;

@@ -7,7 +7,11 @@
 {% block content %}
   <h2 class="page-header">{% trans "Questions" %}</h2>
 
-  <a href="#" class="button-positive has-dropdown" data-dropdown="create-question">{% trans "Create a question" %}</a>
+  <a href="#" class="button-positive has-dropdown" data-dropdown="create-question"  data-url="{% url 'companysettings:create_question' %}">
+    {% trans "Create a question" %}
+  </a>
+
+  {% include 'companysettings/_dropdown_form.html' with dropdown_id='create-question' object_id=None %}
 
   {% if question_list %}
     <div class="row">
@@ -22,12 +26,13 @@
         <tbody>
         {% for question in question_list %}
           <tr class="row">
-            {% with dropdown_id='edit-dept-'|concatenate:question.id %}
-              {% include 'companysettings/_dropdown_form.html' with dropdown_id=dropdown_id dept_id=question.id %}
+            {% with dropdown_id='edit-question-'|concatenate:question.id %}
+              {% include 'companysettings/_dropdown_form.html' with dropdown_id=dropdown_id object_id=question.id %}
 
               <td class="has-dropdown large-9 columns" data-dropdown="{{ dropdown_id  }}" data-id="{{ question.id }}" data-url="{% url 'companysettings:update_question' question.id %}">
                 <i class="icon-pencil icon-large"></i>
                 <span>{{ question.name }}</span>
+                <span class="not-displayed">{{ question.type }}</span>
               </td>
               <td class="large-3 columns text-right">
                 <a href="{% url 'companysettings:delete_question' question.id %}">{% trans "Delete" %}</a>
@@ -43,3 +48,14 @@
   {% endif %}
 
 {% endblock content %}
+
+{% block extra-js %}
+  <script src="{% static "js/form_dropdown.js" %}"></script>
+  <script>
+    $(document).ready(function() {
+      var formDropdown = new Hizard.FormDropdown(
+        '{{ has_errors }}', '{{ error_object_id }}', 'a.has-dropdown', 'td.has-dropdown'
+      );
+    });
+  </script>
+{% endblock extra-js %}

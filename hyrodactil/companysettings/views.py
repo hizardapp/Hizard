@@ -20,26 +20,29 @@ class SettingsHomeView(LoginRequiredMixin, TemplateView):
     template_name = 'companysettings/settings.html'
 
 
-class DepartmentListView(LoginRequiredMixin, RestrictedListView):
-    model = Department
-
+class ListViewWithDropdown(LoginRequiredMixin, RestrictedListView):
     def get_context_data(self, **kwargs):
-        context = super(DepartmentRestrictedListView, self).get_context_data(**kwargs)
-        form_with_errors = self.request.session.get('dept_form', None)
+        context = super(ListViewWithDropdown, self).get_context_data(**kwargs)
+        form_with_errors = self.request.session.get('used_form', None)
         if form_with_errors:
             context['form'] = form_with_errors
             context['has_errors'] = True
-            del self.request.session['dept_form']
-            dept_id = self.request.session.get('dept_id', None)
+            del self.request.session['used_form']
+            object_id = self.request.session.get('object_id', None)
 
-            if dept_id:
-                context['error_object_id'] = dept_id
-                del self.request.session['dept_id']
+            if object_id:
+                context['error_object_id'] = object_id
+                del self.request.session['object_id']
 
         else:
-            context['form'] = DepartmentForm()
+            context['form'] = self.form()
 
         return context
+
+
+class DepartmentRestrictedListView(ListViewWithDropdown):
+    model = Department
+    form = DepartmentForm
 
 
 class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
@@ -55,7 +58,7 @@ class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(DepartmentCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
-        self.request.session['dept_form'] = form
+        self.request.session['used_form'] = form
         return redirect(self.success_url)
 
 
@@ -67,8 +70,8 @@ class DepartmentUpdateView(LoginRequiredMixin, MessageMixin,
     success_message = _('Department updated.')
 
     def form_invalid(self, form):
-        self.request.session['dept_form'] = form
-        self.request.session['dept_id'] = self.object.id
+        self.request.session['used_form'] = form
+        self.request.session['object_id'] = self.object.id
         return redirect(self.success_url)
 
 
@@ -77,15 +80,14 @@ class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_url = reverse_lazy('companysettings:list_departments')
     success_message = _('Department deleted.')
 
-
-class QuestionListView(LoginRequiredMixin, RestrictedListView):
+class QuestionRestrictedListView(ListViewWithDropdown):
     model = Question
+    form = QuestionForm
 
 
 class QuestionCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = Question
     form_class = QuestionForm
-    action = 'created'
     success_url = reverse_lazy('companysettings:list_questions')
     success_message = _('Question created.')
 
@@ -95,14 +97,22 @@ class QuestionCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         question.save()
         return super(QuestionCreateView, self).form_valid(form)
 
+    def form_invalid(self, form):
+        self.request.session['used_form'] = form
+        return redirect(self.success_url)
+
 
 class QuestionUpdateView(LoginRequiredMixin, MessageMixin,
         RestrictedUpdateView):
     model = Question
     form_class = QuestionForm
-    action = 'updated'
     success_url = reverse_lazy('companysettings:list_questions')
     success_message = _('Question updated.')
+
+    def form_invalid(self, form):
+        self.request.session['used_form'] = form
+        self.request.session['object_id'] = self.object.id
+        return redirect(self.success_url)
 
 
 class QuestionDeleteView(LoginRequiredMixin, QuickDeleteView):

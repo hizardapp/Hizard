@@ -35,17 +35,22 @@ class FormDropdown
     createDropdown = $("#" + $elem.data("dropdown"))
     createDropdown.find("form").attr "action", createURL
     console.log createDropdown
-    createDropdown.find("input[type=text]").focus()
+    createDropdown.find(':input:enabled:visible:first').focus()
 
   # Replace the action and field values of the dropdown when updating and
   # put autofocus on the first field
   _fillEditDropdown: ($elem) ->
-    dept = $elem.find("span").text()
+    values = $elem.find('span').map(->
+      $(this).text()
+    )
     updateURL = $elem.data("url")
     editDropdown = $("#" + $elem.data("dropdown"))
     editDropdown.find("form").attr "action", updateURL
-    editDropdown.find("input[type=text]").val dept
-    editDropdown.find("input[type=text]").focus()
+
+    editDropdown.find('input:enabled:visible, select').not(':input[type=submit]').each (index, e) ->
+      $(e).val values[index]
+
+    editDropdown.find(':input:enabled:visible:first').focus()
 
 
 window.Hizard.FormDropdown = FormDropdown
