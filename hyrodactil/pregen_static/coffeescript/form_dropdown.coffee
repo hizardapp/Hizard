@@ -34,7 +34,6 @@ class FormDropdown
     createURL = $elem.data("url")
     createDropdown = $("#" + $elem.data("dropdown"))
     createDropdown.find("form").attr "action", createURL
-    console.log createDropdown
     createDropdown.find(':input:enabled:visible:first').focus()
 
   # Replace the action and field values of the dropdown when updating and

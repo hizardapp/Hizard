@@ -17,29 +17,29 @@
     <div class="row">
       <table class="large-6 large-centered columns">
         <thead>
-        <tr>
-          <th>{% trans "Name" %}</th>
-          <th></th>
-        </tr>
+          <tr>
+            <th>{% trans "Name" %}</th>
+            <th></th>
+          </tr>
         </thead>
 
         <tbody>
-        {% for question in question_list %}
-          <tr class="row">
-            {% with dropdown_id='edit-question-'|concatenate:question.id %}
-              {% include 'companysettings/_dropdown_form.html' with dropdown_id=dropdown_id object_id=question.id %}
+          {% for question in question_list %}
+            <tr class="row">
+              {% with dropdown_id='edit-question-'|concatenate:question.id %}
+                {% include 'companysettings/_dropdown_form.html' with dropdown_id=dropdown_id object_id=question.id %}
 
-              <td class="has-dropdown large-9 columns" data-dropdown="{{ dropdown_id  }}" data-id="{{ question.id }}" data-url="{% url 'companysettings:update_question' question.id %}">
-                <i class="icon-pencil icon-large"></i>
-                <span>{{ question.name }}</span>
-                <span class="not-displayed">{{ question.type }}</span>
-              </td>
-              <td class="large-3 columns text-right">
-                <a href="{% url 'companysettings:delete_question' question.id %}">{% trans "Delete" %}</a>
-              </td>
-            {% endwith %}
-          </tr>
-        {% endfor %}
+                <td class="has-dropdown large-9 columns" data-dropdown="{{ dropdown_id  }}" data-id="{{ question.id }}" data-url="{% url 'companysettings:update_question' question.id %}">
+                  <i class="icon-pencil icon-large"></i>
+                  <span>{{ question.name }}</span>
+                  <span class="not-displayed">{{ question.type }}</span>
+                </td>
+                <td class="large-3 columns text-right">
+                  <a href="{% url 'companysettings:delete_question' question.id %}">{% trans "Delete" %}</a>
+                </td>
+              {% endwith %}
+            </tr>
+          {% endfor %}
         </tbody>
 
       </table>

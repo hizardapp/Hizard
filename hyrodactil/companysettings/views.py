@@ -128,7 +128,6 @@ class InterviewStageListView(LoginRequiredMixin, RestrictedListView):
 class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = InterviewStage
     form_class = InterviewStageForm
-    action = 'created'
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage created.')
 
@@ -148,7 +147,6 @@ class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin,
         RestrictedUpdateView):
     model = InterviewStage
     form_class = InterviewStageForm
-    action = 'updated'
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage updated.')
 
@@ -193,13 +191,13 @@ class InterviewStageReorderView(LoginRequiredMixin, MessageMixin, View):
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
-class UsersListView(LoginRequiredMixin, RestrictedListView):
+class UsersListView(ListViewWithDropdown):
     template_name = "companysettings/customuser_list.html"
     model = CustomUser
+    form = CustomUserInviteForm
 
 
 class InviteUserCreateView(LoginRequiredMixin, CreateView):
-    template_name = "companysettings/customuser_form.html"
     model = CustomUser
     form_class = CustomUserInviteForm
     success_url = reverse_lazy('companysettings:list_users')
@@ -213,7 +211,6 @@ class UpdateCompanyInformationView(LoginRequiredMixin, MessageMixin,
         RestrictedUpdateView):
     model = Company
     form_class = CompanyInformationForm
-    action = 'updated'
     success_url = reverse_lazy('companysettings:settings_home')
     success_message = _('Company informations updated.')
     template_name = 'companysettings/information_form.html'

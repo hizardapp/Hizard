@@ -45,7 +45,6 @@
       createURL = $elem.data("url");
       createDropdown = $("#" + $elem.data("dropdown"));
       createDropdown.find("form").attr("action", createURL);
-      console.log(createDropdown);
       return createDropdown.find(':input:enabled:visible:first').focus();
     };
 

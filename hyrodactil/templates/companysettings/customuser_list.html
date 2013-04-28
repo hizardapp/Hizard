@@ -1,63 +1,85 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load companysettings %}
+{% load staticfiles %}
 
 {% block content %}
-  <h2>{% trans "Users" %}</h2>
+  <h2 class="page-header">{% trans "Users" %}</h2>
+
+  <a href="#" class="button-positive has-dropdown" data-dropdown="invite-user"  data-url="{% url 'companysettings:invite_user' %}">
+    {% trans "Invite a user" %}
+  </a>
+
+  {% include 'companysettings/_dropdown_form.html' with dropdown_id='invite-user' object_id=None %}
 
   {% if customuser_list %}
-    <table class="large-12 columns">
-      <thead>
-        <tr>
-          <th>{% trans "Email" %}</th>
-          <th>{% trans "Name" %}</th>
-          <th>{% trans "Status" %}</th>
-          <th>{% trans "Role" %}</th>
-          <th>{% trans "Actions" %}</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for user in customuser_list %}
-          <tr>
-            <td>
-              {{ user.email }}
-            </td>
-            <td>
-              {{ user.first_name }} {{ user.last_name }}
-            </td>
-            <td>
-              {{ user.get_status }}
-            </td>
-            <td>
-              {% if user.is_company_admin %}
-                {% trans 'Administrator' %}
-              {% else %}
-                {% trans 'User' %}
-              {% endif %}
-            </td>
-            <td>
-              {% if request.user.is_company_admin and request.user != user %}
-                {% if not user.activation_key %}
-                  <a href="{% url 'accounts:toggle_status' user.pk %}">
-                    {% if user.is_active %}
-                      {% trans 'Disable' %}
-                    {% else %}
-                      {% trans 'Enable' %}
-                    {% endif %}
-                  </a>
-                {% endif %}
-              {% endif %}
-            </td>
+    <div class="row">
+      <table class="large-6 large-centered columns">
+        <thead>
+          <tr class="row">
+            <th class="large-3 columns">{% trans "Email" %}</th>
+            <th class="large-3 columns">{% trans "Name" %}</th>
+            <th class="large-2 columns">{% trans "Status" %}</th>
+            <th class="large-2 columns">{% trans "Role" %}</th>
+            <th class="large-1 column"></th>
           </tr>
-        {% endfor %}
-      </tbody>
+        </thead>
 
-    </table>
-  {% else %}
-    <p>{% trans "No user yet" %}</p>
+        <tbody>
+          {% for user in customuser_list %}
+            <tr class="row">
+              <td class="large-3 columns">
+                <span>{{ user.email }}</span>
+              </td>
+              <td class="large-3 columns">
+                <span>{{ user.first_name }} {{ user.last_name }}</span>
+              </td>
+              <td class="large-2 columns">
+                <span>{{ user.get_status }}</span>
+              </td>
+              <td class="large-2 columns">
+                <span>
+                 {% if user.is_company_admin %}
+                   {% trans 'Administrator' %}
+                 {% else %}
+                   {% trans 'User' %}
+                 {% endif %}
+                </span>
+              </td>
+              <td class="large-1 columns">
+                <span>
+                  {% if request.user.is_company_admin and request.user != user %}
+                    {% if not user.activation_key %}
+                      <a href="{% url 'accounts:toggle_status' user.pk %}">
+                        {% if user.is_active %}
+                          {% trans 'Disable' %}
+                        {% else %}
+                          {% trans 'Enable' %}
+                        {% endif %}
+                      </a>
+                    {% endif %}
+                  {% endif %}
+                </span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
   {% endif %}
 
-  <a href="{% url 'companysettings:invite_user' %}" class="button">{% trans "Create a user" %}</a>
-
 {% endblock content %}
+
+
+{% block extra-js %}
+  <script src="{% static "js/form_dropdown.js" %}"></script>
+  <script>
+    $(document).ready(function() {
+      var formDropdown = new Hizard.FormDropdown(
+        '{{ has_errors }}', '{{ error_object_id }}', 'a.has-dropdown', ''
+      );
+    });
+  </script>
+{% endblock extra-js %}
