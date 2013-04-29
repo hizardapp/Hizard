@@ -1,12 +1,61 @@
-{% extends "base.html" %}
+{% extends "base_public.html" %}
+
 {% load i18n %}
 
-{% block content %}
-<h1>
-  Welcome to Hizard!
-</h1>
 
-<p>
-  Hizard is a tool to make your hiring process easier.
-</p>
+{% block content %}
+
+  <div class="jumbotron">
+    <div class="row text-center">
+      <h1>{% trans 'Hiring made simple' %}</h1>
+      <p>Sign up now</p>
+      IMAGE OF INTERFACE?
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <div class="large-12 columns">
+      <h3>{% trans 'How can Hizard help you?' %}</h3>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <div class="large-6 columns">
+      <h4>{% trans  'Applicant tracking' %}</h4>
+      <p>Blabla</p>
+    </div>
+    <div class="large-6 columns">
+      <h4>{% trans  'Your own career site' %}</h4>
+      <p>Blabla</p>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <ul class="pricing-table large-4 columns">
+      <li class="title">Standard</li>
+      <li class="price">$99.99</li>
+      <li class="description">An awesome description</li>
+      <li class="bullet-item">1 Database</li>
+      <li class="bullet-item">5GB Storage</li>
+      <li class="cta-button"><a class="button" href="#">Buy Now</a></li>
+    </ul>
+    <ul class="pricing-table large-4 columns">
+      <li class="title">Standard</li>
+      <li class="price">$99.99</li>
+      <li class="description">An awesome description</li>
+      <li class="bullet-item">1 Database</li>
+      <li class="bullet-item">5GB Storage</li>
+      <li class="cta-button"><a class="button" href="#">Buy Now</a></li>
+    </ul>
+    <ul class="pricing-table large-4 columns">
+      <li class="title">Standard</li>
+      <li class="price">$99.99</li>
+      <li class="description">An awesome description</li>
+      <li class="bullet-item">1 Database</li>
+      <li class="bullet-item">5GB Storage</li>
+      <li class="cta-button"><a class="button" href="#">Buy Now</a></li>
+    </ul>
+  </div>
+
 {% endblock content %}
+

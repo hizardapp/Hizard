@@ -8,17 +8,19 @@
 
     {% for field in form %}
 
-      <div class="row {% if field.errors and error_object_id == object_id %} error {% endif %}">
-        {{ field.label_tag }}
-        {{ field }}
+      <div class="row">
+        <div class="large-12 columns {% if field.errors and error_object_id == object_id %} error {% endif %}">
+          {{ field.label_tag }}
+          {{ field }}
 
-        {% if field.errors and error_object_id == object_id  %}
-          <small class="error">
-            {% for error in field.errors %}
-              {{ error }}
-            {% endfor %}
-          </small>
-        {% endif %}
+          {% if field.errors and error_object_id == object_id  %}
+            <small class="rounded-error">
+              {% for error in field.errors %}
+                {{ error }}
+              {% endfor %}
+            </small>
+          {% endif %}
+        </div>
       </div>
 
     {% endfor %}

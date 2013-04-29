@@ -11,8 +11,10 @@ form {
     font-weight: bold;
   }
 
-  .error {
+  .rounded-error {
+    @extend .error;
     @include border-bottom-radius($radius-form);
     padding: 8px;
   }
+
 }

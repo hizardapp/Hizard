@@ -1,5 +1,5 @@
 
-@import "../common/colours";
+@import "colours";
 
 .alert-success {
   @include alert($alert-success-background);

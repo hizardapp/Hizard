@@ -1,5 +1,5 @@
 // Global Foundation Settings
-@import "settings_app";
+@import "settings_public";
 
 // Comment out this import if you are customizing you imports below
 // @import "foundation";
@@ -32,8 +32,8 @@
 // @import "foundation/components/labels";
 // @import "foundation/components/inline-lists";
 // @import "foundation/components/pagination";
-@import "foundation/components/panels";
-// @import "foundation/components/pricing-tables";
+// @import "foundation/components/panels";
+@import "foundation/components/pricing-tables";
 // @import "foundation/components/progress-bars";
 // @import "foundation/components/side-nav";
 // @import "foundation/components/sub-nav";
@@ -42,7 +42,7 @@
 // @import "foundation/components/tables";
 // @import "foundation/components/thumbs";
 // @import "foundation/components/tooltips";
-@import "foundation/components/dropdown";
+// @import "foundation/components/dropdown";
 
 @import "font-awesome";
 
@@ -50,17 +50,5 @@
 @import "common/alerts";
 @import "common/buttons";
 
-@import "app/navigation";
-@import "app/layout";
-@import "app/table";
-@import "app/common";
-@import "app/cleditor";
-@import "app/dashboard";
-
-// Style specific to apps
-@import "app/accounts";
-@import "app/companysettings";
-@import "app/applicant_details";
-@import "app/openings";
-@import "app/section_modals";
-@import "app/kanban";
+@import "public/home";
+@import "public/accounts";
