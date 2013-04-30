@@ -20,10 +20,12 @@ class UserCreationForm(forms.ModelForm):
 
     password1 = forms.CharField(
         label=_('Password'),
+        widget=forms.PasswordInput()
     )
 
     password2 = forms.CharField(
         label=_('Password confirmation'),
+        widget=forms.PasswordInput()
     )
 
     class Meta:

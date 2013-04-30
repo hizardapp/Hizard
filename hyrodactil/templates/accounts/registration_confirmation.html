@@ -1,12 +1,17 @@
-{% extends "base_app.html" %}
+{% extends "base_accounts.html" %}
 {% load i18n %}
 
 {% block content %}
 
-  <div class="row registration-confirmation">
-    <h1 class="large-12 columns">{% trans "Activate your account" %}</h1>
+  <div class="row text-center">
+    <h1 class="large-12 columns">
+      {% trans "Activate your account" %}
+    </h1>
     <br>
-    <p class="large-12 columns">{% trans "We just sent you an email " %} <i class="icon-thumbs-up icon-3x"></i></p>
+
+    <p class="large-12 columns">
+      {% trans "We just sent you an email " %} <i class="icon-thumbs-up icon-3x"></i>
+    </p>
   </div>
 
 {% endblock content %}

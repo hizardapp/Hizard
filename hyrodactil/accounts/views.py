@@ -30,7 +30,7 @@ class RegistrationConfirmationView(TemplateView):
 
 class ActivateView(FormView):
     form_class = InvitedRegistrationForm
-    template_name = "accounts/registration_form.html"
+    template_name = "accounts/activation_form.html"
 
     def dispatch(self, *args, **kwargs):
         self.activation_key = kwargs['activation_key']
@@ -44,7 +44,6 @@ class ActivateView(FormView):
             return super(ActivateView, self).get(*args, **kwargs)
         else:
             user = CustomUser.objects.activate_user(self.activation_key)
-
             if user:
                 self.request.session['from_activation'] = True
                 return HttpResponseRedirect(reverse('auth:login'))
@@ -58,6 +57,7 @@ class ActivateView(FormView):
 
     def form_valid(self, form):
         form.save()
+
         user = CustomUser.objects.activate_user(self.activation_key)
         if user:
             return HttpResponseRedirect(reverse("dashboard:dashboard"))
