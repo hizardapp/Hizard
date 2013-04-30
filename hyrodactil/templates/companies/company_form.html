@@ -1,71 +1,50 @@
-{% extends "base_app.html" %}
+{% extends "base_accounts.html" %}
 {% load i18n %}
 
 
 {% block content %}
 
-  <div class="hizard-form large-6 columns large-centered panel">
-
-    <form action="." method="POST" id="action-form">
+  <div class="row">
+    <form action="." method="POST" class="login-form large-4 columns">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
-        <small class="error">{{ form.non_field_errors.as_text }}</small>
+        <small class="error">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </small>
       {% endif %}
 
-      <div class="row">
-        <div class="large-12 columns form-title">
-          <h1>{% trans "Create your company" %}</h1>
-        </div>
-      </div>
+      {% for field in form %}
+        <div class="row">
+          <div class="large-12 columns {% if field.errors %} error {% endif %}">
 
-      <div class="row">
-        <div class="large-2 columns">
-          <label for="id_name" class="right inline">{{ form.name.label }}</label>
-        </div>
-        <div class="large-10 columns">
-            {{ form.name }}
-        </div>
-        {% if form.name.errors %}
-          <small class="error">{{ form.name.errors.as_text }}</small>
-        {% endif %}
-      </div>
+            {{ field.label_tag }}
+            {{ field }}
 
-      <div class="row">
-        <div class="large-12 columns subdomain-help">
-          {% trans "Create your own address (example: example.hizard.com)" %}
-          <br>
-          {% trans "Only letters and numbers." %}
+            {% if field.errors %}
+              <small class="rounded-error">
+                {% for error in field.errors %}
+                  {{ error }}
+                {% endfor %}
+              </small>
+            {% endif %}
+          </div>
         </div>
-      </div>
-
-      <div class="row collapse">
-
-        <div class="large-2 columns">
-          <span class="prefix">http://</span>
-        </div>
-
-        <div class="large-7 columns {% if form.subdomain.errors %} error {% endif %}">
-          {{ form.subdomain }}
-          {% if form.subdomain.errors %}
-            <small class="error">{{ form.subdomain.errors.as_text }}</small>
-          {% endif %}
-        </div>
-
-        <div class="large-3 columns">
-          <span class="postfix">.hizard.com</span>
-        </div>
-
-      </div>
+      {% endfor %}
 
 
       <div class="row">
-        <div class="large-12 columns submit-button">
-          <input type="submit" class="button" value="{% trans 'Start using Hizard' %}" />
+        <div class="large-12 columns text-right">
+          <input type="submit" class="button-positive" value="{% trans 'Start using Hizard' %}" />
         </div>
       </div>
     </form>
 
+    <div class="large-6 columns">
+      Some blabla
+    </div>
   </div>
 
 {% endblock content %}

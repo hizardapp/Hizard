@@ -17,13 +17,13 @@ class CompaniesViewsTests(WebTest):
         page = self.app.get(url, user=self.user)
 
         self.assertEqual(page.status_code, 200)
-        self.assertIn('action-form', page.forms)
+        self.assertIn(0, page.forms)
 
     def test_post_create_company_invalid(self):
         url = reverse('companies:create')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['name'] = ''
         response = form.submit()
 
@@ -34,7 +34,7 @@ class CompaniesViewsTests(WebTest):
         url = reverse('companies:create')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['name'] = 'ACME'
         form['subdomain'] = 'acmememe'
         response = form.submit()
