@@ -39,7 +39,7 @@
       <ul class="right">
         <li><a href="#">{% trans 'Features' %}</a></li>
         <li><a href="#">{% trans 'Pricing' %}</a></li>
-        <li><a href="#">{% trans 'Sign up' %}</a></li>
+        <li><a href={% url 'accounts:register' %}>{% trans 'Sign up' %}</a></li>
         <li><a href="{% url 'auth:login' %}">{% trans 'Login' %}</a></li>
       </ul>
     </section>

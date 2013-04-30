@@ -1,119 +1,72 @@
-<!DOCTYPE html>
-
+{% extends "base_accounts.html" %}
 {% load i18n %}
-{% load staticfiles %}
 
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>{% block title %}Hizard{% endblock title %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Hiring made easy">
-  <meta name="author" content="Hizard">
 
-  <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
-  <link rel="stylesheet" href="{% static "css/public.css" %}" />
+{% block content %}
 
-  {% block extra-head %}
-  {% endblock extra-head %}
-
-  <script src="{% static "js/vendor/custom.modernizr.js" %}"></script>
-  {% block extrahead %}{% endblock %}
-</head>
-
-<body>
-
-  <div class="login-container">
-
-    <div class="row">
-      <h1 class="text-center"><a href="{% url 'public:home' %}">Hizard</a></h1>
-      <hr>
+  {% if from_activation %}
+    <div class="row from-activation">
+      <h1>{% trans "Login to get started." %}</h1>
     </div>
+  {% endif %}
 
-    {% if messages %}
-      {% for message in messages %}
-        <div data-alert class="alert-{{ message.tags }}">
-          {{ message }}
-          <a href="#" class="close">&times;</a>
-        </div>
-      {% endfor %}
-    {% endif %}
-
-    {% if from_activation %}
-      <div class="row from-activation">
-        <h1>{% trans "Login to get started." %}</h1>
-      </div>
-    {% endif %}
-
-    <div class="row">
-      <div class="large-12 columns">
-        {% url 'accounts:register' as register_url %}
-        {% blocktrans %}
-          Don't have an account ? <a href="{{ register_url }}">Sign up</a>
-        {% endblocktrans %}
-      </div>
+  <div class="row">
+    <div class="large-12 columns">
+      {% url 'accounts:register' as register_url %}
+      {% blocktrans %}
+        Don't have an account ? <a href="{{ register_url }}">Sign up</a>
+      {% endblocktrans %}
     </div>
-
-    <br>
-
-    <div class="row">
-      <form action="." method="POST" class="login-form large-4 columns">
-        {% csrf_token %}
-
-        {% if form.non_field_errors %}
-          <small class="error">
-            {% for error in form.non_field_errors %}
-              {{ error }}
-            {% endfor %}
-          </small>
-        {% endif %}
-
-        {% for field in form %}
-          <div class="row">
-            <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-              {{ field.label_tag }}
-              {{ field }}
-
-              {% if field.errors %}
-                <small class="rounded-error">
-                  {% for error in field.errors %}
-                    {{ error }}
-                  {% endfor %}
-                </small>
-              {% endif %}
-            </div>
-          </div>
-        {% endfor %}
-
-
-        <div class="row">
-          <div class="large-12 columns text-right">
-            <a href="{% url 'auth:reset_password' %}" title="{% trans 'Reset password' %}">
-              {% trans 'Forgot your password?' %}
-            </a>
-            <input type="submit" class="button-positive" value="{% trans 'Login' %}" />
-          </div>
-        </div>
-      </form>
-
-      <div class="large-6 columns">
-        Some blabla
-      </div>
-    </div>
-
   </div>
 
+  <br>
 
-<script src="{% static "js/vendor/jquery.js" %}"></script>
-<script src="{% static "js/foundation/foundation.js" %}"></script>
-<script src="{% static "js/foundation/foundation.alerts.js" %}"></script>
-<script>
-  $(document).foundation();
-</script>
+  <div class="row">
+    <form action="." method="POST" class="login-form large-4 columns">
+      {% csrf_token %}
 
-{% block extra-js %}
-{% endblock extra-js %}
-</body>
-</html>
+      {% if form.non_field_errors %}
+        <small class="error">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </small>
+      {% endif %}
 
+      {% for field in form %}
+        <div class="row">
+          <div class="large-12 columns {% if field.errors %} error {% endif %}">
+
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% if field.errors %}
+              <small class="rounded-error">
+                {% for error in field.errors %}
+                  {{ error }}
+                {% endfor %}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+
+
+      <div class="row">
+        <div class="large-12 columns text-right">
+          <a href="{% url 'auth:reset_password' %}" title="{% trans 'Reset password' %}">
+            {% trans 'Forgot your password?' %}
+          </a>
+          <input type="submit" class="button-positive" value="{% trans 'Login' %}" />
+        </div>
+      </div>
+    </form>
+
+    <div class="large-6 columns">
+      Some blabla
+    </div>
+  </div>
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+{% load i18n %}
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Hizard{% endblock title %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hiring made easy">
+  <meta name="author" content="Hizard">
+
+  <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
+  <link rel="stylesheet" href="{% static "css/public.css" %}" />
+
+  {% block extra-head %}
+  {% endblock extra-head %}
+
+  <script src="{% static "js/vendor/custom.modernizr.js" %}"></script>
+  {% block extrahead %}{% endblock %}
+</head>
+
+<body>
+<div class="login-container">
+
+  <div class="row">
+    <h1 class="text-center"><a href="{% url 'public:home' %}">Hizard</a></h1>
+    <hr>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div data-alert class="alert-{{ message.tags }}">
+        {{ message }}
+        <a href="#" class="close">&times;</a>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% block content %}
+  {% endblock content %}
+
+</div>
+
+<script src="{% static "js/vendor/jquery.js" %}"></script>
+<script src="{% static "js/foundation/foundation.js" %}"></script>
+<script src="{% static "js/foundation/foundation.topbar.js" %}"></script>
+<script src="{% static "js/foundation/foundation.alerts.js" %}"></script>
+<script>
+  $(document).foundation();
+</script>
+
+{% block extra-js %}
+{% endblock extra-js %}
+</body>
+</html>
