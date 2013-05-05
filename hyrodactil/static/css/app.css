@@ -4350,16 +4350,21 @@ form .rounded-error {
   }
 }
 /* line 11, ../../pregen_static/sass/app/_layout.scss */
+html, body {
+  height: 100%;
+}
+
+/* line 14, ../../pregen_static/sass/app/_layout.scss */
 body {
   background-color: #ecf0f1;
 }
-/* line 14, ../../pregen_static/sass/app/_layout.scss */
+/* line 17, ../../pregen_static/sass/app/_layout.scss */
 body #main {
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
 }
-/* line 21, ../../pregen_static/sass/app/_layout.scss */
+/* line 24, ../../pregen_static/sass/app/_layout.scss */
 body #main .container {
   background-color: white;
   border: 1px solid #bdc3c7;
