@@ -32,7 +32,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'hyrodactil',
-        'USER': '',
+        'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
