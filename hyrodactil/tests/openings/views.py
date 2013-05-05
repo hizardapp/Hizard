@@ -9,7 +9,7 @@ from ..factories._companies import CompanyFactory
 from openings.models import Opening
 
 
-class JobsViewsTests(WebTest):
+class OpeningsViewsTests(WebTest):
 
     def setUp(self):
         self.user = UserFactory()
@@ -26,7 +26,7 @@ class JobsViewsTests(WebTest):
         url = reverse('openings:create_opening')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
 
         form['title'] = 'Software Developer'
         form['description'] = 'Fait des logiciels.'
@@ -63,7 +63,7 @@ class JobsViewsTests(WebTest):
         url = reverse('openings:create_opening')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['title'] = 'Software Developer'
         form['description'] = ''
         form['is_private'] = ''
@@ -82,7 +82,7 @@ class JobsViewsTests(WebTest):
         url = reverse('openings:update_opening', args=(opening.id,))
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['title'] = 'Software Developer'
         response = form.submit().follow()
 

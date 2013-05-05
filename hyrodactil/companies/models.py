@@ -9,9 +9,6 @@ class Company(TimeStampedModel):
     website = models.URLField(blank=True)
     description = models.TextField(blank=True)
 
-    def get_public_openings_list(self):
-        pass
-
     class Meta:
         verbose_name_plural = 'companies'
 

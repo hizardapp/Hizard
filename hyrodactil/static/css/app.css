@@ -4271,6 +4271,7 @@ body #main .container {
   background-color: white;
   border: 1px solid #bdc3c7;
   padding: 10px;
+  padding-top: 20px;
   box-shadow: 0 0 3px #bdc3c7;
   padding-bottom: 40px;
 }
