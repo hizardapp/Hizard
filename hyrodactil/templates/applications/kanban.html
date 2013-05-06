@@ -5,6 +5,7 @@
 {% load staticfiles %}
 
 {% block content %}
+  <h2 class="page-header">{% trans "Applications" %}</h2>
 
 <div class="toggle-list-applications">
   <a href={% url 'applications:list_all_applications' %}>{% trans 'Show as list' %}</a>

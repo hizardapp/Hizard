@@ -6,7 +6,7 @@
   <h2 class="page-header">{% trans "Openings" %}</h2>
 
   <a href="#" class="button-positive" data-url="{% url 'openings:create_opening' %}">
-    {% trans "Create an opening." %}
+    {% trans "Create an opening" %}
   </a>
 
   {% if opening_list %}
@@ -38,13 +38,12 @@
               </td>
 
               <td class="large-2 columns">
-                <a href="{% url 'applications:list_applications' opening.id %}">
-                  {% if opening.application_set.count %}
-                    {{ opening.application_set.count }}
-                  {% else %}
-                    {% trans "No applications" %}
-                  {% endif %}
-                </a>
+                {% for stage, count in opening.applicants_stats %}
+                  <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
+                    {{ count }}
+                  </a>
+                  {% if not forloop.last %}/{% endif %}
+                {% endfor %}
               </td>
 
               <td class="large-2 columns">
