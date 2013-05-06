@@ -4,64 +4,68 @@
 
 {% block content %}
 
-  {% if context_opening %}
-    <p>Add an application manually <a href="{% url 'applications:manual_application' context_opening.id %}">here</a></p>
-  {% endif %}
-
-  {% if application_list %}
-
     {% if context_opening %}
-      <h2>
-      {% blocktrans with opening=context_opening.title %}
-        Applicants for {{ opening }}
-      {% endblocktrans %}
-      </h2>
-    {% else %}
-      <div class="toggle-list-applications">
-        <a href={% url 'applications:board_applications' %}>{% trans 'Show as board' %}</a>
-      </div>
+      <p>Add an application manually <a href="{% url 'applications:manual_application' context_opening.id %}">here</a></p>
     {% endif %}
 
-    <table class="large-12 columns">
-      <thead>
-        <tr>
-          <th>{% trans "First Name" %}</th>
-          <th>{% trans "Last Name" %}</th>
-          <th>{% trans "Date applied" %}</th>
-        </tr>
-      </thead>
+    {% if application_list %}
 
-      <tbody>
-        {% regroup application_list by opening as opening_applications %}
+      {% if context_opening %}
+        <h2>
+          {% blocktrans with opening=context_opening.title %}
+            Applicants for {{ opening }}
+          {% endblocktrans %}
+        </h2>
+      {% else %}
+        <div class="toggle-list-applications">
+          <a href={% url 'applications:board_applications' %}>{% trans 'Show as board' %}</a>
+        </div>
+      {% endif %}
 
-        {% for opening in opening_applications %}
-          {% if not context_opening %}
-            <tr>
-              <td colspan="3">
-                {{ opening.grouper.title }} for {{ opening.grouper.department }}
-              </td>
-            </tr>
-          {% endif %}
+      <div class="row">
+        <table class="large-12 columns">
+          <thead>
+          <tr>
+            <th>{% trans "First Name" %}</th>
+            <th>{% trans "Last Name" %}</th>
+            <th>{% trans "Date applied" %}</th>
+          </tr>
+          </thead>
 
-          {% for application in opening.list %}
-            <tr>
-              <td>
-                <a href="{% url 'applications:application_detail' application.id %}">{{ application.applicant.first_name }}</a>
-              </td>
-              <td>
-                {{ application.applicant.last_name }}
-              </td>
-              <td>
-                {{ application.created|date:"d/m/Y H:m" }}
-              </td>
-            </tr>
+          <tbody>
+          {% regroup application_list by opening as opening_applications %}
+
+          {% for opening in opening_applications %}
+            {% if not context_opening %}
+              <tr>
+                <td colspan="3">
+                  {{ opening.grouper.title }} for {{ opening.grouper.department }}
+                </td>
+              </tr>
+            {% endif %}
+
+            {% for application in opening.list %}
+              <tr>
+                <td>
+                  <a href="{% url 'applications:application_detail' application.id %}">{{ application.applicant.first_name }}</a>
+                </td>
+                <td>
+                  {{ application.applicant.last_name }}
+                </td>
+                <td>
+                  {{ application.created|date:"d/m/Y H:m" }}
+                </td>
+              </tr>
+            {% endfor %}
           {% endfor %}
-        {% endfor %}
-      </tbody>
+          </tbody>
 
-    </table>
-  {% else %}
-    <p>{% trans "No applications yet" %}</p>
-  {% endif %}
+        </table>
+      </div>
+
+    {% else %}
+      <p>{% trans "No applications yet" %}</p>
+    {% endif %}
+
 
 {% endblock content %}
