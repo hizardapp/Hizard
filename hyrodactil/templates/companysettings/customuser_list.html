@@ -22,7 +22,7 @@
             <th class="large-3 columns">{% trans "Name" %}</th>
             <th class="large-2 columns">{% trans "Status" %}</th>
             <th class="large-2 columns">{% trans "Role" %}</th>
-            <th class="large-1 column"></th>
+            <th class="large-2 column"></th>
           </tr>
         </thead>
 
@@ -47,7 +47,7 @@
                  {% endif %}
                 </span>
               </td>
-              <td class="large-1 columns">
+              <td class="large-2 columns">
                 <span>
                   {% if request.user.is_company_admin and request.user != user %}
                     {% if not user.activation_key %}

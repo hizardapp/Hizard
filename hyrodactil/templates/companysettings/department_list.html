@@ -17,9 +17,9 @@
     <div class="row">
       <table class="large-6 large-centered columns">
         <thead>
-          <tr>
-            <th>{% trans "Name" %}</th>
-            <th></th>
+          <tr class="row">
+            <th class="large-10 columns">{% trans "Name" %}</th>
+            <th class="large-2 columns"></th>
           </tr>
         </thead>
 
@@ -29,11 +29,11 @@
               {% with dropdown_id='edit-dept-'|concatenate:department.id %}
                 {% include 'companysettings/_dropdown_form.html' with dropdown_id=dropdown_id object_id=department.id %}
 
-                <td class="has-dropdown large-9 columns" data-dropdown="{{ dropdown_id  }}" data-id="{{ department.id }}" data-url="{% url 'companysettings:update_department' department.id %}">
+                <td class="has-dropdown large-10 columns" data-dropdown="{{ dropdown_id  }}" data-id="{{ department.id }}" data-url="{% url 'companysettings:update_department' department.id %}">
                   <i class="icon-pencil icon-large"></i>
                   <span>{{ department.name }}</span>
                 </td>
-                <td class="large-3 columns text-right">
+                <td class="large-2 columns text-right">
                   <a href="{% url 'companysettings:delete_department' department.id %}">{% trans "Delete" %}</a>
                 </td>
             {% endwith %}

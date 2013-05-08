@@ -9,3 +9,23 @@
     text-align: center;
   }
 }
+
+.opening-list {
+  width: 100%;
+
+  th:not(:first-child), td:not(:first-child) {
+    padding-left: 0;
+  }
+
+  .delete-link {
+    padding-left: 20px;
+  }
+
+  .opening-title {
+    font-size: emCalc(20px);
+  }
+
+  td {
+    line-height: emCalc(30px);
+  }
+}

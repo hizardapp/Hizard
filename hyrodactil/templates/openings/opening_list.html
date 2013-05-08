@@ -10,51 +10,46 @@
   </a>
 
   {% if opening_list %}
-    <div class="row">
-      <table class="large-12 large-centered columns">
-        <thead>
+    <table class="opening-list">
+      <thead>
+        <tr class="row">
+          <th class="large-6 columns">{% trans "Title" %}</th>
+          <th class="large-2 columns">{% trans "Created" %}</th>
+          <th class="large-2 columns">{% trans "Applicants" %}</th>
+          <th class="large-2 columns">{% trans "Actions" %}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for opening in opening_list %}
           <tr class="row">
-            <th class="large-4 columns">{% trans "Title" %}</th>
-            <th class="large-2 columns">{% trans "Created" %}</th>
-            <th class="large-2 columns">{% trans "Edit" %}</th>
-            <th class="large-2 columns">{% trans "Applicants" %}</th>
-            <th class="large-2 columns">{% trans "Delete" %}</th>
+            <td class="large-6 columns">
+              <strong><a href="{% url 'openings:detail_opening' opening.id %}" class="opening-title">{{ opening.title }}</a></strong>
+            </td>
+
+            <td class="large-2 columns">
+              {{ opening.created|date:"d/m/Y" }}
+            </td>
+
+            <td class="large-2 columns">
+              {% for stage, count in opening.applicants_stats %}
+                <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
+                  {{ count }}
+                </a>
+                {% if not forloop.last %}/{% endif %}
+              {% endfor %}
+            </td>
+
+            <td class="large-2 columns">
+              <a href="{% url 'openings:update_opening' opening.id %}">{% trans "Edit" %}</a>
+              <a href="{% url 'openings:delete_opening' opening.id %}" class="delete-link">{% trans "Delete" %}</a>
+            </td>
+
           </tr>
-        </thead>
+        {% endfor %}
+      </tbody>
 
-        <tbody>
-          {% for opening in opening_list %}
-            <tr class="row">
-              <td class="large-4 columns">
-                <a href="{% url 'openings:detail_opening' opening.id %}">{{ opening.title }}</a>
-              </td>
-
-              <td class="large-2 columns">
-                {{ opening.created|date:"d/m/Y" }}
-              </td>
-
-              <td class="large-2 columns">
-                <a href="{% url 'openings:update_opening' opening.id %}" class="button-positive">{% trans "Edit" %}</a>
-              </td>
-
-              <td class="large-2 columns">
-                {% for stage, count in opening.applicants_stats %}
-                  <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
-                    {{ count }}
-                  </a>
-                  {% if not forloop.last %}/{% endif %}
-                {% endfor %}
-              </td>
-
-              <td class="large-2 columns">
-                <a href="{% url 'openings:delete_opening' opening.id %}" class="button-negative">{% trans "Delete" %}</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-
-      </table>
-    </div>
+    </table>
   {% endif %}
 
 {% endblock content %}
