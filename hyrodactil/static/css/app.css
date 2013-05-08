@@ -4886,6 +4886,8 @@ body #main .container {
 .page-header {
   font-size: 1.5em;
   height: 45px;
+  border-bottom: 1px solid #bdc3c7;
+  margin-bottom: 30px;
 }
 
 /* line 1, ../../pregen_static/sass/app/_cleditor.scss */
@@ -5127,34 +5129,44 @@ table td.has-dropdown:hover {
   margin-bottom: 2em;
 }
 
-/* line 4, ../../pregen_static/sass/app/_openings.scss */
+/* line 6, ../../pregen_static/sass/app/_openings.scss */
 .included-questions .select, .included-questions .required {
   width: 25%;
 }
-/* line 8, ../../pregen_static/sass/app/_openings.scss */
+/* line 10, ../../pregen_static/sass/app/_openings.scss */
 .included-questions th, .included-questions td {
   text-align: center;
 }
 
-/* line 13, ../../pregen_static/sass/app/_openings.scss */
+/* line 15, ../../pregen_static/sass/app/_openings.scss */
 .opening-list {
   width: 100%;
 }
-/* line 16, ../../pregen_static/sass/app/_openings.scss */
+/* line 18, ../../pregen_static/sass/app/_openings.scss */
 .opening-list th:not(:first-child), .opening-list td:not(:first-child) {
   padding-left: 0;
 }
-/* line 20, ../../pregen_static/sass/app/_openings.scss */
+/* line 22, ../../pregen_static/sass/app/_openings.scss */
 .opening-list .delete-link {
   padding-left: 20px;
 }
-/* line 24, ../../pregen_static/sass/app/_openings.scss */
+/* line 26, ../../pregen_static/sass/app/_openings.scss */
 .opening-list .opening-title {
   font-size: 1.25em;
 }
-/* line 28, ../../pregen_static/sass/app/_openings.scss */
+/* line 30, ../../pregen_static/sass/app/_openings.scss */
 .opening-list td {
   line-height: 1.875em;
+}
+
+/* line 35, ../../pregen_static/sass/app/_openings.scss */
+.submit-opening {
+  border-top: 1px solid #bdc3c7;
+  margin-top: 20px;
+}
+/* line 39, ../../pregen_static/sass/app/_openings.scss */
+.submit-opening input {
+  margin-top: 20px;
 }
 
 /* line 2, ../../pregen_static/sass/app/_section_modals.scss */

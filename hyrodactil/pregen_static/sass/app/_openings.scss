@@ -1,3 +1,5 @@
+@import "../common/colours";
+
 
 .included-questions {
 
@@ -27,5 +29,14 @@
 
   td {
     line-height: emCalc(30px);
+  }
+}
+
+.submit-opening {
+  border-top: 1px solid $silver;
+  margin-top: 20px;
+
+  input {
+    margin-top: 20px;
   }
 }

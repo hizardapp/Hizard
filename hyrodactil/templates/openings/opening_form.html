@@ -5,6 +5,12 @@
 
 {% block content %}
 
+  {% if opening %}
+    <h2 class="page-header">{% trans "Edit opening" %}</h2>
+  {% else %}
+    <h2 class="page-header">{% trans "Create opening" %}</h2>
+  {% endif %}
+
   <div class="row">
     <form action="." method="POST" class="large-12 columns">
       {% csrf_token %}
@@ -75,8 +81,14 @@
           </div>
 
       <div class="row">
-        <div class="large-12 columns text-right">
-          <input type="submit" class="button-positive" value="{% trans 'Create this opening' %}" />
+        <div class="large-12 columns text-right submit-opening">
+
+          {% if opening %}
+            <input type="submit" class="button-positive" value="{% trans 'Save changes' %}" />
+          {% else %}
+            <input type="submit" class="button-positive" value="{% trans 'Create this opening' %}" />
+          {% endif %}
+
         </div>
       </div>
 

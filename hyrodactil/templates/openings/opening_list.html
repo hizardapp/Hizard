@@ -5,7 +5,7 @@
 {% block content %}
   <h2 class="page-header">{% trans "Openings" %}</h2>
 
-  <a href="#" class="button-positive" data-url="{% url 'openings:create_opening' %}">
+  <a href="{% url 'openings:create_opening' %}" class="button-positive">
     {% trans "Create an opening" %}
   </a>
 
