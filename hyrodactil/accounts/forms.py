@@ -69,7 +69,7 @@ class InvitedRegistrationForm(UserCreationForm):
 
     def save(self, commit=True):
         password = self.cleaned_data["password1"]
-        self.instance.password = password
+        self.instance.set_password(password)
         if commit:
             self.instance.save()
         return self.instance

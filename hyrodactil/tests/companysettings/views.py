@@ -352,6 +352,9 @@ class CompanySettingsViewsTests(WebTest):
         self.assertTrue(new_user.is_active)
         self.assertEqual(new_user.company, self.user.company)
 
+        user = CustomUser.objects.get(email="steve@example.com")
+        self.assertTrue(user.check_password("1234567"))
+
     def test_disable_user(self):
         colleague = CustomUser.objects.create_user(
             email="steve@example.com",
