@@ -29,11 +29,25 @@
 {% block aside %}
   <form action="." method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.errors }}
+
     {% for field in form %}
-      {{ field.label_tag }}
-      {{ field }}
+      <div class="row">
+        <div class="large-12 columns {% if field.errors %} error {% endif %}">
+
+          {{ field.label_tag }}
+          {{ field }}
+
+          {% if field.errors %}
+            <small class="rounded-error">
+              {% for error in field.errors %}
+                {{ error }}
+              {% endfor %}
+            </small>
+          {% endif %}
+        </div>
+      </div>
     {% endfor %}
+
     <br><br><br>
     <input type="submit" value="Submit" class="button">
   </form>
