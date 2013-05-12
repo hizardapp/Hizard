@@ -256,10 +256,10 @@ MIN_PASSWORD_LENGTH = 7
 
 ########## SITE SPECIFIC
 SITE_DOMAIN = 'app.hizard.com'
+SITE_PREFIX = 'http://app.hizard.com'
 SITE_URL = 'http://app.hizard.com/'
 PUBLIC_DOMAIN = 'hizard.com'
 PUBLIC_URL = 'http://hizard.com/'
-SITE_PREFIX = 'http://hizard.com'
 COMPANY_URL_PREFIX = 'http://%s.hizard.com'
 DISPLAY_SITE_NAME = 'Hizard'
 DEFAULT_FROM_EMAIL = 'vincent@hizard.com'
