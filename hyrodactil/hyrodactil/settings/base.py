@@ -262,7 +262,7 @@ PUBLIC_DOMAIN = 'hizard.com'
 PUBLIC_URL = 'http://hizard.com/'
 COMPANY_URL_PREFIX = 'http://%s.hizard.com'
 DISPLAY_SITE_NAME = 'Hizard'
-DEFAULT_FROM_EMAIL = 'vincent@hizard.com'
+DEFAULT_FROM_EMAIL = 'Hizard <app@hizard.com>'
 
 SESSION_COOKIE_DOMAIN = '.' + SITE_DOMAIN
 
