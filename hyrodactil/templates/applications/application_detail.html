@@ -39,6 +39,41 @@
       </div>
     </section>
   </div>
+
+  <div id="transition-form-modal" class="reveal-modal">
+    <h3>{% trans 'Current stage' %} : {{ application.current_stage }}</h3>
+    <form action="#transition-form" method="POST" id="transition-form">
+      {% csrf_token %}
+
+      {% if form.errors %}
+        <span class="has-errors"></span>
+      {% endif %}
+
+      {% for field in form %}
+        <div class="row">
+          <div class="large-12 columns {% if field.errors %} error {% endif %}">
+
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% if field.errors %}
+              <small class="rounded-error">
+                {% for error in field.errors %}
+                  {{ error }}
+                {% endfor %}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="row">
+        <input type="submit" value="{% trans 'Change stage' %}" class="button-positive right" />
+      </div>
+
+    </form>
+    <a class="close-reveal-modal">&#215;</a>
+  </div>
 {% endblock %}
 
 {% block extra-js %}
@@ -66,7 +101,8 @@
     });
 
     $(function () {
-      if ($("#transition-form").find("ul.errorlist").length > 0) {
+      if ($("#transition-form").find(".has-errors").length > 0) {
+        console.log('here');
         $("a[data-reveal-id=transition-form-modal]").click();
       }
     })

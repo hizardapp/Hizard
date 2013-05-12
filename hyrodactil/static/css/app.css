@@ -5393,7 +5393,7 @@ table td.has-dropdown:hover {
 
 /* line 28, ../../pregen_static/sass/app/_applicant_details.scss */
 #transition-form textarea {
-  width: auto;
+  width: 100%;
   height: auto;
 }
 

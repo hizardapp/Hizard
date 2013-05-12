@@ -25,16 +25,3 @@
 </div>
 
 
-<div id="transition-form-modal" class="reveal-modal">
-  <h3>{% trans 'Current stage' %} : {{ application.current_stage }}</h3>
-  <form action="#transition-form" method="POST" id="transition-form">
-    {% csrf_token %}
-    {{ form.errors }}
-    {{ form.stage.label_tag }}
-    {{ form.stage }}
-    {{ form.note.label_tag }}
-    {{ form.note }}
-    <input type="submit" value="{% trans 'Move to' %}" class="button" />
-  </form>
-  <a class="close-reveal-modal">&#215;</a>
-</div>
