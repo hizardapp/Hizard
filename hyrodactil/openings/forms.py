@@ -72,7 +72,7 @@ class OpeningForm(forms.ModelForm):
 
     class Meta:
         model = Opening
-        fields = ('title', 'description', 'is_private', 'department',
+        fields = ('title', 'description', 'employment_type', 'is_private', 'department',
                   'loc_country', 'loc_city', 'loc_postcode',)
 
     def __init__(self, company, *args, **kwargs):

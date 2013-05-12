@@ -23,6 +23,7 @@ class OpeningsFormsTests(TestCase):
                           'loc_country': 'FR',
                           'loc_city': 'Cannes',
                           'loc_postcode': '93100',
+                          'employment_type': 'full_time',
                           'questions': [1, 2]}
 
         self.Form = OpeningForm

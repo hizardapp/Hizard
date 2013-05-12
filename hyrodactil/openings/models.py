@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from django_countries import CountryField
+from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
@@ -9,6 +10,12 @@ from companysettings.models import Department, Question, InterviewStage
 
 
 class Opening(TimeStampedModel):
+    EMPLOYMENT_TYPES = Choices(
+        ('part_time', _('Part Time')),
+        ('full_time', _('Full Time')),
+        ('internship', _('Internship')),
+    )
+
     title = models.CharField(max_length=770)
     description = models.TextField()
     is_private = models.BooleanField(default=False)
@@ -17,6 +24,11 @@ class Opening(TimeStampedModel):
     loc_country = CountryField(_("Country"), blank=True)
     loc_city = models.CharField(_("City"), max_length=128, blank=True)
     loc_postcode = models.CharField(_("Post-code"), max_length=64, blank=True)
+    employment_type = models.CharField(
+        choices=EMPLOYMENT_TYPES,
+        default=EMPLOYMENT_TYPES.full_time,
+        max_length=20
+    )
 
     company = models.ForeignKey(Company)
     questions = models.ManyToManyField(
