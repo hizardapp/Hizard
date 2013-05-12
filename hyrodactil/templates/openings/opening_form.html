@@ -129,8 +129,18 @@
         return el.text;
       });
 
+      function formatState (state) {
+          if (state.id == "-1" ) {
+            return state.text + " {% trans "(will be created upon saving)" %}";
+          } else {
+            return state.text;
+          }
+      }
+
       $("#id_department").select2({
         width: '50%',
+        formatResult: formatState,
+        formatSelection: formatState,
         createSearchChoice: function (term, data) {
           if ($(options).filter(function () {
             return term.toLowerCase() == this.toLowerCase();
