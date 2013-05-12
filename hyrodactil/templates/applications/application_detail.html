@@ -42,33 +42,33 @@
 {% endblock %}
 
 {% block extra-js %}
-<script type="text/javascript">
-  $("a.reply-link").click(function (event) {
-      event.preventDefault();
-      var new_form = $("#new-message-form").clone(),
-          link = $(this),
-          small_parent = $(link.parents("small")[0]),
-          parent_message = link.attr("reply-to");
-      small_parent.after(new_form);
-      new_form.find("#id_parent").val(parent_message);
-  });
+  <script type="text/javascript">
+    $("a.reply-link").click(function (event) {
+        event.preventDefault();
+        var new_form = $("#new-message-form").clone(),
+            link = $(this),
+            small_parent = $(link.parents("small")[0]),
+            parent_message = link.attr("reply-to");
+        small_parent.after(new_form);
+        new_form.find("#id_parent").val(parent_message);
+    });
 
-  $("textarea#id_note").on("keydown", function () {
-    var textarea = $(this),
-        str = textarea.val(),
-        cols = textarea.attr("cols"),
-        linecount = 0;
+    $("textarea#id_note").on("keydown", function () {
+      var textarea = $(this),
+          str = textarea.val(),
+          cols = textarea.attr("cols"),
+          linecount = 0;
 
-    $.each(str.split("\n"), function (i, line) {
-      linecount += (Math.ceil(line.length / cols) || 1);
+      $.each(str.split("\n"), function (i, line) {
+        linecount += (Math.ceil(line.length / cols) || 1);
+      })
+      textarea.attr("rows", linecount + 1);
+    });
+
+    $(function () {
+      if ($("#transition-form").find("ul.errorlist").length > 0) {
+        $("a[data-reveal-id=transition-form-modal]").click();
+      }
     })
-    textarea.attr("rows", linecount + 1);
-  });
-
-  $(function () {
-    if ($("#transition-form").find("ul.errorlist").length > 0) {
-      $("a[data-reveal-id=transition-form-modal]").click();
-    }
-  })
-</script>
+  </script>
 {% endblock extra-js %}

@@ -1,8 +1,34 @@
 {% load i18n %}
+{% load staticfiles %}
+
+
+
+<p>
+  <a href="#" data-reveal-id="transition-form-modal">
+    {% trans 'Change the stage of this application' %}
+  </a>
+</p>
+
+
+<div>
+  {% for transition in application.stage_transitions.all %}
+    <p>
+      <span class="label">{{ transition.stage }}</span>
+      {{ transition.user.first_name }} {{ transition.user.last_name }}
+      {{ transition.created|date:"SHORT_DATETIME_FORMAT" }}<br/>
+      {{ transition.note|linebreaks }}
+    </p>
+    {% if not forloop.last %}
+      <hr/>
+    {% endif %}
+  {% endfor %}
+</div>
+
 
 <div id="transition-form-modal" class="reveal-modal">
-  <form action="#transition-form" method="POST" id="transition-form"> {% csrf_token %}
-    <h3>Current stage : {{ application.current_stage }}</h3>
+  <h3>{% trans 'Current stage' %} : {{ application.current_stage }}</h3>
+  <form action="#transition-form" method="POST" id="transition-form">
+    {% csrf_token %}
     {{ form.errors }}
     {{ form.stage.label_tag }}
     {{ form.stage }}
@@ -12,29 +38,3 @@
   </form>
   <a class="close-reveal-modal">&#215;</a>
 </div>
-
-<div class="row">
-  <div class="large-12 columns">
-    <p>
-      <a href="#" data-reveal-id="transition-form-modal">
-        Change the stage of this application
-      </a>
-    </p>
-  </div>
-</div>
-
-<div class="row">
-  <div class="large-12 columns">
-    {% for transition in application.stage_transitions.all %}
-      <p>
-        <span class="label">{{ transition.stage }}</span>
-        {{ transition.user.first_name }} {{ transition.user.last_name }}
-        {{ transition.created|date:"SHORT_DATETIME_FORMAT" }}<br/>
-        {{ transition.note|linebreaks }}
-      </p>
-      {% if not forloop.last %}
-        <hr/>
-      {% endif %}
-    {% endfor %}
-  </div>
-<div>

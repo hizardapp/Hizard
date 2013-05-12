@@ -1,33 +1,31 @@
 {% load i18n %}
 
-<table width="100%">
+<table>
   <tbody>
   <tr>
-    <td width="20px"></td>
-    <td width="200px">First Name</td>
+    <td>First Name</td>
     <td>{{ application.applicant.first_name }}</td>
   </tr>
   <tr>
-    <td width="20px"></td>
-    <td width="200px">Last Name</td>
+    <td>Last Name</td>
     <td>{{ application.applicant.last_name }}</td>
   </tr>
   <tr>
-    <td width="20px"></td>
-    <td width="200px">Email</td>
+    <td>Email</td>
     <td>{{ application.applicant.email }}</td>
   </tr>
   </tbody>
 </table>
 
-<table width="100%">
+<table>
   <tbody>
   {% for answer in answers %}
     <tr>
-      <td width="20px"></td>
-      <td width="200px">{{ answer.question.name }}</td>
+      <td>{{ answer.question.name }}</td>
       <td>
-        {% if answer.question.type == "file" %}
+        {% if not answer.answer %}
+          {% trans 'No answer' %}
+        {% elif answer.question.type == "file" %}
           <a href="{{ MEDIA_URL }}{{ answer.answer }}" target="_blank">{{ answer.answer }}</a>
         {% else %}
           {{ answer.answer }}
