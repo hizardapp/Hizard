@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import OrderedDict
 import json
 
 from django.core.urlresolvers import reverse
@@ -130,12 +130,15 @@ class BoardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(BoardView, self).get_context_data(**kwargs)
 
-        board_data = defaultdict(list)
+        board_data = OrderedDict()
 
-        stages = InterviewStage.objects.filter(company=self.request.user.company)
+        stages = InterviewStage.objects.filter(
+            company=self.request.user.company
+        ).order_by('position')
         applications = Application.objects.filter(
             opening__company=self.request.user.company
         ).prefetch_related('stage_transitions__stage', 'applicant')
+
         for stage in stages:
             board_data[stage] = []
             for application in applications:
