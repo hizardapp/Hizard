@@ -1,4 +1,5 @@
 {% extends "base_app.html" %}
+{% load django_tables2 %}
 
 {% load i18n %}
 
@@ -21,6 +22,11 @@
           <a href={% url 'applications:board_applications' %}>{% trans 'Show as board' %}</a>
         </div>
       {% endif %}
+
+      <div class="row">
+        {% render_table table %}
+      </div>
+
 
       <div class="row">
         <table class="large-12 columns">

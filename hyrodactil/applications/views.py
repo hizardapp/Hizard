@@ -6,7 +6,9 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, CreateView, TemplateView, View
+
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
+import django_tables2 as tables
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm, ApplicationForm
 from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
@@ -16,16 +18,33 @@ from core.views import MessageMixin, RestrictedListView
 from openings.models import Opening
 
 
-class ApplicationListView(LoginRequiredMixin, RestrictedListView):
+class ApplicationTable(tables.Table):
+    first_name = tables.Column(accessor="applicant.first_name")
+    last_name = tables.Column(accessor="applicant.last_name")
+    created = tables.DateColumn(verbose_name="Date applied", format="d/m/Y H:m")
+
+    class Meta:
+        attrs = {"class": "large-12 columns"}
+        model = Application
+        fields = ("first_name", "last_name", "created")
+
+class ApplicationListView(LoginRequiredMixin, tables.SingleTableMixin, RestrictedListView):
+
+    model = Application
+    table_class = ApplicationTable
+
     def get_context_data(self, **kwargs):
         kwargs['context_opening'] = get_object_or_404(
             Opening, pk=self.kwargs['opening_id']
         )
-        return super(ApplicationListView, self).get_context_data(**kwargs)
+        ctx =  super(ApplicationListView, self).get_context_data(**kwargs)
+        return ctx
 
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
-        return Application.objects.filter(opening=opening)
+        qs = Application.objects.filter(opening=opening)
+        print qs
+        return qs
 
 
 class AllApplicationListView(LoginRequiredMixin, RestrictedListView):
