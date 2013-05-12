@@ -60,6 +60,8 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 ########## END TOOLBAR CONFIGURATION
 
+MEDIA_URL = 'http://app.spp.com:8000/media/'
+
 ######## REGISTRATION
 SKIP_ACTIVATION = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -23,3 +23,5 @@ RAVEN_CONFIG = {
 INSTALLED_APPS = INSTALLED_APPS + (
     'raven.contrib.django.raven_compat',
 )
+
+MEDIA_URL = 'http://app.hizard.com/media/'
