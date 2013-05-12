@@ -145,7 +145,7 @@ class PasswordResetView(FormView):
         """
         opts = {
             'use_https': self.request.is_secure(),
-            'from_email': 'Hyrodactil',
+            'from_email': 'Hizard',
             'subject_template_name': 'accounts/password_reset_subject.txt',
             'email_template_name': 'accounts/password_reset_email.html',
             'request': self.request,
