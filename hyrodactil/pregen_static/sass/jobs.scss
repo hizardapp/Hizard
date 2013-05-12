@@ -43,6 +43,10 @@
 // @import "foundation/components/tooltips";
 // @import "foundation/components/dropdown";
 
-@import "jobs_partials/header";
-@import "jobs_partials/opening_list";
-@import "jobs_partials/form";
+
+@import "common/forms";
+@import "common/buttons";
+
+@import "jobs/header";
+@import "jobs/opening_list";
+@import "jobs/form";

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from model_utils.models import TimeStampedModel
 
@@ -12,7 +13,10 @@ class Applicant(TimeStampedModel):
     last_name = models.CharField(max_length=770)
     # 254 is the max length of an email
     email = models.EmailField(max_length=254)
-    resume = models.FileField(upload_to='resumes')
+    resume = models.FileField(
+        upload_to='resumes',
+        help_text=_("PDF files only")
+    )
 
 
 class Application(TimeStampedModel):

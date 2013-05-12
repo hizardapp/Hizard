@@ -1,12 +1,12 @@
-@import "../variables";
 
+@import '../common/colours';
 
 header {
   a {
     line-height: 80px;
   }
 
-  border-bottom: 1px solid $light-grey;
+  border-bottom: 1px solid $clouds;
 }
 
 .apply-header {
@@ -16,5 +16,5 @@ header {
     line-height: 50px;
   }
 
-  border-bottom: 1px solid $light-grey;
+  border-bottom: 1px solid $clouds;
 }

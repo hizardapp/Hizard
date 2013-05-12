@@ -1,5 +1,5 @@
-@import "../variables";
 
+@import '../common/colours';
 
 .company-settings {
   ul {
@@ -9,14 +9,14 @@
   li {
     padding-bottom: 10px;
     padding-top: 10px;
-    border-bottom: 1px solid $grey;
+    border-bottom: 1px solid $silver;
 
     &:first-of-type {
-      border-top: 1px solid darken($grey, 20);
+      border-top: 1px solid darken($silver, 20);
     }
 
     &:last-of-type {
-      border-bottom: 1px solid darken($grey, 20);
+      border-bottom: 1px solid darken($silver, 20);
     }
 
     h3 {

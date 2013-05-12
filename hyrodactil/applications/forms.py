@@ -54,9 +54,9 @@ class ApplicationForm(forms.ModelForm):
                 raise forms.ValidationError(_('File type is not supported'))
 
             # mime type of a pdf is application/pdf
-            type = resume.content_type.split('/')
+            filetype = resume.content_type.split('/')
 
-            if len(type) > 1 and type[1] != 'pdf':
+            if len(filetype) > 1 and filetype[1] != 'pdf':
                 raise forms.ValidationError(_('File type is not supported'))
 
         return resume
