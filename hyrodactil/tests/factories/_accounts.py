@@ -5,7 +5,7 @@ from accounts.models import CustomUser
 import _companies
 
 
-class UserFactory(factory.Factory):
+class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = CustomUser
 
     email = 'bob@bob.com'

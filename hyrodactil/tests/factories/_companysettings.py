@@ -4,14 +4,14 @@ from companysettings.models import Department, Question, InterviewStage
 import _companies
 
 
-class DepartmentFactory(factory.Factory):
+class DepartmentFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Department
 
     name = 'Engineering'
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
-class SingleLineQuestionFactory(factory.Factory):
+class SingleLineQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'Single Line'
@@ -20,7 +20,7 @@ class SingleLineQuestionFactory(factory.Factory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
-class MultiLineQuestionFactory(factory.Factory):
+class MultiLineQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'Multi Line'
@@ -29,7 +29,7 @@ class MultiLineQuestionFactory(factory.Factory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
-class CheckboxQuestionFactory(factory.Factory):
+class CheckboxQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'Checkbox'
@@ -38,7 +38,7 @@ class CheckboxQuestionFactory(factory.Factory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
-class FileQuestionFactory(factory.Factory):
+class FileQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'File'
@@ -47,7 +47,7 @@ class FileQuestionFactory(factory.Factory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
-class InterviewStageFactory(factory.Factory):
+class InterviewStageFactory(factory.DjangoModelFactory):
     FACTORY_FOR = InterviewStage
 
     name = 'Phone interview'

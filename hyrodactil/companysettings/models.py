@@ -43,6 +43,9 @@ class InterviewStage(TimeStampedModel):
     name = models.CharField(max_length=100)
     position = models.PositiveIntegerField()
 
+    accepted = models.NullBooleanField(default=False)
+    rejected = models.NullBooleanField( default=False)
+
     company = models.ForeignKey(Company)
 
     class Meta:
@@ -82,14 +85,14 @@ class InterviewStage(TimeStampedModel):
             position__gt=self.position
         ).aggregate(models.Min('position'))['position__min']
         try:
-            next = InterviewStage.objects.filter(
+            next_stage = InterviewStage.objects.filter(
                 company=self.company,
                 position=next_position
             )[0]
         except IndexError:
             return None
 
-        return next
+        return next_stage
 
     def swap_position(self, other_stage):
         """

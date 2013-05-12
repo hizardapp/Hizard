@@ -14,7 +14,8 @@
       <thead>
         <tr class="row">
           <th class="large-6 columns">{% trans "Title" %}</th>
-          <th class="large-2 columns">{% trans "Created" %}</th>
+          <th class="large-1 columns">{% trans "Created" %}</th>
+          <th class="large-1 columns">{% trans "Closed" %}</th>
           <th class="large-2 columns">{% trans "Applicants" %}</th>
           <th class="large-2 columns">{% trans "Actions" %}</th>
         </tr>
@@ -27,8 +28,12 @@
               <strong><a href="{% url 'openings:detail_opening' opening.id %}" class="opening-title">{{ opening.title }}</a></strong>
             </td>
 
-            <td class="large-2 columns">
+            <td class="large-1 columns">
               {{ opening.created|date:"d/m/Y" }}
+            </td>
+
+            <td class="large-1 columns">
+              {{ opening.closing_date|date:"d/m/Y" }}
             </td>
 
             <td class="large-2 columns">
@@ -42,7 +47,10 @@
 
             <td class="large-2 columns">
               <a href="{% url 'openings:update_opening' opening.id %}">{% trans "Edit" %}</a>
-              <a href="{% url 'openings:delete_opening' opening.id %}" class="delete-link">{% trans "Delete" %}</a>
+              |
+              <a href="{% url 'openings:delete_opening' opening.id %}">{% trans "Delete" %}</a>
+              |
+              <a href="{% url 'openings:close_opening' opening.id %}">{% trans "Close opening" %}</a>
             </td>
 
           </tr>

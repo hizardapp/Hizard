@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
@@ -117,3 +119,24 @@ class OpeningsViewsTests(WebTest):
         url = reverse('openings:detail_opening', args=(opening.id,))
         response = self.app.get(url, user=self.user)
         self.assertContains(response, opening.title)
+
+    def test_close_opening_valid(self):
+        opening = OpeningFactory(title='DevOps', company=self.user.company)
+        url = reverse('openings:close_opening', args=(opening.id,))
+        self.app.get(url, user=self.user)
+
+        self.assertEqual(
+            Opening.objects.filter(closing_date__isnull=True).count(), 0
+        )
+
+    def test_close_opening_already_closed(self):
+        opening = OpeningFactory(
+            title='DevOps', company=self.user.company, closing_date=datetime.now()
+        )
+        url = reverse('openings:close_opening', args=(opening.id,))
+        response = self.app.get(url, user=self.user).follow()
+
+        self.assertEqual(
+            Opening.objects.filter(closing_date__isnull=True).count(), 0
+        )
+        self.assertContains(response, 'already closed')

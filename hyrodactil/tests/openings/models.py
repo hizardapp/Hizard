@@ -1,8 +1,13 @@
+from datetime import datetime
+
 from django.test import TestCase
 
 from ..factories._applications import ApplicationFactory
 from ..factories._companysettings import InterviewStageFactory
 from ..factories._openings import OpeningFactory
+
+from openings.models import Opening
+
 
 class OpeningsModelsTests(TestCase):
 

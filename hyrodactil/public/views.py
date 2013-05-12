@@ -19,7 +19,7 @@ class OpeningList(SubdomainRequiredMixin, TemplateView):
         context = super(OpeningList, self).get_context_data(**kwargs)
         company = get_object_or_404(Company, subdomain=self.request.subdomain)
         context["company"] = company
-        context["openings"] = company.opening_set.all()
+        context["openings"] = company.opening_set.filter(closing_date__isnull=True)
         return context
 
 

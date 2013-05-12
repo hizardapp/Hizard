@@ -3,7 +3,7 @@ import factory
 from companies.models import Company
 
 
-class CompanyFactory(factory.Factory):
+class CompanyFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Company
 
     name = 'ACME'

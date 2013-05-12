@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import shutil
 
@@ -41,6 +42,18 @@ class ApplicationViewsTests(WebTest):
     def test_get_list_openings_inexisting_subdomain(self):
         url = reverse('public:opening-list')
         self.app.get(url, headers=dict(Host="tralala.h.com"), status=404)
+
+    def test_get_list_openings_with_a_close_one(self):
+        OpeningWithQuestionsFactory(
+            title="Dreamer",
+            company=self.user.company,
+            closing_date=datetime.now()
+        )
+        url = reverse('public:opening-list')
+        page = self.app.get(
+            url, headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+        )
+        self.assertNotContains(page, 'Dreamer')
 
     def test_get_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))

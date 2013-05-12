@@ -5,7 +5,7 @@ import _companysettings
 from openings.models import Opening, OpeningQuestion
 
 
-class OpeningFactory(factory.Factory):
+class OpeningFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Opening
 
     title = 'Salesman'
@@ -17,7 +17,7 @@ class OpeningFactory(factory.Factory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
-class OpeningQuestionFactory(factory.Factory):
+class OpeningQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = OpeningQuestion
 
     question = factory.SubFactory(_companysettings.Question)
