@@ -36,8 +36,19 @@
 }
 
 .stages {
-  .links {
-    color: black;
+  .stage {
+    margin-bottom: emCalc(20px);
+    padding-bottom: 5px;
+    margin-top: 5px;
+    border-bottom: 1px solid black;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    .links {
+      color: black;
+    }
   }
 }
 

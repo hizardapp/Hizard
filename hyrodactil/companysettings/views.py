@@ -177,7 +177,7 @@ class InterviewStageDeleteView(LoginRequiredMixin, QuickDeleteView):
             return redirect(self.success_url)
 
 
-class InterviewStageReorderView(LoginRequiredMixin, MessageMixin, View):
+class InterviewStageReorderView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         stage = InterviewStage.objects.get(id=kwargs.pop('pk'))
         direction = kwargs.pop('direction')
@@ -188,7 +188,7 @@ class InterviewStageReorderView(LoginRequiredMixin, MessageMixin, View):
             swapping_stage = stage.get_next_stage()
 
         if stage.swap_position(swapping_stage):
-            messages.info(self.request, 'Stages reordered.')
+            messages.success(self.request, 'Stages reordered.')
         else:
             messages.info(self.request, "Couldn't reorder the stages.")
         return HttpResponseRedirect(reverse('companysettings:list_stages'))

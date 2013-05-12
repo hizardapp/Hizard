@@ -5153,6 +5153,7 @@ body #main .container {
   padding-top: 20px;
   box-shadow: 0 0 3px #bdc3c7;
   padding-bottom: 40px;
+  min-height: 500px;
 }
 
 /* line 3, ../../pregen_static/sass/app/_common.scss */
@@ -5335,20 +5336,31 @@ body #main .container {
 }
 
 /* line 39, ../../pregen_static/sass/app/_companysettings.scss */
-.stages .links {
+.stages .stage {
+  margin-bottom: 1.25em;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  border-bottom: 1px solid black;
+}
+/* line 45, ../../pregen_static/sass/app/_companysettings.scss */
+.stages .stage:last-of-type {
+  border-bottom: none;
+}
+/* line 49, ../../pregen_static/sass/app/_companysettings.scss */
+.stages .stage .links {
   color: black;
 }
 
-/* line 45, ../../pregen_static/sass/app/_companysettings.scss */
+/* line 56, ../../pregen_static/sass/app/_companysettings.scss */
 table td.has-dropdown {
   cursor: pointer;
 }
-/* line 48, ../../pregen_static/sass/app/_companysettings.scss */
+/* line 59, ../../pregen_static/sass/app/_companysettings.scss */
 table td.has-dropdown:hover {
   background-color: #ecf0f1;
 }
 
-/* line 55, ../../pregen_static/sass/app/_companysettings.scss */
+/* line 66, ../../pregen_static/sass/app/_companysettings.scss */
 .not-displayed {
   display: none;
 }

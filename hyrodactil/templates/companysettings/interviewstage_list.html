@@ -4,46 +4,52 @@
 
 
 {% block content %}
-  <h2>{% trans "Stages" %}</h2>
+  <h2 class="page-header">{% trans "Stages" %}</h2>
 
-  <div class="stages">
+  <div class="large-8 columns stages">
 
     {% for stage in interviewstage_list %}
-      <div class="row">
-        <div class="large-6 large-centered columns panel centered-text">
-          <div class="row">
-            {% if not forloop.last %}
-              <a href="{% url 'companysettings:reorder_stage' stage.id 'down' %}"><i class="icon-arrow-down icon-large large-1 column pointer links"></i></a>
-            {% endif %}
 
-            <span class="large-10 columns {% if forloop.last %} large-offset-1{% endif %}">
-              <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a> —
-              <a href="{% url 'companysettings:delete_stage' stage.id %}"><i class="icon-trash pointer links"></i></a>
-            </span>
+      <div class="row stage text-center">
 
-            {% if not forloop.first %}
-                <a href="{% url 'companysettings:reorder_stage' stage.id 'up' %}"><i class="icon-arrow-up icon-large large-1 column pointer links"></i></a>
-            {% else %}
-              <span class="large-1 column"></span>
-            {% endif %}
-          </div>
+        <div class="large-1 column">
+          {% if not forloop.last %}
+            <a href="{% url 'companysettings:reorder_stage' stage.id 'down' %}">
+              <i class="icon-arrow-down icon-large pointer links"></i>
+            </a>
+          {% endif %}
+         </div>
+
+        <span class="large-10 columns {% if forloop.last %} large-offset-1{% endif %}">
+          <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a> —
+          <a href="{% url 'companysettings:delete_stage' stage.id %}"><i class="icon-trash pointer links"></i></a>
+        </span>
+
+        <div class="large-1 column">
+          {% if not forloop.first %}
+            <a href="{% url 'companysettings:reorder_stage' stage.id 'up' %}">
+              <i class="icon-arrow-up icon-large pointer links"></i>
+            </a>
+          {% endif %}
         </div>
+
+        {% if not forloop.last and False %}
+          <div class="row">
+            <div class="large-6 large-centered columns centered-text">
+              <i class="icon-double-angle-down icon-2x"></i>
+            </div>
+          </div>
+        {% endif %}
+
       </div>
 
-      {% if not forloop.last %}
-        <div class="row">
-          <div class="large-6 large-centered columns centered-text">
-            <i class="icon-double-angle-down icon-2x"></i>
-          </div>
-        </div>
-        <br>
-      {% endif %}
 
     {% endfor %}
 
   </div>
 
-  <br><br>
-  <a href="{% url 'companysettings:create_stage' %}" class="button">{% trans "Create a stage" %}</a>
+  <div class="large-4 columns">
+    <a href="{% url 'companysettings:create_stage' %}" class="button-positive">{% trans "Create a stage" %}</a>
+  </div>
 
 {% endblock content %}
