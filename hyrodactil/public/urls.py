@@ -4,9 +4,14 @@ import views
 
 urlpatterns = patterns('',
     url(
-        r'^$',
-        views.HomeView.as_view(),
-        name='home'
+        r'^landing_page/$',
+        views.LandingPageView.as_view(),
+        name='landing-page'
+    ),
+    url(
+        r'^opening_list/$',
+        views.OpeningList.as_view(),
+        name='opening-list'
     ),
     url(
         r'^(?P<opening_id>\d+)/apply/$',

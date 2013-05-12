@@ -28,7 +28,7 @@
     <ul class="title-area">
       <!-- Title Area -->
       <li class="name">
-        <h1><a href="#">Hizard</a></h1>
+      <h1><a href="{{ PUBLIC_URL }}">Hizard</a></h1>
       </li>
 
       <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
@@ -39,8 +39,8 @@
       <ul class="right">
         <li><a href="#">{% trans 'Features' %}</a></li>
         <li><a href="#">{% trans 'Pricing' %}</a></li>
-        <li><a href={% url 'accounts:register' %}>{% trans 'Sign up' %}</a></li>
-        <li><a href="{% url 'auth:login' %}">{% trans 'Login' %}</a></li>
+        <li><a href="{{ SITE_PREFIX }}{% url 'accounts:register' %}">{% trans 'Sign up' %}</a></li>
+        <li><a href="{{ SITE_PREFIX }}{% url 'auth:login' %}">{% trans 'Login' %}</a></li>
       </ul>
     </section>
   </nav>

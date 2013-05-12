@@ -158,7 +158,7 @@ class AccountsViewsTests(WebTest):
         user = UserFactory.create()
         response = self.app.get(reverse('auth:logout'), user=user)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual("http://hizard.com/", response["Location"])
+        self.assertEqual("http://testserver/login/", response["Location"])
         self.assertNotIn('_auth_user_id', self.app.session)
 
     def test_get_logout_while_logged_out(self):
@@ -199,7 +199,7 @@ class AccountsViewsTests(WebTest):
 
         user_found = CustomUser.objects.get()
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(reverse('dashboard:dashboard') in response["Location"])
+        self.assertTrue(reverse('auth:login') in response["Location"])
         self.assertTrue(user_found.check_password('a secure password'))
 
     def test_post_change_password_failure_too_short(self):
@@ -263,7 +263,7 @@ class AccountsViewsTests(WebTest):
         form['email'] = user.email
         response = form.submit()
 
-        self.assertRedirects(response, reverse('public:home'))
+        self.assertRedirects(response, reverse('auth:login'))
         self.assertEqual(len(mail.outbox), 1)
 
     def test_post_password_reset_failure(self):
@@ -345,7 +345,7 @@ class AccountsViewsTests(WebTest):
         response = form.submit()
 
         user_found = CustomUser.objects.get()
-        self.assertRedirects(response, reverse('public:home'))
+        self.assertRedirects(response, reverse('auth:login'))
         self.assertTrue(user_found.check_password('password'))
         self.assertFalse(user_found.check_password('bob'))
 

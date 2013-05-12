@@ -1,6 +1,5 @@
 from braces.views import LoginRequiredMixin
 
-from django.conf import settings
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
@@ -103,20 +102,11 @@ class LoginView(FormView):
 class LogoutView(LoginRequiredMixin, View):
     """
     Logout view, only the GET method, if user is not logged in,
-    redirect to the home page
+    redirect to the login page
     """
     def get(self, *args, **kwargs):
         logout(self.request)
-
-        scheme = "https" if self.request.is_secure() else "http"
-        server_port = int(self.request.environ['SERVER_PORT'])
-        if server_port not in (80, 443):
-            host_part = "%s://%s:%s" % (scheme, settings.SITE_URL, server_port)
-        else:
-            host_part = "%s://%s" % (scheme, settings.SITE_URL)
-
-        url = "%s%s" % (host_part, reverse('public:home'))
-        return HttpResponseRedirect(url)
+        return HttpResponseRedirect(reverse("auth:login"))
 
 
 class PasswordChangeView(LoginRequiredMixin, FormView):
@@ -125,7 +115,7 @@ class PasswordChangeView(LoginRequiredMixin, FormView):
     """
     form_class = MinLengthChangePasswordForm
     template_name = 'accounts/password_change_form.html'
-    success_url = reverse_lazy('dashboard:dashboard')
+    success_url = reverse_lazy('auth:login')
 
     def get_form_kwargs(self):
         """
@@ -147,7 +137,7 @@ class PasswordResetView(FormView):
     """
     form_class = auth_forms.PasswordResetForm
     template_name = 'accounts/password_reset_form.html'
-    success_url = reverse_lazy('public:home')
+    success_url = reverse_lazy('auth:login')
 
     def form_valid(self, form):
         """
@@ -167,7 +157,7 @@ class PasswordResetView(FormView):
 class PasswordConfirmResetView(FormView):
     form_class = MinLengthSetPasswordForm
     template_name = 'accounts/password_reset_confirm.html'
-    success_url = reverse_lazy('public:home')
+    success_url = reverse_lazy('auth:login')
 
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):

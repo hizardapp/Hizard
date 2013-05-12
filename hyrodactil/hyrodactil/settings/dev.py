@@ -63,6 +63,14 @@ DEBUG_TOOLBAR_CONFIG = {
 ######## REGISTRATION
 SKIP_ACTIVATION = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-SITE_URL = 'spp.com'
+
+SITE_DOMAIN = 'app.spp.com'
+SITE_URL = 'http://app.spp.com:8000/'
+SITE_PREFIX = 'http://app.spp.com:8000'
 ALLOWED_HOSTS = ('.spp.com',)
-SESSION_COOKIE_DOMAIN = '.' + SITE_URL
+SESSION_COOKIE_DOMAIN = '.' + SITE_DOMAIN
+
+PUBLIC_DOMAIN = 'spp.com'
+PUBLIC_URL = 'http://spp.com:8000/'
+
+COMPANY_URL_PREFIX = 'http://%s.spp.com:8000'

@@ -15,8 +15,8 @@ from companysettings.models import Question
 
 
 class PublicViewsTests(WebTest):
-    def test_anonymous_can_access_home(self):
-        url = reverse('public:home')
+    def test_anonymous_can_access_landing_page(self):
+        url = reverse('public:landing-page')
         response = self.app.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -28,7 +28,7 @@ class ApplicationViewsTests(WebTest):
         self.opening = OpeningWithQuestionsFactory(company=self.user.company)
 
     def test_get_list_openings(self):
-        url = reverse('public:home')
+        url = reverse('public:opening-list')
 
         page = self.app.get(
             url,
@@ -39,7 +39,7 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(page, self.opening.title)
 
     def test_get_list_openings_inexisting_subdomain(self):
-        url = reverse('public:home')
+        url = reverse('public:opening-list')
         self.app.get(url, headers=dict(Host="tralala.h.com"), status=404)
 
     def test_get_application_form(self):

@@ -1,38 +1,26 @@
 from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
-from django.template.response import TemplateResponse
 from django.views.generic.base import TemplateView
 
 from applications.forms import ApplicationForm
 from companies.models import Company
-from core.views import SubdomainMixin
 from openings.models import Opening
+from core.views import SubdomainRequiredMixin
 
 
-class HomeView(SubdomainMixin, TemplateView):
-    def job_list(self, request):
-        context = super(HomeView, self).get_context_data()
+class LandingPageView(TemplateView):
+    template_name = "public/home.html"
+
+
+class OpeningList(SubdomainRequiredMixin, TemplateView):
+    template_name = "public/opening_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(OpeningList, self).get_context_data(**kwargs)
         company = get_object_or_404(Company, subdomain=self.request.subdomain)
-        context['company'] = company
-        context['openings'] = Opening.objects.filter(company=company)
-
-        return TemplateResponse(
-                request=request,
-                template="public/opening_list.html",
-                context=context
-        )
-
-    def home_view(self, request):
-        return TemplateResponse(
-                request=self.request,
-                template="public/home.html"
-        )
-
-    def get(self, request, *args, **kwargs):
-        if self.request.subdomain:
-            return self.job_list(request)
-        else:
-            return self.home_view(request)
+        context["company"] = company
+        context["openings"] = company.opening_set.all()
+        return context
 
 
 class ApplyView(TemplateView):

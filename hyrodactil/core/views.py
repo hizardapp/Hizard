@@ -1,17 +1,18 @@
 from django.contrib import messages
+from django.http import Http404
 from django.views.generic.edit import BaseDeleteView
 from django.views.generic import UpdateView, DetailView, ListView
 
 
-class SubdomainMixin(object):
+class SubdomainRequiredMixin(object):
     def dispatch(self, *args, **kwargs):
         domain_parts = self.request.get_host().split('.')
         if len(domain_parts) > 2:
             self.request.subdomain = domain_parts[0]
         else:
-            self.request.subdomain = None
+            raise Http404
 
-        return super(SubdomainMixin, self).dispatch(*args, **kwargs)
+        return super(SubdomainRequiredMixin, self).dispatch(*args, **kwargs)
 
 
 class QuickDeleteView(BaseDeleteView):

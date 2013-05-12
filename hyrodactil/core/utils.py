@@ -1,26 +1,7 @@
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from companysettings.models import Question, InterviewStage
 from openings.models import Opening
-
-
-def build_host_part(request, domain):
-    scheme = "https" if request.is_secure() else "http"
-    server_port = int(request.environ['SERVER_PORT'])
-    if server_port not in (80, 443):
-        return "%s://%s:%s" % (scheme, domain, server_port)
-    else:
-        return "%s://%s" % (scheme, domain)
-
-def build_subdomain_url(request, url, user=None):
-    if user is None:
-        user = request.user
-
-    host_part = build_host_part(request,
-            "%s.%s" % (user.company.subdomain, settings.SITE_URL))
-
-    return "%s%s" % (host_part, url)
 
 
 def setup_company(company):

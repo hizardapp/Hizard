@@ -255,10 +255,15 @@ SKIP_ACTIVATION = False
 MIN_PASSWORD_LENGTH = 7
 
 ########## SITE SPECIFIC
-SITE_URL = 'hizard.com'
+SITE_DOMAIN = 'app.hizard.com'
+SITE_URL = 'https://app.hizard.com/'
+PUBLIC_DOMAIN = 'hizard.com'
+PUBLIC_URL = 'http://hizard.com/'
+SITE_PREFIX = 'http://hizard.com:8000'
+COMPANY_URL_PREFIX = 'https://%s.hizard.com'
 DISPLAY_SITE_NAME = 'Hizard'
 DEFAULT_FROM_EMAIL = 'vincent@hizard.com'
 
-SESSION_COOKIE_DOMAIN = '.' + SITE_URL
+SESSION_COOKIE_DOMAIN = '.' + SITE_DOMAIN
 
 ALLOWED_HOSTS = ('.hizard.com',)

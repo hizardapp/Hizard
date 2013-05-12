@@ -54,7 +54,7 @@ urlpatterns = patterns('',
             app_name='applications')
     ),
     url(
-        r'^dashboard/',
+        r'^',
         include(
             'dashboard.urls',
             namespace='dashboard',
