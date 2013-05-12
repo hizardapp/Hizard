@@ -43,7 +43,16 @@
     </form>
 
     <div class="large-6 columns">
-      Some blabla
+      <p>
+        {% trans 'The name of your company will be used on your jobs page.' %}
+      </p>
+      <br>
+      <p>
+        {% blocktrans %}
+          Your jobs page will be accessible at yourcompany.hizard.com, yourcompany being
+          the subdomain entered in the input on the left.
+        {% endblocktrans %}
+      </p>
     </div>
   </div>
 

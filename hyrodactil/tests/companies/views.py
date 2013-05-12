@@ -19,6 +19,15 @@ class CompaniesViewsTests(WebTest):
         self.assertEqual(page.status_code, 200)
         self.assertIn(0, page.forms)
 
+    def test_get_company_with_already_a_company(self):
+        """Should be redirect to dashboard"""
+        user = UserFactory(email="mac@gyver.com")
+        url = reverse('companies:create')
+
+        page = self.app.get(url, user=user)
+
+        self.assertEqual(page.status_code, 302)
+
     def test_post_create_company_invalid(self):
         url = reverse('companies:create')
 
