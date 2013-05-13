@@ -8,7 +8,7 @@
 
   <div class="large-8 columns stages">
 
-    {% for stage in interviewstage_list %}
+    {% for stage in stages %}
 
       <div class="row stage text-center">
 
@@ -21,7 +21,7 @@
          </div>
 
         <span class="large-10 columns {% if forloop.last %} large-offset-1{% endif %}">
-          <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a> —
+          <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a>
           <a href="{% url 'companysettings:delete_stage' stage.id %}"><i class="icon-trash pointer links"></i></a>
         </span>
 
@@ -33,18 +33,19 @@
           {% endif %}
         </div>
 
-        {% if not forloop.last and False %}
-          <div class="row">
-            <div class="large-6 large-centered columns centered-text">
-              <i class="icon-double-angle-down icon-2x"></i>
-            </div>
-          </div>
-        {% endif %}
-
       </div>
 
-
     {% endfor %}
+
+  <br>
+
+  {% for stage in default_stages %}
+    <div class="row stage text-center">
+      <span class="large-10 columns large-offset-1">
+        <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a>
+       </span>
+    </div>
+  {% endfor %}
 
   </div>
 

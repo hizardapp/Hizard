@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.core import mail
+from django.http import Http404
 from django_webtest import WebTest
 from companies.models import Company
 
@@ -265,6 +266,23 @@ class CompanySettingsViewsTests(WebTest):
         )
         self.assertContains(response, stage.name)
         self.assertContains(response, "You need to have at least one stage.")
+
+    def test_delete_accepted_stage(self):
+        stage = InterviewStageFactory.create(
+            company=self.user.company, accepted=True
+        )
+        url = reverse('companysettings:delete_stage', args=(stage.id,))
+
+        self.app.get(url, user=self.user, status=404)
+
+    def test_delete_rejected_stage(self):
+        stage = InterviewStageFactory.create(
+            company=self.user.company, rejected=True
+        )
+        url = reverse('companysettings:delete_stage', args=(stage.id,))
+
+        # Expecting a 404
+        self.app.get(url, user=self.user, status=404)
 
     def test_reorder_stage_valid_up(self):
         stage1 = InterviewStageFactory.create(company=self.user.company)

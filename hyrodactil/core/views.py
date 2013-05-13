@@ -21,7 +21,7 @@ class QuickDeleteView(BaseDeleteView):
 
     def delete(self, request, *args, **kwargs):
         message = self.success_message
-        messages.info(self.request, message)
+        messages.success(self.request, message)
         return super(QuickDeleteView, self).delete(request, *args, **kwargs)
 
 

@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.views.generic import CreateView, TemplateView, View
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
@@ -124,8 +124,22 @@ class QuestionDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_message = _('Question deleted.')
 
 
-class InterviewStageListView(LoginRequiredMixin, RestrictedListView):
+class InterviewStageListView(LoginRequiredMixin, TemplateView):
     model = InterviewStage
+    template_name = 'companysettings/interviewstage_list.html'
+
+    def get_context_data(self, **kwargs):
+        stages = InterviewStage.objects.filter(
+            company=self.request.user.company, position__isnull=False
+        )
+        default_stages = InterviewStage.objects.filter(
+            company=self.request.user.company, position__isnull=True
+        )
+        context = super(InterviewStageListView, self).get_context_data(**kwargs)
+        context['stages'] = stages
+        context['default_stages'] = default_stages
+
+        return context
 
 
 class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
@@ -166,6 +180,10 @@ class InterviewStageDeleteView(LoginRequiredMixin, QuickDeleteView):
 
     def get(self, *args, **kwargs):
         self.object = self.get_object()
+        # Can't delete those 2, we use them to classify
+        if self.object.accepted or self.object.rejected:
+            raise Http404
+
         count_stages = InterviewStage.objects.filter(
                 company=self.request.user.company).count()
         if count_stages > 1:

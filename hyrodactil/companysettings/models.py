@@ -41,10 +41,10 @@ class Question(TimeStampedModel):
 
 class InterviewStage(TimeStampedModel):
     name = models.CharField(max_length=100)
-    position = models.PositiveIntegerField()
+    position = models.PositiveIntegerField(null=True)
 
     accepted = models.NullBooleanField(default=False)
-    rejected = models.NullBooleanField( default=False)
+    rejected = models.NullBooleanField(default=False)
 
     company = models.ForeignKey(Company)
 
