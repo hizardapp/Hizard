@@ -13,6 +13,8 @@ DATABASES = {
     }
 }
 
+SESSION_COOKIE_SECURE = True
+
 STATIC_ROOT = '/home/app/static/'
 MEDIA_URL = 'http://hizard.com/media/'
 
