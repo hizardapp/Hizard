@@ -4,82 +4,105 @@
 {% load companysettings %}
 {% load staticfiles %}
 
+
+
 {% block content %}
-  <h2 class="page-header">{% trans "Users" %}</h2>
+  <h2 class="page-header">{% trans "Departments" %}</h2>
 
-  <a href="#" class="button-positive has-dropdown" data-dropdown="invite-user"  data-url="{% url 'companysettings:invite_user' %}">
-    {% trans "Invite a user" %}
-  </a>
+  <div>
 
-  {% include 'companysettings/_dropdown_form.html' with dropdown_id='invite-user' object_id=None %}
+    <table class="large-8 columns">
+      <thead>
+        <tr class="row">
+          <th class="large-3 columns">{% trans "Email" %}</th>
+          <th class="large-3 columns">{% trans "Name" %}</th>
+          <th class="large-2 columns">{% trans "Status" %}</th>
+          <th class="large-2 columns">{% trans "Role" %}</th>
+          <th class="large-2 column"></th>
+        </tr>
+      </thead>
 
-  {% if customuser_list %}
-    <div class="row">
-      <table class="large-6 large-centered columns">
-        <thead>
-          <tr class="row">
-            <th class="large-3 columns">{% trans "Email" %}</th>
-            <th class="large-3 columns">{% trans "Name" %}</th>
-            <th class="large-2 columns">{% trans "Status" %}</th>
-            <th class="large-2 columns">{% trans "Role" %}</th>
-            <th class="large-2 column"></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for user in customuser_list %}
-            <tr class="row">
-              <td class="large-3 columns">
-                <span>{{ user.email }}</span>
-              </td>
-              <td class="large-3 columns">
-                <span>{{ user.first_name }} {{ user.last_name }}</span>
-              </td>
-              <td class="large-2 columns">
-                <span>{{ user.get_status }}</span>
-              </td>
-              <td class="large-2 columns">
-                <span>
-                 {% if user.is_company_admin %}
-                   {% trans 'Administrator' %}
-                 {% else %}
-                   {% trans 'User' %}
-                 {% endif %}
-                </span>
-              </td>
-              <td class="large-2 columns">
-                <span>
-                  {% if request.user.is_company_admin and request.user != user %}
-                    {% if not user.activation_key %}
-                      <a href="{% url 'accounts:toggle_status' user.pk %}">
-                        {% if user.is_active %}
-                          {% trans 'Disable' %}
-                        {% else %}
-                          {% trans 'Enable' %}
-                        {% endif %}
-                      </a>
+      <tbody>
+      {% for user in customuser_list %}
+        <tr class="row" data-id="{{ user.id }}">
+          <td class="large-3 columns">
+            <span>{{ user.email }}</span>
+          </td>
+          <td class="large-3 columns">
+            <span>{{ user.first_name }} {{ user.last_name }}</span>
+          </td>
+          <td class="large-2 columns">
+            <span>{{ user.get_status }}</span>
+          </td>
+          <td class="large-2 columns">
+            <span>
+             {% if user.is_company_admin %}
+               {% trans 'Administrator' %}
+             {% else %}
+               {% trans 'User' %}
+             {% endif %}
+            </span>
+          </td>
+          <td class="large-2 columns">
+            <span>
+              {% if request.user.is_company_admin and request.user != user %}
+                {% if not user.activation_key %}
+                  <a href="{% url 'accounts:toggle_status' user.pk %}">
+                    {% if user.is_active %}
+                      {% trans 'Disable' %}
+                    {% else %}
+                      {% trans 'Enable' %}
                     {% endif %}
-                  {% endif %}
-                </span>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
+                  </a>
+                {% endif %}
+              {% endif %}
+            </span>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
 
-      </table>
+    </table>
+
+    <div class="large-4 columns">
+      {% include 'companysettings/_side_form.html' with error_object_id=error_object_id %}
     </div>
-  {% endif %}
+
+  </div>
 
 {% endblock content %}
 
-
 {% block extra-js %}
-  <script src="{% static "js/form_dropdown.js" %}"></script>
   <script>
     $(document).ready(function() {
-      var formDropdown = new Hizard.FormDropdown(
-        '{{ has_errors }}', '{{ error_object_id }}', 'a.has-dropdown', ''
-      );
+      var createUrl = "{% url 'companysettings:invite_user'%}";
+      var updateUrl = "{% url 'companysettings:update_department' 0 %}";
+      var updateText = "{% trans 'Update' %}";
+      var saveText = "{% trans 'Save' %}";
+      var $form = $('.company-settings-form');
+      $form.attr('action', createUrl);
+
+      $('.update-object').click(function() {
+        var $td = $(this);
+        var id = $td.parent().data('id');
+        var text = $td.find('span').text();
+        $form.attr('action', updateUrl.replace(0, id));
+        var values = td.find('span').map(function() {
+          return $(this).text();
+        });
+        $form.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
+          $(e).val(values[index]);
+        });
+        $form.find('input[type=submit]').val(updateText);
+      });
+
+      $('.clear-inputs').click(function() {
+        $form.attr('action', createUrl);
+        $form.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
+          $(e).val('');
+        });
+        $form.find(':input[type=submit]').val(saveText);
+      });
     });
   </script>
 {% endblock extra-js %}

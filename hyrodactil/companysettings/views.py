@@ -20,9 +20,9 @@ class SettingsHomeView(LoginRequiredMixin, TemplateView):
     template_name = 'companysettings/settings.html'
 
 
-class ListViewWithDropdown(LoginRequiredMixin, RestrictedListView):
+class ListViewWithForm(LoginRequiredMixin, RestrictedListView):
     def get_context_data(self, **kwargs):
-        context = super(ListViewWithDropdown, self).get_context_data(**kwargs)
+        context = super(ListViewWithForm, self).get_context_data(**kwargs)
         form_data = self.request.session.get('form_data', None)
         if form_data:
             form = self.form(data=form_data)
@@ -42,7 +42,28 @@ class ListViewWithDropdown(LoginRequiredMixin, RestrictedListView):
         return context
 
 
-class DepartmentListView(ListViewWithDropdown):
+class ListViewWithDropdown(LoginRequiredMixin, RestrictedListView):
+    def get_context_data(self, **kwargs):
+        context = super(ListViewWithDropdown, self).get_context_data(**kwargs)
+        form_data = self.request.session.get('form_data', None)
+        if form_data:
+            form = self.form(data=form_data)
+            form.is_valid()
+            context['form'] = form
+            context['has_errors'] = True
+            del self.request.session['form_data']
+            object_id = self.request.session.get('object_id', None)
+            if object_id:
+                context['error_object_id'] = object_id
+                del self.request.session['object_id']
+
+        else:
+            context['form'] = self.form()
+
+        return context
+
+
+class DepartmentListView(ListViewWithForm):
     model = Department
     form = DepartmentForm
 
@@ -83,7 +104,7 @@ class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_message = _('Department deleted.')
 
 
-class QuestionListView(ListViewWithDropdown):
+class QuestionListView(ListViewWithForm):
     model = Question
     form = QuestionForm
 
@@ -212,7 +233,7 @@ class InterviewStageReorderView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
-class UsersListView(ListViewWithDropdown):
+class UsersListView(ListViewWithForm):
     template_name = "companysettings/customuser_list.html"
     model = CustomUser
     form = CustomUserInviteForm

@@ -1,19 +1,19 @@
 
 {% load i18n %}
 
-<div id="{{ dropdown_id }}" class="f-dropdown small content" data-dropdown-content>
+<div class="row">
 
-  <form action="" method="POST">
+  <form class="company-settings-form" action="" method="POST">
     {% csrf_token %}
 
     {% for field in form %}
 
       <div class="row">
-        <div class="large-12 columns {% if field.errors and error_object_id == object_id %} error {% endif %}">
+        <div class="large-12 columns {% if field.errors %} error {% endif %}">
           {{ field.label_tag }}
           {{ field }}
 
-          {% if field.errors and error_object_id == object_id  %}
+          {% if field.errors %}
             <small class="rounded-error">
               {% for error in field.errors %}
                 {{ error }}
@@ -25,11 +25,12 @@
 
     {% endfor %}
 
-
-    <br>
+    <div class="left">
+      <a class="button-negative clear-inputs">{% trans 'Clear' %}</a>
+    </div>
 
     <div class="right">
-      <input type="submit" class=" button-positive" value="{% trans 'Save' %}" />
+      <input type="submit" class="button-positive submit-settings" value="{% trans 'Save' %}" />
     </div>
 
   </form>
