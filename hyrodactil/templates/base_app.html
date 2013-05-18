@@ -39,18 +39,19 @@
           <li><a href="{% url 'applications:board_applications' %}">{% trans 'Applicants' %}</a></li>
           <li><a href="{% url 'companysettings:settings_home' %}">{% trans 'Settings' %}</a></li>
           <li><a href="{{ opening_list_url }}" target="_blank">{% trans 'Jobs page' %}</a></li>
+
+          <li class="user-badge">
+            <a href="{% url 'accounts:change_details' %}">
+              <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"/>
+              <span>{{ user.first_name }} {{ user.last_name }}</span>
+            </a>
+
+          </li>
+
+          <li class="divider"></li>
+
           <li><a href="{% url 'auth:logout' %}">{% trans 'Logout' %}</a></li>
 
-          <li>
-            <div class="row">
-              <div class="large-3 columns">
-                <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}" width="32" height="32"/>
-              </div>
-              <div class="large-9 columns">
-                <a href="{% url 'accounts:change_details' %}"><small>{{ user.first_name }} {{ user.last_name }}</small></a>
-              </div>
-            </div>
-          </li>
         </ul>
       </section>
     </nav>

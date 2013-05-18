@@ -5132,6 +5132,10 @@ form .rounded-error {
   .top-bar ul li {
     width: 100%;
   }
+  /* line 19, ../../pregen_static/sass/app/_navigation.scss */
+  .top-bar ul .user-badge img {
+    width: 100%;
+  }
 }
 @media only screen and (min-width: 58.75em) {
   /* line 5, ../../pregen_static/sass/app/_layout.scss */
