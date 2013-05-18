@@ -40,9 +40,11 @@
           <li><a href="{% url 'companysettings:settings_home' %}">{% trans 'Settings' %}</a></li>
           <li><a href="{{ opening_list_url }}" target="_blank">{% trans 'Jobs page' %}</a></li>
 
+          <li class="divider"></li>
+
           <li class="user-badge">
             <a href="{% url 'accounts:change_details' %}">
-              <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"/>
+              <img width="40" height="40"  src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"/>
 
               <span>
                 {% if user.first_name or user.last_name %}
