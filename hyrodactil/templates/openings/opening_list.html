@@ -12,31 +12,31 @@
   {% if opening_list %}
     <table class="opening-list">
       <thead>
-        <tr class="row">
-          <th class="large-6 columns">{% trans "Title" %}</th>
-          <th class="large-1 columns">{% trans "Created" %}</th>
-          <th class="large-1 columns">{% trans "Closed" %}</th>
-          <th class="large-2 columns">{% trans "Applicants" %}</th>
-          <th class="large-2 columns">{% trans "Actions" %}</th>
+        <tr>
+          <th>{% trans "Title" %}</th>
+          <th>{% trans "Created" %}</th>
+          <th>{% trans "Closed" %}</th>
+          <th>{% trans "Applicants" %}</th>
+          <th>{% trans "Actions" %}</th>
         </tr>
       </thead>
 
       <tbody>
         {% for opening in opening_list %}
-          <tr class="row">
-            <td class="large-6 columns">
+          <tr>
+            <td>
               <strong><a href="{% url 'openings:detail_opening' opening.id %}" class="opening-title">{{ opening.title }}</a></strong>
             </td>
 
-            <td class="large-1 columns">
+            <td>
               {{ opening.created|date:"d/m/Y" }}
             </td>
 
-            <td class="large-1 columns">
+            <td>
               {{ opening.closing_date|date:"d/m/Y" }}
             </td>
 
-            <td class="large-2 columns">
+            <td>
               {% for stage, count in opening.applicants_stats %}
                 <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
                   {{ count }}
@@ -45,7 +45,7 @@
               {% endfor %}
             </td>
 
-            <td class="large-2 columns">
+            <td>
               <a href="{% url 'openings:update_opening' opening.id %}">{% trans "Edit" %}</a>
               |
               <a href="{% url 'openings:delete_opening' opening.id %}">{% trans "Delete" %}</a>
