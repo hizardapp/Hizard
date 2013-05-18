@@ -26,52 +26,7 @@
       <div class="row">
         {% render_table table %}
       </div>
-
-
-      <div class="row">
-        <table class="large-12 columns">
-          <thead>
-          <tr>
-            <th>{% trans "First Name" %}</th>
-            <th>{% trans "Last Name" %}</th>
-            <th>{% trans "Date applied" %}</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          {% regroup application_list by opening as opening_applications %}
-
-          {% for opening in opening_applications %}
-            {% if not context_opening %}
-              <tr>
-                <td colspan="3">
-                  {{ opening.grouper.title }} for {{ opening.grouper.department }}
-                </td>
-              </tr>
-            {% endif %}
-
-            {% for application in opening.list %}
-              <tr>
-                <td>
-                  <a href="{% url 'applications:application_detail' application.id %}">{{ application.applicant.first_name }}</a>
-                </td>
-                <td>
-                  {{ application.applicant.last_name }}
-                </td>
-                <td>
-                  {{ application.created|date:"d/m/Y H:m" }}
-                </td>
-              </tr>
-            {% endfor %}
-          {% endfor %}
-          </tbody>
-
-        </table>
-      </div>
-
     {% else %}
       <p>{% trans "No applications yet" %}</p>
     {% endif %}
-
-
 {% endblock content %}

@@ -3,6 +3,8 @@ from django.http import Http404
 from django.views.generic.edit import BaseDeleteView
 from django.views.generic import UpdateView, DetailView, ListView
 
+import django_tables2
+
 
 class SubdomainRequiredMixin(object):
     def dispatch(self, *args, **kwargs):
@@ -56,3 +58,7 @@ class MessageMixin(object):
         message = self.success_message
         messages.success(self.request, message)
         return super(MessageMixin, self).form_valid(form)
+
+
+class UnpaginatedSingleTableMixin(django_tables2.SingleTableMixin):
+    table_pagination = False

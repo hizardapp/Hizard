@@ -15,6 +15,7 @@ from .models import Application, ApplicationAnswer, ApplicationMessage, Applicat
 from .threaded_discussion import group
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
+from core.views import UnpaginatedSingleTableMixin
 from openings.models import Opening
 
 
@@ -28,8 +29,8 @@ class ApplicationTable(tables.Table):
         model = Application
         fields = ("first_name", "last_name", "created")
 
-class ApplicationListView(LoginRequiredMixin, tables.SingleTableMixin, RestrictedListView):
-
+class ApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
+        RestrictedListView):
     model = Application
     table_class = ApplicationTable
 
@@ -37,17 +38,18 @@ class ApplicationListView(LoginRequiredMixin, tables.SingleTableMixin, Restricte
         kwargs['context_opening'] = get_object_or_404(
             Opening, pk=self.kwargs['opening_id']
         )
-        ctx =  super(ApplicationListView, self).get_context_data(**kwargs)
-        return ctx
+        return super(ApplicationListView, self).get_context_data(**kwargs)
 
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
-        qs = Application.objects.filter(opening=opening)
-        print qs
-        return qs
+        return Application.objects.filter(opening=opening)
 
 
-class AllApplicationListView(LoginRequiredMixin, RestrictedListView):
+class AllApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
+        RestrictedListView):
+    model = Application
+    table_class = ApplicationTable
+
     def get_queryset(self):
         return Application.objects.filter(
             opening__company=self.request.user.company
