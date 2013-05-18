@@ -113,9 +113,7 @@ def get_file_path(instance, filename):
     new_name = ''.join(random.choice(possible_chars) for _ in xrange(6))
 
     ext = filename.split('.')[-1]
-    filename = "%s.%s" % (new_name, ext)
-
-    return '%s/avatars/%s' % (settings.MEDIA_ROOT, filename)
+    return 'avatars/%s.%s' % (new_name, ext)
 
 
 class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):

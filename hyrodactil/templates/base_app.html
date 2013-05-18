@@ -44,7 +44,7 @@
           <li>
             <div class="row">
               <div class="large-3 columns">
-                <img src="/static/img/default_avatar.jpg" width="32" height="32"/>
+                <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}" width="32" height="32"/>
               </div>
               <div class="large-9 columns">
                 <a href="{% url 'accounts:change_details' %}"><small>{{ user.first_name }} {{ user.last_name }}</small></a>

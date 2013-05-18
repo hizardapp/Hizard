@@ -1,3 +1,6 @@
+import base64
+import os
+
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 )
@@ -12,6 +15,8 @@ from ..factories._accounts import UserFactory
 from accounts.forms import UserCreationForm
 from accounts.models import CustomUser
 
+SMALL_GIF = base64.decodestring(
+        'R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
 
 class AccountsViewsTests(WebTest):
     def test_get_registration_view(self):
@@ -418,10 +423,13 @@ class AccountsViewsTests(WebTest):
         form = page.forms[0]
         form['first_name'] = "Henry"
         form['last_name'] = "IV"
+        form['avatar'] = 'avatar.gif', SMALL_GIF
+
         response = form.submit()
         self.assertEqual(response.status_code, 302)
-        self.assertContains(response, "Details successfuly")
 
         user = CustomUser.objects.get(pk=user.pk)
         self.assertEqual(user.first_name, "Henry")
         self.assertEqual(user.last_name, "IV")
+        self.assertTrue(user.avatar.url)
+        os.unlink(user.avatar.path)

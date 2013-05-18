@@ -3,7 +3,7 @@
 
 {% block content %}
    {{ form.errors }}
-  <form action="{% block action %}{% endblock %}" method="POST" id="action-form">
+  <form enctype="multipart/form-data" action="{% block action %}{% endblock %}" method="POST" id="action-form">
     {% csrf_token %}
 
     {% for field in form %}
