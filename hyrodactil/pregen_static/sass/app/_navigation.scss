@@ -16,9 +16,14 @@
         width: 100%;
       }
 
-      .user-badge img {
-        display: block;
-        margin: auto;
+      .user-badge {
+        a {
+          text-align: center;
+        }
+        img {
+          display: block;
+          margin: auto;
+        }
       }
     }
 
