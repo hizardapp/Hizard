@@ -43,7 +43,14 @@
           <li class="user-badge">
             <a href="{% url 'accounts:change_details' %}">
               <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"/>
-              <span>{{ user.first_name }} {{ user.last_name }}</span>
+
+              <span>
+                {% if user.first_name or user.last_name %}
+                  {{ user.first_name }} {{ user.last_name }}
+                {% else %}
+                  {{ user.email }}
+                {% endif %}
+              </span>
             </a>
 
           </li>
