@@ -404,3 +404,24 @@ class AccountsViewsTests(WebTest):
         self.assertContains(response, 'The two password fields')
         self.assertFalse(user_found.check_password('password'))
         self.assertTrue(user_found.check_password('bob'))
+
+    def test_change_personal_details(self):
+        url = reverse("accounts:change_details")
+        user = UserFactory.create(first_name="Nikola", last_name="Tesla")
+        page = self.app.get(url, user=user)
+
+        self.assertTrue(user.first_name)
+        self.assertTrue(user.last_name)
+        self.assertContains(page, user.first_name)
+        self.assertContains(page, user.last_name)
+
+        form = page.forms[0]
+        form['first_name'] = "Henry"
+        form['last_name'] = "IV"
+        response = form.submit()
+        self.assertEqual(response.status_code, 302)
+        self.assertContains(response, "Details successfuly")
+
+        user = CustomUser.objects.get(pk=user.pk)
+        self.assertEqual(user.first_name, "Henry")
+        self.assertEqual(user.last_name, "IV")

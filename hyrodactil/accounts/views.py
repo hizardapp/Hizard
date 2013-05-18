@@ -11,8 +11,10 @@ from django.utils.http import base36_to_int
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, FormView, View, TemplateView
+from django.views.generic import UpdateView
 
-from .forms import UserCreationForm, MinLengthSetPasswordForm
+from core.views import MessageMixin
+from .forms import UserCreationForm, MinLengthSetPasswordForm, ChangeDetailsForm
 from .forms import MinLengthChangePasswordForm, InvitedRegistrationForm
 from .models import CustomUser
 
@@ -199,9 +201,21 @@ class PasswordConfirmResetView(FormView):
         self.valid_link = bool(self.user is not None and check_token)
         return self.valid_link
 
+
 class ToggleStatusView(View):
     def get(self, request, user_pk):
         user = get_object_or_404(CustomUser, pk=user_pk)
         user.is_active = not user.is_active
         user.save()
         return HttpResponseRedirect(reverse("companysettings:list_users"))
+
+
+class ChangeDetailsView(LoginRequiredMixin, MessageMixin, UpdateView):
+    form_class = ChangeDetailsForm
+    model = CustomUser
+    success_message = "Details successfuly updated"
+    template_name = 'accounts/change_details_form.html'
+    success_url = reverse_lazy('dashboard:dashboard')
+
+    def get_object(self):
+        return self.request.user

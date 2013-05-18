@@ -114,3 +114,9 @@ class MinLengthChangePasswordForm(auth_forms.PasswordChangeForm):
         # No insecure passwords !
         if len(password2) < settings.MIN_PASSWORD_LENGTH:
             raise forms.ValidationError(self.error_messages['short_password'])
+
+
+class ChangeDetailsForm(forms.ModelForm):
+    class Meta:
+        fields = ('first_name', 'last_name', 'avatar')
+        model = CustomUser
