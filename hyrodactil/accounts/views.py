@@ -8,6 +8,7 @@ from django.http.response import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.http import base36_to_int
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, FormView, View, TemplateView
@@ -213,7 +214,7 @@ class ToggleStatusView(View):
 class ChangeDetailsView(LoginRequiredMixin, MessageMixin, UpdateView):
     form_class = ChangeDetailsForm
     model = CustomUser
-    success_message = "Details successfuly updated"
+    success_message = _("Personal details successfuly updated")
     template_name = 'accounts/change_details_form.html'
     success_url = reverse_lazy('dashboard:dashboard')
 
