@@ -12,7 +12,8 @@
     <table class="large-8 columns">
       <thead>
       <tr class="row">
-        <th class="large-10 columns">{% trans "Name" %}</th>
+        <th class="large-5 columns">{% trans "Name" %}</th>
+        <th class="large-5 columns">{% trans "Type" %}</th>
         <th class="large-2 columns"></th>
       </tr>
       </thead>
@@ -20,9 +21,12 @@
       <tbody>
       {% for question in question_list %}
         <tr class="row" data-id="{{ department.id }}">
-          <td class="large-10 columns update-object">
+          <td class="large-5 columns update-object">
             <i class="icon-pencil icon-large"></i>
-            <span>{{ question.name }}</span>
+            <span class="name">{{ question.name }}</span>
+          </td>
+          <td class="large-5 columns update-object">
+            <span class="type">{{ question.type }}</span>
           </td>
           <td class="large-2 columns text-right">
             <a href="{% url 'companysettings:delete_question' question.id %}">{% trans "Delete" %}</a>
@@ -50,15 +54,15 @@
       var saveText = "{% trans 'Save' %}";
       var $form = $('.company-settings-form');
       $form.attr('action', createUrl);
+      $form.find(':input[type=submit]').val(saveText);
 
       $('.update-object').click(function() {
         var $td = $(this);
-        var id = $td.parent().data('id');
-        var text = $td.find('span').text();
+        var $tr = $td.parent();
+        var id = $tr.data('id');
         $form.attr('action', updateUrl.replace(0, id));
-        $form.find('input[type=text]').val(text);
-
-        $form.find('input[type=text]').val(text);
+        $form.find('input[type=text]').val($tr.find('.name').text());
+        $form.find('select').val($td.parent().find('.type').text());
         $form.find('input[type=submit]').val(updateText);
       });
 

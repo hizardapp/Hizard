@@ -51,26 +51,20 @@
       var saveText = "{% trans 'Save' %}";
       var $form = $('.company-settings-form');
       $form.attr('action', createUrl);
+      $form.find(':input[type=submit]').val(saveText);
 
       $('.update-object').click(function() {
         var $td = $(this);
         var id = $td.parent().data('id');
         var text = $td.find('span').text();
         $form.attr('action', updateUrl.replace(0, id));
-        var values = td.find('span').map(function() {
-          return $(this).text();
-        });
-        $form.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
-          $(e).val(values[index]);
-        });
+        $form.find('input[type=text]').val(text);
         $form.find('input[type=submit]').val(updateText);
       });
 
       $('.clear-inputs').click(function() {
         $form.attr('action', createUrl);
-        $form.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
-          $(e).val('');
-        });
+        $form.find('input[type=text]').val('');
         $form.find(':input[type=submit]').val(saveText);
       });
     });

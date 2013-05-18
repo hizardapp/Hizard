@@ -78,16 +78,17 @@
       var createUrl = "{% url 'companysettings:invite_user'%}";
       var updateUrl = "{% url 'companysettings:update_department' 0 %}";
       var updateText = "{% trans 'Update' %}";
-      var saveText = "{% trans 'Save' %}";
+      var saveText = "{% trans 'Invite' %}";
       var $form = $('.company-settings-form');
       $form.attr('action', createUrl);
+      $form.find(':input[type=submit]').val(saveText);
 
       $('.update-object').click(function() {
         var $td = $(this);
         var id = $td.parent().data('id');
         var text = $td.find('span').text();
         $form.attr('action', updateUrl.replace(0, id));
-        var values = td.find('span').map(function() {
+        var values = $td.find('span').map(function() {
           return $(this).text();
         });
         $form.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
