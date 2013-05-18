@@ -5030,7 +5030,7 @@ form .rounded-error {
   opacity: 0.5;
 }
 
-/* line 4, ../../pregen_static/sass/common/_buttons.scss */
+/* line 6, ../../pregen_static/sass/common/_buttons.scss */
 .button-positive {
   border-style: solid;
   border-width: 1px;
@@ -5053,6 +5053,11 @@ form .rounded-error {
   color: white;
   background-color: #2ecc71;
   border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
 }
 /* line 121, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_buttons.scss */
 .button-positive:hover, .button-positive:focus {
@@ -5062,12 +5067,12 @@ form .rounded-error {
 .button-positive:hover, .button-positive:focus {
   color: white;
 }
-/* line 9, ../../pregen_static/sass/common/_buttons.scss */
+/* line 11, ../../pregen_static/sass/common/_buttons.scss */
 .button-positive:hover {
   background-color: #54d98c;
 }
 
-/* line 14, ../../pregen_static/sass/common/_buttons.scss */
+/* line 16, ../../pregen_static/sass/common/_buttons.scss */
 .button-negative {
   border-style: solid;
   border-width: 1px;
@@ -5090,6 +5095,11 @@ form .rounded-error {
   color: white;
   background-color: #e74c3c;
   border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
 }
 /* line 121, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_buttons.scss */
 .button-negative:hover, .button-negative:focus {
@@ -5099,7 +5109,7 @@ form .rounded-error {
 .button-negative:hover, .button-negative:focus {
   color: white;
 }
-/* line 19, ../../pregen_static/sass/common/_buttons.scss */
+/* line 21, ../../pregen_static/sass/common/_buttons.scss */
 .button-negative:hover {
   background-color: #ed7669;
 }
@@ -5351,16 +5361,20 @@ body #main .container {
   color: black;
 }
 
-/* line 56, ../../pregen_static/sass/app/_companysettings.scss */
+/* line 57, ../../pregen_static/sass/app/_companysettings.scss */
+table .error-table {
+  background: #ecf0f1 !important;
+}
+/* line 61, ../../pregen_static/sass/app/_companysettings.scss */
 table td.update-object {
   cursor: pointer;
 }
-/* line 59, ../../pregen_static/sass/app/_companysettings.scss */
+/* line 64, ../../pregen_static/sass/app/_companysettings.scss */
 table td.update-object:hover {
   background-color: #ecf0f1;
 }
 
-/* line 66, ../../pregen_static/sass/app/_companysettings.scss */
+/* line 71, ../../pregen_static/sass/app/_companysettings.scss */
 .not-displayed {
   display: none;
 }

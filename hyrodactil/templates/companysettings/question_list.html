@@ -20,7 +20,7 @@
 
       <tbody>
       {% for question in question_list %}
-        <tr class="row" data-id="{{ department.id }}">
+        <tr class="row {% if question.id == error_object_id %}error-table{% endif %}" data-id="{{ question.id }}">
           <td class="large-5 columns update-object">
             <i class="icon-pencil icon-large"></i>
             <span class="name">{{ question.name }}</span>
@@ -53,8 +53,14 @@
       var updateText = "{% trans 'Update' %}";
       var saveText = "{% trans 'Save' %}";
       var $form = $('.company-settings-form');
-      $form.attr('action', createUrl);
-      $form.find(':input[type=submit]').val(saveText);
+
+      {% if error_object_id %}
+        $form.attr('action', "{% url 'companysettings:update_question' error_object_id %}");
+        $form.find(':input[type=submit]').val(updateText);
+      {% else %}
+        $form.attr('action', createUrl);
+        $form.find(':input[type=submit]').val(saveText);
+      {% endif %}
 
       $('.update-object').click(function() {
         var $td = $(this);

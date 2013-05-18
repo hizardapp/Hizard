@@ -53,6 +53,11 @@
 }
 
 table {
+
+  .error-table {
+    background: $clouds !important;
+  }
+
   td.update-object {
     cursor: pointer;
 

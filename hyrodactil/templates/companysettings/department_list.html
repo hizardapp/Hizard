@@ -20,7 +20,7 @@
 
         <tbody>
           {% for department in department_list %}
-            <tr class="row" data-id="{{ department.id }}">
+            <tr class="row {% if department.id == error_object_id %}error-table{% endif %}" data-id="{{ department.id }}">
                 <td class="large-10 columns update-object">
                   <i class="icon-pencil icon-large"></i>
                   <span>{{ department.name }}</span>
@@ -31,7 +31,6 @@
             </tr>
           {% endfor %}
         </tbody>
-
       </table>
 
       <div class="large-4 columns">
@@ -50,8 +49,14 @@
       var updateText = "{% trans 'Update' %}";
       var saveText = "{% trans 'Save' %}";
       var $form = $('.company-settings-form');
-      $form.attr('action', createUrl);
-      $form.find(':input[type=submit]').val(saveText);
+
+      {% if error_object_id %}
+        $form.attr('action', "{% url 'companysettings:update_department' error_object_id %}");
+        $form.find(':input[type=submit]').val(updateText);
+      {% else %}
+        $form.attr('action', createUrl);
+        $form.find(':input[type=submit]').val(saveText);
+      {% endif %}
 
       $('.update-object').click(function() {
         var $td = $(this);
