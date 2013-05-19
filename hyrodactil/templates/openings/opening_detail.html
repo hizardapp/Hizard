@@ -40,7 +40,7 @@
 
     <h4>{% trans 'Important links' %}</h4>
       <p>
-        {% trans 'Job link' %} : http://blabla.com
+        {% trans 'Job link' %} : <a href=" {{ opening.get_apply_url }}" target="_blank">{{ opening.get_apply_url }}</a>
       </p>
   </div>
 </div>

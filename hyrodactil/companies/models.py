@@ -1,3 +1,6 @@
+
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from model_utils.models import TimeStampedModel
@@ -14,3 +17,9 @@ class Company(TimeStampedModel):
 
     def __unicode__(self):
         return self.name
+
+    def get_career_site_url(self):
+        company_prefix = (
+            settings.COMPANY_URL_PREFIX % self.subdomain
+        )
+        return "%s%s" % (company_prefix, reverse('public:opening-list'))

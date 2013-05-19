@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -47,6 +49,12 @@ class Opening(TimeStampedModel):
             stages[stages_indexes[application.current_stage().name]][1] += 1
 
         return stages
+
+    def get_apply_url(self):
+        company_prefix = (
+            settings.COMPANY_URL_PREFIX % self.company.subdomain
+        )
+        return "%s%s" % (company_prefix, reverse('public:apply', args=(self.id,)))
 
 
 class OpeningQuestion(TimeStampedModel):

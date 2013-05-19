@@ -9,3 +9,11 @@ class CompaniesModelsTest(TestCase):
         CompanyFactory(subdomain='acme')
         with self.assertRaises(IntegrityError):
             CompanyFactory(subdomain='acme')
+
+    def test_get_career_site_url(self):
+        company = CompanyFactory(subdomain='acme')
+        self.assertEqual(
+            'http://acme.hizard.com/opening_list/',
+            company.get_career_site_url()
+        )
+
