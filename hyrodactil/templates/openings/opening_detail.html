@@ -3,40 +3,47 @@
 {% load i18n %}
 
 {% block content %}
-<div class="row">
-  <span style="display: block">
-  <h2 style="display: inline">{{ opening.title }}</h2>
-  <a href="{% url 'openings:update_opening' opening.pk %}" style="display: inline">{% trans 'Edit' %}</a>
-  </span>
+
+<div>
+  <div class="large-9 columns">
+    <h3>{{ opening.title }}</h3>
+
+    <p>
+      {{ opening.loc_city }}, {{ opening.loc_country.name }}
+    </p>
+
+    <p>
+      {{ opening.get_employment_type_display }}
+    </p>
+
+    <p>
+      {% trans 'Do not display publicly' %} : {{ opening.is_private }}
+    </p>
+
+    <p>
+      <h4>Description</h4>
+      {{ opening.description|safe }}
+    </p>
+  </div>
 
   <div class="large-3 columns">
-    <dl>
-      <dt>{% trans 'Department' %}</dt>
-      <dd>{{ opening.department }}</dd>
+    <h4>{% trans 'Actions' %}</h4>
+    <p>
+      <a href="{% url 'openings:update_opening' opening.pk %}">{% trans 'Edit this opening' %}</a>
+    </p>
+    <p>
+      <a href="{% url 'openings:delete_opening' opening.pk %}">{% trans 'Delete this opening' %}</a>
+    </p>
+    <p>
+      <a href="{% url 'openings:close_opening' opening.pk %}">{% trans 'Close this opening' %}</a>
+    </p>
 
-      <dt>{% trans 'Do not display publicly' %}</dt>
-      <dd>{{ opening.is_private }}</dd>
-
-      <dt>{% trans 'Closing date' %}</dt>
-      <dd>{{ opening.closing_date }}</dd>
-
-      <dt>{% trans 'Country' %}</dt>
-      <dd>{{ opening.loc_country.name }}</dd>
-
-      <dt>{% trans 'City' %}</dt>
-      <dd>{{ opening.loc_city }}</dd>
-
-      <dt>{% trans 'Post-code' %}</dt>
-      <dd>{{ opening.loc_postcode }}</dd>
-    </dl>
-  </div>
-
-  <div class="large-9 columns">
-    <dl>
-      <dt>{% trans 'Description' %}</dt>
-      <dt>{{ opening.description|safe }}</dt>
-    </dl>
+    <h4>{% trans 'Important links' %}</h4>
+      <p>
+        {% trans 'Job link' %} : http://blabla.com
+      </p>
   </div>
 </div>
+
 
 {% endblock %}
