@@ -3,6 +3,8 @@
 
 .included-questions {
 
+  width: 100%;
+
   .select, .required {
     width: 25%;
   }
@@ -33,7 +35,6 @@
 }
 
 .submit-opening {
-  border-top: 1px solid $silver;
   margin-top: 20px;
 
   input {

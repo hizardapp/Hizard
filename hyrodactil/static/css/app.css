@@ -5163,16 +5163,17 @@ body #main {
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
+  height: 100%;
 }
-/* line 24, ../../pregen_static/sass/app/_layout.scss */
+/* line 26, ../../pregen_static/sass/app/_layout.scss */
 body #main .container {
-  background-color: white;
+  background-color: white !important;
   border: 1px solid #bdc3c7;
   padding: 10px;
   padding-top: 20px;
   box-shadow: 0 0 3px #bdc3c7;
   padding-bottom: 40px;
-  min-height: 500px;
+  height: 100%;
 }
 
 /* line 3, ../../pregen_static/sass/app/_common.scss */
@@ -5437,42 +5438,45 @@ table td.update-object:hover {
   margin-bottom: 2em;
 }
 
-/* line 6, ../../pregen_static/sass/app/_openings.scss */
+/* line 4, ../../pregen_static/sass/app/_openings.scss */
+.included-questions {
+  width: 100%;
+}
+/* line 8, ../../pregen_static/sass/app/_openings.scss */
 .included-questions .select, .included-questions .required {
   width: 25%;
 }
-/* line 10, ../../pregen_static/sass/app/_openings.scss */
+/* line 12, ../../pregen_static/sass/app/_openings.scss */
 .included-questions th, .included-questions td {
   text-align: center;
 }
 
-/* line 15, ../../pregen_static/sass/app/_openings.scss */
+/* line 17, ../../pregen_static/sass/app/_openings.scss */
 .opening-list {
   width: 100%;
 }
-/* line 18, ../../pregen_static/sass/app/_openings.scss */
+/* line 20, ../../pregen_static/sass/app/_openings.scss */
 .opening-list th:not(:first-child), .opening-list td:not(:first-child) {
   padding-left: 0;
 }
-/* line 22, ../../pregen_static/sass/app/_openings.scss */
+/* line 24, ../../pregen_static/sass/app/_openings.scss */
 .opening-list .delete-link {
   padding-left: 20px;
 }
-/* line 26, ../../pregen_static/sass/app/_openings.scss */
+/* line 28, ../../pregen_static/sass/app/_openings.scss */
 .opening-list .opening-title {
   font-size: 1.25em;
 }
-/* line 30, ../../pregen_static/sass/app/_openings.scss */
+/* line 32, ../../pregen_static/sass/app/_openings.scss */
 .opening-list td {
   line-height: 1.875em;
 }
 
-/* line 35, ../../pregen_static/sass/app/_openings.scss */
+/* line 37, ../../pregen_static/sass/app/_openings.scss */
 .submit-opening {
-  border-top: 1px solid #bdc3c7;
   margin-top: 20px;
 }
-/* line 39, ../../pregen_static/sass/app/_openings.scss */
+/* line 40, ../../pregen_static/sass/app/_openings.scss */
 .submit-opening input {
   margin-top: 20px;
 }

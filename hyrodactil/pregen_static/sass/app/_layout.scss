@@ -21,14 +21,16 @@ body {
       bottom: 20px;
     }
 
+    height: 100%;
+
     .container {
-      background-color: white;
+      background-color: white !important;
       border: 1px solid $silver;
       padding: 10px;
       padding-top: 20px;
       box-shadow: 0 0 3px $silver;
       padding-bottom: 40px;
-      min-height: 500px;
+      height: 100%;
     }
   }
 

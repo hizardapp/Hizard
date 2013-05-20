@@ -11,90 +11,75 @@
     <h2 class="page-header">{% trans "Create opening" %}</h2>
   {% endif %}
 
-  <div class="row">
     <form action="." method="POST" class="large-12 columns">
       {% csrf_token %}
 
-      {% if form.non_field_errors %}
-        <small class="error">
-          {% for error in form.non_field_errors %}
-            {{ error }}
-          {% endfor %}
-        </small>
-      {% endif %}
+      <div class="large-6 columns">
 
-      {% for field in form.hidden_fields %}
-        {{ field }}
-      {% endfor %}
+        {% if form.non_field_errors %}
+          <small class="error">
+            {% for error in form.non_field_errors %}
+              {{ error }}
+            {% endfor %}
+          </small>
+        {% endif %}
 
-      {% for field in form.visible_fields %}
-        <div class="row">
-          <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-            {{ field.label_tag }}
-            {{ field }}
-
-            {% if field.errors %}
-              <small class="rounded-error">
-                {% for error in field.errors %}
-                  {{ error }}
-                {% endfor %}
-              </small>
-            {% endif %}
-          </div>
-        </div>
+        {% for field in form.hidden_fields %}
+          {{ field }}
+        {% endfor %}
+        {% include 'openings/_opening_form_field.html' with field=form.title %}
         <br>
-      {% endfor %}
-
-      <div class="row">
-        <div class="large-12 columns">
-          <label>{% trans 'Included questions' %}</label>
-          <p class="help-text">You can add questions blablab</p>
-        </div>
+        {% include 'openings/_opening_form_field.html' with field=form.description %}
       </div>
 
-      <div class="row">
-        <div class="large-12 columns">
-          <div class="row">
-            <table class="included-questions large-7 columns large-centered">
-              <thead>
+      <div class="large-6 columns">
+        {% include 'openings/_opening_form_field.html' with field=form.employment_type %}
+        <br>
+        {% include 'openings/_opening_form_field.html' with field=form.is_private %}
+        <br>
+        {% include 'openings/_opening_form_field.html' with field=form.department %}
+        <br>
+        {% include 'openings/_opening_form_field.html' with field=form.loc_country %}
+        <br>
+        {% include 'openings/_opening_form_field.html' with field=form.loc_city %}
+
+        <div>
+          <table class="included-questions">
+            <thead>
+            <tr>
+              <th class="select">{% trans 'Select' %}</th>
+              <th class="name"></th>
+              <th class="required">{% trans 'Required ?' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for question_form in form.opening_questions %}
               <tr>
-                <th class="select">{% trans 'Select' %}</th>
-                <th class="name"></th>
-                <th class="required">{% trans 'Required ?' %}</th>
+                <td>
+                  {{ question_form.included }}
+                </td>
+                <td><label for="{{ question_form.included.auto_id }}">{{ question_form.question }}</label></td>
+                <td>
+                  {{ question_form.required }}
+                </td>
               </tr>
-              </thead>
-              <tbody>
-              {% for question_form in form.opening_questions %}
-                <tr>
-                  <td>
-                    {{ question_form.included }}
-                  </td>
-                  <td><label for="{{ question_form.included.auto_id }}">{{ question_form.question }}</label></td>
-                  <td>
-                    {{ question_form.required }}
-                  </td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-      <div class="row">
-        <div class="large-12 columns text-right submit-opening">
-
-          {% if opening %}
-            <input type="submit" class="button-positive" value="{% trans 'Save changes' %}" />
-          {% else %}
-            <input type="submit" class="button-positive" value="{% trans 'Create this opening' %}" />
-          {% endif %}
-
+            {% endfor %}
+            </tbody>
+          </table>
         </div>
+
       </div>
 
-    </form>
-  </div>
+      <div class="text-right submit-opening">
 
+        {% if opening %}
+          <input type="submit" class="button-positive" value="{% trans 'Save changes' %}" />
+        {% else %}
+          <input type="submit" class="button-positive" value="{% trans 'Create this opening' %}" />
+        {% endif %}
+
+      </div>
+    </form>
 {% endblock content %}
 
 {% block extrahead %}
