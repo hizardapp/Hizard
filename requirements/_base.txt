@@ -6,5 +6,5 @@ South==0.7.6
 django-countries==1.5
 pillow==2.0.0
 django-autoslug==1.6.1
-psycopg2==2.5
+psycopg2>=2.4
 django-tables2==0.13.0
