@@ -153,12 +153,8 @@ class InterviewStageListView(LoginRequiredMixin, TemplateView):
         stages = InterviewStage.objects.filter(
             company=self.request.user.company, position__isnull=False
         )
-        default_stages = InterviewStage.objects.filter(
-            company=self.request.user.company, position__isnull=True
-        )
         context = super(InterviewStageListView, self).get_context_data(**kwargs)
         context['stages'] = stages
-        context['default_stages'] = default_stages
 
         return context
 

@@ -37,16 +37,6 @@
 
     {% endfor %}
 
-  <br>
-
-  {% for stage in default_stages %}
-    <div class="row stage text-center">
-      <span class="large-10 columns large-offset-1">
-        <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a>
-       </span>
-    </div>
-  {% endfor %}
-
   </div>
 
   <div class="large-4 columns">
