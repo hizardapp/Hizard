@@ -23,6 +23,7 @@ class ApplicationTable(tables.Table):
     first_name = tables.Column(accessor="applicant.first_name")
     last_name = tables.Column(accessor="applicant.last_name")
     created = tables.DateColumn(verbose_name="Date applied", format="d/m/Y H:m")
+    status = tables.Column(accessor="current_stage")
 
     class Meta:
         attrs = {"class": "large-12 columns"}
