@@ -3,6 +3,7 @@ import factory
 import _companysettings
 import _openings
 from applications.models import Applicant, Application, ApplicationAnswer
+from applications.models import ApplicationStageTransition
 
 
 class ApplicantFactory(factory.DjangoModelFactory):
@@ -27,3 +28,10 @@ class ApplicationAnswerFactory(factory.DjangoModelFactory):
     answer = 'Some clever answer'
     application = factory.SubFactory(ApplicationFactory)
     question = factory.SubFactory(_companysettings.SingleLineQuestionFactory)
+
+
+class ApplicationStageTransitionFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = ApplicationStageTransition
+
+    application = factory.SubFactory(ApplicationFactory)
+    stage = factory.SubFactory(_companysettings.InterviewStageFactory)

@@ -163,7 +163,7 @@ class BoardView(LoginRequiredMixin, TemplateView):
         for stage in stages:
             board_data[stage] = []
             for application in applications:
-                if stage == application.current_stage():
+                if stage == application.current_stage:
                     board_data[stage].append(application)
 
         context['board'] = board_data
@@ -193,7 +193,7 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
                 application.save()
 
                 if data.get('stage'):
-                    current_stage = application.current_stage()
+                    current_stage = application.current_stage
                     if not current_stage or current_stage.id != stage:
                         ApplicationStageTransition.objects.create(
                             application=application,

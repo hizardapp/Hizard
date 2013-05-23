@@ -46,7 +46,7 @@ class Opening(TimeStampedModel):
             stages_indexes[stage.name] = i
 
         for application in self.application_set.all():
-            stages[stages_indexes[application.current_stage().name]][1] += 1
+            stages[stages_indexes[application.current_stage.name]][1] += 1
 
         return stages
 

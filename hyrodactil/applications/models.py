@@ -26,13 +26,24 @@ class Application(TimeStampedModel):
     rating = models.IntegerField(blank=True, null=True)
     position = models.IntegerField(default=0)
 
+    current_stage = models.ForeignKey(InterviewStage, null=True)
+
+    def update_current_stage(self, commit=True):
+        transitions = ApplicationStageTransition.objects.filter(
+                application=self)
+        if transitions:
+            last_transistion = transitions[0]
+            if last_transistion.stage != self.current_stage:
+                self.current_stage = last_transistion.stage
+                if commit:
+                    self.save()
+
+    def save(self, *args, **kwargs):
+        self.update_current_stage(commit=False)
+        return super(Application, self).save(*args, **kwargs)
+
     class Meta:
         ordering = 'position',
-
-    def current_stage(self):
-        transitions = self.stage_transitions.all()
-        if transitions:
-            return transitions[0].stage
 
 
 class ApplicationStageTransition(TimeStampedModel):
@@ -44,6 +55,13 @@ class ApplicationStageTransition(TimeStampedModel):
     class Meta:
         ordering = "-created",
 
+    def save(self, *args, **kwargs):
+        result = super(ApplicationStageTransition, self).save(*args, **kwargs)
+        self.application.update_current_stage()
+        return result
+
+    def __str__(self):
+        return "%s %s %s" % (self.application, self.user, self.stage)
 
 class ApplicationAnswer(TimeStampedModel):
     answer = models.TextField(blank=True, null=True)

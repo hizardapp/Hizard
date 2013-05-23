@@ -183,10 +183,10 @@ class ApplicationAjaxViewsTests(WebTest):
         application2 = Application.objects.get(id=application2.id)
 
         self.assertEqual(0, application1.position)
-        self.assertEqual(stage.id, application1.current_stage().id)
+        self.assertEqual(stage.id, application1.current_stage_id)
 
         self.assertEqual(1, application2.position)
-        self.assertEqual(stage.id, application1.current_stage().id)
+        self.assertEqual(stage.id, application1.current_stage_id)
 
     def test_saving_position_applications_valid_without_stage(self):
         application1 = ApplicationFactory(opening=self.opening)

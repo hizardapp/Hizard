@@ -97,7 +97,7 @@ class ApplicationViewsTests(WebTest):
 
         self.assertEqual(applicant.first_name, 'Bilbon')
         self.assertEqual(applicant.resume.url, '/media/resumes/bilbon_cv.pdf')
-        self.assertEqual(application.current_stage(), stage1)
+        self.assertEqual(application.current_stage, stage1)
 
         # 2 required, 2 not required, we still record the 4 though
         self.assertEqual(ApplicationAnswer.objects.count(), 4)
