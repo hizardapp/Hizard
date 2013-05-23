@@ -34,6 +34,7 @@ class ApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
         RestrictedListView):
     model = Application
     table_class = ApplicationTable
+    template_name = "applications/application_list.html"
 
     def get_context_data(self, **kwargs):
         kwargs['context_opening'] = get_object_or_404(
@@ -43,7 +44,8 @@ class ApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
 
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
-        return Application.objects.filter(opening=opening)
+        return Application.objects.filter(opening=opening
+                ).select_related("current_stage", "applicant")
 
 
 class AllApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
@@ -54,7 +56,8 @@ class AllApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
     def get_queryset(self):
         return Application.objects.filter(
             opening__company=self.request.user.company
-        ).order_by("opening").prefetch_related("applicant", "opening")
+        ).order_by("opening").select_related("applicant", "opening",
+                "current_stage")
 
 
 class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
@@ -159,7 +162,7 @@ class BoardView(LoginRequiredMixin, TemplateView):
         ).order_by('position')
         applications = Application.objects.filter(
             opening__company=self.request.user.company
-        ).prefetch_related('stage_transitions__stage', 'applicant')
+        ).select_related('current_stage', 'applicant', 'opening')
 
         for stage in stages:
             board_data[stage] = []
