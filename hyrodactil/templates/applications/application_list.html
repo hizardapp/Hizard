@@ -16,9 +16,9 @@
         {% endblocktrans %}
       </h2>
     {% else %}
-      <div class="toggle-list-applications">
-        <a href={% url 'applications:board_applications' %}>{% trans 'Show as board' %}</a>
-      </div>
+      <h2>
+       {% trans 'All applications' %}
+      </h2>
     {% endif %}
 
     <div class="large-3 columns">
