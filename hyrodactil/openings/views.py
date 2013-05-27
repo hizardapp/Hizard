@@ -79,3 +79,24 @@ class OpeningCloseView(LoginRequiredMixin, View):
             messages.success(request, _('Opening closed.'))
 
         return redirect(self.success_url)
+
+
+class OpeningPublishView(LoginRequiredMixin, View):
+    success_url = reverse_lazy('openings:list_openings')
+
+    def get(self, request, *args, **kwargs):
+        opening = get_object_or_404(Opening, id=self.kwargs['pk'])
+
+        if opening.company != self.request.user.company:
+            raise Http404
+
+        if opening.published_date:
+            opening.published_date = None
+            opening.save()
+            messages.success(request, _('Opening unpublished.'))
+        else:
+            opening.published_date = datetime.now()
+            opening.save()
+            messages.success(request, _('Opening published.'))
+
+        return redirect(self.success_url)

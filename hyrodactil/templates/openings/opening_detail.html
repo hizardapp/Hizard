@@ -28,15 +28,32 @@
 
   <div class="large-3 columns">
     <h4>{% trans 'Actions' %}</h4>
+
+
     <p>
       <a href="{% url 'openings:update_opening' opening.pk %}">{% trans 'Edit this opening' %}</a>
     </p>
+
     <p>
       <a href="{% url 'openings:delete_opening' opening.pk %}">{% trans 'Delete this opening' %}</a>
     </p>
-    <p>
-      <a href="{% url 'openings:close_opening' opening.pk %}">{% trans 'Close this opening' %}</a>
-    </p>
+
+    {% if not opening.closed_date %}
+      <p>
+        <a href="{% url 'openings:close_opening' opening.pk %}">{% trans 'Close this opening' %}</a>
+      </p>
+    {% endif %}
+
+    {% if not opening.published_date %}
+      <p>
+        <a href="{% url 'openings:publish_opening' opening.pk %}">{% trans 'Publish this opening' %}</a>
+      </p>
+    {% else %}
+      <p>
+        <a href="{% url 'openings:publish_opening' opening.pk %}">{% trans 'Unpublish this opening' %}</a>
+      </p>
+    {% endif %}
+
 
     <h4>{% trans 'Important links' %}</h4>
       <p>

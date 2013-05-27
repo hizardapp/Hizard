@@ -22,7 +22,6 @@ class OpeningsFormsTests(TestCase):
                           'is_private': '',
                           'loc_country': 'FR',
                           'loc_city': 'Cannes',
-                          'loc_postcode': '93100',
                           'employment_type': 'full_time',
                           'questions': [1, 2]}
 
@@ -50,7 +49,6 @@ class OpeningsFormsTests(TestCase):
         self._form_is_valid_without()
         self._form_is_valid_without('loc_country')
         self._form_is_valid_without('loc_city')
-        self._form_is_valid_without('loc_postcode')
         self._form_is_valid_without('questions')
 
     def test_invalid_opening_form(self):

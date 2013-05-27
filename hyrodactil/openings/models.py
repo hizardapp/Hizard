@@ -25,7 +25,7 @@ class Opening(TimeStampedModel):
     closing_date = models.DateTimeField(blank=True, null=True)
     loc_country = CountryField(_("Country"), blank=True)
     loc_city = models.CharField(_("City"), max_length=128, blank=True)
-    loc_postcode = models.CharField(_("Post-code"), max_length=64, blank=True)
+    published_date = models.DateTimeField(blank=True, null=True)
     employment_type = models.CharField(
         choices=EMPLOYMENT_TYPES,
         default=EMPLOYMENT_TYPES.full_time,
@@ -66,8 +66,8 @@ class Opening(TimeStampedModel):
         if self.is_private:
             return _('Private')
 
-        #if self.is_published:
-            #return _('Published')
+        if self.published_date:
+            return _('Published')
 
         return _('Created')
 

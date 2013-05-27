@@ -35,7 +35,6 @@ class OpeningsViewsTests(WebTest):
         form['is_private'] = ''
         form['loc_country'] = 'FR'
         form['loc_city'] = 'Cannes'
-        form['loc_postcode'] = '93100'
         form['oq-1-included'] = True
         response = form.submit().follow()
 
@@ -71,7 +70,6 @@ class OpeningsViewsTests(WebTest):
         form['is_private'] = ''
         form['loc_country'] = 'FR'
         form['loc_city'] = 'Cannes'
-        form['loc_postcode'] = '93100'
         form['oq-1-included'] = True
         response = form.submit()
 
@@ -140,3 +138,17 @@ class OpeningsViewsTests(WebTest):
             Opening.objects.filter(closing_date__isnull=True).count(), 0
         )
         self.assertContains(response, 'already closed')
+
+    def test_publish_opening(self):
+        opening = OpeningFactory(company=self.user.company)
+        url = reverse('openings:publish_opening', args=(opening.id,))
+        self.app.get(url, user=self.user)
+
+        self.assertIsNotNone(Opening.objects.get().published_date)
+
+    def test_unpublish_opening(self):
+        opening = OpeningFactory(company=self.user.company, published_date=datetime.now())
+        url = reverse('openings:publish_opening', args=(opening.id,))
+        self.app.get(url, user=self.user)
+
+        self.assertIsNone(Opening.objects.get().published_date)

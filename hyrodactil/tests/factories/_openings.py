@@ -13,7 +13,6 @@ class OpeningFactory(factory.DjangoModelFactory):
     is_private = ''
     loc_country = 'FR'
     loc_city = 'Cannes'
-    loc_postcode = '93100'
     company = factory.SubFactory(_companies.CompanyFactory)
 
 

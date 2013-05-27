@@ -38,10 +38,15 @@ class OpeningsModelsTests(TestCase):
 
     def test_get_status(self):
         opening = OpeningFactory.build()
-        self.assertEqual(opening.get_status(), 'Created')
+        self.assertEqual(unicode(opening.get_status()), 'Created')
 
         opening.is_private = True
-        self.assertEqual(opening.get_status(), 'Private')
+        self.assertEqual(unicode(opening.get_status()), 'Private')
+        opening.is_private = False
 
         opening.closing_date = datetime.now()
-        self.assertEqual(opening.get_status(), 'Closed')
+        self.assertEqual(unicode(opening.get_status()), 'Closed')
+        opening.closing_date = None
+
+        opening.published_date = datetime.now()
+        self.assertEqual(unicode(opening.get_status()), 'Published')

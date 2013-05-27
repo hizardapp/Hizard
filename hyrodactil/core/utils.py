@@ -32,8 +32,7 @@ def setup_company(company):
 
         <p>We are a small but growing university with a bright future ahead of us, enabling hundred of students to learn about magic.</p>"""),
         loc_country="GB",
-        loc_city="London",
-        loc_postcode="M4G 1C",
+        loc_city="London"
     ).openingquestion_set.create(
         question=phone_question,
         required=True
