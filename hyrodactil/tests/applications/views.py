@@ -55,20 +55,20 @@ class ApplicationViewsTests(WebTest):
             current_stage=phoned)
         url = reverse('applications:list_all_applications')
 
-        response = self.app.get(url, dict(stage=phoned.pk), user=self.user)
+        response = self.app.get(url, dict(stages=[phoned.pk]), user=self.user)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
 
-        response = self.app.get(url, dict(stage=phoned.pk,
+        response = self.app.get(url, dict(stages=[phoned.pk],
           opening=self.opening.pk), user=self.user)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
 
-        response = self.app.get(url, dict(stage=hired.pk), user=self.user)
+        response = self.app.get(url, dict(stages=[hired.pk]), user=self.user)
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, application.applicant.first_name)
 
-        response = self.app.get(url, dict(opening=opening2.pk), user=self.user)
+        response = self.app.get(url, dict(openings=[opening2.pk]), user=self.user)
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, application.applicant.first_name)
 

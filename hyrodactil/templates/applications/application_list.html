@@ -6,41 +6,26 @@
 {% block content %}
 
     {% if context_opening %}
-      <p>Add an application manually <a href="{% url 'applications:manual_application' context_opening.id %}">here</a></p>
-    {% endif %}
-
-    {% if context_opening %}
-      <h2>
+      <h2 class="page-header">
         {% blocktrans with opening=context_opening.title %}
           Applicants for {{ opening }}
         {% endblocktrans %}
       </h2>
     {% else %}
-      <h2>
+      <h2 class="page-header">
        {% trans 'All applications' %}
       </h2>
     {% endif %}
 
-    <div class="large-3 columns">
-      <h3>Filter</h3>
+  {% if context_opening %}
+    <p>Add an application manually <a href="{% url 'applications:manual_application' context_opening.id %}">here</a></p>
+  {% endif %}
 
-      <h4>Status</h4>
-      <ul>
-        {% for choice in stage_choices %}
-        <li><a href="?stage={{ choice.pk }}{% if selected_opening %}&opening={{ selected_opening }}{% endif %}">{{ choice }}</a></li>
-        {% endfor %}
-          <li><a href=".">{% trans "All" %}</a></li>
-      </ul>
-
-      {% if not context_opening %}
-        <h4>Opening</h4>
-        <form action="" method="GET" id="filter_form">
-          {{ filter_form.opening }}
-          {% if stage_pk %}
-            <input type="hidden" name="stage" value="{{ stage_pk }}" />
-          {% endif %}
-        </form>
-      {% endif %}
+    <div class="large-3 columns filter-applications">
+      <form method="GET">
+        {{ filter_form.as_p }}
+        <input type="submit" class="button-positive" value="Filter" />
+      </form>
     </div>
 
     <div class="large-9 columns">

@@ -10,7 +10,7 @@ from ..factories._applications import ApplicantFactory
 from ..factories._companysettings import InterviewStageFactory
 from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningWithQuestionsFactory
-from applications.forms import ApplicationForm, ApplicationStageTransitionForm
+from applications.forms import ApplicationForm, ApplicationStageTransitionForm, ApplicationFilterForm
 from applications.models import Applicant
 
 
@@ -134,3 +134,11 @@ class ApplicationFormTests(TestCase):
         pks = just_pks(form["stage"].field.choices)
         self.assertTrue(s_ic.pk in pks)
         self.assertTrue(s_ii.pk not in pks)
+
+    def test_filter_form(self):
+        coca_cola = CompanyFactory()
+        stage = InterviewStageFactory(name="S-IC", company=coca_cola)
+        opening = OpeningFactory(company=coca_cola)
+
+        form = ApplicationFilterForm(company=coca_cola, data={'openings': [opening.id]})
+        self.assertTrue(form.is_valid())

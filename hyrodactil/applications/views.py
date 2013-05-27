@@ -22,20 +22,28 @@ from openings.models import Opening
 
 
 class ApplicationFilterMixin(object):
+
+    def get(self, *args, **kwargs):
+        self.filter_form = ApplicationFilterForm(
+            company=self.request.user.company)
+        if self.request.GET:
+            self.filter_form = ApplicationFilterForm(
+                company=self.request.user.company, data=self.request.GET)
+
+        return super(ApplicationFilterMixin, self).get(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
-        kwargs['stage_choices'] = InterviewStage.objects.filter(
-                company=self.request.user.company)
-        kwargs['stage_pk'] = self.stage_pk
+        kwargs['filter_form'] = self.filter_form
         return super(ApplicationFilterMixin, self).get_context_data(**kwargs)
 
     def filter_queryset(self, qs):
-        self.stage_pk = None
-        if self.request.GET.get("stage"):
-            try:
-                self.stage_pk = int(self.request.GET.get("stage"))
-                return qs.filter(current_stage_id=self.stage_pk)
-            except ValueError:
-                pass
+        if self.filter_form.is_valid():
+            cleaned_data = self.filter_form.cleaned_data
+            if cleaned_data:
+                if cleaned_data['stages']:
+                    qs = qs.filter(current_stage__in=cleaned_data['stages'])
+                if cleaned_data['openings']:
+                    qs = qs.filter(opening__in=cleaned_data['openings'])
         return qs
 
 
@@ -45,7 +53,7 @@ class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin, django_tab
     table_class = ApplicationTable
     table_pagination = False
 
-    template_name = "applications/application_list.html"
+    template_name = 'applications/application_list.html'
 
     def get_context_data(self, **kwargs):
         kwargs['context_opening'] = get_object_or_404(
@@ -56,7 +64,7 @@ class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin, django_tab
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
         qs = Application.objects.filter(opening=opening
-                ).select_related("current_stage", "applicant")
+                ).select_related('current_stage', 'applicant')
         return self.filter_queryset(qs)
 
 
@@ -66,30 +74,11 @@ class AllApplicationListView(LoginRequiredMixin, ApplicationFilterMixin,
     table_class = AllApplicationsTable
     table_pagination = False
 
-    def get(self, *args, **kwargs):
-        self.filter_form = ApplicationFilterForm(
-                company=self.request.user.company)
-        self.selected_opening = None
-        if self.request.GET:
-            self.filter_form = ApplicationFilterForm(
-                    company=self.request.user.company, data=self.request.GET)
-            if self.filter_form.is_valid():
-                self.selected_opening = self.filter_form.cleaned_data["opening"]
-
-        return super(AllApplicationListView, self).get(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        kwargs['filter_form'] = self.filter_form
-        kwargs['selected_opening'] = self.selected_opening
-        return super(AllApplicationListView, self).get_context_data(**kwargs)
-
     def get_queryset(self):
         qs = Application.objects.filter(
             opening__company=self.request.user.company
-        ).order_by("opening").select_related("applicant", "opening",
-                "current_stage")
-        if self.selected_opening:
-            qs = qs.filter(opening=self.selected_opening)
+        ).order_by('opening').select_related('applicant', 'opening',
+                'current_stage')
         return self.filter_queryset(qs)
 
 
@@ -108,7 +97,7 @@ class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
             request, application_id, **kwargs)
 
     def get_success_url(self):
-        return "%s#notes" % reverse(
+        return '%s#notes' % reverse(
             'applications:application_detail',
             args=(self.application.id,)
         )
@@ -123,12 +112,12 @@ class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
 class ApplicationDetailView(LoginRequiredMixin, FormView):
     model = Application
     form_class = ApplicationStageTransitionForm
-    template_name = "applications/application_detail.html"
+    template_name = 'applications/application_detail.html'
 
     def get_application(self):
         try:
             return Application.objects.get(
-                pk=self.kwargs["pk"],
+                pk=self.kwargs['pk'],
                 opening__company=self.request.user.company
             )
         except Application.DoesNotExist:
@@ -136,7 +125,7 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         default_kwargs = super(ApplicationDetailView, self).get_form_kwargs()
-        default_kwargs["company"] = self.request.user.company
+        default_kwargs['company'] = self.request.user.company
         return default_kwargs
 
     def get_context_data(self, **kwargs):
@@ -224,7 +213,7 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
                 application = Application.objects.filter(
                     id=int(application_id),
                     opening__company=self.request.user.company
-                ).prefetch_related("stage_transitions__stage")[0]
+                ).prefetch_related('stage_transitions__stage')[0]
 
                 application.position = new_position
                 application.save()

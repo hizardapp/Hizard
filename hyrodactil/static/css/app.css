@@ -5313,6 +5313,11 @@ body #main .container {
   cursor: default;
 }
 
+/* line 2, ../../pregen_static/sass/app/_tables.scss */
+table {
+  width: 100%;
+}
+
 /* line 2, ../../pregen_static/sass/app/_accounts.scss */
 .login-form {
   margin-top: 60px;
@@ -5487,73 +5492,7 @@ table td.update-object:hover {
   z-index: 10;
 }
 
-/* line 3, ../../pregen_static/sass/app/_kanban.scss */
-.toggle-list-applications {
-  margin-left: 20px;
-  margin-bottom: 20px;
-  margin-top: 20px;
-}
-
-/* line 10, ../../pregen_static/sass/app/_kanban.scss */
-.kanban-board {
-  height: 600px;
-  margin-right: 20px;
-  margin-left: 20px;
-  font-size: 14px;
-}
-/* line 16, ../../pregen_static/sass/app/_kanban.scss */
-.kanban-board .kanban-list {
-  position: relative;
-  width: 220px;
-  border: 1px solid black;
-  margin: 0 5px;
-  padding: 3px;
-  float: left;
-  line-height: 18px;
-  background: #e3e3e3;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-}
-/* line 27, ../../pregen_static/sass/app/_kanban.scss */
-.kanban-board .kanban-list .kanban-list-header h2 {
-  min-height: 20px;
-  font-size: 16px;
-  margin: 10px 0 0 10px;
-}
-/* line 33, ../../pregen_static/sass/app/_kanban.scss */
-.kanban-board .kanban-list .kanban-list-cards {
-  min-height: 40px;
-  max-height: 600px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 1;
-  padding: 4px;
-}
-/* line 41, ../../pregen_static/sass/app/_kanban.scss */
-.kanban-board .kanban-list .kanban-list-cards .kanban-card-placeholder {
-  visibility: visible !important;
-  background-color: #b9b9b9 !important;
-  opacity: 0.5;
-}
-/* line 47, ../../pregen_static/sass/app/_kanban.scss */
-.kanban-board .kanban-list .kanban-list-cards .kanban-card {
-  background-color: white;
-  margin-bottom: 5px;
-  border: 1px solid #b9b9b9;
-  padding: 5px;
-  padding-left: 8px;
-  cursor: pointer;
-  z-index: 2;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-}
-/* line 57, ../../pregen_static/sass/app/_kanban.scss */
-.kanban-board .kanban-list .kanban-list-cards .kanban-card:hover {
-  border: 1px solid #868686;
+/* line 3, ../../pregen_static/sass/app/_applications.scss */
+.filter-applications ul {
+  list-style-type: none;
 }

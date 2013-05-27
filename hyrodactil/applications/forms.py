@@ -2,8 +2,10 @@ import os
 import uuid
 
 from django import forms
+from django.forms.widgets import CheckboxSelectMultiple
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+
 from companysettings.models import InterviewStage
 
 from .models import (
@@ -44,9 +46,9 @@ class ApplicationForm(forms.ModelForm):
                 self.fields[field].label += '*'
 
     def clean_resume(self):
-        """
+        '''
         Make sure we really have a pdf file
-        """
+        '''
         resume = self.cleaned_data['resume']
 
         if resume:
@@ -62,19 +64,19 @@ class ApplicationForm(forms.ModelForm):
         return resume
 
     def _assure_directory_exists(self):
-        """
+        '''
         Creates the company directory in media/uploads if it doesn't exist
         already.
-        """
+        '''
         path = '%s/uploads/%d' % (settings.MEDIA_ROOT, self.opening.company.id)
 
         if not os.path.exists(path):
             os.makedirs(path)
 
     def _get_random_filename(self, filename):
-        """
+        '''
         Use uuid to generate a unique filename and adds the file extension
-        """
+        '''
         new_filename = str(uuid.uuid4())
         extension = filename.split('.')[-1]
         new_filename += '.%s' % extension
@@ -82,9 +84,9 @@ class ApplicationForm(forms.ModelForm):
         return new_filename
 
     def _save_file(self, file):
-        """
+        '''
         Saves the files uploaded by an applicant into media/uploads/company_id
-        """
+        '''
         filename = self._get_random_filename(file.name)
         upload_path = '/uploads/%d/%s' % (self.opening.company.id, filename)
         path = '%s/%s' % (settings.MEDIA_ROOT, upload_path)
@@ -149,19 +151,30 @@ class ApplicationForm(forms.ModelForm):
 
         return applicant
 
+
 class ApplicationFilterForm(forms.Form):
-    opening = forms.ChoiceField()
+    stages = forms.MultipleChoiceField(
+        required=False,
+        widget=CheckboxSelectMultiple
+    )
+    openings = forms.MultipleChoiceField(
+        required=False,
+        widget=CheckboxSelectMultiple
+    )
 
     def __init__(self, company, *args, **kwargs):
         super(ApplicationFilterForm, self).__init__(*args, **kwargs)
-        self.fields["opening"].choices = [("", _("All"))] +\
-                [(o.pk, o.title) for o in company.opening_set.all()]
+        self.fields['stages'].choices = [(str(o.pk), o.name) for o in
+                company.interviewstage_set.all()]
+
+        self.fields['openings'].choices = [(str(o.pk), o.title) for o in
+                company.opening_set.all()]
 
 
 class ApplicationStageTransitionForm(forms.ModelForm):
     def __init__(self, company, *args, **kwargs):
         super(ApplicationStageTransitionForm, self).__init__(*args, **kwargs)
-        self.fields["stage"].queryset = InterviewStage.objects.filter(
+        self.fields['stage'].queryset = InterviewStage.objects.filter(
                 company=company)
 
     class Meta:

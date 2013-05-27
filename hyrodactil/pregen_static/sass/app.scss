@@ -54,6 +54,7 @@
 @import "app/common";
 @import "app/cleditor";
 @import "app/dashboard";
+@import "app/tables";
 
 // Style specific to apps
 @import "app/accounts";
@@ -61,4 +62,5 @@
 @import "app/applicant_details";
 @import "app/openings";
 @import "app/section_modals";
-@import "app/kanban";
+@import "app/applications";
+//@import "app/kanban";
