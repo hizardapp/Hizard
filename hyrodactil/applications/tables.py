@@ -13,3 +13,6 @@ class ApplicationTable(tables.Table):
         attrs = {"class": "large-12 columns"}
         model = Application
         fields = ("first_name", "last_name", "created")
+
+class AllApplicationsTable(ApplicationTable):
+    opening = tables.Column(verbose_name="Opening", accessor="opening.title")

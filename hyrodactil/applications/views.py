@@ -12,10 +12,10 @@ from django.views.generic import FormView, CreateView, TemplateView, View
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
-from .forms import ApplicationForm
+from .forms import ApplicationForm, ApplicationFilterForm
 from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
 from .threaded_discussion import group
-from .tables import ApplicationTable
+from .tables import ApplicationTable, AllApplicationsTable
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
 from openings.models import Opening
@@ -25,13 +25,15 @@ class ApplicationFilterMixin(object):
     def get_context_data(self, **kwargs):
         kwargs['stage_choices'] = InterviewStage.objects.filter(
                 company=self.request.user.company)
+        kwargs['stage_pk'] = self.stage_pk
         return super(ApplicationFilterMixin, self).get_context_data(**kwargs)
 
     def filter_queryset(self, qs):
+        self.stage_pk = None
         if self.request.GET.get("stage"):
             try:
-                stage_pk = int(self.request.GET.get("stage"))
-                return qs.filter(current_stage_id=stage_pk)
+                self.stage_pk = int(self.request.GET.get("stage"))
+                return qs.filter(current_stage_id=self.stage_pk)
             except ValueError:
                 pass
         return qs
@@ -58,17 +60,36 @@ class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin, django_tab
         return self.filter_queryset(qs)
 
 
-class AllApplicationListView(LoginRequiredMixin, ApplicationFilterMixin, django_tables2.SingleTableMixin,
-        RestrictedListView):
+class AllApplicationListView(LoginRequiredMixin, ApplicationFilterMixin,
+        django_tables2.SingleTableMixin, RestrictedListView):
     model = Application
-    table_class = ApplicationTable
+    table_class = AllApplicationsTable
     table_pagination = False
+
+    def get(self, *args, **kwargs):
+        self.filter_form = ApplicationFilterForm(
+                company=self.request.user.company)
+        self.selected_opening = None
+        if self.request.GET:
+            self.filter_form = ApplicationFilterForm(
+                    company=self.request.user.company, data=self.request.GET)
+            if self.filter_form.is_valid():
+                self.selected_opening = self.filter_form.cleaned_data["opening"]
+
+        return super(AllApplicationListView, self).get(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        kwargs['filter_form'] = self.filter_form
+        kwargs['selected_opening'] = self.selected_opening
+        return super(AllApplicationListView, self).get_context_data(**kwargs)
 
     def get_queryset(self):
         qs = Application.objects.filter(
             opening__company=self.request.user.company
         ).order_by("opening").select_related("applicant", "opening",
                 "current_stage")
+        if self.selected_opening:
+            qs = qs.filter(opening=self.selected_opening)
         return self.filter_queryset(qs)
 
 

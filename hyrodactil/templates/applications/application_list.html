@@ -21,18 +21,39 @@
       </div>
     {% endif %}
 
-    <div class="row">
-      <div class="large-2 columns">
-        <ul>
-          {% for choice in stage_choices %}
-            <li><a href="?stage={{ choice.pk }}">{{ choice }}</a></li>
-          {% endfor %}
-            <li><a href=".">{% trans "All" %}</a></li>
-        </ul>
-      </div>
+    <div class="large-3 columns">
+      <h3>Filter</h3>
 
-      <div class="large-10 columns">
-        {% render_table table %}
-      </div>
+      <h4>Status</h4>
+      <ul>
+        {% for choice in stage_choices %}
+        <li><a href="?stage={{ choice.pk }}{% if selected_opening %}&opening={{ selected_opening }}{% endif %}">{{ choice }}</a></li>
+        {% endfor %}
+          <li><a href=".">{% trans "All" %}</a></li>
+      </ul>
+
+      {% if not context_opening %}
+        <h4>Opening</h4>
+        <form action="" method="GET" id="filter_form">
+          {{ filter_form.opening }}
+          {% if stage_pk %}
+            <input type="hidden" name="stage" value="{{ stage_pk }}" />
+          {% endif %}
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="large-9 columns">
+      {% render_table table %}
     </div>
 {% endblock content %}
+
+{% block extra-js %}
+<script>
+  $(function () {
+    $("select#id_opening").change(function () {
+      $("#filter_form").submit();
+    });
+  });
+</script>
+{% endblock %}
