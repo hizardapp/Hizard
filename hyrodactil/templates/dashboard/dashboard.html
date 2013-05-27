@@ -31,6 +31,27 @@
   <hr>
 
   <h3>{% trans 'Openings' %}</h3>
-  {% render_table opening_table %}
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans 'Title' %}</th>
+        {% for interview_stage in interview_stages %}
+          <th>{{ interview_stage.name }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+
+    {% for opening in opening_list %}
+      <tr>
+        <td><a href="{% url "openings:detail_opening" opening.id %}">{{ opening.title }}</a></td>
+        {% for stage_count in opening.stage_counts %}
+          <td>{{ stage_count }}</td>
+        {% endfor  %}
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
 
 {% endblock content %}

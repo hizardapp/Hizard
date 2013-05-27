@@ -8,7 +8,7 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
-from companysettings.models import Department, Question
+from companysettings.models import Department, Question, InterviewStage
 
 
 class Opening(TimeStampedModel):
@@ -37,16 +37,9 @@ class Opening(TimeStampedModel):
         Question, blank=True, null=True, through='OpeningQuestion'
     )
 
-    def __getattr__(self, attr):
-        try:
-            return super(Opening, self).__getattribute__(attr)
-        except AttributeError:
-            if attr.startswith('_prefetched'):
-                raise
-
-        if attr.startswith("count_applications-"):
-            status = attr.split("-")[1]
-            return self.application_set.filter(current_stage_id=status).count()
+    def stage_counts(self, stages):
+        for stage in InterviewStage.objects.filter(company=self.company):
+            yield self.application_set.filter(current_stage_id=stage).count()
 
     def get_apply_url(self):
         company_prefix = (

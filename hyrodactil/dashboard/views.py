@@ -1,12 +1,10 @@
 from django.views.generic.base import TemplateView
 
-import django_tables2
 from braces.views import LoginRequiredMixin
 
 from openings.models import Opening
 from applications.models import Application
-
-from .tables import OpeningTable
+from companysettings.models import InterviewStage
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/dashboard.html'
@@ -14,19 +12,15 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        config = django_tables2.RequestConfig(self.request, paginate=False)
 
         company = self.request.user.company
-        context['opening_table'] = OpeningTable(company,
-                Opening.objects.filter(company=company,
-                    published_date__isnull=False))
+        context['opening_list'] = Opening.objects.filter(company=company,
+                    published_date__isnull=False)
 
-        config.configure(context['opening_table'])
+        context['interview_stages'] = InterviewStage.objects.filter(company=company)
 
         context['last_applications'] = Application.objects.filter(
             opening__company=company
-        ).order_by('-created')[:5].select_related('opening', 'applicant')
+        ).order_by('-created')[:5]
 
-
-        context['opening_list'] = company.opening_set.all()
         return context
