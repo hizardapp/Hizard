@@ -15,4 +15,7 @@ class ApplicationTable(tables.Table):
         fields = ("first_name", "last_name", "created")
 
 class AllApplicationsTable(ApplicationTable):
-    opening = tables.Column(verbose_name="Opening", accessor="opening.title")
+    opening = tables.LinkColumn("openings:detail_opening",
+            args=[tables.A("opening.pk")],
+            verbose_name="Opening",
+            accessor="opening.title")
