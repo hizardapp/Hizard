@@ -1,5 +1,3 @@
-from django.utils.translation import ugettext_lazy as _
-
 import django_tables2 as tables
 
 from openings.models import Opening
@@ -15,6 +13,7 @@ class OpeningTable(tables.Table):
     def __init__(self, company, *args, **kwargs):
         for stage in InterviewStage.objects.filter(company=company):
             self.base_columns[str(stage.name)] = tables.Column(
+                sortable=False,
                 verbose_name=stage.name,
                 accessor=tables.A("count_applications-%s" % stage.pk))
         super(OpeningTable, self).__init__(*args, **kwargs)
