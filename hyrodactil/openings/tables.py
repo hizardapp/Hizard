@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 
 import django_tables2 as tables
 
@@ -9,15 +10,15 @@ class OpeningTable(tables.Table):
         'openings:detail_opening',
         args=[tables.A('pk')],
     )
-    employment_type = tables.Column(verbose_name='Type')
-    published_date = tables.DateColumn(verbose_name='Published', format='d/m/Y')
+    employment_type = tables.Column(verbose_name=_('Type'))
+    published_date = tables.DateColumn(verbose_name=_('Published'), format='d/m/Y')
     location = tables.Column(
         accessor='get_location_string', order_by=('city', 'country')
     )
     number_applications = tables.LinkColumn(
         'applications:list_applications',
         args=[tables.A('pk')],
-        verbose_name='Applications'
+        verbose_name=_('Applications')
     )
     status = tables.Column(accessor='get_status')
 

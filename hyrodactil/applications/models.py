@@ -18,6 +18,8 @@ class Applicant(TimeStampedModel):
         help_text=_("PDF files only")
     )
 
+    def get_full_name(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
 class Application(TimeStampedModel):
     applicant = models.ForeignKey(Applicant)

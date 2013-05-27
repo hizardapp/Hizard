@@ -6,6 +6,30 @@
 {% block content %}
   <h2 class="page-header">{% trans "Dashboard" %}</h2>
 
+  <h3>{% trans 'Latest candidates' %}</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans 'Name' %}</th>
+        <th>{% trans 'Applied for' %}</th>
+        <th>{% trans 'Applied the' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    {% for application in last_applications %}
+      <tr>
+        <td>{{ application.applicant.get_full_name }}</td>
+        <td>{{ application.opening.title }}</td>
+        <td>{{ application.created|date:"Y/m/d H:i" }}</td>
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+
+  <hr>
+
   <div class="row">
     {% render_table opening_table %}
 
