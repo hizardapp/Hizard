@@ -23,7 +23,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         context['last_applications'] = Application.objects.filter(
             opening__company=company
-        ).order_by('-created')[:5]
+        ).order_by('-created')[:5].select_related('opening', 'applicant')
 
 
         context['opening_list'] = company.opening_set.all()
