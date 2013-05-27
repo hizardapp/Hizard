@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from ..factories._companysettings import InterviewStageFactory
-from ..factories._applications import ApplicationFactory
+from ..factories._applications import ApplicationFactory, ApplicantFactory
 from ..factories._applications import ApplicationStageTransitionFactory
 
 
@@ -19,3 +19,7 @@ class ApplicationModelTests(TestCase):
         ApplicationStageTransitionFactory.create(application=application,
                 stage=s2)
         self.assertEqual(application.current_stage, s2)
+
+    def test_get_full_name(self):
+        bob = ApplicantFactory.build()
+        self.assertEqual(bob.get_full_name(), 'Bilbon Sacquet')

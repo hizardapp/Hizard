@@ -19,7 +19,7 @@
 
     {% for application in last_applications %}
       <tr>
-        <td>{{ application.applicant.get_full_name }}</td>
+        <td><a href="{% url "applications:application_detail" application.id %}">{{ application.applicant.get_full_name }}</a></td>
         <td>{{ application.opening.title }}</td>
         <td>{{ application.created|date:"Y/m/d H:i" }}</td>
       </tr>

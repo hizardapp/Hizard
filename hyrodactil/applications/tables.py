@@ -6,15 +6,19 @@ from .models import Application
 
 
 class ApplicationTable(tables.Table):
-    first_name = tables.Column(accessor="applicant.first_name")
-    last_name = tables.Column(accessor="applicant.last_name")
-    created = tables.DateColumn(verbose_name=_("Date applied"), format="d/m/Y H:m")
+    name = tables.LinkColumn(
+        'applications:application_detail',
+        args=[tables.A('pk')],
+        accessor='applicant.get_full_name',
+        order_by=('applicant.first_name', 'applicant.last_name')
+    )
+    created = tables.DateColumn(verbose_name=_("Date applied"), format="d/m/Y")
     status = tables.Column(accessor="current_stage")
 
     class Meta:
         attrs = {"class": "large-12 columns"}
         model = Application
-        fields = ("first_name", "last_name", "created")
+        fields = ('name', "created")
 
 class AllApplicationsTable(ApplicationTable):
     opening = tables.LinkColumn("openings:detail_opening",
