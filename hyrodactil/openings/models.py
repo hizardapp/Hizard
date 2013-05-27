@@ -37,7 +37,7 @@ class Opening(TimeStampedModel):
         Question, blank=True, null=True, through='OpeningQuestion'
     )
 
-    def stage_counts(self, stages):
+    def stage_counts(self):
         for stage in InterviewStage.objects.filter(company=self.company):
             yield self.application_set.filter(current_stage_id=stage).count()
 
