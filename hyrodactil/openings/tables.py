@@ -10,6 +10,7 @@ class OpeningTable(tables.Table):
         'openings:detail_opening',
         args=[tables.A('pk')],
     )
+    department = tables.Column()
     employment_type = tables.Column(verbose_name=_('Type'))
     published_date = tables.DateColumn(verbose_name=_('Published'), format='d/m/Y')
     location = tables.Column(
@@ -26,6 +27,6 @@ class OpeningTable(tables.Table):
         attrs = {'class': 'large-12 columns'}
         model = Opening
         fields = (
-            'title', 'employment_type', 'location',
+            'title', 'department', 'employment_type', 'location',
             'number_applications', 'published_date', 'status'
         )
