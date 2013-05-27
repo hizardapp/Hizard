@@ -31,3 +31,17 @@ class OpeningsModelsTests(TestCase):
             'http://acme.hizard.com/1/apply/',
             opening.get_apply_url()
         )
+
+    def test_get_location_string(self):
+        opening = OpeningFactory.build()
+        self.assertEqual(opening.get_location_string(), 'Cannes, France')
+
+    def test_get_status(self):
+        opening = OpeningFactory.build()
+        self.assertEqual(opening.get_status(), 'Created')
+
+        opening.is_private = True
+        self.assertEqual(opening.get_status(), 'Private')
+
+        opening.closing_date = datetime.now()
+        self.assertEqual(opening.get_status(), 'Closed')

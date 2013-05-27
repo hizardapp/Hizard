@@ -1,5 +1,6 @@
 {% extends "base_app.html" %}
 
+{% load django_tables2 %}
 {% load i18n %}
 
 {% block content %}
@@ -9,55 +10,10 @@
     {% trans "Create an opening" %}
   </a>
 
-  {% if opening_list %}
-    <table class="opening-list">
-      <thead>
-        <tr>
-          <th>{% trans "Title" %}</th>
-          <th>{% trans "Created" %}</th>
-          <th>{% trans "Closed" %}</th>
-          <th>{% trans "Applicants" %}</th>
-          <th>{% trans "Actions" %}</th>
-        </tr>
-      </thead>
 
-      <tbody>
-        {% for opening in opening_list %}
-          <tr>
-            <td>
-              <strong><a href="{% url 'openings:detail_opening' opening.id %}" class="opening-title">{{ opening.title }}</a></strong>
-            </td>
+  <div class="row">
+    {% render_table table %}
+  </div>
 
-            <td>
-              {{ opening.created|date:"d/m/Y" }}
-            </td>
-
-            <td>
-              {{ opening.closing_date|date:"d/m/Y" }}
-            </td>
-
-            <td>
-              {% for stage, count in opening.applicants_stats %}
-                <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
-                  {{ count }}
-                </a>
-                {% if not forloop.last %}/{% endif %}
-              {% endfor %}
-            </td>
-
-            <td>
-              <a href="{% url 'openings:update_opening' opening.id %}">{% trans "Edit" %}</a>
-              |
-              <a href="{% url 'openings:delete_opening' opening.id %}">{% trans "Delete" %}</a>
-              |
-              <a href="{% url 'openings:close_opening' opening.id %}">{% trans "Close" %}</a>
-            </td>
-
-          </tr>
-        {% endfor %}
-      </tbody>
-
-    </table>
-  {% endif %}
 
 {% endblock content %}

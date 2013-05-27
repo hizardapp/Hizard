@@ -56,6 +56,21 @@ class Opening(TimeStampedModel):
         )
         return "%s%s" % (company_prefix, reverse('public:apply', args=(self.id,)))
 
+    def get_location_string(self):
+        return '%s, %s' % (self.loc_city, unicode(self.loc_country.name))
+
+    def get_status(self):
+        if self.closing_date:
+            return _('Closed')
+
+        if self.is_private:
+            return _('Private')
+
+        #if self.is_published:
+            #return _('Published')
+
+        return _('Created')
+
 
 class OpeningQuestion(TimeStampedModel):
     opening = models.ForeignKey(Opening)
