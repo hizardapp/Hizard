@@ -1,4 +1,5 @@
 {% extends "base_app.html" %}
+{% load django_tables2 %}
 
 {% load i18n %}
 
@@ -6,6 +7,8 @@
   <h2 class="page-header">{% trans "Dashboard" %}</h2>
 
   <div class="row">
+    {% render_table opening_table %}
+
     <table class="large-6 columns">
       <thead>
       <tr>

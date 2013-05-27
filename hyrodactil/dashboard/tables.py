@@ -11,3 +11,4 @@ class OpeningTable(tables.Table):
 
     class Meta:
       model = Opening
+      fields = ("title",)
