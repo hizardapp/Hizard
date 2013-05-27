@@ -8,27 +8,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, CreateView, TemplateView, View
 
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
-import django_tables2 as tables
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm, ApplicationForm
 from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
 from .threaded_discussion import group
+from .tables import ApplicationTable
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
 from core.views import UnpaginatedSingleTableMixin
 from openings.models import Opening
-
-
-class ApplicationTable(tables.Table):
-    first_name = tables.Column(accessor="applicant.first_name")
-    last_name = tables.Column(accessor="applicant.last_name")
-    created = tables.DateColumn(verbose_name="Date applied", format="d/m/Y H:m")
-    status = tables.Column(accessor="current_stage")
-
-    class Meta:
-        attrs = {"class": "large-12 columns"}
-        model = Application
-        fields = ("first_name", "last_name", "created")
 
 class ApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
         RestrictedListView):
