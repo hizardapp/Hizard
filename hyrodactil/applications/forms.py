@@ -154,8 +154,8 @@ class ApplicationFilterForm(forms.Form):
 
     def __init__(self, company, *args, **kwargs):
         super(ApplicationFilterForm, self).__init__(*args, **kwargs)
-        self.fields["opening"].choices = [(o.pk, o.title) for o in
-                company.opening_set.all()]
+        self.fields["opening"].choices = [("", _("All"))] +\
+                [(o.pk, o.title) for o in company.opening_set.all()]
 
 
 class ApplicationStageTransitionForm(forms.ModelForm):
