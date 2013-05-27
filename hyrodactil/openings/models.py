@@ -8,7 +8,7 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
-from companysettings.models import Department, Question, InterviewStage
+from companysettings.models import Department, Question
 
 
 class Opening(TimeStampedModel):
@@ -47,19 +47,6 @@ class Opening(TimeStampedModel):
         if attr.startswith("count_applications-"):
             status = attr.split("-")[1]
             return self.application_set.filter(current_stage_id=status).count()
-
-    def applicants_stats(self):
-        stages = []
-        stages_indexes = dict()
-        for i, stage in enumerate(InterviewStage.objects.filter(
-                company=self.company).only("id", "name")):
-            stages.append([stage.name, 0])
-            stages_indexes[stage.name] = i
-
-        for application in self.application_set.all():
-            stages[stages_indexes[application.current_stage.name]][1] += 1
-
-        return stages
 
     def get_apply_url(self):
         company_prefix = (
