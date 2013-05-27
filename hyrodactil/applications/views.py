@@ -21,7 +21,6 @@ from core.views import MessageMixin, RestrictedListView
 from openings.models import Opening
 
 
-<<<<<<< HEAD
 class ApplicationFilterMixin(object):
     def get_context_data(self, **kwargs):
         kwargs['stage_choices'] = InterviewStage.objects.filter(
@@ -37,7 +36,8 @@ class ApplicationFilterMixin(object):
                 pass
         return qs
 
-class ApplicationListView(LoginRequiredMixin, django_tables2.SingleTableMixin,
+
+class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin, django_tables2.SingleTableMixin,
         RestrictedListView):
     model = Application
     table_class = ApplicationTable
@@ -58,7 +58,7 @@ class ApplicationListView(LoginRequiredMixin, django_tables2.SingleTableMixin,
         return self.filter_queryset(qs)
 
 
-class AllApplicationListView(LoginRequiredMixin, django_tables2.SingleTableMixin,
+class AllApplicationListView(LoginRequiredMixin, ApplicationFilterMixin, django_tables2.SingleTableMixin,
         RestrictedListView):
     model = Application
     table_class = ApplicationTable
