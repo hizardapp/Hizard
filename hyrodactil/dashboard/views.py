@@ -16,13 +16,15 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         config = django_tables2.RequestConfig(self.request, paginate=False)
 
-        context['opening_table'] = OpeningTable(Opening.objects.all())
+        company = self.request.user.company
+        context['opening_table'] = OpeningTable(company, Opening.objects.all())
 
         config.configure(context['opening_table'])
 
         context['last_applications'] = Application.objects.filter(
-            opening__company=self.request.user.company
+            opening__company=company
         ).order_by('-created')[:5]
 
-        context['opening_list'] = self.request.user.company.opening_set.all()
+
+        context['opening_list'] = company.opening_set.all()
         return context

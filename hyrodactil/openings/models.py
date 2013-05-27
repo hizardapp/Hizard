@@ -37,6 +37,17 @@ class Opening(TimeStampedModel):
         Question, blank=True, null=True, through='OpeningQuestion'
     )
 
+    def __getattr__(self, attr):
+        try:
+            return super(Opening, self).__getattribute__(attr)
+        except AttributeError:
+            if attr.startswith('_prefetched'):
+                raise
+
+        if attr.startswith("count_applications-"):
+            status = attr.split("-")[1]
+            return self.application_set.filter(current_stage_id=status).count()
+
     def applicants_stats(self):
         stages = []
         stages_indexes = dict()
@@ -70,6 +81,9 @@ class Opening(TimeStampedModel):
             return _('Published')
 
         return _('Created')
+
+    def __unicode__(self):
+        return u"<Opening: %s>" % self.title
 
 
 class OpeningQuestion(TimeStampedModel):
