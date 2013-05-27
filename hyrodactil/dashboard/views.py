@@ -17,7 +17,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         config = django_tables2.RequestConfig(self.request, paginate=False)
 
         company = self.request.user.company
-        context['opening_table'] = OpeningTable(company, Opening.objects.all())
+        context['opening_table'] = OpeningTable(company,
+                Opening.objects.filter(company=company,
+                    published_date__isnull=False))
 
         config.configure(context['opening_table'])
 
