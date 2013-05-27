@@ -30,33 +30,7 @@
 
   <hr>
 
-  <div class="row">
-    {% render_table opening_table %}
-
-    <table class="large-6 columns">
-      <thead>
-      <tr>
-        <th>Position</th>
-        <th>Applications</th>
-      </tr>
-      </thead>
-
-      <tbody>
-      {% for opening in opening_list %}
-        <tr>
-          <td><a href="{% url 'openings:detail_opening' opening.pk %}">{{ opening.title }}</a></td>
-          <td>
-            {% for stage, count in opening.applicants_stats %}
-              <a href="{% url "applications:list_applications" opening.id %}" data-tooltip class="has-tip" title="{{ stage }}">
-                {{ count }}
-              </a>
-              {% if not forloop.last %}/{% endif %}
-            {% endfor %}
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <h3>{% trans 'Openings' %}</h3>
+  {% render_table opening_table %}
 
 {% endblock content %}
