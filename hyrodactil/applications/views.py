@@ -1,6 +1,8 @@
 from collections import OrderedDict
 import json
 
+import django_tables2
+
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -16,10 +18,10 @@ from .threaded_discussion import group
 from .tables import ApplicationTable
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
-from core.views import UnpaginatedSingleTableMixin
 from openings.models import Opening
 
 
+<<<<<<< HEAD
 class ApplicationFilterMixin(object):
     def get_context_data(self, **kwargs):
         kwargs['stage_choices'] = InterviewStage.objects.filter(
@@ -35,11 +37,12 @@ class ApplicationFilterMixin(object):
                 pass
         return qs
 
-
-class ApplicationListView(ApplicationFilterMixin, LoginRequiredMixin,
-        UnpaginatedSingleTableMixin, RestrictedListView):
+class ApplicationListView(LoginRequiredMixin, django_tables2.SingleTableMixin,
+        RestrictedListView):
     model = Application
     table_class = ApplicationTable
+    table_pagination = False
+
     template_name = "applications/application_list.html"
 
     def get_context_data(self, **kwargs):
@@ -55,10 +58,11 @@ class ApplicationListView(ApplicationFilterMixin, LoginRequiredMixin,
         return self.filter_queryset(qs)
 
 
-class AllApplicationListView(ApplicationFilterMixin, LoginRequiredMixin,
-        UnpaginatedSingleTableMixin, RestrictedListView):
+class AllApplicationListView(LoginRequiredMixin, django_tables2.SingleTableMixin,
+        RestrictedListView):
     model = Application
     table_class = ApplicationTable
+    table_pagination = False
 
     def get_queryset(self):
         qs = Application.objects.filter(
