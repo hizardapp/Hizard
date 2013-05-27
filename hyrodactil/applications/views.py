@@ -28,8 +28,11 @@ class ApplicationFilterMixin(object):
 
     def filter_queryset(self, qs):
         if self.request.GET.get("stage"):
-            return qs.filter(current_stage_id=
-                    int(self.request.GET.get("stage")))
+            try:
+                stage_pk = int(self.request.GET.get("stage"))
+                return qs.filter(current_stage_id=stage_pk)
+            except ValueError:
+                pass
         return qs
 
 

@@ -27,6 +27,7 @@
           {% for choice in stage_choices %}
             <li><a href="?stage={{ choice.pk }}">{{ choice }}</a></li>
           {% endfor %}
+            <li><a href=".">{% trans "All" %}</a></li>
         </ul>
       </div>
 
