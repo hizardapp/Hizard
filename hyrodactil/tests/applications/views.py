@@ -23,21 +23,10 @@ class ApplicationViewsTests(WebTest):
         self.question = SingleLineQuestionFactory(company=self.user.company)
         self.opening = OpeningWithQuestionsFactory(company=self.user.company)
 
-    def test_listing_applicants(self):
-        application = ApplicationFactory.create(opening=self.opening)
-
-        url = reverse('applications:list_applications', args=(self.opening.id,))
-
-        response = self.app.get(url, user=self.user)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.applicant.first_name)
-        self.assertContains(response, application.applicant.last_name)
-
     def test_listing_all_applicants(self):
         application = ApplicationFactory.create(opening=self.opening)
 
-        url = reverse('applications:list_all_applications')
+        url = reverse('applications:list_applications')
 
         response = self.app.get(url, user=self.user)
 
@@ -53,7 +42,7 @@ class ApplicationViewsTests(WebTest):
         opening2 = OpeningWithQuestionsFactory(company=self.user.company)
         application = ApplicationFactory.create(opening=self.opening,
             current_stage=phoned)
-        url = reverse('applications:list_all_applications')
+        url = reverse('applications:list_applications')
 
         response = self.app.get(url, dict(stages=[phoned.pk]), user=self.user)
         self.assertEqual(response.status_code, 200)

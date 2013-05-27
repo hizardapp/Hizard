@@ -5,18 +5,13 @@ import views
 urlpatterns = patterns('',
    url(
        r'^$',
-       views.AllApplicationListView.as_view(),
-       name='list_all_applications'
+       views.ApplicationListView.as_view(),
+       name='list_applications'
    ),
     url(
         r'^update_positions/$',
         views.UpdatePositionsAjaxView.as_view(),
         name='update_positions'
-    ),
-    url(
-        r'^(?P<opening_id>\d+)/list/$',
-        views.ApplicationListView.as_view(),
-        name='list_applications'
     ),
     url(
         r'^(?P<pk>\d+)/$',

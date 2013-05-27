@@ -61,7 +61,7 @@
       </p>
 
       <p>
-       <a href="{% url "applications:list_applications" opening.pk %}">{% trans 'Applicants list' %}</a>
+        <a href="{% url "applications:list_applications" %}?openings={{ opening.pk }}">{% trans 'Applicants list' %}</a>
       </p>
   </div>
 </div>

@@ -1,4 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
 
 import django_tables2 as tables
 
@@ -16,12 +18,17 @@ class OpeningTable(tables.Table):
     location = tables.Column(
         accessor='get_location_string', order_by=('city', 'country')
     )
-    number_applications = tables.LinkColumn(
-        'applications:list_applications',
-        args=[tables.A('pk')],
+    number_applications = tables.Column(
         verbose_name=_('Applications')
     )
     status = tables.Column(accessor='get_status')
+
+    def render_number_applications(self, record):
+        return mark_safe("<a href=\"%s\">%s</a>" % (
+            reverse('applications:list_applications') +
+              "?openings=%s" % record.pk,
+            record.number_applications
+        ))
 
     class Meta:
         attrs = {'class': 'large-12 columns'}

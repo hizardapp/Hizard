@@ -15,7 +15,7 @@ from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
 from .forms import ApplicationForm, ApplicationFilterForm
 from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
 from .threaded_discussion import group
-from .tables import ApplicationTable, AllApplicationsTable
+from .tables import ApplicationsTable
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
 from openings.models import Opening
@@ -46,32 +46,10 @@ class ApplicationFilterMixin(object):
                     qs = qs.filter(opening__in=cleaned_data['openings'])
         return qs
 
-
-class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin, django_tables2.SingleTableMixin,
-        RestrictedListView):
-    model = Application
-    table_class = ApplicationTable
-    table_pagination = False
-
-    template_name = 'applications/application_list.html'
-
-    def get_context_data(self, **kwargs):
-        kwargs['context_opening'] = get_object_or_404(
-            Opening, pk=self.kwargs['opening_id']
-        )
-        return super(ApplicationListView, self).get_context_data(**kwargs)
-
-    def get_queryset(self):
-        opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
-        qs = Application.objects.filter(opening=opening
-                ).select_related('current_stage', 'applicant')
-        return self.filter_queryset(qs)
-
-
-class AllApplicationListView(LoginRequiredMixin, ApplicationFilterMixin,
+class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin,
         django_tables2.SingleTableMixin, RestrictedListView):
     model = Application
-    table_class = AllApplicationsTable
+    table_class = ApplicationsTable
     table_pagination = False
 
     def get_queryset(self):
@@ -166,8 +144,7 @@ class ManualApplicationView(LoginRequiredMixin, MessageMixin, CreateView):
     def form_valid(self, form):
         self.success_url = reverse(
             'applications:list_applications',
-            kwargs={'opening_id': form.opening.id}
-        )
+        ) + "?openings=%s" % form.opening.id
         return super(ManualApplicationView, self).form_valid(form)
 
 
