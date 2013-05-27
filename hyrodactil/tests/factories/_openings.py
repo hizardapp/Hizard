@@ -11,8 +11,8 @@ class OpeningFactory(factory.DjangoModelFactory):
     title = 'Salesman'
     description = 'Sales stuff'
     is_private = ''
-    loc_country = 'FR'
-    loc_city = 'Cannes'
+    country = 'FR'
+    city = 'Cannes'
     company = factory.SubFactory(_companies.CompanyFactory)
 
 

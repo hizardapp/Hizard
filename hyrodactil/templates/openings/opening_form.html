@@ -39,9 +39,9 @@
         <br>
         {% include 'openings/_opening_form_field.html' with field=form.department %}
         <br>
-        {% include 'openings/_opening_form_field.html' with field=form.loc_country %}
+        {% include 'openings/_opening_form_field.html' with field=form.country %}
         <br>
-        {% include 'openings/_opening_form_field.html' with field=form.loc_city %}
+        {% include 'openings/_opening_form_field.html' with field=form.city %}
         <br>
         {% include 'openings/_opening_form_field.html' with field=form.loc_postcode %}
 
@@ -111,7 +111,7 @@
           }
       });
 
-      $("#id_loc_country").select2({width: '50%'})
+      $("#id_country").select2({width: '50%'})
       var options = $.map($("#id_department option"), function (el) {
         return el.text;
       });

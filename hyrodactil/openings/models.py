@@ -23,8 +23,8 @@ class Opening(TimeStampedModel):
     is_private = models.BooleanField(default=False)
     department = models.ForeignKey(Department, blank=True, null=True)
     closing_date = models.DateTimeField(blank=True, null=True)
-    loc_country = CountryField(_("Country"), blank=True)
-    loc_city = models.CharField(_("City"), max_length=128, blank=True)
+    country = CountryField(_("Country"), blank=True)
+    city = models.CharField(_("City"), max_length=128, blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     employment_type = models.CharField(
         choices=EMPLOYMENT_TYPES,
@@ -57,7 +57,7 @@ class Opening(TimeStampedModel):
         return "%s%s" % (company_prefix, reverse('public:apply', args=(self.id,)))
 
     def get_location_string(self):
-        return '%s, %s' % (self.loc_city, unicode(self.loc_country.name))
+        return '%s, %s' % (self.city, unicode(self.country.name))
 
     def get_status(self):
         if self.closing_date:

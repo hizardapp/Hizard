@@ -12,7 +12,7 @@ class OpeningTable(tables.Table):
     employment_type = tables.Column(verbose_name='Type')
     published_date = tables.DateColumn(verbose_name='Published', format='d/m/Y')
     location = tables.Column(
-        accessor='get_location_string', order_by=('loc_city', 'loc_country')
+        accessor='get_location_string', order_by=('city', 'country')
     )
     number_applications = tables.LinkColumn(
         'applications:list_applications',

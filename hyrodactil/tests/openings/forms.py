@@ -20,8 +20,8 @@ class OpeningsFormsTests(TestCase):
         self.form_data = {'title': 'Software Developer',
                           'description': 'Fait des logiciels.',
                           'is_private': '',
-                          'loc_country': 'FR',
-                          'loc_city': 'Cannes',
+                          'country': 'FR',
+                          'city': 'Cannes',
                           'employment_type': 'full_time',
                           'questions': [1, 2]}
 
@@ -47,8 +47,8 @@ class OpeningsFormsTests(TestCase):
 
     def test_valid_opening_form(self):
         self._form_is_valid_without()
-        self._form_is_valid_without('loc_country')
-        self._form_is_valid_without('loc_city')
+        self._form_is_valid_without('country')
+        self._form_is_valid_without('city')
         self._form_is_valid_without('questions')
 
     def test_invalid_opening_form(self):

@@ -33,8 +33,8 @@ class OpeningsViewsTests(WebTest):
         form['title'] = 'Software Developer'
         form['description'] = 'Fait des logiciels.'
         form['is_private'] = ''
-        form['loc_country'] = 'FR'
-        form['loc_city'] = 'Cannes'
+        form['country'] = 'FR'
+        form['city'] = 'Cannes'
         form['oq-1-included'] = True
         response = form.submit().follow()
 
@@ -68,8 +68,8 @@ class OpeningsViewsTests(WebTest):
         form['title'] = 'Software Developer'
         form['description'] = ''
         form['is_private'] = ''
-        form['loc_country'] = 'FR'
-        form['loc_city'] = 'Cannes'
+        form['country'] = 'FR'
+        form['city'] = 'Cannes'
         form['oq-1-included'] = True
         response = form.submit()
 
