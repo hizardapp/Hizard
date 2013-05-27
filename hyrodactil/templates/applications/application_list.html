@@ -9,24 +9,29 @@
       <p>Add an application manually <a href="{% url 'applications:manual_application' context_opening.id %}">here</a></p>
     {% endif %}
 
-    {% if application_list %}
+    {% if context_opening %}
+      <h2>
+        {% blocktrans with opening=context_opening.title %}
+          Applicants for {{ opening }}
+        {% endblocktrans %}
+      </h2>
+    {% else %}
+      <div class="toggle-list-applications">
+        <a href={% url 'applications:board_applications' %}>{% trans 'Show as board' %}</a>
+      </div>
+    {% endif %}
 
-      {% if context_opening %}
-        <h2>
-          {% blocktrans with opening=context_opening.title %}
-            Applicants for {{ opening }}
-          {% endblocktrans %}
-        </h2>
-      {% else %}
-        <div class="toggle-list-applications">
-          <a href={% url 'applications:board_applications' %}>{% trans 'Show as board' %}</a>
-        </div>
-      {% endif %}
+    <div class="row">
+      <div class="large-2 columns">
+        <ul>
+          {% for choice in stage_choices %}
+            <li><a href="?stage={{ choice.pk }}">{{ choice }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
 
-      <div class="row">
+      <div class="large-10 columns">
         {% render_table table %}
       </div>
-    {% else %}
-      <p>{% trans "No applications yet" %}</p>
-    {% endif %}
+    </div>
 {% endblock content %}

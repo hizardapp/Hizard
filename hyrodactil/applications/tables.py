@@ -13,4 +13,3 @@ class ApplicationTable(tables.Table):
         attrs = {"class": "large-12 columns"}
         model = Application
         fields = ("first_name", "last_name", "created")
-

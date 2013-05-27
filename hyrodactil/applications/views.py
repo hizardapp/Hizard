@@ -9,7 +9,8 @@ from django.views.generic import FormView, CreateView, TemplateView, View
 
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
-from .forms import ApplicationStageTransitionForm, ApplicationMessageForm, ApplicationForm
+from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
+from .forms import ApplicationForm
 from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
 from .threaded_discussion import group
 from .tables import ApplicationTable
@@ -18,8 +19,22 @@ from core.views import MessageMixin, RestrictedListView
 from core.views import UnpaginatedSingleTableMixin
 from openings.models import Opening
 
-class ApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
-        RestrictedListView):
+
+class ApplicationFilterMixin(object):
+    def get_context_data(self, **kwargs):
+        kwargs['stage_choices'] = InterviewStage.objects.filter(
+                company=self.request.user.company)
+        return super(ApplicationFilterMixin, self).get_context_data(**kwargs)
+
+    def filter_queryset(self, qs):
+        if self.request.GET.get("stage"):
+            return qs.filter(current_stage_id=
+                    int(self.request.GET.get("stage")))
+        return qs
+
+
+class ApplicationListView(ApplicationFilterMixin, LoginRequiredMixin,
+        UnpaginatedSingleTableMixin, RestrictedListView):
     model = Application
     table_class = ApplicationTable
     template_name = "applications/application_list.html"
@@ -32,20 +47,22 @@ class ApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
 
     def get_queryset(self):
         opening = get_object_or_404(Opening, pk=self.kwargs['opening_id'])
-        return Application.objects.filter(opening=opening
+        qs = Application.objects.filter(opening=opening
                 ).select_related("current_stage", "applicant")
+        return self.filter_queryset(qs)
 
 
-class AllApplicationListView(LoginRequiredMixin, UnpaginatedSingleTableMixin,
-        RestrictedListView):
+class AllApplicationListView(ApplicationFilterMixin, LoginRequiredMixin,
+        UnpaginatedSingleTableMixin, RestrictedListView):
     model = Application
     table_class = ApplicationTable
 
     def get_queryset(self):
-        return Application.objects.filter(
+        qs = Application.objects.filter(
             opening__company=self.request.user.company
         ).order_by("opening").select_related("applicant", "opening",
                 "current_stage")
+        return self.filter_queryset(qs)
 
 
 class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
