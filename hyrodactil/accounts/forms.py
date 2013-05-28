@@ -38,7 +38,9 @@ class UserCreationForm(forms.ModelForm):
         password2 = self.cleaned_data.get("password2")
 
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(self.error_messages['password_mismatch'])
+            raise forms.ValidationError(
+                self.error_messages['password_mismatch']
+            )
 
         # No insecure passwords !
         if len(password2) < settings.MIN_PASSWORD_LENGTH:
@@ -55,10 +57,12 @@ class UserCreationForm(forms.ModelForm):
         password = self.cleaned_data["password1"]
 
         if commit:
-            user = CustomUser.objects.create_user(email,
-                    password=password,
-                    active=False,
-                    is_company_admin=True)
+            user = CustomUser.objects.create_user(
+                email,
+                password=password,
+                active=False,
+                is_company_admin=True
+            )
             return user
 
 

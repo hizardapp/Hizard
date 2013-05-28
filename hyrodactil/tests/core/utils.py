@@ -19,5 +19,7 @@ class SetupCompanyTests(WebTest):
 
         # Not asserting exact number since it can vary if we want to add some
         self.assertTrue(Question.objects.filter(company=company).exists())
-        self.assertTrue(InterviewStage.objects.filter(company=company).exists())
+        self.assertTrue(
+            InterviewStage.objects.filter(company=company).exists()
+        )
         self.assertTrue(Opening.objects.filter(company=company).exists())

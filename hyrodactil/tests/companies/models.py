@@ -16,4 +16,3 @@ class CompaniesModelsTest(TestCase):
             'http://acme.hizard.com/opening_list/',
             company.get_career_site_url()
         )
-

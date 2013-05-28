@@ -180,7 +180,7 @@ LOCAL_APPS = (
     'openings',
     'applications',
     'public',
-    'core' # Contains views/methods used in other apps, not an app itself
+    'core'  # Contains views/methods used in other apps, not an app itself
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -200,7 +200,7 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
-        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -208,10 +208,10 @@ LOGGING = {
     },
     'handlers': {
         'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
-            },
-        'console':{
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
+        },
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
@@ -228,7 +228,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
-            }
+        }
     }
 }
 ########## END LOGGING CONFIGURATION

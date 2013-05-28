@@ -9,11 +9,16 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, CreateView, TemplateView, View
 
-from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
+from braces.views import (
+    LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
+)
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
 from .forms import ApplicationForm, ApplicationFilterForm
-from .models import Application, ApplicationAnswer, ApplicationMessage, ApplicationStageTransition, Applicant
+from .models import (
+    Application, ApplicationAnswer, ApplicationMessage,
+    ApplicationStageTransition, Applicant
+)
 from .threaded_discussion import group
 from .tables import ApplicationsTable
 from companysettings.models import InterviewStage
@@ -46,8 +51,11 @@ class ApplicationFilterMixin(object):
                     qs = qs.filter(opening__in=cleaned_data['openings'])
         return qs
 
-class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin,
-        django_tables2.SingleTableMixin, RestrictedListView):
+
+class ApplicationListView(
+    LoginRequiredMixin, ApplicationFilterMixin,
+    django_tables2.SingleTableMixin, RestrictedListView
+):
     model = Application
     table_class = ApplicationsTable
     table_pagination = False
@@ -55,8 +63,9 @@ class ApplicationListView(LoginRequiredMixin, ApplicationFilterMixin,
     def get_queryset(self):
         qs = Application.objects.filter(
             opening__company=self.request.user.company
-        ).order_by('opening').select_related('applicant', 'opening',
-                'current_stage')
+        ).order_by('opening').select_related(
+            'applicant', 'opening', 'current_stage'
+        )
         return self.filter_queryset(qs)
 
 

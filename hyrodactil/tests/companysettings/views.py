@@ -14,13 +14,13 @@ from accounts.models import CustomUser
 
 class CompanySettingsViewsTests(WebTest):
     def setUp(self):
-        self.user = UserFactory.create()
+        self.user = UserFactory()
         self.required = 'This field is required.'
 
     def test_list_departments(self):
         url = reverse('companysettings:list_departments')
 
-        department = DepartmentFactory.create(company=self.user.company)
+        department = DepartmentFactory(company=self.user.company)
         page = self.app.get(url, user=self.user)
 
         self.assertContains(page, department.name)
@@ -53,12 +53,14 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_update_department_valid(self):
-        dept = DepartmentFactory.create(name='Sales', company=self.user.company)
+        dept = DepartmentFactory(name='Sales', company=self.user.company)
         url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
         form = page.forms[0]
-        form.action = reverse('companysettings:update_department', args=(dept.id,))
+        form.action = reverse(
+            'companysettings:update_department', args=(dept.id,)
+        )
         form['name'] = 'Engineering'
 
         self.assertContains(page, dept.name)
@@ -70,13 +72,15 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(response, 'Sales')
 
     def test_update_department_invalid(self):
-        dept = DepartmentFactory.create(name='Sales', company=self.user.company)
+        dept = DepartmentFactory(name='Sales', company=self.user.company)
         url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
         form = page.forms[0]
 
-        form.action = reverse('companysettings:update_department', args=(dept.id,))
+        form.action = reverse(
+            'companysettings:update_department', args=(dept.id,)
+        )
         form['name'] = ''
 
         self.assertContains(page, dept.name)
@@ -87,7 +91,9 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_delete_department(self):
-        dept = DepartmentFactory.create(name='Sales', company=self.user.company)
+        dept = DepartmentFactory.create(
+            name='Sales', company=self.user.company
+        )
         url = reverse('companysettings:delete_department', args=(dept.id,))
 
         response = self.app.get(url, user=self.user).follow()
@@ -98,7 +104,7 @@ class CompanySettingsViewsTests(WebTest):
 
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')
-        question = SingleLineQuestionFactory.create(company=self.user.company)
+        question = SingleLineQuestionFactory(company=self.user.company)
         page = self.app.get(url, user=self.user)
         self.assertContains(page, question.name)
 
@@ -133,12 +139,14 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_update_question_valid(self):
-        question = SingleLineQuestionFactory.create(company=self.user.company)
+        question = SingleLineQuestionFactory(company=self.user.company)
         url = reverse('companysettings:list_questions')
 
         page = self.app.get(url, user=self.user)
         form = page.forms[0]
-        form.action = reverse('companysettings:update_question', args=(question.id,))
+        form.action = reverse(
+            'companysettings:update_question', args=(question.id,)
+        )
         form['name'] = 'Last Name'
 
         self.assertContains(page, question.name)
@@ -150,12 +158,14 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(response, 'First Name')
 
     def test_update_question_invalid(self):
-        question = SingleLineQuestionFactory.create(company=self.user.company)
+        question = SingleLineQuestionFactory(company=self.user.company)
         url = reverse('companysettings:list_questions')
 
         page = self.app.get(url, user=self.user)
         form = page.forms[0]
-        form.action = reverse('companysettings:update_question', args=(question.id,))
+        form.action = reverse(
+            'companysettings:update_question', args=(question.id,)
+        )
         form['name'] = ''
 
         response = form.submit().follow()
@@ -164,7 +174,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_delete_question(self):
-        question = SingleLineQuestionFactory.create(
+        question = SingleLineQuestionFactory(
             name='ninja', company=self.user.company
         )
         url = reverse('companysettings:delete_question', args=(question.id,))
@@ -178,7 +188,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_list_stages(self):
         url = reverse('companysettings:list_stages')
 
-        stage = InterviewStageFactory.create(company=self.user.company)
+        stage = InterviewStageFactory(company=self.user.company)
         page = self.app.get(url, user=self.user)
 
         self.assertContains(page, stage.name)
@@ -210,7 +220,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertFormError(response, 'form', 'name', self.required)
 
     def test_update_stage_valid(self):
-        stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
+        stage = InterviewStageFactory(name='Phone', company=self.user.company)
         url = reverse('companysettings:update_stage', args=(stage.id,))
 
         page = self.app.get(url, user=self.user)
@@ -226,7 +236,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(response, stage.name)
 
     def test_update_stage_invalid(self):
-        stage = InterviewStageFactory.create(name='Phone', company=self.user.company)
+        stage = InterviewStageFactory(name='Phone', company=self.user.company)
         url = reverse('companysettings:update_stage', args=(stage.id,))
 
         page = self.app.get(url, user=self.user)
@@ -255,7 +265,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(response, "Stage deleted.")
 
     def test_delete_last_stage(self):
-        stage = InterviewStageFactory.create(company=self.user.company)
+        stage = InterviewStageFactory(company=self.user.company)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
         response = self.app.get(url, user=self.user).follow()
@@ -268,25 +278,21 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(response, "You need to have at least one stage.")
 
     def test_delete_accepted_stage(self):
-        stage = InterviewStageFactory.create(
-            company=self.user.company, accepted=True
-        )
+        stage = InterviewStageFactory(company=self.user.company, accepted=True)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
         self.app.get(url, user=self.user, status=404)
 
     def test_delete_rejected_stage(self):
-        stage = InterviewStageFactory.create(
-            company=self.user.company, rejected=True
-        )
+        stage = InterviewStageFactory(company=self.user.company, rejected=True)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
         # Expecting a 404
         self.app.get(url, user=self.user, status=404)
 
     def test_reorder_stage_valid_up(self):
-        stage1 = InterviewStageFactory.create(company=self.user.company)
-        stage2 = InterviewStageFactory.create(company=self.user.company)
+        stage1 = InterviewStageFactory(company=self.user.company)
+        stage2 = InterviewStageFactory(company=self.user.company)
         url = reverse('companysettings:reorder_stage', args=(stage2.id, 'up'))
 
         response = self.app.get(url, user=self.user).follow()
@@ -298,9 +304,11 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(InterviewStage.objects.get(id=1).position, 2)
 
     def test_reorder_stage_valid_down(self):
-        stage1 = InterviewStageFactory.create(company=self.user.company)
-        stage2 = InterviewStageFactory.create(company=self.user.company)
-        url = reverse('companysettings:reorder_stage', args=(stage1.id, 'down'))
+        stage1 = InterviewStageFactory(company=self.user.company)
+        stage2 = InterviewStageFactory(company=self.user.company)
+        url = reverse(
+            'companysettings:reorder_stage', args=(stage1.id, 'down')
+        )
 
         response = self.app.get(url, user=self.user).follow()
 
@@ -311,9 +319,11 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(InterviewStage.objects.get(id=1).position, 2)
 
     def test_reorder_stage_invalid(self):
-        stage1 = InterviewStageFactory.create(company=self.user.company)
-        stage2 = InterviewStageFactory.create(company=self.user.company)
-        url = reverse('companysettings:reorder_stage', args=(stage2.id, 'down'))
+        stage1 = InterviewStageFactory(company=self.user.company)
+        stage2 = InterviewStageFactory(company=self.user.company)
+        url = reverse(
+            'companysettings:reorder_stage', args=(stage2.id, 'down')
+        )
 
         response = self.app.get(url, user=self.user).follow()
 
@@ -325,12 +335,12 @@ class CompanySettingsViewsTests(WebTest):
 
     def test_list_users(self):
         url = reverse('companysettings:list_users')
-        colleague = UserFactory.create(
+        colleague = UserFactory(
             company=self.user.company,
             first_name="Steve",
             email="steve@example.com"
         )
-        not_colleague = UserFactory.create(
+        not_colleague = UserFactory(
             first_name="Bill",
             email="bill@example.com"
         )
@@ -386,7 +396,9 @@ class CompanySettingsViewsTests(WebTest):
 
         self.app.get(toggle_status_url, user=self.user, status=302)
         self.assertTrue(
-            CustomUser.objects.filter(pk=colleague.pk, is_active=False).exists()
+            CustomUser.objects.filter(
+                pk=colleague.pk, is_active=False
+            ).exists()
         )
 
         self.app.get(toggle_status_url, user=self.user, status=302)

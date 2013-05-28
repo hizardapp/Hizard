@@ -19,7 +19,9 @@ class OpeningQuestionForm(forms.Form):
     def clean(self):
         cleaned_data = super(OpeningQuestionForm, self).clean()
         if cleaned_data.get('required') and not cleaned_data.get('included'):
-            raise forms.ValidationError(_("Can't require a question not included"))
+            raise forms.ValidationError(
+                _("Can't require a question not included")
+            )
 
         return cleaned_data
 
@@ -72,8 +74,8 @@ class OpeningForm(forms.ModelForm):
 
     class Meta:
         model = Opening
-        fields = ('title', 'description', 'employment_type', 'is_private', 'department',
-                  'country', 'city',)
+        fields = ('title', 'description', 'employment_type', 'is_private',
+                  'department', 'country', 'city',)
 
     def __init__(self, company, *args, **kwargs):
         super(OpeningForm, self).__init__(*args, **kwargs)

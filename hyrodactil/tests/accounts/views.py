@@ -16,7 +16,9 @@ from accounts.forms import UserCreationForm
 from accounts.models import CustomUser
 
 SMALL_GIF = base64.decodestring(
-        'R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
+    'R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+)
+
 
 class AccountsViewsTests(WebTest):
     def test_get_registration_view(self):
@@ -43,7 +45,9 @@ class AccountsViewsTests(WebTest):
 
         response = form.submit()
 
-        self.assertRedirects(response, reverse('accounts:register_confirmation'))
+        self.assertRedirects(
+            response, reverse('accounts:register_confirmation')
+        )
         self.assertEqual(CustomUser.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
         new_user = CustomUser.objects.get()
@@ -97,7 +101,9 @@ class AccountsViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'accounts/login.html')
-        self.failUnless(isinstance(response.context['form'], AuthenticationForm))
+        self.failUnless(
+            isinstance(response.context['form'], AuthenticationForm)
+        )
 
     def test_post_login_view_success_without_company(self):
         """
@@ -185,8 +191,12 @@ class AccountsViewsTests(WebTest):
         response = self.app.get(reverse('auth:change_password'), user=user)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'accounts/password_change_form.html')
-        self.failUnless(isinstance(response.context['form'], PasswordChangeForm))
+        self.assertTemplateUsed(
+            response, 'accounts/password_change_form.html'
+        )
+        self.failUnless(
+            isinstance(response.context['form'], PasswordChangeForm)
+        )
 
     def test_post_change_password_success(self):
         """
@@ -254,7 +264,9 @@ class AccountsViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'accounts/password_reset_form.html')
-        self.failUnless(isinstance(response.context['form'], PasswordResetForm))
+        self.failUnless(
+            isinstance(response.context['form'], PasswordResetForm)
+        )
 
     def test_post_password_reset_success(self):
         """
@@ -304,7 +316,9 @@ class AccountsViewsTests(WebTest):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'accounts/password_reset_confirm.html')
+        self.assertTemplateUsed(
+            response, 'accounts/password_reset_confirm.html'
+        )
         self.failUnless(isinstance(response.context['form'], SetPasswordForm))
 
     def test_get_password_confirm_invalid(self):
@@ -324,7 +338,9 @@ class AccountsViewsTests(WebTest):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'accounts/password_reset_confirm.html')
+        self.assertTemplateUsed(
+            response, 'accounts/password_reset_confirm.html'
+        )
         self.assertContains(response, 'Password reset failed')
 
     def test_post_password_confirm_success(self):

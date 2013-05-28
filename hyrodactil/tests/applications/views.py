@@ -35,21 +35,29 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(response, application.applicant.last_name)
 
     def test_filter_applicants(self):
-        phoned = InterviewStageFactory.create(company=self.user.company,
-            name="phoned")
-        hired = InterviewStageFactory.create(company=self.user.company,
-            name="hired")
+        phoned = InterviewStageFactory.create(
+            company=self.user.company,
+            name="phoned"
+        )
+        hired = InterviewStageFactory.create(
+            company=self.user.company,
+            name="hired"
+        )
         opening2 = OpeningWithQuestionsFactory(company=self.user.company)
-        application = ApplicationFactory.create(opening=self.opening,
-            current_stage=phoned)
+        application = ApplicationFactory.create(
+            opening=self.opening,
+            current_stage=phoned
+        )
         url = reverse('applications:list_applications')
 
         response = self.app.get(url, dict(stages=[phoned.pk]), user=self.user)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
 
-        response = self.app.get(url, dict(stages=[phoned.pk],
-          opening=self.opening.pk), user=self.user)
+        response = self.app.get(url, dict(
+            stages=[phoned.pk],
+            opening=self.opening.pk
+        ), user=self.user)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
 
@@ -57,7 +65,9 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, application.applicant.first_name)
 
-        response = self.app.get(url, dict(openings=[opening2.pk]), user=self.user)
+        response = self.app.get(
+            url, dict(openings=[opening2.pk]), user=self.user
+        )
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, application.applicant.first_name)
 
@@ -67,7 +77,9 @@ class ApplicationViewsTests(WebTest):
             application=application, question=self.question, answer="Man"
         )
 
-        url = reverse('applications:application_detail', args=(application.id,))
+        url = reverse(
+            'applications:application_detail', args=(application.id,)
+        )
         response = self.app.get(url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
@@ -78,7 +90,9 @@ class ApplicationViewsTests(WebTest):
         application = ApplicationFactory.create(opening=self.opening)
         user = UserFactory.create(email='red@red.com')
 
-        url = reverse('applications:application_detail', args=(application.id,))
+        url = reverse(
+            'applications:application_detail', args=(application.id,)
+        )
 
         self.app.get(url, user=user, status=404)
 
@@ -110,7 +124,9 @@ class ApplicationViewsTests(WebTest):
         colleague = UserFactory.create(
             email='bill@company.com', company=self.user.company
         )
-        url = reverse('applications:application_detail', args=(application.id,))
+        url = reverse(
+            'applications:application_detail', args=(application.id,)
+        )
 
         response = self.app.get(url, user=self.user)
 
@@ -134,7 +150,9 @@ class ApplicationViewsTests(WebTest):
     def test_only_allowed_user_can_participate_to_application_discussion(self):
         application = ApplicationFactory.create(opening=self.opening)
         attacker = UserFactory.create(email='red@red.com')
-        url = reverse('applications:application_detail', args=(application.id,))
+        url = reverse(
+            'applications:application_detail', args=(application.id,)
+        )
 
         response = self.app.get(url, user=self.user)
 
@@ -146,7 +164,9 @@ class ApplicationViewsTests(WebTest):
 
     def test_create_manual_application(self):
         InterviewStageFactory(company=self.user.company)
-        url = reverse('applications:manual_application', args=(self.opening.id,))
+        url = reverse(
+            'applications:manual_application', args=(self.opening.id,)
+        )
         page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['first_name'] = 'Bilbo'
@@ -223,5 +243,9 @@ class ApplicationAjaxViewsTests(WebTest):
 
         json_response = json.loads(response.content)
         self.assertEqual(json_response['status'], 'success')
-        self.assertEqual(0, Application.objects.get(id=application1.id).position)
-        self.assertEqual(1, Application.objects.get(id=application2.id).position)
+        self.assertEqual(
+            0, Application.objects.get(id=application1.id).position
+        )
+        self.assertEqual(
+            1, Application.objects.get(id=application2.id).position
+        )

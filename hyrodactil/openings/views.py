@@ -19,7 +19,9 @@ from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
 from core.views import RestrictedDetailView, RestrictedListView
 
 
-class OpeningListView(LoginRequiredMixin, django_tables2.SingleTableMixin, RestrictedListView):
+class OpeningListView(
+    LoginRequiredMixin, django_tables2.SingleTableMixin, RestrictedListView
+):
     model = Opening
     table_class = OpeningTable
     table_pagination = False
@@ -41,7 +43,9 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return form_class(self.request.user.company, **self.get_form_kwargs())
 
 
-class OpeningUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
+class OpeningUpdateView(
+    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
+):
     model = Opening
     form_class = OpeningForm
     action = 'updated'

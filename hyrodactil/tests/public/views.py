@@ -7,12 +7,13 @@ from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
-from ..factories._companysettings import SingleLineQuestionFactory, InterviewStageFactory
+from ..factories._companysettings import (
+    SingleLineQuestionFactory, InterviewStageFactory
+)
 from ..factories._openings import OpeningWithQuestionsFactory
 
 from applications.models import Application, ApplicationAnswer
 from companysettings.models import Question
-
 
 
 class PublicViewsTests(WebTest):
@@ -71,10 +72,14 @@ class ApplicationViewsTests(WebTest):
 
     def test_valid_post_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))
-        stage1 = InterviewStageFactory(company=self.opening.company,
-            position=0, name="Received")
-        InterviewStageFactory(company=self.opening.company,
-            position=1, name="Accepted")
+        stage1 = InterviewStageFactory(
+            company=self.opening.company,
+            position=0, name="Received"
+        )
+        InterviewStageFactory(
+            company=self.opening.company,
+            position=1, name="Accepted"
+        )
         form = self.app.get(url).form
 
         form['first_name'] = 'Bilbon'

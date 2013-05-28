@@ -164,27 +164,30 @@ class ApplicationFilterForm(forms.Form):
 
     def __init__(self, company, *args, **kwargs):
         super(ApplicationFilterForm, self).__init__(*args, **kwargs)
-        self.fields['stages'].choices = [(str(o.pk), o.name) for o in
-                company.interviewstage_set.all()]
+        self.fields['stages'].choices = [
+            (str(o.pk), o.name) for o in company.interviewstage_set.all()
+        ]
 
-        self.fields['openings'].choices = [(str(o.pk), o.title) for o in
-                company.opening_set.all()]
+        self.fields['openings'].choices = [
+            (str(o.pk), o.title) for o in company.opening_set.all()
+        ]
 
 
 class ApplicationStageTransitionForm(forms.ModelForm):
     def __init__(self, company, *args, **kwargs):
         super(ApplicationStageTransitionForm, self).__init__(*args, **kwargs)
         self.fields['stage'].queryset = InterviewStage.objects.filter(
-                company=company)
+            company=company
+        )
 
     class Meta:
         model = ApplicationStageTransition
         fields = ('stage', 'note')
         widgets = {
             'note': forms.Textarea(attrs={
-              'rows':4,
-              'placeholder': 'Additional comment',
-              'cols':55}),
+                'rows': 4,
+                'placeholder': 'Additional comment',
+                'cols': 55}),
         }
 
 

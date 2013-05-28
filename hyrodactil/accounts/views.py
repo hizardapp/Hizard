@@ -36,8 +36,10 @@ class ActivateView(FormView):
 
     def dispatch(self, *args, **kwargs):
         self.activation_key = kwargs['activation_key']
-        self.user = get_object_or_404(CustomUser,
-                activation_key=self.activation_key)
+        self.user = get_object_or_404(
+            CustomUser,
+            activation_key=self.activation_key
+        )
         return super(ActivateView, self).dispatch(*args, **kwargs)
 
     def get(self, *args, **kwargs):

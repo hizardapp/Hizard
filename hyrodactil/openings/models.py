@@ -45,7 +45,9 @@ class Opening(TimeStampedModel):
         company_prefix = (
             settings.COMPANY_URL_PREFIX % self.company.subdomain
         )
-        return "%s%s" % (company_prefix, reverse('public:apply', args=(self.id,)))
+        return "%s%s" % (
+            company_prefix, reverse('public:apply', args=(self.id,))
+        )
 
     def get_location_string(self):
         return '%s, %s' % (self.city, unicode(self.country.name))

@@ -95,7 +95,9 @@ class MinLengthSetPasswordFormTests(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_form_valid(self):
-        form = account_forms.MinLengthSetPasswordForm(user={}, data=self.form_data)
+        form = account_forms.MinLengthSetPasswordForm(
+            user={}, data=self.form_data
+        )
         self.assertTrue(form.is_valid())
 
 

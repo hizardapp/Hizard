@@ -14,7 +14,9 @@ class OpeningTable(tables.Table):
     )
     department = tables.Column()
     employment_type = tables.Column(verbose_name=_('Type'))
-    published_date = tables.DateColumn(verbose_name=_('Published'), format='d/m/Y')
+    published_date = tables.DateColumn(
+        verbose_name=_('Published'), format='d/m/Y'
+    )
     location = tables.Column(
         accessor='get_location_string', order_by=('city', 'country')
     )
@@ -24,9 +26,9 @@ class OpeningTable(tables.Table):
     status = tables.Column(accessor='get_status')
 
     def render_number_applications(self, record):
+        get_param = '?openings=%s' % record.pk
         return mark_safe("<a href=\"%s\">%s</a>" % (
-            reverse('applications:list_applications') +
-              "?openings=%s" % record.pk,
+            reverse('applications:list_applications') + get_param,
             record.number_applications
         ))
 

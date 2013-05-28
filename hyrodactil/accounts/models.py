@@ -24,7 +24,7 @@ class CustomUserManager(BaseUserManager):
     activating them
     """
     def create_user(self, email, password=None, active=True, company=None,
-            is_company_admin=False):
+                    is_company_admin=False):
         """
         Creates a basic user which is active by default.
         If we want to create an inactive one, an activation key is generated
@@ -36,9 +36,11 @@ class CustomUserManager(BaseUserManager):
         if settings.SKIP_ACTIVATION:
             active = True
 
-        user = self.model(email=CustomUserManager.normalize_email(email),
+        user = self.model(
+            email=CustomUserManager.normalize_email(email),
             is_company_admin=is_company_admin,
-            company=company)
+            company=company
+        )
         user.set_password(password)
 
         if not active:
@@ -209,11 +211,15 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
             'site_url': settings.SITE_DOMAIN
         }
 
-        subject = render_to_string('accounts/activation_email_subject.txt', context)
+        subject = render_to_string(
+            'accounts/activation_email_subject.txt', context
+        )
         subject = ''.join(subject.splitlines())
         body = render_to_string('accounts/activation_email_body.txt', context)
 
-        mail.send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [self.email])
+        mail.send_mail(
+            subject, body, settings.DEFAULT_FROM_EMAIL, [self.email]
+        )
 
     def __unicode__(self):
         return self.email

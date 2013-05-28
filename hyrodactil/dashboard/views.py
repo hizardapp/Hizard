@@ -6,6 +6,7 @@ from openings.models import Opening
 from applications.models import Application
 from companysettings.models import InterviewStage
 
+
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/dashboard.html'
     table_pagination = False
@@ -14,8 +15,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
         company = self.request.user.company
-        context['opening_list'] = Opening.objects.filter(company=company,
-                    published_date__isnull=False)
+        context['opening_list'] = Opening.objects.filter(
+            company=company,
+            published_date__isnull=False
+        )
 
         context['interview_stages'] = InterviewStage.objects.filter(company=company)
 

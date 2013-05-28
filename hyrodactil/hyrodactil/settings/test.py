@@ -24,8 +24,8 @@ DATABASES = {
         "PASSWORD": "",
         "HOST": "",
         "PORT": "",
-        },
-    }
+    },
+}
 
 ######### FAST HASHING FOR PASSWORDS
 PASSWORD_HASHERS = (

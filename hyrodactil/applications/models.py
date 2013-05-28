@@ -15,11 +15,12 @@ class Applicant(TimeStampedModel):
     email = models.EmailField(max_length=254)
     resume = models.FileField(
         upload_to='resumes',
-        help_text=_("PDF files only")
+        help_text=_('PDF files only')
     )
 
     def get_full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
+
 
 class Application(TimeStampedModel):
     applicant = models.ForeignKey(Applicant)
@@ -32,7 +33,8 @@ class Application(TimeStampedModel):
 
     def update_current_stage(self, commit=True):
         transitions = ApplicationStageTransition.objects.filter(
-                application=self)
+            application=self
+        )
         if transitions:
             last_transistion = transitions[0]
             if last_transistion.stage != self.current_stage:
@@ -49,13 +51,15 @@ class Application(TimeStampedModel):
 
 
 class ApplicationStageTransition(TimeStampedModel):
-    application = models.ForeignKey(Application, related_name="stage_transitions")
+    application = models.ForeignKey(
+        Application, related_name='stage_transitions'
+    )
     user = models.ForeignKey(CustomUser, null=True)
     stage = models.ForeignKey(InterviewStage)
     note = models.TextField(blank=True)
 
     class Meta:
-        ordering = "-created",
+        ordering = '-created',
 
     def save(self, *args, **kwargs):
         result = super(ApplicationStageTransition, self).save(*args, **kwargs)
@@ -64,6 +68,7 @@ class ApplicationStageTransition(TimeStampedModel):
 
     def __str__(self):
         return "%s %s %s" % (self.application, self.user, self.stage)
+
 
 class ApplicationAnswer(TimeStampedModel):
     answer = models.TextField(blank=True, null=True)

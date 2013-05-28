@@ -14,7 +14,9 @@ from openings.models import OpeningQuestion
 class OpeningsFormsTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
-        self.first_question = SingleLineQuestionFactory(company=self.user.company)
+        self.first_question = SingleLineQuestionFactory(
+            company=self.user.company
+        )
         SingleLineQuestionFactory(company=self.user.company)
 
         self.form_data = {'title': 'Software Developer',
@@ -120,7 +122,9 @@ class OpeningQuestionFormsetTests(TestCase):
     def test_initialize_with_company(self):
         formset = OpeningQuestionFormset(company=self.company)
 
-        self.assertEqual(len(formset.questions), self.company.question_set.count())
+        self.assertEqual(
+            len(formset.questions), self.company.question_set.count()
+        )
         self.assertEqual(len(formset.forms), self.company.question_set.count())
 
         self.assertEqual(formset.forms[0].prefix, 'oq-1')

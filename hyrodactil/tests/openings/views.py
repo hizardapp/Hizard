@@ -101,8 +101,10 @@ class OpeningsViewsTests(WebTest):
 
         response = self.app.get(url, user=self.user).follow()
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.request.path,
-            reverse('openings:list_openings'))
+        self.assertEqual(
+            response.request.path,
+            reverse('openings:list_openings')
+        )
         self.assertNotContains(response, 'DevOps')
         self.assertContains(response, 'Opening deleted.')
 
@@ -129,7 +131,8 @@ class OpeningsViewsTests(WebTest):
 
     def test_close_opening_already_closed(self):
         opening = OpeningFactory(
-            title='DevOps', company=self.user.company, closing_date=datetime.now()
+            title='DevOps', company=self.user.company,
+            closing_date=datetime.now()
         )
         url = reverse('openings:close_opening', args=(opening.id,))
         response = self.app.get(url, user=self.user).follow()
@@ -147,7 +150,9 @@ class OpeningsViewsTests(WebTest):
         self.assertIsNotNone(Opening.objects.get().published_date)
 
     def test_unpublish_opening(self):
-        opening = OpeningFactory(company=self.user.company, published_date=datetime.now())
+        opening = OpeningFactory(
+            company=self.user.company, published_date=datetime.now()
+        )
         url = reverse('openings:publish_opening', args=(opening.id,))
         self.app.get(url, user=self.user)
 

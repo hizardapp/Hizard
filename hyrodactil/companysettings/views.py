@@ -7,7 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
 
-from .forms import DepartmentForm, QuestionForm, InterviewStageForm, CompanyInformationForm
+from .forms import (
+    DepartmentForm, QuestionForm, InterviewStageForm, CompanyInformationForm
+)
 from .forms import CustomUserInviteForm
 from .models import Department, Question, InterviewStage
 from companies.models import Company
@@ -76,7 +78,9 @@ class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
 
     def form_valid(self, form):
         department = form.save(commit=False)
-        department.company = Company.objects.get(id=self.request.user.company.id)
+        department.company = Company.objects.get(
+            id=self.request.user.company.id
+        )
         department.save()
         return super(DepartmentCreateView, self).form_valid(form)
 
@@ -85,8 +89,9 @@ class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return redirect(self.success_url)
 
 
-class DepartmentUpdateView(LoginRequiredMixin, MessageMixin,
-        RestrictedUpdateView):
+class DepartmentUpdateView(
+    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
+):
     model = Department
     form_class = DepartmentForm
     success_url = reverse_lazy('companysettings:list_departments')
@@ -126,8 +131,9 @@ class QuestionCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return redirect(self.success_url)
 
 
-class QuestionUpdateView(LoginRequiredMixin, MessageMixin,
-        RestrictedUpdateView):
+class QuestionUpdateView(
+    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
+):
     model = Question
     form_class = QuestionForm
     success_url = reverse_lazy('companysettings:list_questions')
@@ -177,8 +183,9 @@ class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
         return super(InterviewStageCreateView, self).form_valid(form)
 
 
-class InterviewStageUpdateView(LoginRequiredMixin, MessageMixin,
-        RestrictedUpdateView):
+class InterviewStageUpdateView(
+    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
+):
     model = InterviewStage
     form_class = InterviewStageForm
     success_url = reverse_lazy('companysettings:list_stages')
@@ -202,7 +209,8 @@ class InterviewStageDeleteView(LoginRequiredMixin, QuickDeleteView):
             raise Http404
 
         count_stages = InterviewStage.objects.filter(
-                company=self.request.user.company).count()
+            company=self.request.user.company
+        ).count()
         if count_stages > 1:
             return super(InterviewStageDeleteView, self).get(*args, **kwargs)
         else:
@@ -249,9 +257,9 @@ class InviteUserCreateView(LoginRequiredMixin, CreateView):
         return redirect(self.success_url)
 
 
-
-class UpdateCompanyInformationView(LoginRequiredMixin, MessageMixin,
-        RestrictedUpdateView):
+class UpdateCompanyInformationView(
+    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
+):
     model = Company
     form_class = CompanyInformationForm
     success_url = reverse_lazy('companysettings:settings_home')
