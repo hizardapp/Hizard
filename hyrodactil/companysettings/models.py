@@ -27,7 +27,7 @@ class Question(TimeStampedModel):
     name = models.CharField(max_length=200)
     slug = AutoSlugField(populate_from='name')
 
-    type = models.CharField(
+    type_field = models.CharField(
         choices=TYPE_QUESTIONS,
         default=TYPE_QUESTIONS.textbox,
         max_length=20

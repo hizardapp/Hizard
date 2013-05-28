@@ -14,7 +14,7 @@ class DepartmentForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('name', 'type',)
+        fields = ('name', 'type_field',)
 
 
 class InterviewStageForm(forms.ModelForm):

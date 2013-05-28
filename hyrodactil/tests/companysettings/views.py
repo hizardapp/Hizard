@@ -115,7 +115,7 @@ class CompanySettingsViewsTests(WebTest):
         form = page.forms[0]
         form.action = reverse('companysettings:create_question')
         form['name'] = 'Cover letter'
-        form['type'] = 'textbox'
+        form['type_field'] = 'textbox'
 
         response = form.submit().follow()
 
@@ -132,7 +132,7 @@ class CompanySettingsViewsTests(WebTest):
         form = page.forms[0]
         form.action = reverse('companysettings:create_question')
         form['name'] = ''
-        form['type'] = 'textbox'
+        form['type_field'] = 'textbox'
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)

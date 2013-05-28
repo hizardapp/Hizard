@@ -29,14 +29,14 @@ class ApplicationForm(forms.ModelForm):
         for question in self.opening.questions.all():
             field_name = 'q_%s' % question.slug
 
-            if question.type == 'textbox':
+            if question.type_field == 'textbox':
                 self.fields[field_name] = forms.CharField(label=question.name)
-            elif question.type == 'textarea':
+            elif question.type_field == 'textarea':
                 self.fields[field_name] = forms.CharField(
                     label=question.name, widget=forms.Textarea)
-            elif question.type == 'checkbox':
+            elif question.type_field == 'checkbox':
                 self.fields[field_name] = forms.BooleanField(label=question.name)
-            elif question.type == 'file':
+            elif question.type_field == 'file':
                 self.fields[field_name] = forms.FileField(label=question.name)
 
             self.fields[field_name].required = False

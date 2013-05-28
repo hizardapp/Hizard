@@ -112,7 +112,7 @@ class ApplicationViewsTests(WebTest):
             settings.MEDIA_ROOT,
             self.opening.company.id
         )
-        file_question = Question.objects.get(type='file')
+        file_question = Question.objects.get(type_field='file')
         filepath = ApplicationAnswer.objects.get(question=file_question).answer
         path = '%s/%s' % (settings.MEDIA_ROOT, filepath)
         self.assertTrue(os.path.exists(path))

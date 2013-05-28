@@ -5,8 +5,8 @@ from openings.models import Opening
 
 
 def setup_company(company):
-    website_question = Question(name=_('Website'), type='textbox')
-    phone_question = Question(name=_('Phone number'), type='textbox')
+    website_question = Question(name=_('Website'), type_field='textbox')
+    phone_question = Question(name=_('Phone number'), type_field='textbox')
     company.question_set.add(website_question)
     company.question_set.add(phone_question)
 

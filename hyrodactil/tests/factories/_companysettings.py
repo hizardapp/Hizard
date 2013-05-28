@@ -15,7 +15,7 @@ class SingleLineQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'Single Line'
-    type = 'textbox'
+    type_field = 'textbox'
 
     company = factory.SubFactory(_companies.CompanyFactory)
 
@@ -24,7 +24,7 @@ class MultiLineQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'Multi Line'
-    type = 'textarea'
+    type_field = 'textarea'
 
     company = factory.SubFactory(_companies.CompanyFactory)
 
@@ -33,7 +33,7 @@ class CheckboxQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'Checkbox'
-    type = 'checkbox'
+    type_field = 'checkbox'
 
     company = factory.SubFactory(_companies.CompanyFactory)
 
@@ -42,7 +42,7 @@ class FileQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Question
 
     name = 'File'
-    type = 'file'
+    type_field = 'file'
 
     company = factory.SubFactory(_companies.CompanyFactory)
 
