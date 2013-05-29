@@ -25,6 +25,14 @@
       </tr>
     {% endfor %}
 
+    {% if not last_applications %}
+      <tr>
+      <td>{% trans 'No candidates' %}</td>
+      <td></td>
+      <td></td>
+      </tr>
+    {% endif %}
+
     </tbody>
   </table>
 
@@ -44,12 +52,25 @@
 
     {% for opening in opening_list %}
       <tr>
-        <td><a href="{% url "openings:detail_opening" opening.id %}">{{ opening.title }}</a></td>
+        <td>
+          <a href="{% url "openings:detail_opening" opening.id %}">{{ opening.title }}</a>
+        </td>
         {% for stage_count in opening.stage_counts %}
           <td>{{ stage_count }}</td>
         {% endfor  %}
       </tr>
     {% endfor %}
+
+    {% if not opening_list %}
+      <tr>
+        <td>{% trans 'No published openings' %}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    {% endif %}
 
     </tbody>
   </table>

@@ -39,3 +39,4 @@ class OpeningTable(tables.Table):
             'title', 'department', 'employment_type', 'location',
             'number_applications', 'published_date', 'status'
         )
+        empty_text = _('No openings')

@@ -25,3 +25,4 @@ class ApplicationsTable(tables.Table):
         attrs = {"class": "large-12 columns"}
         model = Application
         fields = ('name', "created")
+        empty_text = _('No applications')
