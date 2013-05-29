@@ -50,7 +50,16 @@ class Opening(TimeStampedModel):
         )
 
     def get_location_string(self):
-        return '%s, %s' % (self.city, unicode(self.country.name))
+        location = ''
+
+        if self.city:
+            location += '%s' % self.city
+            if self.country:
+                location += ', '
+
+        if self.country:
+            location += '%s' % unicode(self.country.name)
+        return location
 
     def get_status(self):
         if self.closing_date:

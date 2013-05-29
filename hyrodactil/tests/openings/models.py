@@ -20,6 +20,13 @@ class OpeningsModelsTests(TestCase):
         opening = OpeningFactory.build()
         self.assertEqual(opening.get_location_string(), 'Cannes, France')
 
+        opening.city = ''
+        self.assertEqual(opening.get_location_string(), 'France')
+
+        opening.city = 'Cannes'
+        opening.country = None
+        self.assertEqual(opening.get_location_string(), 'Cannes')
+
     def test_get_status(self):
         opening = OpeningFactory.build()
         self.assertEqual(unicode(opening.get_status()), 'Created')
