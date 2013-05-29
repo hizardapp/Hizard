@@ -31,10 +31,12 @@ class ApplicationViewsTests(WebTest):
 
     def test_get_list_openings(self):
         url = reverse('public:opening-list')
+        self.user.company.subdomain = self.user.company.subdomain.title()
+        self.user.company.save()
 
         page = self.app.get(
             url,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain)
+            headers=dict(Host="%s.h.com" % self.user.company.subdomain.lower())
         )
 
         self.assertEqual(page.status_code, 200)
