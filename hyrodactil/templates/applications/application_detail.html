@@ -82,7 +82,7 @@
         event.preventDefault();
         var new_form = $("#new-message-form").clone(),
             link = $(this),
-            small_parent = $(link.parents("small")[0]),
+            small_parent = $(link.parents("p")[0]),
             parent_message = link.attr("reply-to");
         small_parent.after(new_form);
         new_form.find("#id_parent").val(parent_message);
@@ -102,7 +102,6 @@
 
     $(function () {
       if ($("#transition-form").find(".has-errors").length > 0) {
-        console.log('here');
         $("a[data-reveal-id=transition-form-modal]").click();
       }
     })
