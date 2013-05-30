@@ -23,7 +23,7 @@ class OpeningTable(tables.Table):
     number_applications = tables.Column(
         verbose_name=_('Applications')
     )
-    status = tables.Column(accessor='get_status')
+    status = tables.Column(accessor='get_status', sortable=False)
 
     def render_number_applications(self, record):
         get_param = '?openings=%s' % record.pk
