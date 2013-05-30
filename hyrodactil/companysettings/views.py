@@ -263,7 +263,7 @@ class UpdateCompanyInformationView(
     model = Company
     form_class = CompanyInformationForm
     success_url = reverse_lazy('companysettings:settings_home')
-    success_message = _('Company informations updated.')
+    success_message = _('Company information updated.')
     template_name = 'companysettings/information_form.html'
 
     def get_object(self):
