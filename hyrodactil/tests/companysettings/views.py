@@ -14,7 +14,7 @@ from accounts.models import CustomUser
 
 class CompanySettingsViewsTests(WebTest):
     def setUp(self):
-        self.user = UserFactory()
+        self.user = UserFactory(is_company_admin=True)
         self.required = 'This field is required.'
 
     def test_list_departments(self):
@@ -385,12 +385,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertTrue(user.check_password("1234567"))
 
     def test_disable_user(self):
-        colleague = CustomUser.objects.create_user(
-            email="steve@example.com",
-            name='Steve',
-            active=True,
-            company=self.user.company
-        )
+        colleague = UserFactory(email='e@e.com', company=self.user.company)
         toggle_status_url = reverse(
             'accounts:toggle_status',
             args=(colleague.pk,)
@@ -409,12 +404,8 @@ class CompanySettingsViewsTests(WebTest):
         )
 
     def test_disable_user_access(self):
-        colleague = CustomUser.objects.create_user(
-            email="steve@example.com",
-            name='Steve',
-            active=True,
-            is_company_admin=False,
-            company=self.user.company
+        colleague = UserFactory(
+            email='e@e.com', company=self.user.company, activation_key=''
         )
         toggle_colleague_status_url = reverse(
             'accounts:toggle_status',

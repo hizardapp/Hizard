@@ -1,9 +1,13 @@
 import factory
 
-import _companysettings
-import _openings
-from applications.models import Applicant, Application, ApplicationAnswer
-from applications.models import ApplicationStageTransition
+
+from applications.models import (
+    Applicant, Application, ApplicationAnswer,ApplicationStageTransition,
+    ApplicationRating
+)
+from ._accounts import UserFactory
+from ._companysettings import SingleLineQuestionFactory, InterviewStageFactory
+from ._openings import OpeningFactory
 
 
 class ApplicantFactory(factory.DjangoModelFactory):
@@ -19,7 +23,7 @@ class ApplicationFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Application
 
     applicant = factory.SubFactory(ApplicantFactory)
-    opening = factory.SubFactory(_openings.OpeningFactory)
+    opening = factory.SubFactory(OpeningFactory)
 
 
 class ApplicationAnswerFactory(factory.DjangoModelFactory):
@@ -27,11 +31,19 @@ class ApplicationAnswerFactory(factory.DjangoModelFactory):
 
     answer = 'Some clever answer'
     application = factory.SubFactory(ApplicationFactory)
-    question = factory.SubFactory(_companysettings.SingleLineQuestionFactory)
+    question = factory.SubFactory(SingleLineQuestionFactory)
 
 
 class ApplicationStageTransitionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = ApplicationStageTransition
 
     application = factory.SubFactory(ApplicationFactory)
-    stage = factory.SubFactory(_companysettings.InterviewStageFactory)
+    stage = factory.SubFactory(InterviewStageFactory)
+
+
+class ApplicationRatingFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = ApplicationRating
+
+    application = factory.SubFactory(ApplicationFactory)
+    user = factory.SubFactory(UserFactory)
+    rating = 0

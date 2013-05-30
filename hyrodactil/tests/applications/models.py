@@ -1,8 +1,12 @@
 from django.test import TestCase
 
 from ..factories._companysettings import InterviewStageFactory
-from ..factories._applications import ApplicationFactory, ApplicantFactory
+from ..factories._applications import (
+    ApplicationFactory, ApplicantFactory, ApplicationRatingFactory
+)
 from ..factories._applications import ApplicationStageTransitionFactory
+from ..factories._accounts import UserFactory
+from ..factories._companies import CompanyFactory
 
 
 class ApplicationModelTests(TestCase):
@@ -27,3 +31,23 @@ class ApplicationModelTests(TestCase):
     def test_get_full_name(self):
         bob = ApplicantFactory.build()
         self.assertEqual(bob.get_full_name(), 'Bilbon Sacquet')
+
+    def test_rating(self):
+        company = CompanyFactory()
+        admin = UserFactory(company=company, is_company_admin=True)
+        normal_user = UserFactory(email='b@b.com', company=company)
+        bob_application = ApplicationFactory()
+
+        ApplicationRatingFactory(
+            user=admin,
+            application=bob_application,
+            rating=6
+        )
+
+        ApplicationRatingFactory(
+            user=normal_user,
+            application=bob_application,
+            rating=9
+        )
+
+        self.assertEqual(bob_application.get_rating(), 7)

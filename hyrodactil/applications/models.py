@@ -46,6 +46,29 @@ class Application(TimeStampedModel):
         self.update_current_stage(commit=False)
         return super(Application, self).save(*args, **kwargs)
 
+    def get_rating(self):
+        """
+        Admin user rating weight more than normal user so we just do the
+        average taking this into account.
+        For now admin vote count twice
+        """
+        ratings = ApplicationRating.objects.filter(
+            application=self
+        ).select_related('CustomUser')
+        total_rating = 0
+        count_rating = 0
+
+        for rating in ratings:
+            if rating.user.is_company_admin:
+                total_rating += (rating.rating * 2)
+                count_rating += 2
+            else:
+                total_rating += rating.rating
+                count_rating += 1
+
+        return total_rating / count_rating
+
+
     class Meta:
         ordering = 'position',
 
@@ -86,3 +109,9 @@ class ApplicationMessage(TimeStampedModel):
 
     class Meta:
         ordering = ('-created',)
+
+
+class ApplicationRating(TimeStampedModel):
+    application = models.ForeignKey(Application)
+    user = models.ForeignKey(CustomUser)
+    rating = models.IntegerField(default=0)
