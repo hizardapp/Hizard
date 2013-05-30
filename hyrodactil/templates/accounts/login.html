@@ -6,9 +6,10 @@
 
   {% if from_activation %}
     <div class="row from-activation">
-      <h1>{% trans "Login to get started." %}</h1>
+      <h1>{% trans "Account activated" %}</h1>
+      <p>{% trans "You can now login with your email and password." %}</p>
     </div>
-  {% endif %}
+  {% else %}
 
   <div class="row">
     <div class="large-12 columns">
@@ -18,6 +19,8 @@
       {% endblocktrans %}
     </div>
   </div>
+
+  {% endif %}
 
   <br>
 
