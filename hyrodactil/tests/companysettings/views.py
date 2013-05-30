@@ -337,17 +337,17 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:list_users')
         colleague = UserFactory(
             company=self.user.company,
-            first_name="Steve",
+            name="Steve",
             email="steve@example.com"
         )
         not_colleague = UserFactory(
-            first_name="Bill",
+            name="Bill",
             email="bill@example.com"
         )
         page = self.app.get(url, user=self.user)
 
-        self.assertContains(page, colleague.first_name)
-        self.assertNotContains(page, not_colleague.first_name)
+        self.assertContains(page, colleague.name)
+        self.assertNotContains(page, not_colleague.name)
 
     def test_invite_user(self):
         url = reverse('companysettings:list_users')
@@ -367,6 +367,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_user_logins_from_invitation(self):
         new_user = CustomUser.objects.create_user(
             email="steve@example.com",
+            name='Steve',
             active=False,
             company=self.user.company
         )
@@ -386,6 +387,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_disable_user(self):
         colleague = CustomUser.objects.create_user(
             email="steve@example.com",
+            name='Steve',
             active=True,
             company=self.user.company
         )
@@ -409,6 +411,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_disable_user_access(self):
         colleague = CustomUser.objects.create_user(
             email="steve@example.com",
+            name='Steve',
             active=True,
             is_company_admin=False,
             company=self.user.company

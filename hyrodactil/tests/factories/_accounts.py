@@ -9,6 +9,7 @@ class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = CustomUser
 
     email = 'bob@bob.com'
+    name = 'Ann Onymous'
     password = 'bob'
     activation_key = '842771118e1d60c103c068280e023bd362af5cc4'
     company = factory.SubFactory(_companies.CompanyFactory)

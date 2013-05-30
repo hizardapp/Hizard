@@ -23,7 +23,7 @@ class CustomUserManager(BaseUserManager):
     Manager for the custom user, responsible for creating new users and
     activating them
     """
-    def create_user(self, email, password=None, active=True, company=None,
+    def create_user(self, email, name, password=None, active=True, company=None,
                     is_company_admin=False):
         """
         Creates a basic user which is active by default.
@@ -38,6 +38,7 @@ class CustomUserManager(BaseUserManager):
 
         user = self.model(
             email=CustomUserManager.normalize_email(email),
+            name=name,
             is_company_admin=is_company_admin,
             company=company
         )
@@ -53,13 +54,13 @@ class CustomUserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, password, name):
         """
         Creates an active superuser.
         Superuser are active from the start, they don't receive an activation
         mail
         """
-        user = self.create_user(email, password)
+        user = self.create_user(email, name, password)
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
@@ -144,15 +145,9 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         blank=True,
         upload_to=get_file_path
     )
-    first_name = models.CharField(
-        verbose_name=_('First name'),
-        max_length=255,
-        blank=True
-    )
-    last_name = models.CharField(
-        verbose_name=_('Last name'),
-        max_length=255,
-        blank=True
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=255
     )
     activation_key = models.CharField(
         verbose_name=_('Activation key'),
@@ -172,7 +167,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def get_short_name(self):
-        return self.email
+        return self.name
 
     def get_status(self):
         if self.is_active:

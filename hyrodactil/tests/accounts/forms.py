@@ -7,6 +7,7 @@ from accounts import forms as account_forms
 
 class UserCreationFormTests(TestCase):
     user_data = {
+        'name': 'Bob Eponge',
         'email': 'bob@bob.com',
         'password1': 'password',
         'password2': 'password'
@@ -56,6 +57,13 @@ class UserCreationFormTests(TestCase):
         valid['password2'] = valid_password
         form = account_forms.UserCreationForm(data=valid)
         self.assertTrue(form.is_valid())
+
+    def test_form_invalid_without_name(self):
+        invalid = dict(self.user_data)
+        del(invalid['name'])
+        form = account_forms.UserCreationForm(data=invalid)
+        self.assertFalse(form.is_valid())
+        self.assertIn('name', form.errors.keys())
 
     def test_form_valid(self):
         form = account_forms.UserCreationForm(data=self.user_data)

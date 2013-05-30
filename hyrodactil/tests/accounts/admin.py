@@ -14,8 +14,8 @@ class ModelAdminTests(TestCase):
         ma = ModelAdmin(CustomUser, self.site)
         expected = ['password', 'last_login', 'is_superuser', 'groups',
                     'user_permissions', 'email', 'is_active', 'is_admin',
-                    'is_staff', 'is_company_admin', 'avatar', 'first_name',
-                    'last_name', 'activation_key', 'company']
+                    'is_staff', 'is_company_admin', 'avatar', 'name',
+                    'activation_key', 'company']
 
         self.assertEqual(expected, ma.get_form(None).base_fields.keys())
 
@@ -27,8 +27,8 @@ class ModelAdminTests(TestCase):
                 'fields': [
                     'password', 'last_login', 'is_superuser', 'groups',
                     'user_permissions', 'email', 'is_active', 'is_admin',
-                    'is_staff', 'is_company_admin', 'avatar', 'first_name',
-                    'last_name', 'activation_key', 'company']
+                    'is_staff', 'is_company_admin', 'avatar', 'name',
+                    'activation_key', 'company']
             })
         ]
         self.assertEqual(expected, ma.get_fieldsets(None, user))

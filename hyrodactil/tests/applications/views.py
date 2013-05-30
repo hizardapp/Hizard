@@ -116,7 +116,7 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(transition.stage, phoned)
         self.assertEqual(transition.note, "Yep, looks good")
 
-        self.assertContains(response, transition.user.first_name)
+        self.assertContains(response, transition.user.name)
         self.assertContains(response, transition.stage)
 
     def test_discuss_an_application(self):

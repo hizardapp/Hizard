@@ -13,11 +13,13 @@ from accounts.models import CustomUser, get_file_path
 class CustomUserModelTests(TestCase):
     user_info = {
         'email': 'bob@bob.com',
+        'name': 'Bob S.',
         'password': 'password'
     }
 
     inactive_user_info = {
         'email': 'sam@sam.com',
+        'name': 'Bob I.',
         'password': 'password',
         'active': False
     }
@@ -70,14 +72,12 @@ class CustomUserModelTests(TestCase):
         user = UserFactory.create()
         user.save()
 
-        user.first_name = 'Bob'
-        user.last_name = 'Marley'
+        user.name = 'Bob L'
         user.save()
 
         user_found = CustomUser.objects.get(id=1)
 
-        self.assertEqual(user.first_name, user_found.first_name)
-        self.assertEqual(user.last_name, user_found.last_name)
+        self.assertEqual(user.name, user_found.name)
 
     def test_activate_user(self):
         user = UserFactory.create(is_active=False)

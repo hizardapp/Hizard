@@ -30,7 +30,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email',)
+        fields = ('name', 'email',)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -55,10 +55,12 @@ class UserCreationForm(forms.ModelForm):
         """
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password1"]
+        name = self.cleaned_data['name']
 
         if commit:
             user = CustomUser.objects.create_user(
                 email,
+                name,
                 password=password,
                 active=False,
                 is_company_admin=True
@@ -122,5 +124,5 @@ class MinLengthChangePasswordForm(auth_forms.PasswordChangeForm):
 
 class ChangeDetailsForm(forms.ModelForm):
     class Meta:
-        fields = ('first_name', 'last_name', 'avatar')
+        fields = ('name', 'avatar')
         model = CustomUser

@@ -42,6 +42,7 @@ class CustomUserInviteForm(forms.ModelForm):
         if commit:
             user = CustomUser.objects.create_user(
                 email=email,
+                name='Invited User',
                 password=None,
                 active=False,
                 is_company_admin=is_company_admin,

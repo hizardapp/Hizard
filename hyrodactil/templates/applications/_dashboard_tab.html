@@ -14,7 +14,7 @@
   {% for transition in application.stage_transitions.all %}
     <p>
       <span class="label">{{ transition.stage }}</span>
-      {{ transition.user.first_name }} {{ transition.user.last_name }}
+      {{ transition.user.name }}
       {{ transition.created|date:"SHORT_DATETIME_FORMAT" }}<br/>
       {{ transition.note|linebreaks }}
     </p>
