@@ -4435,6 +4435,130 @@ html[xmlns] .slides {
   transition: 1s;
 }
 
+/* line 1, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorMain {
+  border: 1px solid #999;
+  padding: 0 1px 1px;
+  background-color: white;
+}
+
+/* line 2, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorMain iframe {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 3, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorMain textarea {
+  border: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  font: 10pt Arial,Verdana;
+  resize: none;
+  outline: none;
+}
+
+/* line 4, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorToolbar {
+  background: url("../../../static/img/toolbar.gif") repeat;
+}
+
+/* line 5, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorGroup {
+  float: left;
+  height: 26px;
+}
+
+/* line 6, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorButton {
+  float: left;
+  width: 24px;
+  height: 24px;
+  margin: 1px 0 1px 0;
+  background: url("../../../static/img/buttons.gif");
+}
+
+/* line 7, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorDisabled {
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+/* line 8, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorDivider {
+  float: left;
+  width: 1px;
+  height: 23px;
+  margin: 1px 0 1px 0;
+  background: #CCC;
+}
+
+/* line 9, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorPopup {
+  border: solid 1px #999;
+  background-color: white;
+  position: absolute;
+  font: 10pt Arial,Verdana;
+  cursor: default;
+  z-index: 10000;
+}
+
+/* line 10, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorList div {
+  padding: 2px 4px 2px 4px;
+}
+
+/* line 18, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorList p,
+.cleditorList h1,
+.cleditorList h2,
+.cleditorList h3,
+.cleditorList h4,
+.cleditorList h5,
+.cleditorList h6,
+.cleditorList font {
+  padding: 0;
+  margin: 0;
+  background-color: Transparent;
+}
+
+/* line 19, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorColor {
+  width: 150px;
+  padding: 1px 0 0 1px;
+}
+
+/* line 20, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorColor div {
+  float: left;
+  width: 14px;
+  height: 14px;
+  margin: 0 1px 1px 0;
+}
+
+/* line 21, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorPrompt {
+  background-color: #F6F7F9;
+  padding: 4px;
+  font-size: 8.5pt;
+}
+
+/* line 23, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorPrompt input,
+.cleditorPrompt textarea {
+  font: 8.5pt Arial,Verdana;
+}
+
+/* line 24, ../../pregen_static/sass/launch/_cleditor.scss */
+.cleditorMsg {
+  background-color: #FDFCEE;
+  width: 150px;
+  padding: 4px;
+  font-size: 8.5pt;
+}
+
 /*
  *  Font Awesome 3.1.0
  *  the iconic font designed for Bootstrap

@@ -47,8 +47,8 @@
             <div class="opening-detail-actions panel">
               <h4>{% trans 'Actions' %}</h4>
               <ul class="side-nav">
-                <li><a href="#"><i class="icon-edit"></i>Edit this opening</a></li>
-                <li><a href="#"><i class="icon-trash"></i>Delete this opening</a></li>
+                <li><a href="{% url 'openings:update_opening' opening.pk %}"><i class="icon-edit"></i>Edit this opening</a></li>
+                <li><a href="{% url 'openings:delete_opening' opening.pk %}"><i class="icon-trash"></i>Delete this opening</a></li>
                 <li>
                   <a href="{% url 'openings:publish_opening' opening.pk %}">
                   {% if not opening.published_date %}
@@ -81,6 +81,5 @@
       </div>
     </div>
   </section>
-
 
 {% endblock %}
