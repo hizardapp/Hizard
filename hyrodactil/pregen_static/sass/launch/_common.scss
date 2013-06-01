@@ -1,3 +1,6 @@
+
+@import "../common/colours";
+
 .wrapper {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -5,14 +8,16 @@
   .container {
 
     background: #fff;
-    border: 1px solid #ebebeb;
+    border: 1px solid $silver;
     padding: 20px;
+    padding-bottom: 60px;
 
     h2 {
       font-family: 'Open Sans', sans-serif;
       font-weight: 300;
       padding-bottom: 5px;
-      border-bottom: 1px solid #ebebeb;
+      border-bottom: 1px solid $silver;
+      margin-bottom: 1em;
 
       .actions a {
         font-size: .5em;

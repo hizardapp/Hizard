@@ -1,70 +1,86 @@
-{% extends "base_app.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
 
+
+{% block title %}
+  {{ opening.title }}
+{% endblock title %}
+
+
 {% block content %}
 
-<div>
-  <div class="large-9 columns">
-    <h3>{{ opening.title }}</h3>
+  <section class="wrapper">
+    <div class="row">
+      <div class="large-12 columns container">
+        <h2>{{ opening.title }} <small>{% trans 'opening details' %}</small></h2>
 
-    <p>
-      {{ opening.city }}, {{ opening.country.name }}
-    </p>
+        <p>
+          {{ opening.get_employment_type_display }}
+          <br>
+          {% if opening.get_location_string %}
+            {{ opening.get_location_string }}
+            <br>
+          {% endif %}
+          {% if opening.is_private %}
+            {% trans 'Private opening' %}
+          {% else %}
+            {% trans 'Public opening' %}
+          {% endif %}
+          <br>
+          {% if opening.published_date %}
+            {% trans 'Published' %}
+          {% else %}
+            {% trans 'Unpublished' %}
+          {% endif %}
+        </p>
 
-    <p>
-      {{ opening.get_employment_type_display }}
-    </p>
+        <div class="row">
 
-    <p>
-      {% trans 'Do not display publicly' %} : {{ opening.is_private }}
-    </p>
+          <div class="large-8 columns">
+            <h3>{% trans 'Description' %}</h3>
+            {{ opening.description|safe }}
+          </div>
 
-    <p>
-      <h4>Description</h4>
-      {{ opening.description|safe }}
-    </p>
-  </div>
+          <div class="large-4 columns">
 
-  <div class="large-3 columns">
-    <h4>{% trans 'Actions' %}</h4>
+            <div class="opening-detail-actions panel">
+              <h4>{% trans 'Actions' %}</h4>
+              <ul class="side-nav">
+                <li><a href="#"><i class="icon-edit"></i>Edit this opening</a></li>
+                <li><a href="#"><i class="icon-trash"></i>Delete this opening</a></li>
+                <li>
+                  <a href="{% url 'openings:publish_opening' opening.pk %}">
+                  {% if not opening.published_date %}
+                    <i class="icon-ok-circle"></i>{% trans 'Publish this opening' %}
+                  {% else %}
+                    <i class="icon-remove-circle"></i>{% trans 'Unpublish this opening' %}
+                  {% endif %}
+                  </a>
+                </li>
+              </ul>
+            </div>
 
+            <div class="opening-detail-actions panel">
+              <h4>{% trans 'Links' %}</h4>
+              <ul class="side-nav">
 
-    <p>
-      <a href="{% url 'openings:update_opening' opening.pk %}">{% trans 'Edit this opening' %}</a>
-    </p>
+                <li>
+                  <a href="{% url "applications:list_applications" %}?openings={{ opening.pk }}"><i class="icon-external-link"></i>{% trans 'Applicants list' %}</a>
+                </li>
+                <li>
+                  <i class="icon-external-link-sign"></i>{% trans 'Job link' %} :<a href=" {{ opening.get_apply_url }}" target="_blank">{{ opening.get_apply_url }}</a>
+                </li>
+              </ul>
+            </div>
 
-    <p>
-      <a href="{% url 'openings:delete_opening' opening.pk %}">{% trans 'Delete this opening' %}</a>
-    </p>
+          </div>
 
-    {% if not opening.closed_date %}
-      <p>
-        <a href="{% url 'openings:close_opening' opening.pk %}">{% trans 'Close this opening' %}</a>
-      </p>
-    {% endif %}
+        </div>
 
-    {% if not opening.published_date %}
-      <p>
-        <a href="{% url 'openings:publish_opening' opening.pk %}">{% trans 'Publish this opening' %}</a>
-      </p>
-    {% else %}
-      <p>
-        <a href="{% url 'openings:publish_opening' opening.pk %}">{% trans 'Unpublish this opening' %}</a>
-      </p>
-    {% endif %}
-
-
-    <h4>{% trans 'Important links' %}</h4>
-      <p>
-        {% trans 'Job link' %} : <a href=" {{ opening.get_apply_url }}" target="_blank">{{ opening.get_apply_url }}</a>
-      </p>
-
-      <p>
-        <a href="{% url "applications:list_applications" %}?openings={{ opening.pk }}">{% trans 'Applicants list' %}</a>
-      </p>
-  </div>
-</div>
+      </div>
+    </div>
+  </section>
 
 
 {% endblock %}

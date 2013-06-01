@@ -1,0 +1,27 @@
+
+@import "../common/colours";
+
+.opening-detail-actions {
+  h4 {
+    padding-bottom: 10px;
+    border-bottom: 1px solid $silver;
+  }
+
+  ul {
+    padding: 0;
+    i {
+      padding-right: 10px;
+    }
+
+    li {
+      &:not(:last-child) {
+        border-bottom: 1px solid $silver;
+        padding-bottom: 8px;
+        a {
+          word-wrap: break-word;
+        }
+      }
+    }
+
+  }
+}
