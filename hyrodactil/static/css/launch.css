@@ -3747,22 +3747,28 @@ html p, body p {
   font-size: 0.9em;
 }
 
-/* line 23, ../../pregen_static/sass/launch/_topbar.scss */
+/* line 22, ../../pregen_static/sass/launch/_topbar.scss */
 header nav.top-bar {
   margin-bottom: 0;
 }
-/* line 34, ../../pregen_static/sass/launch/_topbar.scss */
+/* line 29, ../../pregen_static/sass/launch/_topbar.scss */
 header nav.top-bar ul.title-area li.name h1 a {
   font-size: 1.5em;
   font-family: 'Pacifico', cursive;
   text-transform: none;
   color: #ccc;
 }
-/* line 53, ../../pregen_static/sass/launch/_topbar.scss */
+/* line 42, ../../pregen_static/sass/launch/_topbar.scss */
 header nav.top-bar section.top-bar-section li a {
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 
+@media only screen and (min-width: 58.75em) {
+  /* line 53, ../../pregen_static/sass/launch/_topbar.scss */
+  .top-bar-right {
+    margin-right: 70px !important;
+  }
+}
 /* line 2, ../../pregen_static/sass/launch/_landing.scss */
 .hero {
   width: 100%;
@@ -3952,18 +3958,22 @@ footer .social {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-/* line 6, ../../pregen_static/sass/launch/_common.scss */
+/* line 5, ../../pregen_static/sass/launch/_common.scss */
 .wrapper .container {
   background: #fff;
   border: 1px solid #ebebeb;
   padding: 20px;
 }
-/* line 12, ../../pregen_static/sass/launch/_common.scss */
+/* line 11, ../../pregen_static/sass/launch/_common.scss */
 .wrapper .container h2 {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   padding-bottom: 5px;
   border-bottom: 1px solid #ebebeb;
+}
+/* line 17, ../../pregen_static/sass/launch/_common.scss */
+.wrapper .container h2 .actions a {
+  font-size: .5em;
 }
 
 /* line 2, ../../pregen_static/sass/launch/_tables.scss */
@@ -3980,6 +3990,90 @@ table {
 /* line 2, ../../pregen_static/sass/launch/_dashboard.scss */
 .dashboard-graph h3 {
   font-size: 1.5em;
+}
+
+/* line 7, ../../pregen_static/sass/common/_buttons.scss */
+.button-positive {
+  border-style: solid;
+  border-width: 1px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  line-height: 1;
+  margin: 0 0 1.25em;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  padding-top: 0.75em;
+  padding-right: 1.5em;
+  padding-bottom: 0.8125em;
+  padding-left: 1.5em;
+  font-size: 1em;
+  background-color: #2ba6cb;
+  border-color: #2284a1;
+  color: white;
+  background-color: #2ecc71;
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+/* line 121, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_buttons.scss */
+.button-positive:hover, .button-positive:focus {
+  background-color: #2284a1;
+}
+/* line 132, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_buttons.scss */
+.button-positive:hover, .button-positive:focus {
+  color: white;
+}
+/* line 12, ../../pregen_static/sass/common/_buttons.scss */
+.button-positive:hover {
+  background-color: #54d98c;
+}
+
+/* line 17, ../../pregen_static/sass/common/_buttons.scss */
+.button-negative {
+  border-style: solid;
+  border-width: 1px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  line-height: 1;
+  margin: 0 0 1.25em;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  padding-top: 0.75em;
+  padding-right: 1.5em;
+  padding-bottom: 0.8125em;
+  padding-left: 1.5em;
+  font-size: 1em;
+  background-color: #2ba6cb;
+  border-color: #2284a1;
+  color: white;
+  background-color: #e74c3c;
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+/* line 121, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_buttons.scss */
+.button-negative:hover, .button-negative:focus {
+  background-color: #2284a1;
+}
+/* line 132, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_buttons.scss */
+.button-negative:hover, .button-negative:focus {
+  color: white;
+}
+/* line 22, ../../pregen_static/sass/common/_buttons.scss */
+.button-negative:hover {
+  background-color: #ed7669;
 }
 
 /*

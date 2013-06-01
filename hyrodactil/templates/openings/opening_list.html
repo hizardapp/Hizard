@@ -1,19 +1,35 @@
-{% extends "base_app.html" %}
+{% extends "new_base.html" %}
 
 {% load django_tables2 %}
 {% load i18n %}
 
+
+{% block title %}
+  {% trans 'Openings' %}
+{% endblock title %}
+
+
 {% block content %}
-  <h2 class="page-header">{% trans "Openings" %}</h2>
 
-  <a href="{% url 'openings:create_opening' %}" class="button-positive">
-    {% trans "Create an opening" %}
-  </a>
+  <section class="wrapper">
+    <div class="row">
+      <div class="large-12 columns container">
 
+        <h2>
+          {% trans 'Openings' %}
 
-  <div>
-    {% render_table table %}
-  </div>
+          <span class="actions">
+            <a href="{% url 'openings:create_opening' %}" class="button-positive right">
+              {% trans "Create an opening" %}
+            </a>
+          </span>
 
+        </h2>
+
+        {% render_table table %}
+
+      </div>
+    </div>
+  </section>
 
 {% endblock content %}

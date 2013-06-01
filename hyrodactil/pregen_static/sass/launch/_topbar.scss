@@ -19,45 +19,38 @@ html, body {
 }
 
 header {
-
   nav.top-bar {
     margin-bottom: 0;
 
     ul.title-area {
-
       li {
-
         &.name {
-
           h1 {
-
             a {
               font-size: 1.5em;
               font-family: 'Pacifico', cursive;
               text-transform: none;
               color: #ccc;
             }
-
           }
-
         }
-
       }
-
     }
 
     section.top-bar-section {
-
       li {
-
         a {
-          text-transform: uppercase;
+          text-transform: capitalize;
         }
-
       }
-
     }
 
   }
 
+}
+
+@media #{$topbar-media-query} {
+  .top-bar-right {
+    margin-right: 70px !important;
+  }
 }
