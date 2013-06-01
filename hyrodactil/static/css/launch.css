@@ -5368,49 +5368,49 @@ header nav.top-bar section.top-bar-section li a {
   text-transform: uppercase;
 }
 
-/* line 65, ../../pregen_static/sass/launch/app.scss */
+/* line 2, ../../pregen_static/sass/launch/_landing.scss */
 .hero {
   width: 100%;
   background: url("../img/hero_bg2.png") center;
 }
-/* line 70, ../../pregen_static/sass/launch/app.scss */
+/* line 7, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider {
   color: #fff;
   text-shadow: 1px 1px 0 #000;
   height: 400px;
 }
-/* line 75, ../../pregen_static/sass/launch/app.scss */
+/* line 12, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider h3 {
   color: #fff;
 }
-/* line 78, ../../pregen_static/sass/launch/app.scss */
+/* line 15, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider h3 small {
   color: #fff;
 }
-/* line 83, ../../pregen_static/sass/launch/app.scss */
+/* line 20, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider img {
   max-height: 400px;
   width: auto;
 }
-/* line 89, ../../pregen_static/sass/launch/app.scss */
+/* line 26, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider .slide-text {
   padding: 30px 0px 30px 80px;
 }
-/* line 92, ../../pregen_static/sass/launch/app.scss */
+/* line 29, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider .slide-text.right {
   padding: 30px 80px 30px 0px;
 }
-/* line 97, ../../pregen_static/sass/launch/app.scss */
+/* line 34, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider .slide-image {
   text-align: center;
   padding: 30px 20px 30px 80px;
 }
-/* line 101, ../../pregen_static/sass/launch/app.scss */
+/* line 38, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider .slide-image.right {
   padding: 30px 80px 30px 20px;
 }
 
-/* line 110, ../../pregen_static/sass/launch/app.scss */
+/* line 47, ../../pregen_static/sass/launch/_landing.scss */
 .border {
   position: relative;
   top: -7px;
@@ -5418,7 +5418,7 @@ header nav.top-bar section.top-bar-section li a {
   height: 7px;
   background: transparent url("../img/border.png") top repeat-x;
 }
-/* line 117, ../../pregen_static/sass/launch/app.scss */
+/* line 54, ../../pregen_static/sass/launch/_landing.scss */
 .border.inverse {
   top: 7px;
   -moz-transform: scaleY(-1);
@@ -5429,18 +5429,18 @@ header nav.top-bar section.top-bar-section li a {
   -ms-filter: "FlipV";
 }
 
-/* line 128, ../../pregen_static/sass/launch/app.scss */
+/* line 65, ../../pregen_static/sass/launch/_landing.scss */
 .wrapper {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-/* line 133, ../../pregen_static/sass/launch/app.scss */
+/* line 70, ../../pregen_static/sass/launch/_landing.scss */
 .wrapper .container {
   background: #fff;
   border: 1px solid #ebebeb;
   padding: 20px;
 }
-/* line 139, ../../pregen_static/sass/launch/app.scss */
+/* line 76, ../../pregen_static/sass/launch/_landing.scss */
 .wrapper .container h2 {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
@@ -5448,26 +5448,26 @@ header nav.top-bar section.top-bar-section li a {
   border-bottom: 1px solid #ebebeb;
 }
 
-/* line 152, ../../pregen_static/sass/launch/app.scss */
+/* line 89, ../../pregen_static/sass/launch/_landing.scss */
 #services .service {
   margin-bottom: 30px;
 }
-/* line 155, ../../pregen_static/sass/launch/app.scss */
+/* line 92, ../../pregen_static/sass/launch/_landing.scss */
 #services .service .service-icon {
   text-align: center;
   color: #ccc;
 }
-/* line 159, ../../pregen_static/sass/launch/app.scss */
+/* line 96, ../../pregen_static/sass/launch/_landing.scss */
 #services .service .service-icon .icon-dark {
   color: #777;
 }
-/* line 164, ../../pregen_static/sass/launch/app.scss */
+/* line 101, ../../pregen_static/sass/launch/_landing.scss */
 #services .service .service-description {
   padding-top: 4px;
   font-size: 0.9em;
 }
 
-/* line 177, ../../pregen_static/sass/launch/app.scss */
+/* line 114, ../../pregen_static/sass/launch/_landing.scss */
 #about .profile .profile-picture {
   line-height: 0;
   display: inline-block;
@@ -5480,18 +5480,18 @@ header nav.top-bar section.top-bar-section li a {
   -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 }
-/* line 184, ../../pregen_static/sass/launch/app.scss */
+/* line 121, ../../pregen_static/sass/launch/_landing.scss */
 #about .profile .profile-description {
   padding: 10px 5px 0px 5px;
   font-size: 0.9em;
 }
-/* line 191, ../../pregen_static/sass/launch/app.scss */
+/* line 128, ../../pregen_static/sass/launch/_landing.scss */
 #about .company-description {
   padding: 5px;
   font-size: 0.9em;
 }
 
-/* line 200, ../../pregen_static/sass/launch/app.scss */
+/* line 137, ../../pregen_static/sass/launch/_landing.scss */
 #portfolio .portfolio-picture {
   line-height: 0;
   display: inline-block;
@@ -5506,18 +5506,18 @@ header nav.top-bar section.top-bar-section li a {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 }
 
-/* line 211, ../../pregen_static/sass/launch/app.scss */
+/* line 148, ../../pregen_static/sass/launch/_landing.scss */
 #contact textarea {
   height: 300px;
 }
-/* line 215, ../../pregen_static/sass/launch/app.scss */
+/* line 152, ../../pregen_static/sass/launch/_landing.scss */
 #contact .send {
   background-color: #36bbff;
   border-color: #0089cf;
   margin-bottom: 0;
 }
 
-/* line 222, ../../pregen_static/sass/launch/app.scss */
+/* line 159, ../../pregen_static/sass/launch/_landing.scss */
 footer {
   width: 100%;
   padding: 30px;
@@ -5526,46 +5526,46 @@ footer {
   font-size: 0.9em;
   line-height: 1.5em;
 }
-/* line 230, ../../pregen_static/sass/launch/app.scss */
+/* line 167, ../../pregen_static/sass/launch/_landing.scss */
 footer .social {
   text-align: right;
   font-size: 1.5em;
 }
 
 @media (max-width: 767px) {
-  /* line 242, ../../pregen_static/sass/launch/app.scss */
+  /* line 179, ../../pregen_static/sass/launch/_landing.scss */
   .hero .flexslider h3 {
     color: #fff;
   }
-  /* line 245, ../../pregen_static/sass/launch/app.scss */
+  /* line 182, ../../pregen_static/sass/launch/_landing.scss */
   .hero .flexslider h3 small {
     color: #ddd;
   }
-  /* line 250, ../../pregen_static/sass/launch/app.scss */
+  /* line 187, ../../pregen_static/sass/launch/_landing.scss */
   .hero .flexslider img {
     max-height: 400px;
     width: auto;
   }
-  /* line 255, ../../pregen_static/sass/launch/app.scss */
+  /* line 192, ../../pregen_static/sass/launch/_landing.scss */
   .hero .flexslider .slide-text {
     padding: 30px 50px 30px 50px;
   }
-  /* line 258, ../../pregen_static/sass/launch/app.scss */
+  /* line 195, ../../pregen_static/sass/launch/_landing.scss */
   .hero .flexslider .slide-text.right {
     text-align: left;
     padding: 30px 50px 30px 50px;
   }
-  /* line 264, ../../pregen_static/sass/launch/app.scss */
+  /* line 201, ../../pregen_static/sass/launch/_landing.scss */
   .hero .flexslider .slide-image {
     text-align: center;
     display: none;
   }
 
-  /* line 273, ../../pregen_static/sass/launch/app.scss */
+  /* line 210, ../../pregen_static/sass/launch/_landing.scss */
   footer {
     text-align: center;
   }
-  /* line 276, ../../pregen_static/sass/launch/app.scss */
+  /* line 213, ../../pregen_static/sass/launch/_landing.scss */
   footer .social {
     margin-top: 10px;
     text-align: center;
