@@ -1,34 +1,237 @@
-{% extends "base_public.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
+{% load staticfiles %}
 
 
 {% block content %}
-
-  <div class="jumbotron">
-    <div class="row text-center">
-      <h1>{% trans 'Hiring made simple' %}</h1>
-      <p>
-        <a href="{% url 'accounts:register' %}" class="button-positive">{% trans 'Sign up' %}</a>
-      </p>
+  <section id="slider" class="hero">
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="flexslider">
+          <ul class="slides">
+            <li>
+              <div class="row">
+                <div class="large-6 columns slide-text left">
+                  <h3>
+                    Fully Responsive.
+                    <br/>
+                    <small>
+                      Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Nulla vitae elit libero, a pharetra augue. Curabitur blandit tempus porttitor. Donec id elit non mi porta gravida at eget metus.
+                    </small>
+                  </h3>
+                </div>
+                <div class="large-6 columns slide-image right">
+                  <img src="http://www.placehold.it/700x300" alt="responsive layouts"/>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="large-6 columns slide-image left">
+                  <img src="http://www.placehold.it/700x300" alt="mobile layouts"/>
+                </div>
+                <div class="large-6 columns slide-text right">
+                  <h3>
+                    Wonderful on mobile.
+                    <br/>
+                    <small>
+                      Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Donec ullamcorper nulla non metus auctor fringilla. Curabitur blandit tempus porttitor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus sagittis lacus vel augue.
+                    </small>
+                  </h3>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="large-6 columns slide-text left">
+                  <h3>
+                    Great on desktop, too.
+                    <br/>
+                    <small>
+                      Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus.
+                    </small>
+                  </h3>
+                </div>
+                <div class="large-6 columns slide-image right">
+                  <img src="http://www.placehold.it/700x300" alt="desktop layouts"/>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="row text-center">
-    <div class="large-12 columns">
-      <h3>{% trans 'How can Hizard help you?' %}</h3>
+  </section>
+  <div class="border"></div>
+
+  <section id="services" class="wrapper">
+    <div class="row">
+
+      <div class="large-12 columns">
+        <div class="container">
+
+          <h2>Services <small>what we offer you</small></h2>
+
+          <!-- Duplicate rows for however many services you might offer. -->
+          <div class="row">
+            <div class="large-6 columns service">
+              <div class="row">
+                <div class="small-4 columns service-icon">
+                                          <span class="icon-stack icon-3x">
+                                              <i class="icon-circle icon-stack-base"></i>
+                                              <i class="icon-flag icon-dark"></i>
+                                          </span>
+                </div>
+                <div class="small-8 columns">
+                  <p class="service-description">
+                    <strong>Look at this thing.</strong> Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Donec sed odio dui. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="large-6 columns service">
+              <div class="row">
+                <div class="small-4 columns service-icon">
+                                          <span class="icon-stack icon-3x">
+                                              <i class="icon-circle icon-stack-base"></i>
+                                              <i class="icon-bullhorn icon-dark"></i>
+                                          </span>
+                </div>
+                <div class="small-8 columns">
+                  <p class="service-description">
+                    <strong>Now take a look over here.</strong> Cras justo odio, dapibus ac facilisis in, egestas eget quam. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End duplicating area -->
+
+          <!-- We've already duplicated the row above here -->
+          <div class="row">
+            <div class="large-6 columns service">
+              <div class="row">
+                <div class="small-4 columns service-icon">
+                                          <span class="icon-stack icon-3x">
+                                              <i class="icon-circle icon-stack-base"></i>
+                                              <i class="icon-star icon-dark"></i>
+                                          </span>
+                </div>
+                <div class="small-8 columns">
+                  <p class="service-description">
+                    <strong>Wound you look at that.</strong> Cras justo odio, dapibus ac facilisis in, egestas eget quam. Aenean lacinia bibendum nulla sed consectetur. Donec id elit non mi porta gravida at eget metus.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="large-6 columns service">
+              <div class="row">
+                <div class="small-4 columns service-icon">
+                                          <span class="icon-stack icon-3x">
+                                              <i class="icon-circle icon-stack-base"></i>
+                                              <i class="icon-ok icon-dark"></i>
+                                          </span>
+                </div>
+                <div class="small-8 columns">
+                  <p class="service-description">
+                    <strong>This looks great!</strong> Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End duplicated row -->
+
+        </div>
+      </div>
+
     </div>
-  </div>
+  </section>
 
-  <div class="row text-center">
-    <div class="large-6 columns">
-      <h4>{% trans  'Applicant tracking' %}</h4>
+  <section id="about" class="wrapper">
+
+    <div class="row">
+
+      <div class="large-12 columns">
+        <div class="container">
+          <h2>About Us <small>who we are</small></h2>
+
+          <!-- Duplicate rows for however many people in the company. -->
+          <div class="row">
+
+            <!-- For a single user, change large-6 to large-12 -->
+            <div class="large-6 columns profile">
+              <div class="profile-picture">
+                <img src="http://www.placehold.it/700x300" alt="placeholder image" />
+              </div>
+              <p class="profile-description">
+                <strong>Here's a person.</strong>
+                Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Maecenas sed diam eget risus varius blandit sit amet non magna. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas faucibus mollis interdum.
+              </p>
+            </div>
+
+            <!-- If this is for a single person, not a larger company, remove this area -->
+            <div class="large-6 columns profile">
+              <div class="profile-picture">
+                <img src="http://www.placehold.it/700x300" alt="placeholder image" />
+              </div>
+              <p class="profile-description">
+                <strong>Oh and here's another.</strong>
+                Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              </p>
+            </div>
+            <!-- End removal area for a single user -->
+
+          </div>
+          <!-- End duplicating area -->
+
+          <div class="row">
+            <div class="large-12 columns">
+              <p class="company-description">
+                <strong>Here's some more detailed information about our company.</strong>
+                Nullam quis risus eget urna mollis ornare vel eu leo. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+              </p>
+              <p class="company-description">
+                <strong>And here's information about when we were founded.</strong>
+                Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
-    <div class="large-6 columns">
-      <h4>{% trans  'Your own career site' %}</h4>
+
+  </section>
+
+  <div class="border inverse"></div>
+  <footer>
+    <div class="row">
+      <div class="large-6 columns copyright">
+        &copy; 2013 Persona
+      </div>
+      <div class="large-6 columns social">
+        <!-- Facebook icon link -->
+        <a href="#"><i class="icon-facebook"></i></a>
+        <!-- Twitter icon link -->
+        <a href="#"><i class="icon-twitter"></i></a>
+        <!-- Github icon link -->
+        <a href="#"><i class="icon-github"></i></a>
+      </div>
     </div>
-  </div>
+  </footer>
 
-
+  <!-- Back to top link -->
+  <p id="back-top">
+    <a href="#"><span><i class="icon-arrow-up icon-4x"></i></span>Back to Top</a>
+  </p>
 {% endblock content %}
 
+
+{% block extra-js %}
+  <script src="{% static "js/vendor/jquery.flexslider-min.js" %}"></script>
+  <script src="{% static "js/landing.js" %}"></script>
+{% endblock extra-js %}

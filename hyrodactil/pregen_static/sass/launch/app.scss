@@ -1,0 +1,282 @@
+@import "foundation/components/global", "foundation/components/thumbs", "foundation/components/buttons";
+
+/* Variables used within the SCSS are below */
+/* ---------------------------------------- */
+
+/* Changes the contact form's button color */
+$themeColor: #36bbff;
+
+
+html, body {
+  overflow-x: hidden;
+  background: #EDF3F3;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+
+  p {
+    font-size: 0.9em;
+  }
+}
+
+header {
+
+  nav.top-bar {
+    margin-bottom: 0;
+
+    ul.title-area {
+
+      li {
+
+        &.name {
+
+          h1 {
+
+            a {
+              font-size: 1.5em;
+              font-family: 'Pacifico', cursive;
+              text-transform: none;
+              color: #ccc;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+    section.top-bar-section {
+
+      li {
+
+        a {
+          text-transform: uppercase;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+.hero {
+
+  width: 100%;
+  background: url('../img/hero_bg2.png') center;
+
+  .flexslider {
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+    height: 400px;
+
+    h3 {
+      color: #fff;
+
+      small {
+        color: #fff;
+      }
+    }
+
+    img {
+      max-height: 400px;
+      width: auto;
+
+    }
+
+    .slide-text {
+      padding: 30px 0px 30px 80px;
+
+      &.right {
+        padding: 30px 80px 30px 0px;
+      }
+    }
+
+    .slide-image {
+      text-align: center;
+      padding: 30px 20px 30px 80px;
+
+      &.right {
+        padding: 30px 80px 30px 20px;
+      }
+    }
+
+  }
+
+}
+
+.border {
+  position: relative;
+  top: -7px;
+  width: 100%;
+  height: 7px;
+  background: transparent url("../img/border.png") top repeat-x;
+
+  &.inverse {
+    top: 7px;
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+  }
+}
+
+.wrapper {
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  .container {
+
+    background: #fff;
+    border: 1px solid #ebebeb;
+    padding: 20px;
+
+    h2 {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ebebeb;
+    }
+
+  }
+
+}
+
+#services {
+
+  .service {
+    margin-bottom: 30px;
+
+    .service-icon {
+      text-align: center;
+      color: #ccc;
+
+      .icon-dark {
+        color: #777;
+      }
+    }
+
+    .service-description {
+      padding-top: 4px;
+      font-size: 0.9em;
+    }
+
+  }
+
+}
+
+#about {
+
+  .profile {
+
+    .profile-picture {
+      $thumb-border-width: 4px;
+      $thumb-box-shadow: 0 0 0 1px rgba(#000,.2);
+      $box-shadow-hover: 0 0 0 1px rgba(#000,.2);
+      @include thumb($thumb-border-width, $thumb-box-shadow, $box-shadow-hover);
+    }
+
+    .profile-description {
+      padding: 10px 5px 0px 5px;
+      font-size: 0.9em;
+    }
+
+  }
+
+  .company-description {
+    padding: 5px;
+    font-size: 0.9em;
+  }
+
+}
+
+#portfolio {
+
+  .portfolio-picture {
+    $thumb-border-width: 4px;
+    $thumb-box-shadow: 0 0 0 1px rgba(#000,.2);
+    $box-shadow-hover: 0 0 0 1px rgba(#000,.2);
+    @include thumb($thumb-border-width, $thumb-box-shadow, $box-shadow-hover);
+    margin-bottom: 20px;
+  }
+
+}
+
+#contact {
+  textarea {
+    height: 300px;
+  }
+
+  .send {
+    background-color: $themeColor;
+    border-color: darken($themeColor, 20%);
+    margin-bottom: 0;
+  }
+}
+
+footer {
+  width: 100%;
+  padding: 30px;
+  background: #252525;
+  color: #999;
+  font-size: 0.9em;
+  line-height: 1.5em;
+
+  .social {
+    text-align: right;
+    font-size: 1.5em;
+  }
+}
+
+@media(max-width: 767px) {
+
+  .hero {
+
+    .flexslider {
+
+      h3 {
+        color: #fff;
+
+        small {
+          color: #ddd;
+        }
+      }
+
+      img {
+        max-height: 400px;
+        width: auto;
+      }
+
+      .slide-text {
+        padding: 30px 50px 30px 50px;
+
+        &.right {
+          text-align: left;
+          padding: 30px 50px 30px 50px;
+        }
+      }
+
+      .slide-image {
+        text-align: center;
+        display: none;
+      }
+
+    }
+
+  }
+
+  footer {
+    text-align: center;
+
+    .social {
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
+
+}
