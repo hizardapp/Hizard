@@ -5,7 +5,7 @@ from django.views.generic import CreateView, TemplateView, View
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
 from .forms import (
     DepartmentForm, QuestionForm, InterviewStageForm, CompanyInformationForm
@@ -68,6 +68,41 @@ class ListViewWithDropdown(LoginRequiredMixin, RestrictedListView):
 class DepartmentListView(ListViewWithForm):
     model = Department
     form = DepartmentForm
+
+
+class DepartmentCreateUpdateView(
+    LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin, View
+):
+    def post_ajax(self, request, *args, **kwargs):
+        data = request.POST.copy()
+
+        if 'id' in data:
+            dept_to_update = Department.objects.filter(id=int(data['id']))
+            if dept_to_update:
+                form = DepartmentForm(data, instance=dept_to_update[0])
+            else:
+                return self.render_json_response({
+                    'result': 'error',
+                    'message': unicode(_('The department does not exist.'))
+                })
+        else:
+            form = DepartmentForm(data)
+
+        if form.is_valid():
+            dept = form.save(commit=False)
+            dept.company = self.request.user.company
+            dept.save()
+            return self.render_json_response({
+                'result': 'success',
+                'id': dept.id,
+                'message': unicode(_('Department.saved'))
+            })
+        else:
+            return self.render_json_response({
+                'result': 'error',
+                'errors': form.errors,
+                'message':unicode(_('Please correct the errors below.'))
+            })
 
 
 class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):

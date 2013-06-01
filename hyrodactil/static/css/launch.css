@@ -4015,6 +4015,10 @@ footer .social {
 table {
   width: 100%;
 }
+/* line 5, ../../pregen_static/sass/launch/_tables.scss */
+table td {
+  line-height: 2em !important;
+}
 
 /* line 1, ../../pregen_static/sass/launch/_dashboard.scss */
 .dashboard-graph {
@@ -4132,6 +4136,68 @@ table {
 /* line 22, ../../pregen_static/sass/common/_buttons.scss */
 .button-negative:hover {
   background-color: #ed7669;
+}
+
+/* line 4, ../../pregen_static/sass/common/_alerts.scss */
+.alert-success {
+  border-style: solid;
+  border-width: 1px;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 1.25em;
+  position: relative;
+  padding: 0.6875em 1.3125em 0.75em 0.6875em;
+  font-size: 0.875em;
+  background-color: #dff0d8;
+  border-color: #c1e2b3;
+  color: #505050;
+  color: #468847;
+}
+/* line 8, ../../pregen_static/sass/common/_alerts.scss */
+.alert-success .close {
+  font-size: 1.375em;
+  padding: 5px 4px 4px;
+  line-height: 0;
+  position: absolute;
+  top: 0.4375em;
+  right: 0.3125em;
+  color: #333333;
+  opacity: 0.3;
+}
+/* line 81, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_alert-boxes.scss */
+.alert-success .close:hover, .alert-success .close:focus {
+  opacity: 0.5;
+}
+
+/* line 13, ../../pregen_static/sass/common/_alerts.scss */
+.alert-error {
+  border-style: solid;
+  border-width: 1px;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 1.25em;
+  position: relative;
+  padding: 0.6875em 1.3125em 0.75em 0.6875em;
+  font-size: 0.875em;
+  background-color: #b94a48;
+  border-color: #953b39;
+  color: white;
+  color: #f2dede;
+}
+/* line 17, ../../pregen_static/sass/common/_alerts.scss */
+.alert-error .close {
+  font-size: 1.375em;
+  padding: 5px 4px 4px;
+  line-height: 0;
+  position: absolute;
+  top: 0.4375em;
+  right: 0.3125em;
+  color: #333333;
+  opacity: 0.3;
+}
+/* line 81, ../../../../../../../var/lib/gems/1.9.1/gems/zurb-foundation-4.1.6/scss/foundation/components/_alert-boxes.scss */
+.alert-error .close:hover, .alert-error .close:focus {
+  opacity: 0.5;
 }
 
 /*

@@ -1,6 +1,7 @@
+import json
+
 from django.core.urlresolvers import reverse
 from django.core import mail
-from django.http import Http404
 from django_webtest import WebTest
 from companies.models import Company
 
@@ -25,7 +26,84 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertContains(page, department.name)
 
-    def test_create_department_valid(self):
+    def test_ajax_create_department_valid(self):
+        url = reverse('companysettings:ajax_department')
+        data = {'name': 'Cooking'}
+
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'success')
+        self.assertEqual(result['id'], 1)
+        self.assertTrue(Department.objects.filter(name='Cooking').exists())
+
+    def test_ajax_create_department_invalid(self):
+        url = reverse('companysettings:ajax_department')
+        data = {'name': ''}
+
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(
+            result['errors'], {'name': ['This field is required.']}
+        )
+        self.assertFalse(Department.objects.filter(name='Cooking').exists())
+
+    def test_ajax_update_department_valid(self):
+        url = reverse('companysettings:ajax_department')
+        dept = DepartmentFactory()
+        data = {'id': dept.id,'name': 'Cooking'}
+
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'success')
+        self.assertTrue(Department.objects.filter(name='Cooking').exists())
+
+    def test_ajax_update_department_invalid(self):
+        url = reverse('companysettings:ajax_department')
+        dept = DepartmentFactory()
+        data = {'id': dept.id, 'name': ''}
+
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(
+            result['errors'], {'name': ['This field is required.']}
+        )
+        self.assertFalse(Department.objects.filter(name='Cooking').exists())
+
+    def test_ajax_update_department_inexisting(self):
+        url = reverse('companysettings:ajax_department')
+        data = {'id': 42, 'name': ''}
+
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'error')
+        self.assertFalse(Department.objects.filter(name='Cooking').exists())
+
+    def stest_create_department_valid(self):
         url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
@@ -40,7 +118,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(department_created.company, self.user.company)
         self.assertEqual(department_created.name, 'Engineering')
 
-    def test_create_department_invalid(self):
+    def stest_create_department_invalid(self):
         url = reverse('companysettings:list_departments')
 
         page = self.app.get(url, user=self.user)
@@ -52,7 +130,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'name', self.required)
 
-    def test_update_department_valid(self):
+    def stest_update_department_valid(self):
         dept = DepartmentFactory(name='Sales', company=self.user.company)
         url = reverse('companysettings:list_departments')
 
@@ -71,7 +149,7 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(response, 'Engineering')
         self.assertNotContains(response, 'Sales')
 
-    def test_update_department_invalid(self):
+    def stest_update_department_invalid(self):
         dept = DepartmentFactory(name='Sales', company=self.user.company)
         url = reverse('companysettings:list_departments')
 

@@ -1,77 +1,138 @@
-{% extends "base_app.html" %}
+{% extends "app_page.html" %}
 
 {% load i18n %}
 {% load companysettings %}
 {% load staticfiles %}
 
 
-{% block content %}
-  <h2 class="page-header">{% trans "Departments" %}</h2>
+{% block title %}
+  {% trans 'Departments' %}
+{% endblock title %}
 
-    <div>
 
-      <table class="large-8 columns">
-        <thead>
+{% block page-content %}
+  <h2>
+    {% trans "Departments" %} <small>{% trans 'allow to group your openings in your career site' %}</small>
+  </h2>
+
+  <div id="departments">
+    <table>
+      <thead>
+      <tr class="row">
+        <th class="large-10 columns sort" data-sort="name">{% trans "Name" %}</th>
+        <th class="large-2 columns" colspan="2"></th>
+      </tr>
+      </thead>
+
+      <tbody class="list">
+        {% for department in department_list %}
           <tr class="row">
-            <th class="large-10 columns">{% trans "Name" %}</th>
-            <th class="large-2 columns"></th>
+            <td class="id" style="display: none;">{{ department.id }}</td>
+            <td class="large-10 columns update-object name">{{ department.name }}</td>
+            <td class="large-1 columns text-right">
+              <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
+            </td>
+            <td class="large-1 columns text-right">
+              <a href="#" class="edit"><i class="icon-trash icon-2x"></i></a>
+            </td>
           </tr>
-        </thead>
+        {% endfor %}
+      </tbody>
+    </table>
 
-        <tbody>
-          {% for department in department_list %}
-            <tr class="row {% if department.id == error_object_id %}error-table{% endif %}" data-id="{{ department.id }}">
-                <td class="large-10 columns update-object">
-                  <i class="icon-pencil icon-large"></i>
-                  <span>{{ department.name }}</span>
-                </td>
-                <td class="large-2 columns text-right">
-                  <a href="{% url 'companysettings:delete_department' department.id %}">{% trans "Delete" %}</a>
-                </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <div class="large-4 columns">
-        {% include 'companysettings/_side_form.html' with error_object_id=error_object_id %}
+  <form action="." method="POST">
+    <div class="row">
+      <div class="large-10 columns">
+        <input type="hidden" class="id-to-update" />
+        <input type="text" class="dept-name" placeholder="{% trans 'Name' %}"/>
       </div>
-
+      <div class="large-2 columns">
+        <a class="button-positive save" href="#">{% trans 'Save' %}</a>
+      </div>
     </div>
+  </form>
 
-{% endblock content %}
+
+  <div>
+
+{% endblock page-content %}
 
 {% block extra-js %}
+  <script src="{% static "js/vendor/list.min.js" %}"></script>
+  <script src="{% static "js/csrf.js" %}"></script>
   <script>
     $(document).ready(function() {
-      var createUrl = "{% url 'companysettings:create_department'%}";
-      var updateUrl = "{% url 'companysettings:update_department' 0 %}";
-      var updateText = "{% trans 'Update' %}";
-      var saveText = "{% trans 'Save' %}";
-      var $form = $('.company-settings-form');
+      var options = {
+        valueNames: ['id', 'name']
+      };
+      var deptTable = new List('departments', options);
 
-      {% if error_object_id %}
-        $form.attr('action', "{% url 'companysettings:update_department' error_object_id %}");
-        $form.find(':input[type=submit]').val(updateText);
-      {% else %}
-        $form.attr('action', createUrl);
-        $form.find(':input[type=submit]').val(saveText);
-      {% endif %}
+      var $nameInput = $('.dept-name');
+      var $id = $('.id-to-update');
+      var $saveButton = $('.save');
 
-      $('.update-object').click(function() {
-        var $td = $(this);
-        var id = $td.parent().data('id');
-        var text = $td.find('span').text();
-        $form.attr('action', updateUrl.replace(0, id));
-        $form.find('input[type=text]').val(text);
-        $form.find('input[type=submit]').val(updateText);
+      $nameInput.focus(function() {
+        $nameInput.removeClass('error');
+        $nameInput.next('small').remove();
       });
 
-      $('.clear-inputs').click(function() {
-        $form.attr('action', createUrl);
-        $form.find('input[type=text]').val('');
-        $form.find(':input[type=submit]').val(saveText);
+      $saveButton.click(function() {
+        var newDept = {
+          'name': $nameInput.val()
+        };
+
+        var isUpdate = false;
+        if ($id.val().length > 0) {
+          newDept.id = $id.val();
+          isUpdate = true;
+        }
+
+        $.post("{% url 'companysettings:ajax_department' %}", newDept, function(data) {
+          if (data.result === 'error') {
+            $nameInput.addClass('error');
+            var $error = $('<small>').addClass('error');
+            for (var error in data.errors) {
+              $error.text(data.errors[error]);
+            }
+            $nameInput.after($error);
+            if (isUpdate) {
+              var item = deptTable.get('id', newDept.id).values();
+              $nameInput.val(item.name);
+            }
+          } else {
+            $nameInput.val('');
+            $id.val('');
+            newDept.id = data.id;
+            if (isUpdate) {
+              var item = deptTable.get('id', data.id);
+              item.values(newDept);
+            } else {
+              deptTable.add(newDept);
+            }
+          }
+
+          displayMessage(data.result, data.message);
+        });
       });
+
+      $('body').on('click', '.edit', function(e) {
+        var itemId = $(this).closest('tr').find('.id').text();
+        var itemValues = deptTable.get('id', itemId).values();
+        $nameInput.val(itemValues.name);
+        $id.val(itemValues.id);
+      });
+
+      $('body').on('click', '.close', function() {
+        $(this).parent().remove();
+      })
+
+      function displayMessage(type, message) {
+        var $alert = $('<div>');
+        $alert.addClass('alert-' + type);
+        $alert.data('alert', 'js');
+        $alert.html(message + '<a href="#" class="close">&times;</a>');
+        $alert.prependTo('.container');
+      }
     });
   </script>
 {% endblock extra-js %}

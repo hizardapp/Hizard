@@ -10,6 +10,11 @@ urlpatterns = patterns('',
     ),
     url(
         r'^department/$',
+        views.DepartmentCreateUpdateView.as_view(),
+        name='ajax_department'
+    ),
+    url(
+        r'^department/$',
         views.DepartmentCreateView.as_view(),
         name='create_department'
     ),

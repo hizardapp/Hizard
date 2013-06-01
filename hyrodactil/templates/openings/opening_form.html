@@ -14,7 +14,7 @@
 {% endblock title %}
 
 
-{% block page_content %}
+{% block page-content %}
 
   {% if opening %}
     <h2>{{ opening.title }} <small>{% trans 'edit opening' %}</small></h2>
@@ -90,7 +90,7 @@
 
 
 
-{% endblock page_content %}
+{% endblock page-content %}
 
 {% block extrahead %}
   <link rel="stylesheet" href="{% static "css/select2.css" %}" />
@@ -151,4 +151,4 @@
       });
     });
   </script>
-{% endblock page_content %}
+{% endblock %}
