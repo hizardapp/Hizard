@@ -1,4 +1,4 @@
-{% extends "new_base.html" %}
+{% extends "app_page.html" %}
 
 {% load i18n %}
 
@@ -6,89 +6,82 @@
   {% trans 'Home' %}
 {% endblock title %}
 
-{% block content %}
+{% block page_content %}
 
-  <section class="wrapper">
-    <div class="row">
-      <div class="large-12 columns container">
-        <h2>{% trans 'Home' %}</h2>
+  <h2>{% trans 'Home' %}</h2>
 
-        <div class="dashboard-graph">
-          <h3>{% trans 'Latest candidates' %}</h3>
-          <table>
-            <thead>
-            <tr>
-              <th>{% trans 'Name' %}</th>
-              <th>{% trans 'Applied for' %}</th>
-              <th>{% trans 'Applied the' %}</th>
-            </tr>
-            </thead>
-            <tbody>
+  <div class="dashboard-graph">
+    <h3>{% trans 'Latest candidates' %}</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>{% trans 'Name' %}</th>
+        <th>{% trans 'Applied for' %}</th>
+        <th>{% trans 'Applied the' %}</th>
+      </tr>
+      </thead>
+      <tbody>
 
-            {% for application in last_applications %}
-              <tr>
-                <td>
-                  <a href="{% url "applications:application_detail" application.id %}">{{ application.applicant.get_full_name }}</a>
-                </td>
-                <td>
-                  <a href="{% url "openings:detail_opening" application.opening.id %}">{{ application.opening.title }}</a>
-                </td>
-                <td>{{ application.created|date:"Y/m/d H:i" }}</td>
-              </tr>
-            {% endfor %}
+      {% for application in last_applications %}
+        <tr>
+          <td>
+            <a href="{% url "applications:application_detail" application.id %}">{{ application.applicant.get_full_name }}</a>
+          </td>
+          <td>
+            <a href="{% url "openings:detail_opening" application.opening.id %}">{{ application.opening.title }}</a>
+          </td>
+          <td>{{ application.created|date:"Y/m/d H:i" }}</td>
+        </tr>
+      {% endfor %}
 
-            {% if not last_applications %}
-              <tr>
-                <td>{% trans 'No candidates' %}</td>
-                <td></td>
-                <td></td>
-              </tr>
-            {% endif %}
+      {% if not last_applications %}
+        <tr>
+          <td>{% trans 'No candidates' %}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      {% endif %}
 
-            </tbody>
-          </table>
-        </div>
+      </tbody>
+    </table>
+  </div>
 
-        <div class="dashboard-graph">
-          <h3>{% trans 'Openings' %}</h3>
+  <div class="dashboard-graph">
+    <h3>{% trans 'Openings' %}</h3>
 
-          <table>
-            <thead>
-            <tr>
-              <th>{% trans 'Title' %}</th>
-              {% for interview_stage in interview_stages %}
-                <th>{{ interview_stage.name }}</th>
-              {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
+    <table>
+      <thead>
+      <tr>
+        <th>{% trans 'Title' %}</th>
+        {% for interview_stage in interview_stages %}
+          <th>{{ interview_stage.name }}</th>
+        {% endfor %}
+      </tr>
+      </thead>
+      <tbody>
 
-            {% for opening in opening_list %}
-              <tr>
-                <td>
-                  <a href="{% url "openings:detail_opening" opening.id %}">{{ opening.title }}</a>
-                </td>
-                {% for stage_count in opening.stage_counts %}
-                  <td>{{ stage_count }}</td>
-                {% endfor  %}
-              </tr>
-            {% endfor %}
+      {% for opening in opening_list %}
+        <tr>
+          <td>
+            <a href="{% url "openings:detail_opening" opening.id %}">{{ opening.title }}</a>
+          </td>
+          {% for stage_count in opening.stage_counts %}
+            <td>{{ stage_count }}</td>
+          {% endfor  %}
+        </tr>
+      {% endfor %}
 
-            {% if not opening_list %}
-              <tr>
-                <td>{% trans 'No published openings' %}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            {% endif %}
+      {% if not opening_list %}
+        <tr>
+          <td>{% trans 'No published openings' %}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      {% endif %}
 
-            </tbody>
-          </table>
-        </div>
+      </tbody>
+    </table>
+  </div>
 
-      </div>
-    </div>
-  </section>
-
-{% endblock content %}
+{% endblock page_content %}

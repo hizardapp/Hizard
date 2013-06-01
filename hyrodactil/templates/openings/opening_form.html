@@ -1,4 +1,4 @@
-{% extends "new_base.html" %}
+{% extends "app_page.html" %}
 
 {% load staticfiles %}
 {% load i18n %}
@@ -14,90 +14,83 @@
 {% endblock title %}
 
 
-{% block content %}
+{% block page_content %}
 
-  <section class="wrapper">
-    <div class="row">
-      <div class="large-12 columns container">
+  {% if opening %}
+    <h2>{{ opening.title }} <small>{% trans 'edit opening' %}</small></h2>
+  {% else %}
+    <h2>{% trans 'Add an opening' %}</h2>
+  {% endif %}
 
-        {% if opening %}
-          <h2>{{ opening.title }} <small>{% trans 'edit opening' %}</small></h2>
-        {% else %}
-          <h2>{% trans 'Add an opening' %}</h2>
-        {% endif %}
+  <form action="." method="POST">
+    {% csrf_token %}
 
-        <form action="." method="POST">
-          {% csrf_token %}
+    {% if form.non_field_errors %}
+      <small class="error">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </small>
+    {% endif %}
 
-          {% if form.non_field_errors %}
-            <small class="error">
-              {% for error in form.non_field_errors %}
-                {{ error }}
-              {% endfor %}
-            </small>
-          {% endif %}
+    {% for field in form.hidden_fields %}
+      {{ field }}
+    {% endfor %}
+    {% include 'openings/_opening_form_field.html' with field=form.title %}
+    <br>
+    {% include 'openings/_opening_form_field.html' with field=form.description %}
 
-          {% for field in form.hidden_fields %}
-            {{ field }}
-          {% endfor %}
-          {% include 'openings/_opening_form_field.html' with field=form.title %}
-          <br>
-          {% include 'openings/_opening_form_field.html' with field=form.description %}
+    {% include 'openings/_opening_form_field.html' with field=form.employment_type %}
+    <br>
+    {% include 'openings/_opening_form_field.html' with field=form.is_private %}
+    <br>
+    {% include 'openings/_opening_form_field.html' with field=form.department %}
+    <br>
+    {% include 'openings/_opening_form_field.html' with field=form.country %}
+    <br>
+    {% include 'openings/_opening_form_field.html' with field=form.city %}
+    <br>
+    {% include 'openings/_opening_form_field.html' with field=form.loc_postcode %}
 
-          {% include 'openings/_opening_form_field.html' with field=form.employment_type %}
-          <br>
-          {% include 'openings/_opening_form_field.html' with field=form.is_private %}
-          <br>
-          {% include 'openings/_opening_form_field.html' with field=form.department %}
-          <br>
-          {% include 'openings/_opening_form_field.html' with field=form.country %}
-          <br>
-          {% include 'openings/_opening_form_field.html' with field=form.city %}
-          <br>
-          {% include 'openings/_opening_form_field.html' with field=form.loc_postcode %}
-
-          <div>
-            <table class="included-questions">
-              <thead>
-              <tr>
-                <th class="select">{% trans 'Select' %}</th>
-                <th class="name"></th>
-                <th class="required">{% trans 'Required ?' %}</th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for question_form in form.opening_questions %}
-                <tr>
-                  <td>
-                    {{ question_form.included }}
-                  </td>
-                  <td><label for="{{ question_form.included.auto_id }}">{{ question_form.question }}</label></td>
-                  <td>
-                    {{ question_form.required }}
-                  </td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-          <div class="text-right submit-opening">
-
-            {% if opening %}
-              <input type="submit" class="button-positive" value="{% trans 'Save changes' %}" />
-            {% else %}
-              <input type="submit" class="button-positive" value="{% trans 'Create this opening' %}" />
-            {% endif %}
-
-          </div>
-        </form>
-
-
-      </div>
+    <div>
+      <table class="included-questions">
+        <thead>
+        <tr>
+          <th class="select">{% trans 'Select' %}</th>
+          <th class="name"></th>
+          <th class="required">{% trans 'Required ?' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for question_form in form.opening_questions %}
+          <tr>
+            <td>
+              {{ question_form.included }}
+            </td>
+            <td><label for="{{ question_form.included.auto_id }}">{{ question_form.question }}</label></td>
+            <td>
+              {{ question_form.required }}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
     </div>
-  </section>
 
-{% endblock content %}
+    <div class="text-right submit-opening">
+
+      {% if opening %}
+        <input type="submit" class="button-positive" value="{% trans 'Save changes' %}" />
+      {% else %}
+        <input type="submit" class="button-positive" value="{% trans 'Create this opening' %}" />
+      {% endif %}
+
+    </div>
+  </form>
+
+
+
+{% endblock page_content %}
 
 {% block extrahead %}
   <link rel="stylesheet" href="{% static "css/select2.css" %}" />
@@ -158,4 +151,4 @@
       });
     });
   </script>
-{% endblock %}
+{% endblock page_content %}
