@@ -41,6 +41,7 @@ class CompanySettingsFormsTests(TestCase):
 
     def test_company_information_valid(self):
         form_data = {
+            'name': 'Google Inc',
             'website': 'www.google.com',
             'description': 'We do some cool stuff'
         }
@@ -49,6 +50,7 @@ class CompanySettingsFormsTests(TestCase):
 
     def test_company_information_invalid(self):
         form_data = {
+            'name': 'Google Inc',
             'website': 'www.goog',
             'description': 'We do some cool stuff'
         }

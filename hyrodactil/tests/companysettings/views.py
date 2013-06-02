@@ -457,11 +457,13 @@ class CompanySettingsViewsTests(WebTest):
         form = page.forms['action-form']
         form['website'] = 'www.google.com'
         form['description'] = 'Cool stuff.'
+        form['name'] = 'Google Incorporated'
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
         company = Company.objects.get(id=1)
 
+        self.assertEqual(company.name, 'Google Incorporated')
         self.assertEqual(company.website, 'http://www.google.com/')
         self.assertEqual(company.description, 'Cool stuff.')
 

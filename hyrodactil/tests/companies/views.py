@@ -46,6 +46,8 @@ class CompaniesViewsTests(WebTest):
         form = page.forms[0]
         form['name'] = 'ACME'
         form['subdomain'] = 'acmememe'
+        form['website'] = 'acmememe.com'
+        form['description'] = 'Tidadou'
         response = form.submit()
         self.assertTrue(reverse("dashboard:dashboard") in response["Location"])
         self.assertEqual(response.status_code, 302)

@@ -54,4 +54,4 @@ class CustomUserInviteForm(forms.ModelForm):
 class CompanyInformationForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ('website', 'description',)
+        fields = ('name', 'website', 'description')
