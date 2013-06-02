@@ -24,7 +24,7 @@ urlpatterns = patterns('',
         name='toggle_status'
     ),
     url(
-        r'^change_details/$',
+        r'^details/$',
         views.ChangeDetailsView.as_view(),
         name='change_details'
     )
