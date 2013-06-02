@@ -18,6 +18,11 @@ class Applicant(TimeStampedModel):
         help_text=_('PDF files only')
     )
 
+    ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx']
+    ALLOWED_CONTENT_TYPES = ['application/pdf',
+        'application/msword',
+        'application/vnd.oasis.opendocument.text']
+
     def get_full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
 

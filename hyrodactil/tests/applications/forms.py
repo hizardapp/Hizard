@@ -63,6 +63,18 @@ class ApplicationFormTests(TestCase):
 
         self.assertTrue(form.is_valid())
 
+    def test_should_be_valid_if_resume_is_doc_docx(self):
+        opening = OpeningFactory()
+        files = {'resume': self._get_temporary_file(
+          type='application/msword', extension='.DOC')}
+        form = ApplicationForm(self.form_data, files, opening=opening)
+        self.assertTrue(form.is_valid())
+
+        files = {'resume': self._get_temporary_file(
+          type='application/vnd.oasis.opendocument.text', extension='.dOcX')}
+        form = ApplicationForm(self.form_data, files, opening=opening)
+        self.assertTrue(form.is_valid())
+
     def test_should_not_be_valid_if_resume_not_pdf(self):
         opening = OpeningFactory()
 

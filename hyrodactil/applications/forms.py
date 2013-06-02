@@ -51,14 +51,13 @@ class ApplicationForm(forms.ModelForm):
         '''
         resume = self.cleaned_data['resume']
 
+
         if resume:
-            if not resume.name.endswith('.pdf'):
+            if not any(resume.name.lower().endswith(extension)
+                    for extension in Applicant.ALLOWED_EXTENSIONS):
                 raise forms.ValidationError(_('File type is not supported'))
 
-            # mime type of a pdf is application/pdf
-            filetype = resume.content_type.split('/')
-
-            if len(filetype) > 1 and filetype[1] != 'pdf':
+            if resume.content_type not in Applicant.ALLOWED_CONTENT_TYPES:
                 raise forms.ValidationError(_('File type is not supported'))
 
         return resume
