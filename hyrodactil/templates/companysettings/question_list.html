@@ -86,6 +86,15 @@
 
       var $alert;
 
+      $nameInput.keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode === 13){
+          $saveButton.click();
+        }
+        event.preventDefault();
+        event.stopPropagation();
+      });
+
       $nameInput.focus(function() {
         $nameInput.removeClass('error');
         $nameInput.next('small').remove();

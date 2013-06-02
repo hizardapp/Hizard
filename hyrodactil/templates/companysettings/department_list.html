@@ -74,6 +74,15 @@
       var $id = $('.form-id');
       var $saveButton = $('.save');
 
+      $nameInput.keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode === 13){
+          $saveButton.click();
+        }
+        event.preventDefault();
+        event.stopPropagation();
+      });
+
       var $alert;
 
       $nameInput.focus(function() {
