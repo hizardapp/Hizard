@@ -5,7 +5,7 @@
     {{ field }}
 
     {% if field.errors %}
-      <small class="rounded-error">
+      <small class="error">
         {% for error in field.errors %}
           {{ error }}
         {% endfor %}

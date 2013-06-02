@@ -1,9 +1,23 @@
 
+@import "../common/colours";
+
 form {
-  .field  {
-    margin-bottom: 10px !important;
-    input, textarea, select {
-      margin-bottom: 0 !important;
-    }
+
+  label {
+    color: black;
   }
+
+  .help-text {
+    background: white;
+    color: black;
+    font-size: .9em;
+  }
+  .error input {
+    border-color: $alert-error-background;
+  }
+  small.error {
+    background-color: $alert-error-background;
+    padding: 5px;
+  }
+
 }
