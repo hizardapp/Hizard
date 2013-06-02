@@ -1,7 +1,11 @@
 from django.test import TestCase
 
+from openings.models import Opening
+
 from ..factories._companies import CompanyFactory
 from ..factories._companysettings import InterviewStageFactory
+from ..factories._companysettings import DepartmentFactory
+from ..factories._openings import OpeningFactory
 
 
 class InterviewStageModelTests(TestCase):
@@ -37,3 +41,11 @@ class InterviewStageModelTests(TestCase):
         self.stage1.swap_position(self.stage2)
         self.assertEqual(self.stage1.position, 2)
         self.assertEqual(self.stage2.position, 1)
+
+class ModelTests(TestCase):
+    def test_department_deletion_keeps_opening(self):
+        sales = DepartmentFactory(name="Sales")
+        opening = OpeningFactory(department=sales)
+        sales.delete()
+        opening = Opening.objects.get()
+        self.assertFalse(opening.department)

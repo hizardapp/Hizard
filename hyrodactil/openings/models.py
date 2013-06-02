@@ -21,7 +21,8 @@ class Opening(TimeStampedModel):
     title = models.CharField(max_length=770)
     description = models.TextField()
     is_private = models.BooleanField(default=False)
-    department = models.ForeignKey(Department, blank=True, null=True)
+    department = models.ForeignKey(Department, blank=True, null=True,
+            on_delete=models.SET_NULL)
     closing_date = models.DateTimeField(blank=True, null=True)
     country = CountryField(_("Country"), blank=True)
     city = models.CharField(_("City"), max_length=128, blank=True)
