@@ -2,7 +2,6 @@ import os
 import uuid
 
 from django import forms
-from django.forms.widgets import CheckboxSelectMultiple
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
@@ -147,27 +146,6 @@ class ApplicationForm(forms.ModelForm):
                     application_answer.save()
 
         return applicant
-
-
-class ApplicationFilterForm(forms.Form):
-    stages = forms.MultipleChoiceField(
-        required=False,
-        widget=CheckboxSelectMultiple
-    )
-    openings = forms.MultipleChoiceField(
-        required=False,
-        widget=CheckboxSelectMultiple
-    )
-
-    def __init__(self, company, *args, **kwargs):
-        super(ApplicationFilterForm, self).__init__(*args, **kwargs)
-        self.fields['stages'].choices = [
-            (str(o.pk), o.name) for o in company.interviewstage_set.all()
-        ]
-
-        self.fields['openings'].choices = [
-            (str(o.pk), o.title) for o in company.opening_set.all()
-        ]
 
 
 class ApplicationStageTransitionForm(forms.ModelForm):

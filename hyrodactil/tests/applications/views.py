@@ -34,43 +34,6 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(response, application.applicant.first_name)
         self.assertContains(response, application.applicant.last_name)
 
-    def test_filter_applicants(self):
-        phoned = InterviewStageFactory.create(
-            company=self.user.company,
-            name="phoned"
-        )
-        hired = InterviewStageFactory.create(
-            company=self.user.company,
-            name="hired"
-        )
-        opening2 = OpeningWithQuestionsFactory(company=self.user.company)
-        application = ApplicationFactory.create(
-            opening=self.opening,
-            current_stage=phoned
-        )
-        url = reverse('applications:list_applications')
-
-        response = self.app.get(url, dict(stages=[phoned.pk]), user=self.user)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.applicant.first_name)
-
-        response = self.app.get(url, dict(
-            stages=[phoned.pk],
-            opening=self.opening.pk
-        ), user=self.user)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, application.applicant.first_name)
-
-        response = self.app.get(url, dict(stages=[hired.pk]), user=self.user)
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, application.applicant.first_name)
-
-        response = self.app.get(
-            url, dict(openings=[opening2.pk]), user=self.user
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, application.applicant.first_name)
-
     def test_get_applicant_details(self):
         application = ApplicationFactory.create(opening=self.opening)
         ApplicationAnswerFactory.create(

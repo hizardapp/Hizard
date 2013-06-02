@@ -12,7 +12,7 @@ from braces.views import (
 )
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
-from .forms import ApplicationForm, ApplicationFilterForm
+from .forms import ApplicationForm
 from .models import (
     Application, ApplicationAnswer, ApplicationMessage,
     ApplicationStageTransition, Applicant
@@ -23,32 +23,6 @@ from core.views import MessageMixin, RestrictedListView
 from openings.models import Opening
 
 
-class ApplicationFilterMixin(object):
-
-    def get(self, *args, **kwargs):
-        self.filter_form = ApplicationFilterForm(
-            company=self.request.user.company)
-        if self.request.GET:
-            self.filter_form = ApplicationFilterForm(
-                company=self.request.user.company, data=self.request.GET)
-
-        return super(ApplicationFilterMixin, self).get(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        kwargs['filter_form'] = self.filter_form
-        return super(ApplicationFilterMixin, self).get_context_data(**kwargs)
-
-    def filter_queryset(self, qs):
-        if self.filter_form.is_valid():
-            cleaned_data = self.filter_form.cleaned_data
-            if cleaned_data:
-                if cleaned_data['stages']:
-                    qs = qs.filter(current_stage__in=cleaned_data['stages'])
-                if cleaned_data['openings']:
-                    qs = qs.filter(opening__in=cleaned_data['openings'])
-        return qs
-
-
 class ApplicationListView(LoginRequiredMixin, RestrictedListView):
     model = Application
 
@@ -57,6 +31,16 @@ class ApplicationListView(LoginRequiredMixin, RestrictedListView):
         context['stages'] = InterviewStage.objects.filter(
             company=self.request.user.company
         )
+
+        opening_id = self.kwargs.get('pk', None)
+
+        if opening_id:
+            opening = get_object_or_404(Opening, id=opening_id)
+            context['application_list'] = context['application_list'].filter(
+                opening=opening
+            )
+            context['opening'] = opening
+
         return context
 
     def get_queryset(self):

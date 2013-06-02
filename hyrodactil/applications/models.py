@@ -73,9 +73,11 @@ class Application(TimeStampedModel):
 
         return total_rating / count_rating
 
-
     class Meta:
         ordering = 'position',
+
+    def __unicode__(self):
+        return self.applicant.get_full_name()
 
 
 class ApplicationStageTransition(TimeStampedModel):
