@@ -33,10 +33,10 @@
           <td class="id" style="display: none;">{{ question.id }}</td>
           <td class="large-5 columns name">{{ question.name }}</td>
           <td class="large-5 columns type_field">{{ question.get_type_field_display }}</td>
-          <td class="large-1 columns text-right">
+          <td class="large-1 columns">
             <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
           </td>
-          <td class="large-1 columns text-right">
+          <td class="large-1 columns">
             <a href="{% url 'companysettings:delete_question' question.pk %}"><i class="icon-trash icon-2x"></i></a>
           </td>
         </tr>
@@ -136,6 +136,7 @@
         var itemId = $(this).closest('tr').find('.id').text();
         var itemValues = questionTable.get('id', itemId).values();
         $nameInput.val(itemValues.name);
+        $nameInput.focus();
         $typeSelect.val(itemValues.type);
         $id.val(itemValues.id);
       });

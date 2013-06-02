@@ -28,15 +28,13 @@ class CompanySettingsFormsTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_stage_form_valid(self):
-        company = CompanyFactory()
         form_data = {'name': 'Phone interview'}
-        form = InterviewStageForm(data=form_data, **{'company': company})
+        form = InterviewStageForm(data=form_data)
         self.assertTrue(form.is_valid())
 
     def test_stage_form_invalid(self):
-        company = CompanyFactory()
         form_data = {'name': ''}
-        form = InterviewStageForm(data=form_data, **{'company': company})
+        form = InterviewStageForm(data=form_data)
         self.assertFalse(form.is_valid())
 
     def test_company_information_valid(self):

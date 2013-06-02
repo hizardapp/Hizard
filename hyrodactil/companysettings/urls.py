@@ -41,13 +41,8 @@ urlpatterns = patterns('',
     ),
     url(
         r'^stage/$',
-        views.InterviewStageCreateView.as_view(),
-        name='create_stage'
-    ),
-    url(
-        r'^stage/(?P<pk>\d+)/$',
-        views.InterviewStageUpdateView.as_view(),
-        name='update_stage'
+        views.InterviewStageCreateUpdateView.as_view(),
+        name='ajax_stage'
     ),
     url(
         r'^stage/(?P<pk>\d+)/delete/$',

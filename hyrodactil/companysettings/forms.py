@@ -22,10 +22,6 @@ class InterviewStageForm(forms.ModelForm):
         model = InterviewStage
         fields = ('name',)
 
-    def __init__(self, *args, **kwargs):
-        self.company = kwargs.pop('company')
-        super(InterviewStageForm, self).__init__(*args, **kwargs)
-
 
 class CustomUserInviteForm(forms.ModelForm):
     class Meta:

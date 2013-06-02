@@ -157,36 +157,12 @@ class InterviewStageListView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class InterviewStageCreateView(LoginRequiredMixin, MessageMixin, CreateView):
+class InterviewStageCreateUpdateView(CreateUpdateAjaxView):
     model = InterviewStage
-    form_class = InterviewStageForm
-    success_url = reverse_lazy('companysettings:list_stages')
-    success_message = _('Stage created.')
-
-    def get_form_kwargs(self):
-        kwargs = super(InterviewStageCreateView, self).get_form_kwargs()
-        kwargs.update({'company': self.request.user.company})
-        return kwargs
-
-    def form_valid(self, form):
-        stage = form.save(commit=False)
-        stage.company = self.request.user.company
-        stage.save()
-        return super(InterviewStageCreateView, self).form_valid(form)
-
-
-class InterviewStageUpdateView(
-    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
-):
-    model = InterviewStage
-    form_class = InterviewStageForm
-    success_url = reverse_lazy('companysettings:list_stages')
-    success_message = _('Stage updated.')
-
-    def get_form_kwargs(self):
-        kwargs = super(InterviewStageUpdateView, self).get_form_kwargs()
-        kwargs.update({'company': self.request.user.company})
-        return kwargs
+    form = InterviewStageForm
+    message_success = _('Stage saved.')
+    message_errors = _('Please correct the errors below.')
+    message_not_exist = _('The stage does not exist.')
 
 
 class InterviewStageDeleteView(LoginRequiredMixin, QuickDeleteView):

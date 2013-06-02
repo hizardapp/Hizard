@@ -218,63 +218,83 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertContains(page, stage.name)
 
-    def test_create_stage_valid(self):
-        url = reverse('companysettings:create_stage')
+    def test_ajax_create_stage_valid(self):
+        url = reverse('companysettings:ajax_stage')
+        data = {'name': 'Cooking'}
 
-        page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
-        form['name'] = 'Phone interview'
-        response = form.submit().follow()
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'success')
+        self.assertEqual(result['id'], 1)
+        self.assertTrue(InterviewStage.objects.filter(name='Cooking').exists())
 
-        self.assertEqual(response.status_code, 200)
-        stage_created = InterviewStage.objects.get()
+    def test_ajax_create_stage_invalid(self):
+        url = reverse('companysettings:ajax_stage')
+        data = {'name': ''}
 
-        self.assertEqual(stage_created.company, self.user.company)
-        self.assertEqual(stage_created.name, 'Phone interview')
-        self.assertEqual(stage_created.position, 1)
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(
+            result['errors'], {'name': ['This field is required.']}
+        )
+        self.assertFalse(InterviewStage.objects.filter(name='Cooking').exists())
 
-    def test_create_stage_invalid(self):
-        url = reverse('companysettings:create_stage')
+    def test_ajax_update_stage_valid(self):
+        url = reverse('companysettings:ajax_stage')
+        stage = InterviewStageFactory()
+        data = {'id': stage.id,'name': 'Cooking'}
 
-        page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
-        form['name'] = ''
-        response = form.submit()
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'success')
+        self.assertTrue(InterviewStage.objects.filter(name='Cooking').exists())
 
-        self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'name', self.required)
+    def test_ajax_update_stage_invalid(self):
+        url = reverse('companysettings:ajax_stage')
+        stage = InterviewStageFactory()
+        data = {'id': stage.id, 'name': ''}
 
-    def test_update_stage_valid(self):
-        stage = InterviewStageFactory(name='Phone', company=self.user.company)
-        url = reverse('companysettings:update_stage', args=(stage.id,))
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(
+            result['errors'], {'name': ['This field is required.']}
+        )
+        self.assertFalse(InterviewStage.objects.filter(name='Cooking').exists())
 
-        page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
-        form['name'] = 'Coding'
+    def test_ajax_update_stage_inexisting(self):
+        url = reverse('companysettings:ajax_stage')
+        data = {'id': 42, 'name': ''}
 
-        self.assertContains(page, stage.name)
-
-        response = form.submit().follow()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Coding')
-        self.assertNotContains(response, stage.name)
-
-    def test_update_stage_invalid(self):
-        stage = InterviewStageFactory(name='Phone', company=self.user.company)
-        url = reverse('companysettings:update_stage', args=(stage.id,))
-
-        page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
-        form['name'] = ''
-
-        self.assertContains(page, stage.name)
-
-        response = form.submit()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'name', self.required)
-
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'error')
+        self.assertFalse(InterviewStage.objects.filter(name='Cooking').exists())
+        
     def test_delete_stage(self):
         InterviewStageFactory(company=self.user.company)
         stage = InterviewStageFactory(

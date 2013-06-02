@@ -31,10 +31,10 @@
           <tr class="row">
             <td class="id" style="display: none;">{{ department.id }}</td>
             <td class="large-10 columns name">{{ department.name }}</td>
-            <td class="large-1 columns text-right">
+            <td class="large-1 columns">
               <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
             </td>
-            <td class="large-1 columns text-right">
+            <td class="large-1 columns">
               <a href="{% url 'companysettings:delete_department' department.pk %}"><i class="icon-trash icon-2x"></i></a>
             </td>
           </tr>
@@ -124,6 +124,7 @@
         var itemId = $(this).closest('tr').find('.id').text();
         var itemValues = deptTable.get('id', itemId).values();
         $nameInput.val(itemValues.name);
+        $nameInput.focus();
         $id.val(itemValues.id);
       });
 

@@ -1,46 +1,183 @@
-{% extends "base_app.html" %}
+{% extends "app_page.html" %}
 
 {% load i18n %}
+{% load staticfiles %}
+
+{% block title %}
+  {% trans 'Stages' %}
+{% endblock title %}
 
 
-{% block content %}
-  <h2 class="page-header">{% trans "Stages" %}</h2>
+{% block page-content %}
+  <h2>
+    {% trans "Stages" %}
+    <small>{% trans 'modify your recruitement workflow' %}</small>
+  </h2>
 
-  <div class="large-8 columns stages">
+  <div id="table-stages">
 
-    {% for stage in stages %}
+    <table>
+      <thead>
+      <tr class="row">
+        <th class="large-2 columns" colspan="2"></th>
+        <th class="large-8 columns">{% trans "Name" %}</th>
+        <th class="large-2 columns" colspan="2"></th>
+      </tr>
+      </thead>
 
-      <div class="row stage text-center">
+      <tbody class="list">
+        {% for stage in stages %}
+          <tr class="row">
+            <td class="large-1 columns">
+              <a href="#" class="edit">
+                {% if not forloop.last %}
+                  <a href="{% url "companysettings:reorder_stage" stage.id "down" %}">
+                    <i class="icon-arrow-down icon-2x"></i>
+                  </a>
+                {% endif %}
+              </a>
+            </td>
+            <td class="large-1 columns">
+              <a href="#">
+                {% if not forloop.first %}
+                  <a href="{% url "companysettings:reorder_stage" stage.id "up" %}">
+                    <i class="icon-arrow-up icon-2x"></i>
+                  </a>
+                {% endif %}
+              </a>
+            </td>
+            <td class="id" style="display: none;">{{ stage.id }}</td>
+            <td class="large-8 columns name">{{ stage.name }}</td>
+            <td class="large-1 columns">
+              <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
+            </td>
+            <td class="large-1 columns">
+              <a href="{% url "companysettings:delete_stage" stage.id %}"><i class="icon-trash icon-2x"></i></a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-        <div class="large-1 column">
-          {% if not forloop.last %}
-            <a href="{% url 'companysettings:reorder_stage' stage.id 'down' %}">
-              <i class="icon-arrow-down icon-large pointer links"></i>
-            </a>
-          {% endif %}
-         </div>
-
-        <span class="large-10 columns {% if forloop.last %} large-offset-1{% endif %}">
-          <a href="{% url 'companysettings:update_stage' stage.id %}">{{ stage.name }}</a>
-          <a href="{% url 'companysettings:delete_stage' stage.id %}"><i class="icon-trash pointer links"></i></a>
-        </span>
-
-        <div class="large-1 column">
-          {% if not forloop.first %}
-            <a href="{% url 'companysettings:reorder_stage' stage.id 'up' %}">
-              <i class="icon-arrow-up icon-large pointer links"></i>
-            </a>
-          {% endif %}
+    <form action="." method="POST">
+      <div class="row">
+        <div class="large-8 columns push-2">
+          <input type="hidden" class="form-id" />
+          <input type="text" class="form-name" placeholder="{% trans 'Name' %}" />
         </div>
-
+        <div class="large-2 columns">
+          <a class="button-positive save" href="#">{% trans 'Save' %}</a>
+        </div>
       </div>
-
-    {% endfor %}
+    </form>
 
   </div>
 
-  <div class="large-4 columns">
-    <a href="{% url 'companysettings:create_stage' %}" class="button-positive">{% trans "Create a stage" %}</a>
-  </div>
+{% endblock page-content %}
 
-{% endblock content %}
+{% block extra-js %}
+  <script src="{% static "js/vendor/list.min.js" %}"></script>
+  <script src="{% static "js/csrf.js" %}"></script>
+  <script>
+    $(document).ready(function() {
+      var options = {
+        valueNames: ['id', 'name']
+      };
+
+      var upURL = '{% url "companysettings:reorder_stage" 0 "up" %}';
+      var downURL = '{% url "companysettings:reorder_stage" 0 "down" %}';
+
+      var stageTable = new List('table-stages', options);
+
+      var $nameInput = $('.form-name');
+      var $id = $('.form-id');
+      var $saveButton = $('.save');
+
+      var $alert;
+
+      $nameInput.focus(function() {
+        $nameInput.removeClass('error');
+        $nameInput.next('small').remove();
+      });
+
+      $saveButton.click(function() {
+        var newStage = {
+          'name': $nameInput.val()
+        };
+
+        var isUpdate = false;
+        if ($id.val().length > 0) {
+          newStage.id = $id.val();
+          isUpdate = true;
+        }
+
+        $.post("{% url 'companysettings:ajax_stage' %}", newStage, function(data) {
+          if (data.result === 'error') {
+            $nameInput.addClass('error');
+            var $error = $('<small>').addClass('error');
+            for (var error in data.errors) {
+              $error.text(data.errors[error]);
+            }
+            $nameInput.after($error);
+            if (isUpdate) {
+              var item = stageTable.get('id', newStage.id).values();
+              $nameInput.val(item.name);
+            }
+          } else {
+            $nameInput.val('');
+            $id.val('');
+            newStage.id = data.id;
+            if (isUpdate) {
+              var item = stageTable.get('id', data.id);
+              item.values(newStage);
+            } else {
+              stageTable.add(newStage);
+              changeArrows(newStage);
+            }
+          }
+          if ($alert) {
+            $alert.remove();
+          }
+          displayMessage(data.result, data.message);
+        });
+      });
+
+      $('body').on('click', '.edit', function(e) {
+        var itemId = $(this).closest('tr').find('.id').text();
+        var itemValues = stageTable.get('id', itemId).values();
+        $nameInput.val(itemValues.name);
+        $nameInput.focus();
+        $id.val(itemValues.id);
+      });
+
+      $('body').on('click', '.close', function() {
+        $(this).parent().remove();
+      });
+
+      function changeArrows(newObject) {
+        // Adding down arrow to the previous last one
+        var $last = $('#table-stages tr:nth-last-child(2)');
+        var itemId = $(this).find('.id').text();
+        var url = downURL.replace(0, itemId);
+
+        $last.find('td:first').html('<a href="'+ url +'"}"><i class="icon-arrow-down icon-2x"></i></a>');
+
+        // Swapping arrows for the newly created one
+        var $new = $('#table-stages tr:last');
+        var itemId = $new.find('.id').text();
+        var url = upURL.replace(0, itemId);
+
+        $new.find('td:nth-child(2)').html('<a href="'+ url +'"}"><i class="icon-arrow-up icon-2x"></i></a>');
+        $new.find('td:first').html('');
+      }
+
+      function displayMessage(type, message) {
+        $alert = $('<div>');
+        $alert.addClass('alert-' + type);
+        $alert.data('alert', 'js');
+        $alert.html(message + '<a href="#" class="close">&times;</a>');
+        $alert.prependTo('.container');
+      }
+    });
+  </script>
+{% endblock extra-js %}
