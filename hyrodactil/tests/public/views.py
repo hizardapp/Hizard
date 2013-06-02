@@ -91,7 +91,6 @@ class ApplicationViewsTests(WebTest):
         form['resume'] = 'bilbon_cv.pdf', "My resume"
         form['q_single-line'] = 'Lalala'
         form['q_multi-line'] = 'Lalala'
-        form['q_file'] = 'mypicture.jpg', "me"
         response = form.submit().follow()
 
         self.assertEqual(
@@ -106,21 +105,9 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(applicant.resume.url, '/media/resumes/bilbon_cv.pdf')
         self.assertEqual(application.current_stage, stage1)
 
-        # 2 required, 2 not required, we still record the 4 though
-        self.assertEqual(ApplicationAnswer.objects.count(), 4)
+        # 2 required, 1 not required, we still record the 3 though
+        self.assertEqual(ApplicationAnswer.objects.count(), 3)
 
-        # Testing the file has been properly updated
-        company_dir = '%s/uploads/%d' % (
-            settings.MEDIA_ROOT,
-            self.opening.company.id
-        )
-        file_question = Question.objects.get(type_field='file')
-        filepath = ApplicationAnswer.objects.get(question=file_question).answer
-        path = '%s/%s' % (settings.MEDIA_ROOT, filepath)
-        self.assertTrue(os.path.exists(path))
-
-        # Remove the uploaded files only
-        shutil.rmtree(company_dir)
         # And the resume we just created
         os.unlink(applicant.resume.path)
 

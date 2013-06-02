@@ -137,17 +137,14 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         )
 
 
-class ManualApplicationView(LoginRequiredMixin, MessageMixin, CreateView):
+class ManualApplicationView(LoginRequiredMixin, MessageMixin, View):
     model = Applicant
-    form_class = ApplicationForm
+    #form_class = ApplicationForm
     template_name = 'applications/manual_application.html'
     success_message = _('Application manually added.')
 
     def get_form_kwargs(self):
         kwargs = super(ManualApplicationView, self).get_form_kwargs()
-        kwargs.update(
-            {'opening': get_object_or_404(Opening, id=self.kwargs['opening_id'])}
-        )
         return kwargs
 
     def form_valid(self, form):

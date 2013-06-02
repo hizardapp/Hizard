@@ -24,7 +24,7 @@ urlpatterns = patterns('',
         name='create_message'
     ),
     url(
-        r'^(?P<opening_id>\d+)/add_application/$',
+        r'^add/$',
         views.ManualApplicationView.as_view(),
         name='manual_application'
     )

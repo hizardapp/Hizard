@@ -164,9 +164,8 @@ class ApplicationViewsTests(WebTest):
 
     def test_create_manual_application(self):
         InterviewStageFactory(company=self.user.company)
-        url = reverse(
-            'applications:manual_application', args=(self.opening.id,)
-        )
+        url = reverse('applications:manual_application')
+        self.fail('Need to rewrite manual application from/view')
         page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['first_name'] = 'Bilbo'

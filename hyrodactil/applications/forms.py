@@ -36,8 +36,6 @@ class ApplicationForm(forms.ModelForm):
                     label=question.name, widget=forms.Textarea)
             elif question.type_field == 'checkbox':
                 self.fields[field_name] = forms.BooleanField(label=question.name)
-            elif question.type_field == 'file':
-                self.fields[field_name] = forms.FileField(label=question.name)
 
             self.fields[field_name].required = False
 

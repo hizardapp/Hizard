@@ -10,7 +10,15 @@
 
 {% block page-content %}
 
-  <h2>{{ opening.title }} <small>{% trans 'opening details' %}</small></h2>
+  <h2>
+    {{ opening.title }}
+    <small>{% trans 'opening details' %}</small>
+      <span class="actions">
+        <a href="{% url 'applications:manual_application' %}" class="button-positive right">
+          {% trans "Add a candidate" %}
+        </a>
+    </span>
+  </h2>
 
   <p>
     {{ opening.get_employment_type_display }}
