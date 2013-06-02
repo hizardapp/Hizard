@@ -35,7 +35,7 @@
       </ul>
 
       <section class="top-bar-section">
-        {% if request.user %}
+        {% if request.user.is_authenticated %}
           <ul class="right top-bar-right">
             <li><a href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'openings:list_openings' %}">Openings</a></li>
