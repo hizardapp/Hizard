@@ -474,7 +474,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_information')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['website'] = 'www.google.com'
         form['description'] = 'Cool stuff.'
         form['name'] = 'Google Incorporated'
@@ -491,7 +491,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:update_information')
 
         page = self.app.get(url, user=self.user)
-        form = page.forms['action-form']
+        form = page.forms[0]
         form['website'] = 'goog'
         form['description'] = 'Cool stuff.'
         response = form.submit()

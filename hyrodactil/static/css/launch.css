@@ -4011,6 +4011,15 @@ footer .social {
   font-size: .5em;
 }
 
+/* line 3, ../../pregen_static/sass/launch/_forms.scss */
+form .field {
+  margin-bottom: 10px !important;
+}
+/* line 5, ../../pregen_static/sass/launch/_forms.scss */
+form .field input, form .field textarea, form .field select {
+  margin-bottom: 0 !important;
+}
+
 /* line 2, ../../pregen_static/sass/launch/_tables.scss */
 table {
   width: 100%;
