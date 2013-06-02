@@ -1,0 +1,65 @@
+
+.transitions {
+  margin-top: 30px;
+
+  .transition {
+    border-bottom: 1px solid $silver;
+    padding: 10px;
+
+    .toggle-note {
+      cursor: pointer;
+      color: blue;
+    }
+
+
+    .transition-note {
+      padding: 30px;
+      display: none;
+    }
+
+  }
+
+  .last-transition {
+    margin-bottom: 20px !important;
+  }
+
+}
+
+.message {
+  margin-bottom: 20px;
+
+  img {
+    margin-right: 20px;
+    height: 50px;
+    width: 50px;
+  }
+
+  .message-content {
+    overflow: hidden;
+    margin-bottom: 10px;
+
+    .name {
+      font-size: .9em;
+    }
+
+    .time {
+      font-size: .8em;
+    }
+
+  }
+
+  form {
+    margin-top: 10px;
+  }
+
+}
+
+.message-level-1 {
+  margin-left: 20px;
+}
+.message-level-2 {
+  margin-left: 40px;
+}
+.message-level-3 {
+  margin-left: 60px;
+}

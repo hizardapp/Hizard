@@ -51,10 +51,4 @@ class OpeningWithQuestionsFactory(OpeningFactory):
                 required=True
             )
 
-            OpeningQuestionFactory(
-                opening=opening,
-                question=_companysettings.FileQuestionFactory(
-                    company=opening.company)
-            )
-
         return opening

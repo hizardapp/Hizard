@@ -18,6 +18,11 @@
       padding-bottom: 5px;
       border-bottom: 1px solid $silver;
       margin-bottom: 1em;
+      text-transform: capitalize;
+
+      small {
+        text-transform: lowercase;
+      }
 
       .actions a {
         font-size: .5em;
@@ -28,3 +33,7 @@
 
 }
 
+
+.clear {
+  clear: both;
+}

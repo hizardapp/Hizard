@@ -21,7 +21,6 @@ class Question(TimeStampedModel):
         ('textbox', _('Single line text')),
         ('textarea', _('Multi line text')),
         ('checkbox', _('Checkbox')),
-        ('file', _('File upload')),
     )
 
     name = models.CharField(max_length=200)

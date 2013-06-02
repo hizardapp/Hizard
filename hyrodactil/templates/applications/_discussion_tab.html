@@ -1,33 +1,41 @@
 {% load i18n %}
 
 <div>
-  <div class="twelve columns">
-    {% for level, message in discussion %}
-      {% ifchanged level %}
-
-        {% if not forloop.first %}
-           {% ifchanged level %}
-           </div>
-           {% endifchanged %}
-        {% endif %}
-
-        <div class="message-level-{{ level }} message-thread">
-      {% endifchanged %}
-
-        <div class="message">
-          <p>
-          <small>{{ message.user.first_name }} {{ message.user.last_name }} ({{ message.user.email }})  {{ message.created|date:"SHORT_DATETIME_FORMAT" }}<br/></small>
-            {{ message.body }} <br/>
-            <a href="#" id="" reply-to="{{ message.pk }}" class="reply-link">{% trans 'Reply' %}</a>
-          </p>
-        </div>
-
-      {% if forloop.last %}
-       </div>
+  {% for level, message in discussion %}
+    {% ifchanged level %}
+      {% if not forloop.first %}
+        {% ifchanged level %}
+          </div>
+        {% endifchanged %}
       {% endif %}
-    {% endfor %}
+
+      <div class="message-level-{{ level }} message-thread">
+    {% endifchanged %}
+
+  <div class="message">
+    {# only for test, users always have an avatar #}
+    {% if message.user.avatar %}
+      <img src="{{ message.user.avatar.url }}" alt="{{ message.user.name }}" class="left" />
+    {% endif %}
+    <div class="message-content">
+
+      <span class="name">{{ message.user.name }}</span>
+      —
+      <span class="time">{{ message.created|timesince }} {% trans 'ago' %}</span>
+      <p>
+        {{ message.body }}
+      </p>
+      <a href="#" data-reply-to="{{ message.pk }}" class="reply-link">{% trans 'Reply' %}</a>
+    </div>
+
   </div>
-<div>
+
+  {% if forloop.last %}
+    </div>
+  {% endif %}
+  {% endfor %}
+</div>
+
 
 <form action="{% url 'applications:create_message' application.id %}"
   method="POST"
@@ -39,7 +47,7 @@
 
   <div>
     <div class="form-actions end">
-      <div class="right">
+      <div>
         {{ new_message_form.parent }}
         <input type="submit" value="{% trans 'Save message' %}" class="button-positive" />
       </div>

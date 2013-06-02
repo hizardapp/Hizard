@@ -4005,10 +4005,20 @@ footer .social {
   padding-bottom: 5px;
   border-bottom: 1px solid #bdc3c7;
   margin-bottom: 1em;
+  text-transform: capitalize;
 }
-/* line 22, ../../pregen_static/sass/launch/_common.scss */
+/* line 23, ../../pregen_static/sass/launch/_common.scss */
+.wrapper .container h2 small {
+  text-transform: lowercase;
+}
+/* line 27, ../../pregen_static/sass/launch/_common.scss */
 .wrapper .container h2 .actions a {
   font-size: .5em;
+}
+
+/* line 37, ../../pregen_static/sass/launch/_common.scss */
+.clear {
+  clear: both;
 }
 
 /* line 3, ../../pregen_static/sass/launch/_forms.scss */
@@ -4061,6 +4071,73 @@ table td {
 /* line 20, ../../pregen_static/sass/launch/_openings.scss */
 .opening-detail-actions ul li:not(:last-child) a {
   word-wrap: break-word;
+}
+
+/* line 2, ../../pregen_static/sass/launch/_applications.scss */
+.transitions {
+  margin-top: 30px;
+}
+/* line 5, ../../pregen_static/sass/launch/_applications.scss */
+.transitions .transition {
+  border-bottom: 1px solid #bdc3c7;
+  padding: 10px;
+}
+/* line 9, ../../pregen_static/sass/launch/_applications.scss */
+.transitions .transition .toggle-note {
+  cursor: pointer;
+  color: blue;
+}
+/* line 15, ../../pregen_static/sass/launch/_applications.scss */
+.transitions .transition .transition-note {
+  padding: 30px;
+  display: none;
+}
+/* line 22, ../../pregen_static/sass/launch/_applications.scss */
+.transitions .last-transition {
+  margin-bottom: 20px !important;
+}
+
+/* line 28, ../../pregen_static/sass/launch/_applications.scss */
+.message {
+  margin-bottom: 20px;
+}
+/* line 31, ../../pregen_static/sass/launch/_applications.scss */
+.message img {
+  margin-right: 20px;
+  height: 50px;
+  width: 50px;
+}
+/* line 37, ../../pregen_static/sass/launch/_applications.scss */
+.message .message-content {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+/* line 41, ../../pregen_static/sass/launch/_applications.scss */
+.message .message-content .name {
+  font-size: .9em;
+}
+/* line 45, ../../pregen_static/sass/launch/_applications.scss */
+.message .message-content .time {
+  font-size: .8em;
+}
+/* line 51, ../../pregen_static/sass/launch/_applications.scss */
+.message form {
+  margin-top: 10px;
+}
+
+/* line 57, ../../pregen_static/sass/launch/_applications.scss */
+.message-level-1 {
+  margin-left: 20px;
+}
+
+/* line 60, ../../pregen_static/sass/launch/_applications.scss */
+.message-level-2 {
+  margin-left: 40px;
+}
+
+/* line 63, ../../pregen_static/sass/launch/_applications.scss */
+.message-level-3 {
+  margin-left: 60px;
 }
 
 /* line 7, ../../pregen_static/sass/common/_buttons.scss */

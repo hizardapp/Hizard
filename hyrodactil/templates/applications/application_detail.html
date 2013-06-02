@@ -1,29 +1,57 @@
-{% extends "base_app.html" %}
+{% extends "app_page.html" %}
 
 {% load i18n %}
 
-{% block content %}
-  <header class="applicant">
-    <h1>{{ application.applicant.first_name }} {{ application.applicant.last_name }}</h1>
-  </header>
+{% block title %}
+  {{ application.applicant.first_name }} {{ application.applicant.last_name }}
+{% endblock title %}
 
-  <br><br>
+{% block page-content %}
+
+  <h2>
+    {{ application.applicant.first_name }} {{ application.applicant.last_name }}
+    <small>{% trans 'applicant details' %}</small>
+  </h2>
+
+  <p>
+    <i class="icon-envelope"></i> {{ application.applicant.email }}
+    <br>
+    <i class="icon-briefcase"></i> <a href="{% url 'openings:detail_opening' application.opening.id %}">{{ application.opening.title }}</a>
+  </p>
+
+  <div class="transitions">
+    <a href="#" data-reveal-id="transition-form-modal" class="button-positive">
+      {% trans 'Change the stage of this application' %}
+    </a>
+
+    {% for transition in application.stage_transitions.all %}
+      <div class="row transition {% if forloop.last %}last-transition{% endif %}">
+        <div class="large-2 columns">
+          {{ transition.created|date:"DATE_FORMAT" }}
+        </div>
+        <div class="large-3 columns">
+          {{ transition.stage }}
+        </div>
+        <div class="large-4 columns">
+            {{ transition.user.name }}
+        </div>
+        {% if transition.note %}
+        <div class="large-3 columns toggle-note">
+          {% trans 'See note' %}
+        </div>
+        {% else %}
+          <div class="large-3 columns">
+          </div>
+        {% endif %}
+
+        <div class="transition-note">
+          {{ transition.note|linebreaks }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 
   <div class="section-container tabs" data-section="" data-options="deep_linking: true">
-
-    <section class="section">
-      <p class="title"><a href="#dashboard">{% trans 'Dashboard' %}</a></p>
-      <div class="content" data-slug="dashboard">
-        {% include 'applications/_dashboard_tab.html' with form=form application=application %}
-      </div>
-    </section>
-
-    <section class="section">
-      <p class="title"><a href="#profile">{% trans 'Profile' %}</a></p>
-      <div class="content" data-slug="profile">
-        {% include 'applications/_profile_tab.html' with application=application %}
-      </div>
-    </section>
 
     <section class="section">
       <p class="title"><a href="#resume">{% trans 'Resume' %}</a></p>
@@ -32,9 +60,18 @@
       </div>
     </section>
 
+    {% if answers %}
+      <section class="section">
+        <p class="title"><a href="#questions">{% trans 'Additional Questions' %}</a></p>
+        <div class="content" data-slug="questions">
+          {% include 'applications/_questions_tab.html' with application=application %}
+        </div>
+      </section>
+    {% endif %}
+
     <section class="section">
-      <p class="title"><a href="#notes">{% trans 'Discussion' %}</a></p>
-      <div class="content" data-slug="notes">
+      <p class="title"><a href="#discussion">{% trans 'Discussion' %}</a></p>
+      <div class="content" data-slug="discussion">
         {% include 'applications/_discussion_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
       </div>
     </section>
@@ -42,7 +79,7 @@
 
   <div id="transition-form-modal" class="reveal-modal">
     <h3>{% trans 'Current stage' %} : {{ application.current_stage }}</h3>
-    <form action="#transition-form" method="POST" id="transition-form">
+    <form action="." method="POST" id="transition-form">
       {% csrf_token %}
 
       {% if form.errors %}
@@ -74,18 +111,23 @@
     </form>
     <a class="close-reveal-modal">&#215;</a>
   </div>
-{% endblock %}
+{% endblock page-content %}
 
 {% block extra-js %}
   <script type="text/javascript">
+
+   $('.toggle-note').click(function() {
+      $(this).next('.transition-note').toggle();
+   });
+
     $("a.reply-link").click(function (event) {
         event.preventDefault();
-        var new_form = $("#new-message-form").clone(),
+
+        var newForm = $("#new-message-form").clone(),
             link = $(this),
-            small_parent = $(link.parents("p")[0]),
-            parent_message = link.attr("reply-to");
-        small_parent.after(new_form);
-        new_form.find("#id_parent").val(parent_message);
+            parentMessage = link.data("reply-to");
+        link.after(newForm);
+      newForm.find("#id_parent").val(parentMessage);
     });
 
     $("textarea#id_note").on("keydown", function () {

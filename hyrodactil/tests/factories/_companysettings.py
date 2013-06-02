@@ -38,15 +38,6 @@ class CheckboxQuestionFactory(factory.DjangoModelFactory):
     company = factory.SubFactory(_companies.CompanyFactory)
 
 
-class FileQuestionFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Question
-
-    name = 'File'
-    type_field = 'file'
-
-    company = factory.SubFactory(_companies.CompanyFactory)
-
-
 class InterviewStageFactory(factory.DjangoModelFactory):
     FACTORY_FOR = InterviewStage
 
