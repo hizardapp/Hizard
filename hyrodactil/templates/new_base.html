@@ -49,19 +49,15 @@
               </ul>
             </li>
             <li class="has-dropdown"><a href="#contact">
-                {% if user.first_name or user.last_name %}
-                  {{ user.first_name }} {{ user.last_name }}
-                {% else %}
-                  {{ user.email }}
-                {% endif %}
+                {{ user.name }}
             </a>
               <ul class="dropdown">
                 {% if user.avatar %}
-                <li>
-                  <a href="{% url 'accounts:change_details' %}">
-                    <img width="40" height="40" src="{{ user.avatar.url }}"/>
-                  </a>
-                </li>
+                  <li>
+                    <a href="{% url 'accounts:change_details' %}">
+                      <img width="40" height="40" src="{{ user.avatar.url }}"/>
+                    </a>
+                  </li>
                 {% endif %}
                 <li><a href="{% url 'accounts:change_details' %}">{% trans 'Account Settings' %}</a></li>
                 <li><a href="{% url 'auth:logout' %}">{% trans 'Log Out' %}</a></li>
