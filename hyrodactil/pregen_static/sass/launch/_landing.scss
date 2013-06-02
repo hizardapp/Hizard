@@ -2,12 +2,12 @@
 .hero {
 
   width: 100%;
-  background: url('../img/hero_bg2.png') center;
+  background: url('../img/hero_bg.png') center top no-repeat;
 
   .flexslider {
     color: #fff;
     text-shadow: 1px 1px 0 #000;
-    height: 400px;
+    height: 220px;
 
     h3 {
       color: #fff;
@@ -18,7 +18,7 @@
     }
 
     img {
-      max-height: 400px;
+      max-height: 220px;
       width: auto;
 
     }

@@ -28,5 +28,20 @@
         return false;
       });
     });
+
+    $("#add-interest").submit(function (e) {
+      e.preventDefault();
+      $.post(e.target.action,
+          {email: $("#id_email").val()},
+          function(data) {
+            $("#result").text(data.message);
+        if (data.result === 'error') {
+            $("#result").text(data.message);
+        } else {
+            $("#result").text(data.message);
+            $(".interestfields").hide();
+        }
+      });
+    });
   });
 })();

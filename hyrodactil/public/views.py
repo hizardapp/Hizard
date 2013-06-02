@@ -1,11 +1,14 @@
-from django.http import Http404
+import json
+
+from django.http import Http404, HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 
 from applications.forms import ApplicationForm
 from companies.models import Company
 from openings.models import Opening
 from core.views import SubdomainRequiredMixin
+from .forms import InterestForm
 
 
 class LandingPageView(TemplateView):
@@ -74,3 +77,19 @@ class ApplicationConfirmationView(TemplateView):
             'company': opening.company
         }
         return self.render_to_response(context)
+
+
+def add_interest(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed("")
+
+    form = InterestForm(data=request.POST)
+    if form.is_valid():
+        form.save()
+        ret = dict(result='success', message=unicode("Thanks"))
+    else:
+        ret = dict(result='error',
+                message=unicode("Email seems invalid, please check it again"))
+
+    return HttpResponse(json.dumps(ret), content_type="application/json")
+

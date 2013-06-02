@@ -3805,13 +3805,13 @@ header nav.top-bar section.top-bar-section li a {
 /* line 2, ../../pregen_static/sass/launch/_landing.scss */
 .hero {
   width: 100%;
-  background: url("../img/hero_bg2.png") center;
+  background: url("../img/hero_bg.png") center top no-repeat;
 }
 /* line 7, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider {
   color: #fff;
   text-shadow: 1px 1px 0 #000;
-  height: 400px;
+  height: 220px;
 }
 /* line 12, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider h3 {
@@ -3823,7 +3823,7 @@ header nav.top-bar section.top-bar-section li a {
 }
 /* line 20, ../../pregen_static/sass/launch/_landing.scss */
 .hero .flexslider img {
-  max-height: 400px;
+  max-height: 220px;
   width: auto;
 }
 /* line 26, ../../pregen_static/sass/launch/_landing.scss */

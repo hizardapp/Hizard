@@ -23,4 +23,9 @@ urlpatterns = patterns('',
         views.ApplicationConfirmationView.as_view(),
         name='confirmation'
     ),
+    url(
+        r'^add_interest/$',
+        views.add_interest,
+        name='add-interest'
+    ),
 )
