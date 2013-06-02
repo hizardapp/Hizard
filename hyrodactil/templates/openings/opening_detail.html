@@ -75,7 +75,7 @@
         <ul class="side-nav">
 
           <li>
-            <a href="{% url "applications:list_applications" %}?openings={{ opening.pk }}"><i class="icon-external-link"></i>{% trans 'Applicants list' %}</a>
+            <a href="{% url "applications:list_applications_opening" opening.id %}"><i class="icon-external-link"></i>{% trans 'Applicants list' %}</a>
           </li>
           <li>
             <i class="icon-external-link-sign"></i>{% trans 'Job link' %} :<a href=" {{ opening.get_apply_url }}" target="_blank">{{ opening.get_apply_url }}</a>
