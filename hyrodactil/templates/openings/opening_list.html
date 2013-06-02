@@ -1,6 +1,5 @@
 {% extends "app_page.html" %}
 
-{% load django_tables2 %}
 {% load i18n %}
 
 
@@ -25,6 +24,34 @@
 
   </h2>
 
-  {% render_table table %}
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans 'Title' %}</th>
+        <th>{% trans 'Department' %}</th>
+        <th>{% trans 'Type' %}</th>
+        <th>{% trans 'Location' %}</th>
+        <th>{% trans 'Applications' %}</th>
+        <th>{% trans 'Published' %}</th>
+        <th>{% trans 'Status' %}</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for opening in opening_list %}
+        {{ opening.department }}
+        <tr>
+          <td>{{ opening.title }}</td>
+          <td>{{ opening.department|default_if_none:'—' }}</td>
+          <td>{{ opening.get_employment_type_display }}</td>
+          <td>{{ opening.get_location_string|default:'—' }}</td>
+          <td><a href="{% url 'applications:list_applications_opening' opening.id %}">{{ opening.number_applications }}</a></td>
+          <td>{{ opening.published_date|default_if_none:'—' }}</td>
+          <td>{{ opening.get_status }}</td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
 
 {% endblock page-content %}

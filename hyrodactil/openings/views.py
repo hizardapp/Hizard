@@ -2,7 +2,6 @@ from datetime import datetime
 
 from braces.views import LoginRequiredMixin
 from django.db.models import Count
-import django_tables2
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
@@ -14,17 +13,12 @@ from django.views.generic import CreateView, View
 
 from .forms import OpeningForm
 from .models import Opening
-from .tables import OpeningTable
 from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
 from core.views import RestrictedDetailView, RestrictedListView
 
 
-class OpeningListView(
-    LoginRequiredMixin, django_tables2.SingleTableMixin, RestrictedListView
-):
+class OpeningListView(LoginRequiredMixin,  RestrictedListView):
     model = Opening
-    table_class = OpeningTable
-    table_pagination = False
 
     def get_queryset(self):
         query_set = super(OpeningListView, self).get_queryset()
