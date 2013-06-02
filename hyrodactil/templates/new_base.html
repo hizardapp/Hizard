@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 {% load i18n %}
 {% load staticfiles %}
 
@@ -49,10 +48,23 @@
                 <li><a href="#">{% trans 'Company information' %}</a></li>
               </ul>
             </li>
-            <li class="has-dropdown"><a href="#contact">Name</a>
+            <li class="has-dropdown"><a href="#contact">
+                {% if user.first_name or user.last_name %}
+                  {{ user.first_name }} {{ user.last_name }}
+                {% else %}
+                  {{ user.email }}
+                {% endif %}
+            </a>
               <ul class="dropdown">
-                <li><a href="#">{% trans 'Account Settings' %}</a></li>
-                <li><a href="#">{% trans 'Log Out' %}</a></li>
+                {% if user.avatar %}
+                <li>
+                  <a href="{% url 'accounts:change_details' %}">
+                    <img width="40" height="40" src="{{ user.avatar.url }}"/>
+                  </a>
+                </li>
+                {% endif %}
+                <li><a href="{% url 'accounts:change_details' %}">{% trans 'Account Settings' %}</a></li>
+                <li><a href="{% url 'auth:logout' %}">{% trans 'Log Out' %}</a></li>
               </ul>
             </li>
           </ul>
