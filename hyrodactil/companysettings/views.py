@@ -65,7 +65,7 @@ class ListViewWithDropdown(LoginRequiredMixin, RestrictedListView):
         return context
 
 
-class DepartmentListView(ListViewWithForm):
+class DepartmentListView(LoginRequiredMixin, RestrictedListView):
     model = Department
     form = DepartmentForm
 
@@ -119,40 +119,22 @@ class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_message = _('Department deleted.')
 
 
-class QuestionListView(ListViewWithForm):
+class QuestionListView(LoginRequiredMixin, RestrictedListView):
     model = Question
     form = QuestionForm
 
+    def get_context_data(self, **kwargs):
+        context = super(QuestionListView, self).get_context_data(**kwargs)
+        context['types'] = Question.TYPE_QUESTIONS
+        return context
 
-class QuestionCreateView(LoginRequiredMixin, MessageMixin, CreateView):
+
+class QuestionCreateUpdateView(CreateUpdateAjaxView):
     model = Question
-    form_class = QuestionForm
-    success_url = reverse_lazy('companysettings:list_questions')
-    success_message = _('Question created.')
-
-    def form_valid(self, form):
-        question = form.save(commit=False)
-        question.company = self.request.user.company
-        question.save()
-        return super(QuestionCreateView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        self.request.session['form_data'] = form.data
-        return redirect(self.success_url)
-
-
-class QuestionUpdateView(
-    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
-):
-    model = Question
-    form_class = QuestionForm
-    success_url = reverse_lazy('companysettings:list_questions')
-    success_message = _('Question updated.')
-
-    def form_invalid(self, form):
-        self.request.session['form_data'] = form.data
-        self.request.session['object_id'] = self.object.id
-        return redirect(self.success_url)
+    form = QuestionForm
+    message_success = _('Question saved.')
+    message_errors = _('Please correct the errors below.')
+    message_not_exist = _('The question does not exist.')
 
 
 class QuestionDeleteView(LoginRequiredMixin, QuickDeleteView):

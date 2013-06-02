@@ -18,7 +18,6 @@ urlpatterns = patterns('',
         views.DepartmentDeleteView.as_view(),
         name='delete_department'
     ),
-
     url(
         r'^questions/$',
         views.QuestionListView.as_view(),
@@ -26,13 +25,8 @@ urlpatterns = patterns('',
     ),
     url(
         r'^question/$',
-        views.QuestionCreateView.as_view(),
-        name='create_question'
-    ),
-    url(
-        r'^question/(?P<pk>\d+)/$',
-        views.QuestionUpdateView.as_view(),
-        name='update_question'
+        views.QuestionCreateUpdateView.as_view(),
+        name='ajax_question'
     ),
     url(
         r'^question/(?P<pk>\d+)/delete/$',

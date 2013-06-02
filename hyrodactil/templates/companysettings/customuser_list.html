@@ -76,7 +76,7 @@
   <script>
     $(document).ready(function() {
       var createUrl = "{% url 'companysettings:invite_user'%}";
-      var updateUrl = "{% url 'companysettings:update_department' 0 %}";
+      var updateUrl = '';
       var updateText = "{% trans 'Update' %}";
       var saveText = "{% trans 'Invite' %}";
       var $form = $('.company-settings-form');

@@ -18,8 +18,8 @@ class Department(TimeStampedModel):
 
 class Question(TimeStampedModel):
     TYPE_QUESTIONS = Choices(
-        ('textbox', _('Single Line')),
-        ('textarea', _('Multi Line')),
+        ('textbox', _('Single line text')),
+        ('textarea', _('Multi line text')),
         ('checkbox', _('Checkbox')),
         ('file', _('File upload')),
     )

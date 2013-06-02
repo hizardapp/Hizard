@@ -121,71 +121,83 @@ class CompanySettingsViewsTests(WebTest):
         page = self.app.get(url, user=self.user)
         self.assertContains(page, question.name)
 
-    def test_create_question_valid(self):
-        url = reverse('companysettings:list_questions')
+    def test_ajax_create_question_valid(self):
+        url = reverse('companysettings:ajax_question')
+        data = {'name': 'Cooking', 'type_field':'textbox'}
 
-        page = self.app.get(url, user=self.user)
-        form = page.forms[0]
-        form.action = reverse('companysettings:create_question')
-        form['name'] = 'Cover letter'
-        form['type_field'] = 'textbox'
-
-        response = form.submit().follow()
-
-        self.assertEqual(response.status_code, 200)
-        question_created = Question.objects.get()
-
-        self.assertEqual(question_created.company, self.user.company)
-        self.assertEqual(question_created.name, 'Cover letter')
-
-    def test_create_question_invalid(self):
-        url = reverse('companysettings:list_questions')
-
-        page = self.app.get(url, user=self.user)
-        form = page.forms[0]
-        form.action = reverse('companysettings:create_question')
-        form['name'] = ''
-        form['type_field'] = 'textbox'
-        response = form.submit().follow()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'name', self.required)
-
-    def test_update_question_valid(self):
-        question = SingleLineQuestionFactory(company=self.user.company)
-        url = reverse('companysettings:list_questions')
-
-        page = self.app.get(url, user=self.user)
-        form = page.forms[0]
-        form.action = reverse(
-            'companysettings:update_question', args=(question.id,)
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
         )
-        form['name'] = 'Last Name'
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'success')
+        self.assertEqual(result['id'], 1)
+        self.assertTrue(Question.objects.filter(name='Cooking').exists())
 
-        self.assertContains(page, question.name)
+    def test_ajax_create_question_invalid(self):
+        url = reverse('companysettings:ajax_question')
+        data = {'name': '', 'type_field': 'textbox'}
 
-        response = form.submit().follow()
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Last Name')
-        self.assertNotContains(response, 'First Name')
-
-    def test_update_question_invalid(self):
-        question = SingleLineQuestionFactory(company=self.user.company)
-        url = reverse('companysettings:list_questions')
-
-        page = self.app.get(url, user=self.user)
-        form = page.forms[0]
-        form.action = reverse(
-            'companysettings:update_question', args=(question.id,)
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
         )
-        form['name'] = ''
+        result = json.loads(response.body)
+        self.assertEqual(
+            result['errors'], {'name': ['This field is required.']}
+        )
+        self.assertFalse(Question.objects.filter(name='Cooking').exists())
 
-        response = form.submit().follow()
+    def test_ajax_update_question_valid(self):
+        url = reverse('companysettings:ajax_question')
+        question = SingleLineQuestionFactory()
+        data = {'id': question.id,'name': 'Cooking', 'type_field': 'textbox'}
 
-        self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'name', self.required)
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'success')
+        self.assertTrue(Question.objects.filter(name='Cooking').exists())
 
+    def test_ajax_update_question_invalid(self):
+        url = reverse('companysettings:ajax_question')
+        question = SingleLineQuestionFactory()
+        data = {'id': question.id, 'name': '', 'type_field': 'textbox'}
+
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(
+            result['errors'], {'name': ['This field is required.']}
+        )
+        self.assertFalse(Question.objects.filter(name='Cooking').exists())
+
+    def test_ajax_update_question_inexisting(self):
+        url = reverse('companysettings:ajax_question')
+        data = {'id': 42, 'name': '', 'type_field': 'textbox'}
+
+        response = self.app.post(
+            url,
+            data,
+            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
+            user=self.user
+        )
+        result = json.loads(response.body)
+        self.assertEqual(result['result'], 'error')
+        self.assertFalse(Question.objects.filter(name='Cooking').exists())
+        
     def test_delete_question(self):
         question = SingleLineQuestionFactory(
             name='ninja', company=self.user.company
