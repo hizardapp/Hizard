@@ -83,7 +83,7 @@ class AccountsViewsTests(WebTest):
         user_found = CustomUser.objects.get()
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Login to get started.')
+        self.assertContains(response, 'You can now login')
         self.assertTrue(user_found.is_active)
 
     def test_get_invalid_activation(self):
