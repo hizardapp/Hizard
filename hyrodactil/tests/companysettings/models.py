@@ -3,8 +3,9 @@ from django.test import TestCase
 from openings.models import Opening
 
 from ..factories._companies import CompanyFactory
-from ..factories._companysettings import InterviewStageFactory
 from ..factories._companysettings import DepartmentFactory
+from ..factories._companysettings import InterviewStageFactory
+from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._openings import OpeningFactory
 
 
@@ -49,3 +50,11 @@ class ModelTests(TestCase):
         sales.delete()
         opening = Opening.objects.get()
         self.assertFalse(opening.department)
+
+    def test_question_deletion_keeps_applications(self):
+        company = CompanyFactory()
+        opening = OpeningFactory(company=company)
+        happiness = SingleLineQuestionFactory(name="Happy?", company=company)
+        happiness.delete()
+        opening = Opening.objects.get()
+        self.assertEqual(opening.questions.all().count(), 0)
