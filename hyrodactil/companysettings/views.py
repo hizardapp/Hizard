@@ -70,72 +70,47 @@ class DepartmentListView(ListViewWithForm):
     form = DepartmentForm
 
 
-class DepartmentCreateUpdateView(
+class CreateUpdateAjaxView(
     LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin, View
 ):
     def post_ajax(self, request, *args, **kwargs):
         data = request.POST.copy()
 
         if 'id' in data:
-            dept_to_update = Department.objects.filter(id=int(data['id']))
-            if dept_to_update:
-                form = DepartmentForm(data, instance=dept_to_update[0])
+            obj_to_update = self.model.objects.filter(id=int(data['id']))
+            if obj_to_update:
+                form = self.form(data, instance=obj_to_update[0])
             else:
                 return self.render_json_response({
                     'result': 'error',
-                    'message': unicode(_('The department does not exist.'))
+                    'message': unicode(self.message_not_exist)
                 })
         else:
-            form = DepartmentForm(data)
+            form = self.form(data)
 
         if form.is_valid():
-            dept = form.save(commit=False)
-            dept.company = self.request.user.company
-            dept.save()
+            obj = form.save(commit=False)
+            obj.company = self.request.user.company
+            obj.save()
             return self.render_json_response({
                 'result': 'success',
-                'id': dept.id,
-                'message': unicode(_('Department.saved'))
+                'id': obj.id,
+                'message': unicode(self.message_success)
             })
         else:
             return self.render_json_response({
                 'result': 'error',
                 'errors': form.errors,
-                'message':unicode(_('Please correct the errors below.'))
+                'message':unicode(self.message_errors)
             })
 
 
-class DepartmentCreateView(LoginRequiredMixin, MessageMixin, CreateView):
+class DepartmentCreateUpdateView(CreateUpdateAjaxView):
     model = Department
-    form_class = DepartmentForm
-    success_url = reverse_lazy('companysettings:list_departments')
-    success_message = _('Department created.')
-
-    def form_valid(self, form):
-        department = form.save(commit=False)
-        department.company = Company.objects.get(
-            id=self.request.user.company.id
-        )
-        department.save()
-        return super(DepartmentCreateView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        self.request.session['form_data'] = form.data
-        return redirect(self.success_url)
-
-
-class DepartmentUpdateView(
-    LoginRequiredMixin, MessageMixin, RestrictedUpdateView
-):
-    model = Department
-    form_class = DepartmentForm
-    success_url = reverse_lazy('companysettings:list_departments')
-    success_message = _('Department updated.')
-
-    def form_invalid(self, form):
-        self.request.session['form_data'] = form.data
-        self.request.session['object_id'] = self.object.id
-        return redirect(self.success_url)
+    form = DepartmentForm
+    message_success = _('Department saved.')
+    message_errors = _('Please correct the errors below.')
+    message_not_exist = _('The department does not exist.')
 
 
 class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):

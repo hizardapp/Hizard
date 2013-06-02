@@ -14,16 +14,6 @@ urlpatterns = patterns('',
         name='ajax_department'
     ),
     url(
-        r'^department/$',
-        views.DepartmentCreateView.as_view(),
-        name='create_department'
-    ),
-    url(
-        r'^department/(?P<pk>\d+)$',
-        views.DepartmentUpdateView.as_view(),
-        name='update_department'
-    ),
-    url(
         r'^department/(?P<pk>\d+)/delete$',
         views.DepartmentDeleteView.as_view(),
         name='delete_department'

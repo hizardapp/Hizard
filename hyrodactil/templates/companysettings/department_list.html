@@ -12,10 +12,12 @@
 
 {% block page-content %}
   <h2>
-    {% trans "Departments" %} <small>{% trans 'allow to group your openings in your career site' %}</small>
+    {% trans "Departments" %}
+    <small>{% trans 'allow to group your openings in your career site' %}</small>
   </h2>
 
-  <div id="departments">
+  <div id="table-departments">
+
     <table>
       <thead>
       <tr class="row">
@@ -28,32 +30,31 @@
         {% for department in department_list %}
           <tr class="row">
             <td class="id" style="display: none;">{{ department.id }}</td>
-            <td class="large-10 columns update-object name">{{ department.name }}</td>
+            <td class="large-10 columns name">{{ department.name }}</td>
             <td class="large-1 columns text-right">
               <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
             </td>
             <td class="large-1 columns text-right">
-              <a href="#" class="edit"><i class="icon-trash icon-2x"></i></a>
+              <a href="{% url 'companysettings:delete_department' department.pk %}"><i class="icon-trash icon-2x"></i></a>
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
 
-  <form action="." method="POST">
-    <div class="row">
-      <div class="large-10 columns">
-        <input type="hidden" class="id-to-update" />
-        <input type="text" class="dept-name" placeholder="{% trans 'Name' %}"/>
+    <form action="." method="POST">
+      <div class="row">
+        <div class="large-10 columns">
+          <input type="hidden" class="form-id" />
+          <input type="text" class="form-name" placeholder="{% trans 'Name' %}" />
+        </div>
+        <div class="large-2 columns">
+          <a class="button-positive save" href="#">{% trans 'Save' %}</a>
+        </div>
       </div>
-      <div class="large-2 columns">
-        <a class="button-positive save" href="#">{% trans 'Save' %}</a>
-      </div>
-    </div>
-  </form>
+    </form>
 
-
-  <div>
+  </div>
 
 {% endblock page-content %}
 
@@ -65,11 +66,13 @@
       var options = {
         valueNames: ['id', 'name']
       };
-      var deptTable = new List('departments', options);
+      var deptTable = new List('table-departments', options);
 
-      var $nameInput = $('.dept-name');
-      var $id = $('.id-to-update');
+      var $nameInput = $('.form-name');
+      var $id = $('.form-id');
       var $saveButton = $('.save');
+
+      var $alert;
 
       $nameInput.focus(function() {
         $nameInput.removeClass('error');
@@ -110,7 +113,9 @@
               deptTable.add(newDept);
             }
           }
-
+          if ($alert) {
+            $alert.remove();
+          }
           displayMessage(data.result, data.message);
         });
       });
@@ -124,10 +129,10 @@
 
       $('body').on('click', '.close', function() {
         $(this).parent().remove();
-      })
+      });
 
       function displayMessage(type, message) {
-        var $alert = $('<div>');
+        $alert = $('<div>');
         $alert.addClass('alert-' + type);
         $alert.data('alert', 'js');
         $alert.html(message + '<a href="#" class="close">&times;</a>');

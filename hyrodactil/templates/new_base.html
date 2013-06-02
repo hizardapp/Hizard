@@ -43,7 +43,7 @@
             <li><a href="{% url 'applications:list_applications' %}">Applicants</a></li>
             <li class="has-dropdown"><a href="#">Settings</a>
               <ul class="dropdown">
-                <li><a href="#">{% trans 'Departments' %}</a></li>
+                <li><a href="{% url 'companysettings:list_departments' %}">{% trans 'Departments' %}</a></li>
                 <li><a href="#">{% trans 'Questions' %}</a></li>
                 <li><a href="#">{% trans 'Stages' %}</a></li>
                 <li><a href="#">{% trans 'Company information' %}</a></li>
