@@ -1,44 +1,99 @@
-{% extends "base_app.html" %}
-{% load django_tables2 %}
+{% extends "app_page.html" %}
 
 {% load i18n %}
+{% load staticfiles %}
 
-{% block content %}
 
-    {% if context_opening %}
-      <h2 class="page-header">
-        {% blocktrans with opening=context_opening.title %}
-          Applicants for {{ opening }}
-        {% endblocktrans %}
-      </h2>
-    {% else %}
-      <h2 class="page-header">
-       {% trans 'All applications' %}
-      </h2>
-    {% endif %}
+{% block title %}
+  {% trans 'Applications' %}
+{% endblock title %}
 
-  {% if context_opening %}
-    <p>Add an application manually <a href="{% url 'applications:manual_application' context_opening.id %}">here</a></p>
-  {% endif %}
+{% block page-content %}
 
-    <div class="large-3 columns filter-applications">
-      <form method="GET">
-        {{ filter_form.as_p }}
-        <input type="submit" class="button-positive" value="Filter" />
-      </form>
+  <h2>{% trans 'All applications' %}</h2>
+
+  <div class="row">
+
+
+    <div id="table-applicants">
+
+      <div class="large-3 columns">
+        <input type="search" class="search" placeholder="Search" />
+
+        {% for stage in stages %}
+          <label>
+            <input class="filter-stages" type="checkbox" value="{{ stage.name }}"/>   {{ stage.name }}
+          </label>
+        {% endfor %}
+
+      </div>
+
+      <div class="large-9 columns">
+
+        <table>
+
+          <thead>
+            <tr class="row">
+              <th class="large-3 columns sort" data-sort="name"><i class="icon-sort"></i> {% trans "Name" %}</th>
+              <th class="large-2 columns sort" data-sort="applied"><i class="icon-sort"></i> {% trans "Applied" %}</th>
+              <th class="large-2 columns sort" data-sort="stage"><i class="icon-sort"></i> {% trans "Stage" %}</th>
+              <th class="large-3 columns sort" data-sort="opening"><i class="icon-sort"></i> {% trans "Opening" %}</th>
+              <th class="large-2 columns sort" data-sort="rating"><i class="icon-sort"></i> {% trans "Rating" %}</th>
+            </tr>
+          </thead>
+
+          <tbody class="list">
+            {% for application in application_list %}
+              <tr class="row">
+                <td class="id" style="display: none;">{{ application.id }}</td>
+                <td class="large-3 columns name">
+                  <a href="{% url 'applications:application_detail' application.id %}">
+                    {{ application.applicant.get_full_name }}
+                  </a>
+                </td>
+                <td class="large-2 columns applied">{{ application.created|date:"Y/m/d"  }}</td>
+                <td class="large-2 columns stage">{{ application.current_stage }}</td>
+                <td class="large-3 columns opening">
+                  <a href="{% url 'openings:detail_opening' application.opening.id %}">
+                    {{ application.opening.title }}
+                  </a>
+                </td>
+                <td class="large-2 columns rating">TODO</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
     </div>
 
-    <div class="large-9 columns">
-      {% render_table table %}
-    </div>
-{% endblock content %}
+  </div>
+
+{% endblock page-content %}
 
 {% block extra-js %}
-<script>
-  $(function () {
-    $("select#id_opening").change(function () {
-      $("#filter_form").submit();
+  <script src="{% static "js/vendor/list.min.js" %}"></script>
+
+  <script>
+    var options = {
+      valueNames: ['id', 'name', 'applied', 'stage', 'opening', 'rating']
+    };
+    var applicantTable = new List('table-applicants', options);
+
+    var $filterStages = $('.filter-stages');
+
+    $filterStages.click(function() {
+      var selectedFilterStage = $('.filter-stages:checkbox:checked').map(function() {
+        return this.value;
+      }).get();
+
+      applicantTable.filter(function(item) {
+        if (selectedFilterStage.length === 0) {
+          return true;
+        }
+        return $.inArray(item.values().stage, selectedFilterStage) !== -1;
+      });
     });
-  });
-</script>
+
+  </script>
 {% endblock %}

@@ -27,7 +27,7 @@
     {% for transition in application.stage_transitions.all %}
       <div class="row transition {% if forloop.last %}last-transition{% endif %}">
         <div class="large-2 columns">
-          {{ transition.created|date:"DATE_FORMAT" }}
+          {{ transition.created|date:"Y/m/d" }}
         </div>
         <div class="large-3 columns">
           {{ transition.stage }}

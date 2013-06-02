@@ -1,8 +1,6 @@
 from collections import OrderedDict
 import json
 
-import django_tables2
-
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -20,7 +18,6 @@ from .models import (
     ApplicationStageTransition, Applicant
 )
 from .threaded_discussion import group
-from .tables import ApplicationsTable
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
 from openings.models import Opening
@@ -52,13 +49,15 @@ class ApplicationFilterMixin(object):
         return qs
 
 
-class ApplicationListView(
-    LoginRequiredMixin, ApplicationFilterMixin,
-    django_tables2.SingleTableMixin, RestrictedListView
-):
+class ApplicationListView(LoginRequiredMixin, RestrictedListView):
     model = Application
-    table_class = ApplicationsTable
-    table_pagination = False
+
+    def get_context_data(self, **kwargs):
+        context = super(ApplicationListView, self).get_context_data(**kwargs)
+        context['stages'] = InterviewStage.objects.filter(
+            company=self.request.user.company
+        )
+        return context
 
     def get_queryset(self):
         qs = Application.objects.filter(
@@ -66,7 +65,7 @@ class ApplicationListView(
         ).order_by('opening').select_related(
             'applicant', 'opening', 'current_stage'
         )
-        return self.filter_queryset(qs)
+        return qs
 
 
 class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
