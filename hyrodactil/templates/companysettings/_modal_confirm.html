@@ -1,0 +1,29 @@
+{% load i18n %}
+
+<div id="delete-confirm-modal" class="reveal-modal">
+  <h4>{% trans "Wait a second!" %}</h4>
+
+  <div class="row">
+    <div class="large-12 columns">
+      {% blocktrans %}
+      <p>You are about to delete : <strong id="object-name"></strong></p>
+      <p>Are you sure you want to do that?</p>
+      {% endblocktrans %}
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <a href="#" id="cancel-link"
+      value="{% trans 'Cancel' %}"
+      class="button-positive columns push-7 large-2"
+      />{% trans 'Cancel' %}</a>
+
+    <a href="" id="confirm-delete-link"
+      value="{% trans 'Delete' %}"
+      class="button-negative columns large-2" />{% trans 'Delete' %}</a>
+  </div>
+
+  <a class="close-reveal-modal">&#215;</a>
+</div>

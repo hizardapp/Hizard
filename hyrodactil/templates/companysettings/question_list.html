@@ -37,7 +37,7 @@
             <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
           </td>
           <td class="large-1 columns">
-            <a href="{% url 'companysettings:delete_question' question.pk %}"><i class="icon-trash icon-2x"></i></a>
+            <a href="#" class="delete-link"><i class="icon-trash icon-2x"></i></a>
           </td>
         </tr>
       {% endfor %}
@@ -64,6 +64,8 @@
     </form>
 
   </div>
+
+  {% include "companysettings/_modal_confirm.html" %}
 
 {% endblock page-content %}
 
@@ -152,6 +154,23 @@
         $alert.html(message + '<a href="#" class="close">&times;</a>');
         $alert.prependTo('.container');
       }
+
+      $('body').on('click', 'a#cancel-link', function() {
+        $('#delete-confirm-modal').foundation('reveal', 'close');
+      });
+
+      $('body').on('click', 'a.delete-link', function() {
+        var link = $(this),
+            tr = link.closest('tr'),
+            refUrl = "{% url 'companysettings:delete_question' 8888 %}",
+            name = tr.find(".name").text(),
+            id = tr.find(".id").text(),
+            url = refUrl.replace("8888", id);
+
+        $('#delete-confirm-modal').foundation('reveal', 'open');
+        $('#delete-confirm-modal #object-name').text(name);
+        $('#delete-confirm-modal #confirm-delete-link').attr("href", url);
+      });
     });
   </script>
 {% endblock extra-js %}
