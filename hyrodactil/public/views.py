@@ -86,7 +86,8 @@ def add_interest(request):
     form = InterestForm(data=request.POST)
     if form.is_valid():
         form.save()
-        ret = dict(result='success', message=unicode("Thanks"))
+        ret = dict(result='success',
+                message=unicode("Thanks for your interest, we'll keep in touch"))
     else:
         ret = dict(result='error',
                 message=unicode("Email seems invalid, please check it again"))
