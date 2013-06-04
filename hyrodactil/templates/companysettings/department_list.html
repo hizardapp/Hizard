@@ -78,9 +78,9 @@
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if(keycode === 13){
           $saveButton.click();
+          event.preventDefault();
+          event.stopPropagation();
         }
-        event.preventDefault();
-        event.stopPropagation();
       });
 
       var $alert;
@@ -121,6 +121,11 @@
               var item = deptTable.get('id', data.id);
               item.values(newDept);
             } else {
+              // listjs kinda suck sometimes
+              // fail to add if list is empty
+              if (deptTable.items.length === 0) {
+                location.reload();
+              }
               deptTable.add(newDept);
             }
           }

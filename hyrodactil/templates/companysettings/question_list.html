@@ -90,9 +90,9 @@
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if(keycode === 13){
           $saveButton.click();
+          event.preventDefault();
+          event.stopPropagation();
         }
-        event.preventDefault();
-        event.stopPropagation();
       });
 
       $nameInput.focus(function() {
@@ -133,6 +133,11 @@
               var item = questionTable.get('id', data.id);
               item.values(newQuestion);
             } else {
+              // listjs kinda suck sometimes
+              // fail to add if list is empty
+              if (questionTable.items.length === 0) {
+                location.reload();
+              }
               questionTable.add(newQuestion);
             }
           }
