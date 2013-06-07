@@ -22,49 +22,6 @@ class SettingsHomeView(LoginRequiredMixin, TemplateView):
     template_name = 'companysettings/settings.html'
 
 
-class ListViewWithForm(LoginRequiredMixin, RestrictedListView):
-    def get_context_data(self, **kwargs):
-        context = super(ListViewWithForm, self).get_context_data(**kwargs)
-        form_data = self.request.session.get('form_data', None)
-        if form_data:
-            form = self.form(data=form_data)
-            form.is_valid()
-            context['form'] = form
-            context['has_errors'] = True
-            del self.request.session['form_data']
-            object_id = self.request.session.get('object_id', None)
-
-            if object_id:
-                context['error_object_id'] = object_id
-                del self.request.session['object_id']
-
-        else:
-            context['form'] = self.form()
-
-        return context
-
-
-class ListViewWithDropdown(LoginRequiredMixin, RestrictedListView):
-    def get_context_data(self, **kwargs):
-        context = super(ListViewWithDropdown, self).get_context_data(**kwargs)
-        form_data = self.request.session.get('form_data', None)
-        if form_data:
-            form = self.form(data=form_data)
-            form.is_valid()
-            context['form'] = form
-            context['has_errors'] = True
-            del self.request.session['form_data']
-            object_id = self.request.session.get('object_id', None)
-            if object_id:
-                context['error_object_id'] = object_id
-                del self.request.session['object_id']
-
-        else:
-            context['form'] = self.form()
-
-        return context
-
-
 class DepartmentListView(LoginRequiredMixin, RestrictedListView):
     model = Department
     form = DepartmentForm
@@ -101,7 +58,7 @@ class CreateUpdateAjaxView(
             return self.render_json_response({
                 'result': 'error',
                 'errors': form.errors,
-                'message':unicode(self.message_errors)
+                'message': unicode(self.message_errors)
             })
 
 
@@ -205,23 +162,21 @@ class InterviewStageReorderView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
-class UsersListView(ListViewWithForm):
-    template_name = "companysettings/customuser_list.html"
-    model = CustomUser
-    form = CustomUserInviteForm
-
-
 class InviteUserCreateView(LoginRequiredMixin, CreateView):
+    template_name = "companysettings/customuser_list.html"
     model = CustomUser
     form_class = CustomUserInviteForm
     success_url = reverse_lazy('companysettings:list_users')
 
+    def get_context_data(self, **kwargs):
+        context = super(InviteUserCreateView, self).get_context_data(**kwargs)
+        context['users'] = CustomUser.objects.filter(
+            company=self.request.user.company
+        )
+        return context
+
     def form_valid(self, form):
         form.save(company=self.request.user.company)
-        return redirect(self.success_url)
-
-    def form_invalid(self, form):
-        self.request.session['form_data'] = form.data
         return redirect(self.success_url)
 
 

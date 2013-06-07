@@ -57,13 +57,8 @@ urlpatterns = patterns('',
 
     url(
         r'^users/$',
-        views.UsersListView.as_view(),
-        name='list_users'
-    ),
-    url(
-        r'^users/invite/$',
         views.InviteUserCreateView.as_view(),
-        name='invite_user'
+        name='list_users'
     ),
     url(
         r'^information/$',

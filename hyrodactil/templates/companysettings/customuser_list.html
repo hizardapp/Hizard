@@ -1,17 +1,21 @@
-{% extends "base_app.html" %}
+{% extends "app_page.html" %}
 
 {% load i18n %}
 {% load companysettings %}
 {% load staticfiles %}
 
 
+{% block title %}
+  {% trans 'Manage users' %}
+{% endblock title %}
 
-{% block content %}
-  <h2 class="page-header">{% trans "Users" %}</h2>
+
+{% block page-content %}
+  <h2>{% trans "Manage users" %}</h2>
 
   <div>
 
-    <table class="large-8 columns">
+    <table>
       <thead>
         <tr class="row">
           <th class="large-3 columns">{% trans "Email" %}</th>
@@ -23,7 +27,7 @@
       </thead>
 
       <tbody>
-      {% for user in customuser_list %}
+      {% for user in users %}
         <tr class="row" data-id="{{ user.id }}">
           <td class="large-3 columns">
             <span>{{ user.email }}</span>
@@ -64,46 +68,41 @@
 
     </table>
 
-    <div class="large-4 columns">
-      {% include 'companysettings/_side_form.html' with error_object_id=error_object_id %}
-    </div>
+  <div>
+    <form action="." method="POST">
+      {% csrf_token %}
+
+      {% for field in form %}
+
+        <div class="row">
+          <div class="large-12 columns {% if field.errors %} error {% endif %}">
+
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% if field.errors %}
+              <small class="error">
+                {% for error in field.errors %}
+                  {{ error }}
+                {% endfor %}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+
+      {% endfor %}
+
+      <div class="row">
+        <div class="large-12 columns">
+          <div class="right">
+            <input type="submit" value="{% trans 'Invite user' %}" class="button-positive" />
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
 
   </div>
 
-{% endblock content %}
-
-{% block extra-js %}
-  <script>
-    $(document).ready(function() {
-      var createUrl = "{% url 'companysettings:invite_user'%}";
-      var updateUrl = '';
-      var updateText = "{% trans 'Update' %}";
-      var saveText = "{% trans 'Invite' %}";
-      var $form = $('.company-settings-form');
-      $form.attr('action', createUrl);
-      $form.find(':input[type=submit]').val(saveText);
-
-      $('.update-object').click(function() {
-        var $td = $(this);
-        var id = $td.parent().data('id');
-        var text = $td.find('span').text();
-        $form.attr('action', updateUrl.replace(0, id));
-        var values = $td.find('span').map(function() {
-          return $(this).text();
-        });
-        $form.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
-          $(e).val(values[index]);
-        });
-        $form.find('input[type=submit]').val(updateText);
-      });
-
-      $('.clear-inputs').click(function() {
-        $form.attr('action', createUrl);
-        $form.find('input:enabled:visible, select').not(':input[type=submit]').each(function(index, e) {
-          $(e).val('');
-        });
-        $form.find(':input[type=submit]').val(saveText);
-      });
-    });
-  </script>
-{% endblock extra-js %}
+{% endblock page-content %}

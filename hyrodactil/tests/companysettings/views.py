@@ -399,7 +399,7 @@ class CompanySettingsViewsTests(WebTest):
         page = self.app.get(url, user=self.user)
 
         form = page.form
-        form.action = reverse('companysettings:invite_user')
+        form.action = reverse('companysettings:list_users')
         form["email"] = "steve@example.com"
         page = form.submit().follow()
         self.assertTrue(

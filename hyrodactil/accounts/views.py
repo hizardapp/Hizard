@@ -3,6 +3,7 @@ from braces.views import LoginRequiredMixin
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -210,6 +211,7 @@ class ToggleStatusView(View):
         user = get_object_or_404(CustomUser, pk=user_pk)
         user.is_active = not user.is_active
         user.save()
+        messages.success(request, _('Changed user status.'))
         return HttpResponseRedirect(reverse("companysettings:list_users"))
 
 
