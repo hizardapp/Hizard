@@ -1,9 +1,31 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import forms as auth_forms
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from .models import CustomUser
+
+
+class ImageWidget(forms.FileInput):
+    template = '%(input)s<br />%(image)s'
+
+    def __init__(self, attrs=None, template=None, width=200, height=200):
+        if template is not None:
+            self.template = template
+        self.width = width
+        self.height = height
+        super(ImageWidget, self).__init__(attrs)
+
+    def render(self, name, value, attrs=None):
+        input_html = super(forms.FileInput, self).render(name, value, attrs)
+        if hasattr(value, 'width') and hasattr(value, 'height'):
+            image_html = '<img src="%s" width="%d" height="%d">' % (value.url, self.width, self.height)
+            output = self.template % {'input': input_html,
+                                      'image': image_html}
+        else:
+            output = input_html
+        return mark_safe(output)
 
 
 class UserCreationForm(forms.ModelForm):
@@ -126,3 +148,10 @@ class ChangeDetailsForm(forms.ModelForm):
     class Meta:
         fields = ('name', 'avatar')
         model = CustomUser
+
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeDetailsForm, self).__init__(*args, **kwargs)
+
+        # change a widget attribute:
+        self.fields['avatar'].widget = ImageWidget()
