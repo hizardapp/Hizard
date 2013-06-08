@@ -1,0 +1,30 @@
+{% extends "new_base.html" %}
+
+{% load staticfiles %}
+
+{% block topbar %}
+{% endblock topbar %}
+
+{% block content %}
+
+  <section class="wrapper">
+    <div class="row">
+      <div class="large-12 columns container">
+
+        {% if messages %}
+          {% for message in messages %}
+            <div data-alert class="alert-{{ message.tags }}">
+              {{ message }}
+              <a href="#" class="close">&times;</a>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% block page-content %}
+        {% endblock page-content %}
+
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}

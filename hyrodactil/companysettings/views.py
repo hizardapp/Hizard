@@ -18,10 +18,6 @@ from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
 from core.views import RestrictedListView
 
 
-class SettingsHomeView(LoginRequiredMixin, TemplateView):
-    template_name = 'companysettings/settings.html'
-
-
 class DepartmentListView(LoginRequiredMixin, RestrictedListView):
     model = Department
     form = DepartmentForm

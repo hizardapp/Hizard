@@ -66,10 +66,4 @@ urlpatterns = patterns('',
         name='update_information'
     ),
 
-    url(
-        r'^$',
-        views.SettingsHomeView.as_view(),
-        name='settings_home'
-    ),
-
 )

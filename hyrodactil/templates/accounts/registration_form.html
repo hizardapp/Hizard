@@ -1,11 +1,17 @@
-{% extends "base_accounts.html" %}
+{% extends "account_page.html" %}
 {% load i18n %}
 
 
-{% block content %}
+{% block title %}
+  {% trans 'Register' %}
+{% endblock title %}
 
-  <div class="row">
-    <form action="." method="POST" class="login-form large-4 columns">
+
+{% block page-content %}
+
+  <h2>{% trans 'Register' %}</h2>
+
+    <form action="." method="POST" class="large-6 columns large-centered">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
@@ -24,7 +30,7 @@
             {{ field }}
 
             {% if field.errors %}
-              <small class="rounded-error">
+              <small class="error">
                 {% for error in field.errors %}
                   {{ error }}
                 {% endfor %}
@@ -42,8 +48,4 @@
       </div>
     </form>
 
-    <div class="large-6 columns">
-    </div>
-  </div>
-
-{% endblock content %}
+{% endblock page-content %}

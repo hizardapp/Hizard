@@ -146,7 +146,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         upload_to=get_file_path
     )
     name = models.CharField(
-        verbose_name=_('Name'),
+        verbose_name=_('Your name'),
         max_length=255
     )
     activation_key = models.CharField(

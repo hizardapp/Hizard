@@ -1,11 +1,18 @@
-{% extends "base_accounts.html" %}
+{% extends "account_page.html" %}
 {% load i18n %}
 
 
-{% block content %}
+{% block title %}
+  {% trans 'Company creation' %}
+{% endblock title %}
 
-  <div class="row">
-    <form action="." method="POST" class="login-form large-4 columns">
+
+{% block page-content %}
+
+
+  <h2>{% trans 'Create my company' %}</h2>
+
+    <form action="." method="POST" class="large-centered large-6 columns">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
@@ -16,23 +23,77 @@
         </small>
       {% endif %}
 
-      {% for field in form %}
-        <div class="row">
-          <div class="large-12 columns {% if field.errors %} error {% endif %}">
+      <div class="row">
+        <div class="{% if form.name.errors %} error {% endif %}">
 
-            {{ field.label_tag }}
-            {{ field }}
+          <label for="id_name">{% trans 'Company name' %}</label>
+          {{ form.name }}
 
-            {% if field.errors %}
-              <small class="rounded-error">
-                {% for error in field.errors %}
-                  {{ error }}
-                {% endfor %}
-              </small>
-            {% endif %}
-          </div>
+          {% if form.name.errors %}
+            <small class="error">
+              {% for error in form.name.errors %}
+                {{ error }}
+              {% endfor %}
+            </small>
+          {% endif %}
         </div>
-      {% endfor %}
+      </div>
+
+      <div class="row">
+        <div class="{% if form.subdomain.errors %} error {% endif %}">
+
+          <label for="id_subdomain">{% trans 'URL of your career site' %}</label>
+          <div class="row">
+            <div class="large-6 columns">
+              {{ form.subdomain }}
+            </div>
+            <div class="large-6 columns">
+              <span class="subdomain">.hizard.com</span>
+            </div>
+          </div>
+
+          {% if form.subdomain.errors %}
+            <small class="error">
+              {% for error in form.subdomain.errors %}
+                {{ error }}
+              {% endfor %}
+            </small>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="{% if form.website.errors %} error {% endif %}">
+
+          <label for="id_website">{% trans 'Company website' %}</label>
+          {{ form.website }}
+
+          {% if form.website.errors %}
+            <small class="error">
+              {% for error in form.website.errors %}
+                {{ error }}
+              {% endfor %}
+            </small>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="{% if form.description.errors %} error {% endif %}">
+
+          <label for="id_description">{% trans 'Description of the company' %}</label>
+          {{ form.description }}
+
+          {% if form.description.errors %}
+            <small class="error">
+              {% for error in form.description.errors %}
+                {{ error }}
+              {% endfor %}
+            </small>
+          {% endif %}
+        </div>
+      </div>
+
 
 
       <div class="row">
@@ -42,18 +103,4 @@
       </div>
     </form>
 
-    <div class="large-6 columns">
-      <p>
-        {% trans 'The name of your company will be used on your jobs page.' %}
-      </p>
-      <br>
-      <p>
-        {% blocktrans %}
-          Your jobs page will be accessible at yourcompany.hizard.com, yourcompany being
-          the subdomain entered in the input on the left.
-        {% endblocktrans %}
-      </p>
-    </div>
-  </div>
-
-{% endblock content %}
+{% endblock page-content %}

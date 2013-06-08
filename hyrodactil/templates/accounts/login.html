@@ -1,31 +1,35 @@
-{% extends "base_accounts.html" %}
+{% extends "account_page.html" %}
 {% load i18n %}
 
 
-{% block content %}
+{% block title %}
+  {% trans 'Login' %}
+{% endblock title %}
 
-  {% if from_activation %}
-    <div class="row from-activation">
-      <h1>{% trans "Account activated" %}</h1>
-      <p>{% trans "You can now login with your email and password." %}</p>
-    </div>
-  {% else %}
 
-  <div class="row">
-    <div class="large-12 columns">
-      {% url 'accounts:register' as register_url %}
+{% block page-content %}
+
+  {% url 'accounts:register' as register_url %}
+
+  <h2>
+    {% trans 'Login' %}
+    <small>
       {% blocktrans %}
         Don't have an account ? <a href="{{ register_url }}">Sign up</a>
       {% endblocktrans %}
-    </div>
-  </div>
+    </small>
+  </h2>
 
+
+  {% if from_activation %}
+    <div class="text-center large-centered large-6 columns">
+      <h3>{% trans "Account activated" %}</h3>
+      <p>{% trans "You can now login with your email and password." %}</p>
+    </div>
   {% endif %}
 
-  <br>
 
-  <div class="row">
-    <form action="." method="POST" class="login-form large-4 columns">
+    <form action="." method="POST" class="large-6 columns large-centered">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
@@ -44,7 +48,7 @@
             {{ field }}
 
             {% if field.errors %}
-              <small class="rounded-error">
+              <small class="error">
                 {% for error in field.errors %}
                   {{ error }}
                 {% endfor %}
@@ -57,7 +61,7 @@
 
       <div class="row">
         <div class="large-12 columns text-right">
-          <a href="{% url 'auth:reset_password' %}" title="{% trans 'Reset password' %}">
+          <a href="{% url 'auth:reset_password' %}" class="forgot-password">
             {% trans 'Forgot your password?' %}
           </a>
           <input type="submit" class="button-positive" value="{% trans 'Login' %}" />
@@ -65,8 +69,5 @@
       </div>
     </form>
 
-    <div class="large-6 columns">
-    </div>
-  </div>
 
-{% endblock content %}
+{% endblock page-content %}

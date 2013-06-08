@@ -41,6 +41,7 @@ class ActivateView(FormView):
             CustomUser,
             activation_key=self.activation_key
         )
+
         return super(ActivateView, self).dispatch(*args, **kwargs)
 
     def get(self, *args, **kwargs):
