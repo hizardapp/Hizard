@@ -23,7 +23,6 @@ class Opening(TimeStampedModel):
     is_private = models.BooleanField(default=False)
     department = models.ForeignKey(Department, blank=True, null=True,
             on_delete=models.SET_NULL)
-    closing_date = models.DateTimeField(blank=True, null=True)
     country = CountryField(_("Country"), blank=True)
     city = models.CharField(_("City"), max_length=128, blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
@@ -63,9 +62,6 @@ class Opening(TimeStampedModel):
         return location
 
     def get_status(self):
-        if self.closing_date:
-            return _('Closed')
-
         if self.is_private:
             return _('Private')
 

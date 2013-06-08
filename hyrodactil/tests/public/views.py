@@ -46,11 +46,11 @@ class ApplicationViewsTests(WebTest):
         url = reverse('public:opening-list')
         self.app.get(url, headers=dict(Host="tralala.h.com"), status=404)
 
-    def test_get_list_openings_with_a_close_one(self):
+    def test_get_list_openings_with_an_unpublished_one(self):
         OpeningWithQuestionsFactory(
             title="Dreamer",
             company=self.user.company,
-            closing_date=datetime.now()
+            published_date=None
         )
         url = reverse('public:opening-list')
         page = self.app.get(

@@ -60,25 +60,6 @@ class OpeningDetailView(LoginRequiredMixin, RestrictedDetailView):
     model = Opening
 
 
-class OpeningCloseView(LoginRequiredMixin, View):
-    success_url = reverse_lazy('openings:list_openings')
-
-    def get(self, request, *args, **kwargs):
-        opening = get_object_or_404(Opening, id=self.kwargs['pk'])
-
-        if opening.company != self.request.user.company:
-            raise Http404
-
-        if opening.closing_date:
-            messages.error(request, _('This opening is already closed.'))
-        else:
-            opening.closing_date = datetime.now()
-            opening.save()
-            messages.success(request, _('Opening closed.'))
-
-        return redirect(self.success_url)
-
-
 class OpeningPublishView(LoginRequiredMixin, View):
     success_url = reverse_lazy('openings:list_openings')
 

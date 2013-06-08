@@ -1,3 +1,4 @@
+from datetime import datetime
 import factory
 
 import _companies
@@ -25,6 +26,8 @@ class OpeningQuestionFactory(factory.DjangoModelFactory):
 
 
 class OpeningWithQuestionsFactory(OpeningFactory):
+
+    published_date = datetime.now()
 
     @classmethod
     def _prepare(cls, create, **kwargs):

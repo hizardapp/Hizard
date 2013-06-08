@@ -29,11 +29,6 @@ urlpatterns = patterns('',
         name='detail_opening'
     ),
     url(
-        r'^close/(?P<pk>\d+)/',
-        views.OpeningCloseView.as_view(),
-        name='close_opening'
-    ),
-    url(
         r'^publish/(?P<pk>\d+)/',
         views.OpeningPublishView.as_view(),
         name='publish_opening'

@@ -23,7 +23,7 @@ class OpeningList(SubdomainRequiredMixin, TemplateView):
         company = get_object_or_404(Company,
                 subdomain__iexact=self.request.subdomain)
         context["company"] = company
-        context["openings"] = company.opening_set.filter(closing_date__isnull=True)
+        context["openings"] = company.opening_set.filter(published_date__isnull=False)
         return context
 
 

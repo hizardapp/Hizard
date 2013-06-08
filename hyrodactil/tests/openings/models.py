@@ -35,9 +35,5 @@ class OpeningsModelsTests(TestCase):
         self.assertEqual(unicode(opening.get_status()), 'Private')
         opening.is_private = False
 
-        opening.closing_date = datetime.now()
-        self.assertEqual(unicode(opening.get_status()), 'Closed')
-        opening.closing_date = None
-
         opening.published_date = datetime.now()
         self.assertEqual(unicode(opening.get_status()), 'Published')

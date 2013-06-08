@@ -122,25 +122,12 @@ class OpeningsViewsTests(WebTest):
 
     def test_close_opening_valid(self):
         opening = OpeningFactory(title='DevOps', company=self.user.company)
-        url = reverse('openings:close_opening', args=(opening.id,))
+        url = reverse('openings:publish_opening', args=(opening.id,))
         self.app.get(url, user=self.user)
 
         self.assertEqual(
-            Opening.objects.filter(closing_date__isnull=True).count(), 0
+            Opening.objects.filter(published_date__isnull=True).count(), 0
         )
-
-    def test_close_opening_already_closed(self):
-        opening = OpeningFactory(
-            title='DevOps', company=self.user.company,
-            closing_date=datetime.now()
-        )
-        url = reverse('openings:close_opening', args=(opening.id,))
-        response = self.app.get(url, user=self.user).follow()
-
-        self.assertEqual(
-            Opening.objects.filter(closing_date__isnull=True).count(), 0
-        )
-        self.assertContains(response, 'already closed')
 
     def test_publish_opening(self):
         opening = OpeningFactory(company=self.user.company)
