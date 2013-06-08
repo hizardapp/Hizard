@@ -14,7 +14,7 @@
     {{ opening.title }}
     <small>{% trans 'opening details' %}</small>
       <span class="actions">
-        <a href="{% url 'applications:manual_application' %}" class="button-positive right">
+        <a href="{% url 'applications:manual_application' opening.pk %}" class="button-positive right">
           {% trans "Add a candidate" %}
         </a>
     </span>
@@ -57,6 +57,9 @@
           </li>
           <li>
             <a href="{% url 'openings:delete_opening' opening.pk %}"><i class="icon-trash"></i>{% trans 'Delete this opening' %}</a>
+          </li>
+          <li>
+            <a href="{% url 'applications:manual_application' opening.pk %}"><i class="icon-upload"></i>{% trans 'Add applicant' %}</a>
           </li>
           <li>
             <a href="{% url 'openings:publish_opening' opening.pk %}">

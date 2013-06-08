@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from companysettings.models import InterviewStage
+from openings.models import Opening
 
 from .models import (
     Applicant, Application, ApplicationAnswer, ApplicationStageTransition,
@@ -48,7 +49,6 @@ class ApplicationForm(forms.ModelForm):
         '''
         resume = self.cleaned_data['resume']
 
-
         if resume:
             if not any(resume.name.lower().endswith(extension)
                     for extension in Applicant.ALLOWED_EXTENSIONS):
@@ -59,58 +59,40 @@ class ApplicationForm(forms.ModelForm):
 
         return resume
 
-    def _assure_directory_exists(self):
-        '''
-        Creates the company directory in media/uploads if it doesn't exist
-        already.
-        '''
-        path = '%s/uploads/%d' % (settings.MEDIA_ROOT, self.opening.company.id)
-
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-    def _get_random_filename(self, filename):
-        '''
-        Use uuid to generate a unique filename and adds the file extension
-        '''
-        new_filename = str(uuid.uuid4())
-        extension = filename.split('.')[-1]
-        new_filename += '.%s' % extension
-
-        return new_filename
-
-    def _save_file(self, file):
-        '''
-        Saves the files uploaded by an applicant into media/uploads/company_id
-        '''
-        filename = self._get_random_filename(file.name)
-        upload_path = '/uploads/%d/%s' % (self.opening.company.id, filename)
-        path = '%s/%s' % (settings.MEDIA_ROOT, upload_path)
-        destination = open(path, 'wb+')
-
-        for chunk in file.chunks():
-            destination.write(chunk)
-        destination.close()
-
-        return upload_path
-
     def save(self, commit=True):
         try:
             applicant = Applicant.objects.get(email=self.cleaned_data['email'])
         except Applicant.DoesNotExist:
-            applicant = Applicant(
+            applicant = Applicant.objects.create(
                 first_name=self.cleaned_data['first_name'],
                 last_name=self.cleaned_data['last_name'],
                 email=self.cleaned_data['email'],
                 resume=self.cleaned_data['resume']
             )
-            applicant.save()
 
-        application = Application(
+        application = Application.objects.create(
             applicant=applicant,
             opening=self.opening
         )
-        application.save()
+
+        tmp_resume = application.applicant.resume.path
+        base_name = os.path.basename(tmp_resume)
+
+        final_resume = os.path.join('resumes',
+                str(application.opening.company.id),
+                base_name)
+        absolute_final_resume = os.path.join(settings.MEDIA_ROOT, final_resume)
+
+        try:
+            os.makedirs(os.path.dirname(absolute_final_resume))
+        except OSError:
+            pass
+
+        if os.path.exists(tmp_resume):
+            os.rename(tmp_resume, absolute_final_resume)
+
+        application.applicant.resume = final_resume
+        application.applicant.save()
 
         stage = InterviewStage.objects.filter(
             company=self.opening.company
@@ -127,16 +109,7 @@ class ApplicationForm(forms.ModelForm):
         for field in self.cleaned_data:
             if field.startswith('q_'):
                 question = questions.filter(slug=field[2:])[0]
-                answer = None
-
-                if isinstance(self.fields[field], forms.FileField):
-                    self._assure_directory_exists()
-                    temp_file = self.files.get(field, None)
-
-                    if temp_file:
-                        answer = self._save_file(self.files[field])
-                else:
-                    answer = self.cleaned_data[field]
+                answer = self.cleaned_data[field]
 
                 if answer is not None:
                     application_answer = ApplicationAnswer()

@@ -64,7 +64,6 @@ MEDIA_URL = 'http://app.spp.com:8000/media/'
 
 ######## REGISTRATION
 SKIP_ACTIVATION = True
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_DOMAIN = 'app.spp.com'
 SITE_URL = 'http://app.spp.com:8000/'

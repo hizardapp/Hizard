@@ -120,20 +120,31 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         )
 
 
-class ManualApplicationView(LoginRequiredMixin, MessageMixin, View):
+class ManualApplicationView(LoginRequiredMixin, MessageMixin, FormView):
     model = Applicant
-    #form_class = ApplicationForm
+    form_class = ApplicationForm
     template_name = 'applications/manual_application.html'
     success_message = _('Application manually added.')
 
+    def get_context_data(self, **kwargs):
+        context = super(ManualApplicationView, self).get_context_data(**kwargs)
+        context["opening"] = self.opening
+        return context
+
     def get_form_kwargs(self):
-        kwargs = super(ManualApplicationView, self).get_form_kwargs()
-        return kwargs
+        default_kwargs = super(ManualApplicationView, self).get_form_kwargs()
+        self.opening = Opening.objects.get(
+            pk=self.kwargs["opening_id"]
+        )
+        default_kwargs['opening'] = self.opening
+        return default_kwargs
 
     def form_valid(self, form):
         self.success_url = reverse(
-            'applications:list_applications',
-        ) + "?openings=%s" % form.opening.id
+            'applications:list_applications_opening',
+            args=[self.opening.id]
+        )
+        form.save()
         return super(ManualApplicationView, self).form_valid(form)
 
 

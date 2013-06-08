@@ -16,7 +16,7 @@ class ApplicantFactory(factory.DjangoModelFactory):
     first_name = 'Bilbon'
     last_name = 'Sacquet'
     email = 'bilbon@shire.com'
-    resume = 'resumes/resume.pdf'
+    resume = 'tmp_resumes/resume.pdf'
 
 
 class ApplicationFactory(factory.DjangoModelFactory):

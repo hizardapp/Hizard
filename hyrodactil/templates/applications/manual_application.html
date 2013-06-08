@@ -1,18 +1,45 @@
-{% extends "base_app.html" %}
+{% extends "app_page.html" %}
 
 {% load i18n %}
 
-{% block content %}
+{% block page-content %}
+  <h2>
+    {{ opening.title }}
+  </h2>
 
-  <form action="." method="POST" enctype="multipart/form-data" id="action-form">
-    {% csrf_token %}
-    {{ form.errors }}
+  <form action="." method="POST" class="large-6 columns large-centered"
+      enctype="multipart/form-data" id="action-form"> {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <small class="error">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </small>
+    {% endif %}
+
     {% for field in form %}
-      {{ field.label_tag }}
-      {{ field }}
-    {% endfor %}
-      <br><br><br>
-      <input type="submit" value="Submit" class="button">
-  </form>
+      <div class="row">
+        <div class="large-12 columns {% if field.errors %} error {% endif %}">
 
-{% endblock content %}
+          {{ field.label_tag }}
+          {{ field }}
+
+          {% if field.errors %}
+            <small class="error">
+              {% for error in field.errors %}
+                {{ error }}
+              {% endfor %}
+            </small>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="row">
+      <div class="large-12 columns text-right">
+        <input type="submit" class="button-positive" value="{% trans 'Save' %}" />
+      </div>
+    </div>
+  </form>
+{% endblock page-content %}

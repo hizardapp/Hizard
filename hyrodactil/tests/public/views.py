@@ -102,7 +102,8 @@ class ApplicationViewsTests(WebTest):
         applicant = application.applicant
 
         self.assertEqual(applicant.first_name, 'Bilbon')
-        self.assertEqual(applicant.resume.url, '/media/resumes/bilbon_cv.pdf')
+        self.assertEqual(applicant.resume.url,
+                '/media/resumes/%d/bilbon_cv.pdf' % self.opening.company.id)
         self.assertEqual(application.current_stage, stage1)
 
         # 2 required, 1 not required, we still record the 3 though

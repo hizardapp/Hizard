@@ -17,7 +17,8 @@
       <a href="{% url 'openings:create_opening' %}" class="button-positive right">
         {% trans "Create an opening" %}
       </a>
-      <a href="{% url 'applications:manual_application' %}" class="button-positive right">
+      <a href="#" class="button-positive right"
+        data-reveal-id="add-applicant-modal">
         {% trans "Add a candidate" %}
       </a>
     </span>
@@ -53,4 +54,31 @@
     </tbody>
   </table>
 
+  <div id="add-applicant-modal" class="reveal-modal">
+    <h3>{% trans 'Add applicant' %}</h3>
+
+    <div class="row">
+      <div class="large-9 column">
+        <select id="opening-list">
+          {% for opening in opening_list %}
+            <option value="{% url 'applications:manual_application' opening.pk %}">{{ opening.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="large-3 column">
+        <button class="button-positive right" id="add-applicant">{% trans 'Add applicant' %}</button>
+      </div>
+
+    <a class="close-reveal-modal">&#215;</a>
+  </div>
+
 {% endblock page-content %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+   $('button#add-applicant').click(function() {
+       window.location.href = $("select#opening-list option:selected").attr("value");
+   });
+  </script>
+{% endblock extra-js %}

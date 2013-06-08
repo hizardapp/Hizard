@@ -398,6 +398,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:list_users')
         page = self.app.get(url, user=self.user)
 
+        self.assertEqual(len(mail.outbox), 0)
         form = page.form
         form.action = reverse('companysettings:list_users')
         form["email"] = "steve@example.com"

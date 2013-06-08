@@ -14,7 +14,7 @@ class Applicant(TimeStampedModel):
     # 254 is the max length of an email
     email = models.EmailField(max_length=254)
     resume = models.FileField(
-        upload_to='resumes',
+        upload_to="tmp_resumes",
         help_text=_('PDF files only')
     )
 

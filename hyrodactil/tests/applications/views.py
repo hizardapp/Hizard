@@ -15,6 +15,7 @@ from ..factories._companysettings import (
 )
 from ..factories._openings import OpeningWithQuestionsFactory
 from applications.models import ApplicationMessage, Application, Applicant
+from openings.models import Opening
 
 
 class ApplicationViewsTests(WebTest):
@@ -127,8 +128,8 @@ class ApplicationViewsTests(WebTest):
 
     def test_create_manual_application(self):
         InterviewStageFactory(company=self.user.company)
-        url = reverse('applications:manual_application')
-        self.fail('Need to rewrite manual application from/view')
+        opening = Opening.objects.get()
+        url = reverse('applications:manual_application', args=[opening.pk])
         page = self.app.get(url, user=self.user)
         form = page.forms['action-form']
         form['first_name'] = 'Bilbo'
@@ -140,12 +141,10 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(Application.objects.count(), 1)
-        company_dir = '%s/uploads/%d' % (
-            settings.MEDIA_ROOT,
-            self.opening.company.id
-        )
-        shutil.rmtree(company_dir)
-        os.unlink(Applicant.objects.get(id=1).resume.path)
+        applicant = Applicant.objects.get()
+        self.assertEqual(applicant.first_name, "Bilbo")
+        self.assertEqual(applicant.last_name, "Sacquet")
+        os.unlink(applicant.resume.path)
 
 
 class ApplicationAjaxViewsTests(WebTest):

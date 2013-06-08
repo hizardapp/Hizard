@@ -86,43 +86,6 @@ class ApplicationFormTests(TestCase):
         form = ApplicationForm(self.form_data, files, opening=opening)
         self.assertFalse(form.is_valid())
 
-    def test_assure_directory_exists(self):
-        opening = OpeningFactory()
-        path = '%s/uploads/%d' % (settings.MEDIA_ROOT, opening.company.id)
-        form = ApplicationForm(opening=opening)
-
-        self.assertFalse(os.path.exists(path))
-        form._assure_directory_exists()
-        self.assertTrue(os.path.exists(path))
-
-        # Making sure we delete the folder
-        os.rmdir(path)
-
-    def test_get_random_filename(self):
-        opening = OpeningFactory()
-        form = ApplicationForm(opening=opening)
-        file = self._get_temporary_file()
-        filename = form._get_random_filename(file.name)
-
-        self.assertNotEqual(filename, 'foo.pdf')
-        self.assertEqual(filename.split('.')[-1], 'pdf')
-
-    def test_save_file(self):
-        opening = OpeningFactory()
-        dir = '%s/uploads/%d' % (settings.MEDIA_ROOT, opening.company.id)
-
-        form = ApplicationForm(opening=opening)
-        file = self._get_temporary_file()
-
-        form._assure_directory_exists()
-        self.assertEqual(len(os.listdir(dir)), 0)
-        filepath = form._save_file(file)
-        path = '%s/%s' % (settings.MEDIA_ROOT, filepath)
-        self.assertTrue(os.path.exists(path))
-
-        # Making sure we delete the folder and the files inside
-        shutil.rmtree(dir)
-
     def test_should_not_create_new_applicant_if_exists(self):
         ApplicantFactory(email='bob@marley.jah')
         company = CompanyFactory()
