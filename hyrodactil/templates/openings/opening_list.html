@@ -39,9 +39,8 @@
 
     <tbody>
       {% for opening in opening_list %}
-        {{ opening.department }}
         <tr>
-          <td>{{ opening.title }}</td>
+          <td><a href="{% url 'openings:detail_opening' opening.id %}">{{ opening.title }}</a></td>
           <td>{{ opening.department|default_if_none:'—' }}</td>
           <td>{{ opening.get_employment_type_display }}</td>
           <td>{{ opening.get_location_string|default:'—' }}</td>
