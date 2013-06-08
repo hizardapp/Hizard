@@ -42,6 +42,7 @@
               <li><a href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
               <li><a href="{% url 'openings:list_openings' %}">Openings</a></li>
               <li><a href="{% url 'applications:list_applications' %}">Applicants</a></li>
+              <li><a href="{{ opening_list_url }}" target="_blank">{% trans 'Career site' %}</a></li>
               <li class="has-dropdown"><a href="#">Settings</a>
                 <ul class="dropdown">
                   <li><a href="{% url 'companysettings:list_departments' %}">{% trans 'Departments' %}</a></li>
