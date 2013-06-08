@@ -70,9 +70,9 @@
     {% endif %}
 
     <section class="section">
-      <p class="title"><a href="#discussion">{% trans 'Discussion' %}</a></p>
-      <div class="content" data-slug="discussion">
-        {% include 'applications/_discussion_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
+      <p class="title"><a href="#comments">{% trans 'Comments' %}</a></p>
+      <div class="content" data-slug="comments">
+        {% include 'applications/_comments_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
       </div>
     </section>
   </div>

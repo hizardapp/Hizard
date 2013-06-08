@@ -67,7 +67,7 @@ class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
             request, application_id, **kwargs)
 
     def get_success_url(self):
-        return '%s#discussion' % reverse(
+        return '%s#comments' % reverse(
             'applications:application_detail',
             args=(self.application.id,)
         )
