@@ -138,6 +138,7 @@
         formatSelection: formatState,
         createSearchChoice: function (term, data) {
           if ($(options).filter(function () {
+            // XXX doesn't handle unicode well (ex: Reunion)
             return term.toLowerCase() == this.toLowerCase();
           }).length === 0) {
             return {id: "-1", text: term};
