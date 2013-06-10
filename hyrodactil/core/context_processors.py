@@ -11,5 +11,10 @@ def opening_lists(request):
     if request.user.is_authenticated() and request.user.company is not None:
         extra_context['opening_list_url'] = (settings.COMPANY_URL_PREFIX
                 % request.user.company.subdomain)
+        if not settings.OPENING_URL_REWRITED:
+            extra_context["opening_list_url"] = "%s%s" % (
+                extra_context["opening_list_url"],
+                reverse("public:opening-list")
+            )
 
     return extra_context

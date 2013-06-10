@@ -70,6 +70,7 @@ SITE_URL = 'http://app.spp.com:8000/'
 SITE_PREFIX = 'http://app.spp.com:8000'
 ALLOWED_HOSTS = ('.spp.com',)
 SESSION_COOKIE_DOMAIN = '.' + SITE_DOMAIN
+OPENING_URL_REWRITED = False
 
 PUBLIC_DOMAIN = 'spp.com'
 PUBLIC_URL = 'http://spp.com:8000/'

@@ -261,6 +261,8 @@ SITE_URL = 'http://app.hizard.com/'
 PUBLIC_DOMAIN = 'hizard.com'
 PUBLIC_URL = 'http://hizard.com/'
 COMPANY_URL_PREFIX = 'http://%s.hizard.com'
+OPENING_URL_REWRITED = True
+
 DISPLAY_SITE_NAME = 'Hizard'
 DEFAULT_FROM_EMAIL = 'Hizard <app@hizard.com>'
 
