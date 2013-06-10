@@ -58,6 +58,14 @@
     <h3>{% trans 'Add applicant' %}</h3>
 
     <div class="row">
+      <p class="large-12 column">
+      {% blocktrans %}
+      Add an applicant for the following opening :
+      {% endblocktrans %}
+      </p>
+    </div>
+
+    <div class="row">
       <div class="large-9 column">
         <select id="opening-list">
           {% for opening in opening_list %}
