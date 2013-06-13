@@ -1,8 +1,6 @@
 import json
 import os
-import shutil
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
@@ -16,6 +14,7 @@ from ..factories._companysettings import (
 from ..factories._openings import OpeningWithQuestionsFactory
 from applications.models import ApplicationMessage, Application, Applicant
 from openings.models import Opening
+from tests.utils import subdomain_get, subdomain_post_ajax
 
 
 class ApplicationViewsTests(WebTest):
@@ -29,47 +28,45 @@ class ApplicationViewsTests(WebTest):
 
         url = reverse('applications:list_applications')
 
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
         self.assertContains(response, application.applicant.last_name)
 
     def test_get_applicant_details(self):
-        application = ApplicationFactory.create(opening=self.opening)
-        ApplicationAnswerFactory.create(
+        application = ApplicationFactory(opening=self.opening)
+        ApplicationAnswerFactory(
             application=application, question=self.question, answer="Man"
         )
 
         url = reverse(
             'applications:application_detail', args=(application.id,)
         )
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, application.applicant.first_name)
         self.assertContains(response, "Man")
 
     def test_get_applicant_details_different_company(self):
-        application = ApplicationFactory.create(opening=self.opening)
-        user = UserFactory.create(email='red@red.com')
+        application = ApplicationFactory(opening=self.opening)
+        user = UserFactory(email='red@red.com')
 
         url = reverse(
             'applications:application_detail', args=(application.id,)
         )
-
-        self.app.get(url, user=user, status=404)
+        subdomain_get(self.app, url, user=user, status=404)
 
     def test_applicant_details_update_stage(self):
-        application = ApplicationFactory.create(opening=self.opening)
-        phoned = InterviewStageFactory.create(company=self.user.company)
+        application = ApplicationFactory(opening=self.opening)
+        phoned = InterviewStageFactory(company=self.user.company)
 
         url = reverse(
             'applications:application_detail', args=(application.id,)
         )
-        response = self.app.get(url, user=self.user)
-        self.assertEqual(response.status_code, 200)
-        response = self.app.get(url)
+        response = subdomain_get(self.app, url, user=self.user)
+
         form = response.forms['transition-form']
         form['stage'] = '%s' % phoned.pk
         form['note'] = 'Yep, looks good'
@@ -84,15 +81,15 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(response, transition.stage)
 
     def test_discuss_an_application(self):
-        application = ApplicationFactory.create(opening=self.opening)
-        colleague = UserFactory.create(
+        application = ApplicationFactory(opening=self.opening)
+        colleague = UserFactory(
             email='bill@company.com', company=self.user.company
         )
         url = reverse(
             'applications:application_detail', args=(application.id,)
         )
 
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
 
         form = response.forms['new-message-form']
         form['body'] = 'This guy is good'
@@ -112,13 +109,13 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(colleague, new_message.user)
 
     def test_only_allowed_user_can_participate_to_application_discussion(self):
-        application = ApplicationFactory.create(opening=self.opening)
-        attacker = UserFactory.create(email='red@red.com')
+        application = ApplicationFactory(opening=self.opening)
+        attacker = UserFactory(email='red@red.com')
         url = reverse(
             'applications:application_detail', args=(application.id,)
         )
 
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
 
         form = response.forms['new-message-form']
         form['body'] = 'This guy is good'
@@ -130,7 +127,8 @@ class ApplicationViewsTests(WebTest):
         InterviewStageFactory(company=self.user.company)
         opening = Opening.objects.get()
         url = reverse('applications:manual_application', args=[opening.pk])
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
+
         form = page.forms['action-form']
         form['first_name'] = 'Bilbo'
         form['last_name'] = 'Sacquet'
@@ -166,11 +164,8 @@ class ApplicationAjaxViewsTests(WebTest):
             'positions': [(application1.id, 0), (application2.id, 1)]
         }
 
-        response = self.app.post(
-            url,
-            {'data': json.dumps(data)},
-            user=self.user,
-            extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = subdomain_post_ajax(
+            self.app, url, {'data': json.dumps(data)}, user=self.user
         )
 
         json_response = json.loads(response.content)
@@ -195,11 +190,8 @@ class ApplicationAjaxViewsTests(WebTest):
             'positions': [(application1.id, 0), (application2.id, 1)]
         }
 
-        response = self.app.post(
-            url,
-            {'data': json.dumps(data)},
-            user=self.user,
-            extra_environ=dict(HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = subdomain_post_ajax(
+            self.app, url, {'data': json.dumps(data)}, user=self.user
         )
 
         json_response = json.loads(response.content)

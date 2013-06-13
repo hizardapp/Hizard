@@ -14,12 +14,13 @@ from ..factories._openings import OpeningWithQuestionsFactory
 
 from applications.models import Application, ApplicationAnswer
 from companysettings.models import Question
+from tests.utils import subdomain_get, career_site_get
 
 
 class PublicViewsTests(WebTest):
     def test_anonymous_can_access_landing_page(self):
         url = reverse('public:landing-page')
-        response = self.app.get(url)
+        response = subdomain_get(self.app, url)
         self.assertEqual(response.status_code, 200)
 
 
@@ -34,10 +35,7 @@ class ApplicationViewsTests(WebTest):
         self.user.company.subdomain = self.user.company.subdomain.title()
         self.user.company.save()
 
-        page = self.app.get(
-            url,
-            headers=dict(Host="%s.h.com" % self.user.company.subdomain.lower())
-        )
+        page = career_site_get(self.app, url, self.user.company.subdomain.lower())
 
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, self.opening.title)
@@ -53,15 +51,13 @@ class ApplicationViewsTests(WebTest):
             published_date=None
         )
         url = reverse('public:opening-list')
-        page = self.app.get(
-            url, headers=dict(Host="%s.h.com" % self.user.company.subdomain)
-        )
+        page = career_site_get(self.app, url, self.user.company.subdomain.lower())
         self.assertNotContains(page, 'Dreamer')
 
     def test_get_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))
 
-        page = self.app.get(url)
+        page = career_site_get(self.app, url, self.user.company.subdomain.lower())
 
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, self.opening.company.name)
@@ -82,7 +78,7 @@ class ApplicationViewsTests(WebTest):
             company=self.opening.company,
             position=1, name="Accepted"
         )
-        form = self.app.get(url).form
+        form = career_site_get(self.app, url, self.user.company.subdomain.lower()).form
 
         form['first_name'] = 'Bilbon'
         form['last_name'] = 'Sacquet'
@@ -114,7 +110,7 @@ class ApplicationViewsTests(WebTest):
 
     def test_invalid_post_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))
-        form = self.app.get(url).form
+        form = career_site_get(self.app, url, self.user.company.subdomain.lower()).form
 
         form['first_name'] = 'Software Developer'
         form['last_name'] = 'Fait des logiciels.'

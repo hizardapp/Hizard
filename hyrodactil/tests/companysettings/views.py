@@ -11,6 +11,7 @@ from ..factories._companysettings import (
 )
 from companysettings.models import Department, Question, InterviewStage
 from accounts.models import CustomUser
+from tests.utils import subdomain_get, subdomain_post_ajax
 
 
 class CompanySettingsViewsTests(WebTest):
@@ -22,7 +23,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:list_departments')
 
         department = DepartmentFactory(company=self.user.company)
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
 
         self.assertContains(page, department.name)
 
@@ -30,12 +31,10 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_department')
         data = {'name': 'Cooking'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
+
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'success')
         self.assertEqual(result['id'], 1)
@@ -45,11 +44,8 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_department')
         data = {'name': ''}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(
@@ -62,11 +58,8 @@ class CompanySettingsViewsTests(WebTest):
         dept = DepartmentFactory()
         data = {'id': dept.id,'name': 'Cooking'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'success')
@@ -77,11 +70,8 @@ class CompanySettingsViewsTests(WebTest):
         dept = DepartmentFactory()
         data = {'id': dept.id, 'name': ''}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(
@@ -93,11 +83,8 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_department')
         data = {'id': 42, 'name': ''}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'error')
@@ -109,7 +96,7 @@ class CompanySettingsViewsTests(WebTest):
         )
         url = reverse('companysettings:delete_department', args=(dept.id,))
 
-        response = self.app.get(url, user=self.user).follow()
+        response = subdomain_get(self.app, url, user=self.user)
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_departments'))
         self.assertNotContains(response, "Sales")
@@ -118,18 +105,15 @@ class CompanySettingsViewsTests(WebTest):
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')
         question = SingleLineQuestionFactory(company=self.user.company)
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         self.assertContains(page, question.name)
 
     def test_ajax_create_question_valid(self):
         url = reverse('companysettings:ajax_question')
         data = {'name': 'Cooking', 'type_field':'textbox'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'success')
@@ -140,11 +124,8 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_question')
         data = {'name': '', 'type_field': 'textbox'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(
@@ -157,11 +138,8 @@ class CompanySettingsViewsTests(WebTest):
         question = SingleLineQuestionFactory()
         data = {'id': question.id,'name': 'Cooking', 'type_field': 'textbox'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'success')
@@ -172,11 +150,8 @@ class CompanySettingsViewsTests(WebTest):
         question = SingleLineQuestionFactory()
         data = {'id': question.id, 'name': '', 'type_field': 'textbox'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(
@@ -188,11 +163,8 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_question')
         data = {'id': 42, 'name': '', 'type_field': 'textbox'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'error')
@@ -204,7 +176,7 @@ class CompanySettingsViewsTests(WebTest):
         )
         url = reverse('companysettings:delete_question', args=(question.id,))
 
-        response = self.app.get(url, user=self.user).follow()
+        response = subdomain_get(self.app, url, user=self.user)
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_questions'))
         self.assertNotContains(response, "ninja")
@@ -214,7 +186,7 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:list_stages')
 
         stage = InterviewStageFactory(company=self.user.company)
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
 
         self.assertContains(page, stage.name)
 
@@ -222,11 +194,8 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_stage')
         data = {'name': 'Cooking'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'success')
@@ -237,11 +206,8 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_stage')
         data = {'name': ''}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(
@@ -254,11 +220,8 @@ class CompanySettingsViewsTests(WebTest):
         stage = InterviewStageFactory()
         data = {'id': stage.id,'name': 'Cooking'}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'success')
@@ -269,11 +232,8 @@ class CompanySettingsViewsTests(WebTest):
         stage = InterviewStageFactory()
         data = {'id': stage.id, 'name': ''}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(
@@ -285,11 +245,8 @@ class CompanySettingsViewsTests(WebTest):
         url = reverse('companysettings:ajax_stage')
         data = {'id': 42, 'name': ''}
 
-        response = self.app.post(
-            url,
-            data,
-            extra_environ={'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'},
-            user=self.user
+        response = subdomain_post_ajax(
+            self.app, url, data, user=self.user
         )
         result = json.loads(response.body)
         self.assertEqual(result['result'], 'error')
@@ -303,7 +260,7 @@ class CompanySettingsViewsTests(WebTest):
         )
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
-        response = self.app.get(url, user=self.user).follow()
+        response = subdomain_get(self.app, url, user=self.user)
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_stages'))
         self.assertNotContains(response, "Interview")
@@ -313,7 +270,7 @@ class CompanySettingsViewsTests(WebTest):
         stage = InterviewStageFactory(company=self.user.company)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
-        response = self.app.get(url, user=self.user).follow()
+        response =  subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(
             response.request.path,
@@ -326,21 +283,21 @@ class CompanySettingsViewsTests(WebTest):
         stage = InterviewStageFactory(company=self.user.company, accepted=True)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
-        self.app.get(url, user=self.user, status=404)
+        subdomain_get(self.app, url, user=self.user, status=404)
 
     def test_delete_rejected_stage(self):
         stage = InterviewStageFactory(company=self.user.company, rejected=True)
         url = reverse('companysettings:delete_stage', args=(stage.id,))
 
         # Expecting a 404
-        self.app.get(url, user=self.user, status=404)
+        subdomain_get(self.app, url, user=self.user, status=404)
 
     def test_reorder_stage_valid_up(self):
         stage1 = InterviewStageFactory(company=self.user.company)
         stage2 = InterviewStageFactory(company=self.user.company)
         url = reverse('companysettings:reorder_stage', args=(stage2.id, 'up'))
 
-        response = self.app.get(url, user=self.user).follow()
+        response = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(
             response.request.path,
@@ -355,7 +312,7 @@ class CompanySettingsViewsTests(WebTest):
             'companysettings:reorder_stage', args=(stage1.id, 'down')
         )
 
-        response = self.app.get(url, user=self.user).follow()
+        response = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(
             response.request.path,
@@ -370,7 +327,7 @@ class CompanySettingsViewsTests(WebTest):
             'companysettings:reorder_stage', args=(stage2.id, 'down')
         )
 
-        response = self.app.get(url, user=self.user).follow()
+        response = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(
             response.request.path,
@@ -389,14 +346,14 @@ class CompanySettingsViewsTests(WebTest):
             name="Bill",
             email="bill@example.com"
         )
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
 
         self.assertContains(page, colleague.name)
         self.assertNotContains(page, not_colleague.name)
 
     def test_invite_user(self):
         url = reverse('companysettings:list_users')
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(len(mail.outbox), 0)
         form = page.form
@@ -418,7 +375,7 @@ class CompanySettingsViewsTests(WebTest):
             company=self.user.company
         )
         url = reverse('accounts:activate', args=(new_user.activation_key,))
-        response = self.app.get(url)
+        response = subdomain_get(self.app, url)
         form = response.form
         form['password1'] = '1234567'
         form['password2'] = '1234567'
@@ -436,15 +393,15 @@ class CompanySettingsViewsTests(WebTest):
             'accounts:toggle_status',
             args=(colleague.pk,)
         )
+        subdomain_get(self.app, toggle_status_url, user=self.user, status=302)
 
-        self.app.get(toggle_status_url, user=self.user, status=302)
         self.assertTrue(
             CustomUser.objects.filter(
                 pk=colleague.pk, is_active=False
             ).exists()
         )
+        subdomain_get(self.app, toggle_status_url, user=self.user, status=302)
 
-        self.app.get(toggle_status_url, user=self.user, status=302)
         self.assertTrue(
             CustomUser.objects.filter(pk=colleague.pk, is_active=True).exists()
         )
@@ -463,18 +420,18 @@ class CompanySettingsViewsTests(WebTest):
         )
         url = reverse('companysettings:list_users')
 
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
         self.assertContains(response, toggle_colleague_status_url)
         self.assertNotContains(response, toggle_self_status_url)
 
-        response = self.app.get(url, user=colleague)
+        response = subdomain_get(self.app, url, user=colleague)
         self.assertNotContains(response, toggle_colleague_status_url)
         self.assertNotContains(response, toggle_self_status_url)
 
     def test_modify_company_information_valid(self):
         url = reverse('companysettings:update_information')
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         form = page.forms[0]
         form['website'] = 'www.google.com'
         form['description'] = 'Cool stuff.'
@@ -491,7 +448,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_modify_company_information_invalid(self):
         url = reverse('companysettings:update_information')
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         form = page.forms[0]
         form['website'] = 'goog'
         form['description'] = 'Cool stuff.'

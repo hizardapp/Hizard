@@ -203,7 +203,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
             'activation_key': self.activation_key,
             'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
             'site_name': settings.DISPLAY_SITE_NAME,
-            'site_url': settings.SITE_DOMAIN
+            'site_url': settings.APP_SITE_URL
         }
 
         subject = render_to_string(

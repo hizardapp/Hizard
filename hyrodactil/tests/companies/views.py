@@ -1,9 +1,9 @@
 from django.core.urlresolvers import reverse
-from django.conf import settings
 from django_webtest import WebTest
 
 from tests.factories._accounts import UserFactory
 from companies.models import Company
+from tests.utils import subdomain_get
 
 
 class CompaniesViewsTests(WebTest):
@@ -14,7 +14,7 @@ class CompaniesViewsTests(WebTest):
     def test_get_company(self):
         url = reverse('companies:create')
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(page.status_code, 200)
         self.assertIn(0, page.forms)
@@ -24,14 +24,14 @@ class CompaniesViewsTests(WebTest):
         user = UserFactory(email="mac@gyver.com")
         url = reverse('companies:create')
 
-        page = self.app.get(url, user=user)
+        page = subdomain_get(self.app, url, user=user)
 
-        self.assertEqual(page.status_code, 302)
+        self.assertTemplateUsed(page, 'dashboard/dashboard.html')
 
     def test_post_create_company_invalid(self):
         url = reverse('companies:create')
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         form = page.forms[0]
         form['name'] = ''
         response = form.submit()
@@ -42,7 +42,7 @@ class CompaniesViewsTests(WebTest):
     def test_post_create_company_valid(self):
         url = reverse('companies:create')
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         form = page.forms[0]
         form['name'] = 'ACME'
         form['subdomain'] = 'acmememe'

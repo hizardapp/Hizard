@@ -9,6 +9,7 @@ from ..factories._companysettings import SingleLineQuestionFactory
 from ..factories._companies import CompanyFactory
 
 from openings.models import Opening
+from tests.utils import subdomain_get
 
 
 class OpeningsViewsTests(WebTest):
@@ -20,14 +21,14 @@ class OpeningsViewsTests(WebTest):
     def test_arriving_on_opening_creation_page(self):
         url = reverse('openings:create_opening')
 
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(response.status_code, 200)
 
     def test_opening_creation(self):
         url = reverse('openings:create_opening')
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         form = page.forms[0]
 
         form['title'] = 'Software Developer'
@@ -56,14 +57,14 @@ class OpeningsViewsTests(WebTest):
             company=CompanyFactory())
 
         url = reverse('openings:create_opening')
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         self.assertContains(page, same_company_question.name)
         self.assertNotContains(page, other_company_question.name)
 
     def test_opening_creation_invalid(self):
         url = reverse('openings:create_opening')
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         form = page.forms[0]
         form['title'] = 'Software Developer'
         form['description'] = ''
@@ -81,7 +82,7 @@ class OpeningsViewsTests(WebTest):
         opening = OpeningFactory(title='DevOps', company=self.user.company)
         url = reverse('openings:update_opening', args=(opening.id,))
 
-        page = self.app.get(url, user=self.user)
+        page = subdomain_get(self.app, url, user=self.user)
         form = page.forms[0]
         form['title'] = 'Software Developer'
         response = form.submit().follow()
@@ -93,13 +94,13 @@ class OpeningsViewsTests(WebTest):
     def test_cant_edit_other_company_opening(self):
         opening = OpeningFactory(title='DevOps', company=CompanyFactory())
         url = reverse('openings:update_opening', args=(opening.id,))
-        self.app.get(url, user=self.user, status=404)
+        subdomain_get(self.app, url, user=self.user, status=404)
 
     def test_opening_delete(self):
         opening = OpeningFactory(title='DevOps', company=self.user.company)
         url = reverse('openings:delete_opening', args=(opening.id,))
 
-        response = self.app.get(url, user=self.user).follow()
+        response = subdomain_get(self.app, url, user=self.user)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.request.path,
@@ -111,19 +112,19 @@ class OpeningsViewsTests(WebTest):
     def test_opening_listing(self):
         url = reverse('openings:list_openings')
         opening = OpeningFactory(title='DevOps', company=self.user.company)
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
         self.assertContains(response, opening.title)
 
     def test_opening_detail_view(self):
         opening = OpeningFactory(title='DevOps', company=self.user.company)
         url = reverse('openings:detail_opening', args=(opening.id,))
-        response = self.app.get(url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
         self.assertContains(response, opening.title)
 
     def test_close_opening_valid(self):
         opening = OpeningFactory(title='DevOps', company=self.user.company)
         url = reverse('openings:publish_opening', args=(opening.id,))
-        self.app.get(url, user=self.user)
+        subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(
             Opening.objects.filter(published_date__isnull=True).count(), 0
@@ -132,7 +133,7 @@ class OpeningsViewsTests(WebTest):
     def test_publish_opening(self):
         opening = OpeningFactory(company=self.user.company)
         url = reverse('openings:publish_opening', args=(opening.id,))
-        self.app.get(url, user=self.user)
+        subdomain_get(self.app, url, user=self.user)
 
         self.assertIsNotNone(Opening.objects.get().published_date)
 
@@ -141,6 +142,6 @@ class OpeningsViewsTests(WebTest):
             company=self.user.company, published_date=datetime.now()
         )
         url = reverse('openings:publish_opening', args=(opening.id,))
-        self.app.get(url, user=self.user)
+        subdomain_get(self.app, url, user=self.user)
 
         self.assertIsNone(Opening.objects.get().published_date)

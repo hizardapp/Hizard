@@ -2,7 +2,7 @@
 
 {% trans "Activate account at" %} {{ site_name }}:
 
-http://{{ site_url }}{% url 'accounts:activate' activation_key %}
+{{ APP_SITE_URL }}{% url 'accounts:activate' activation_key %}
 
 {% blocktrans %}Link is valid for {{ expiration_days }} days.{% endblocktrans %}
 

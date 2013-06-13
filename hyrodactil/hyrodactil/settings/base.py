@@ -146,6 +146,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
+    'core.middlewares.AppSubdomainRequired'
 )
 ########## END MIDDLEWARE CONFIGURATION
 
@@ -255,9 +257,9 @@ SKIP_ACTIVATION = False
 MIN_PASSWORD_LENGTH = 7
 
 ########## SITE SPECIFIC
-SITE_DOMAIN = 'app.hizard.com'
-SITE_PREFIX = 'http://app.hizard.com'
-SITE_URL = 'http://app.hizard.com/'
+APP_SITE_DOMAIN = 'app.hizard.com'
+
+APP_SITE_URL = 'https://app.hizard.com'
 PUBLIC_DOMAIN = 'hizard.com'
 PUBLIC_URL = 'http://hizard.com/'
 COMPANY_URL_PREFIX = 'http://%s.hizard.com'
@@ -266,6 +268,6 @@ OPENING_URL_REWRITED = True
 DISPLAY_SITE_NAME = 'Hizard'
 DEFAULT_FROM_EMAIL = 'Hizard <app@hizard.com>'
 
-SESSION_COOKIE_DOMAIN = '.' + SITE_DOMAIN
+SESSION_COOKIE_DOMAIN = '.' + APP_SITE_DOMAIN
 
 ALLOWED_HOSTS = ('.hizard.com',)

@@ -8,11 +8,12 @@ TEST_DISCOVER_ROOT = join(SITE_ROOT, "tests")
 TEST_DISCOVER_PATTERN = "*"
 
 MIDDLEWARE_CLASSES = (
-    # Default Django middleware.
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
+    'core.middlewares.AppSubdomainRequired'
 )
 
 ########## IN-MEMORY TEST DATABASE
@@ -34,3 +35,8 @@ PASSWORD_HASHERS = (
 SOUTH_TESTS_MIGRATE = False
 
 MEDIA_ROOT = normpath(join(SITE_ROOT, 'tests/media'))
+
+APP_SITE_DOMAIN = 'app.test.com:80'
+APP_SITE_URL = 'http://app.test.com'
+PUBLIC_DOMAIN = 'test.com:80'
+PUBLIC_URL = 'http://test.com'
