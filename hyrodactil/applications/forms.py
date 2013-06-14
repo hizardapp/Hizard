@@ -1,12 +1,10 @@
 import os
-import uuid
 
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from companysettings.models import InterviewStage
-from openings.models import Opening
 
 from .models import (
     Applicant, Application, ApplicationAnswer, ApplicationStageTransition,
@@ -38,10 +36,6 @@ class ApplicationForm(forms.ModelForm):
                 self.fields[field_name] = forms.BooleanField(label=question.name)
 
             self.fields[field_name].required = False
-
-        for field in self.fields:
-            if self.fields[field].required:
-                self.fields[field].label += '*'
 
     def clean_resume(self):
         '''

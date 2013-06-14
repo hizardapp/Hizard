@@ -70,6 +70,7 @@ class OpeningQuestionFormset(object):
 
 
 class OpeningForm(forms.ModelForm):
+    required_css_class = 'required'
     new_department = forms.CharField(required=False, widget=forms.HiddenInput)
 
     class Meta:
