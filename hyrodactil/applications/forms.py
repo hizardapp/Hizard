@@ -24,7 +24,8 @@ class ApplicationForm(forms.ModelForm):
         if not self.opening:
             return
 
-        for question in self.opening.questions.all():
+        for opening_question in self.opening.openingquestion_set.all().select_related('question'):
+            question = opening_question.question
             field_name = 'q_%s' % question.slug
 
             if question.type_field == 'textbox':
@@ -35,7 +36,8 @@ class ApplicationForm(forms.ModelForm):
             elif question.type_field == 'checkbox':
                 self.fields[field_name] = forms.BooleanField(label=question.name)
 
-            self.fields[field_name].required = False
+
+            self.fields[field_name].required = opening_question.required
 
     def clean_resume(self):
         '''
