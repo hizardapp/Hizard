@@ -1,8 +1,5 @@
-import os
-import shutil
 import StringIO
 
-from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase
 
@@ -25,7 +22,8 @@ class ApplicationFormTests(TestCase):
 
     question_data = {
         'q_single-line': 'Lalala',
-        'q_multi-line': 'Lololo'
+        'q_multi-line': 'Lololo',
+        'q_checkbox': True
     }
 
     def _get_temporary_file(self, type='application/pdf', extension='pdf'):
@@ -62,6 +60,17 @@ class ApplicationFormTests(TestCase):
         form = ApplicationForm(data, files, opening=opening)
 
         self.assertTrue(form.is_valid())
+
+    def test_application_with_missing_required_valid(self):
+        opening = OpeningWithQuestionsFactory()
+        data = dict(self.form_data)
+        data.update(self.question_data)
+        del data['q_checkbox']
+
+        files = {'resume': self._get_temporary_file()}
+        form = ApplicationForm(data, files, opening=opening)
+
+        self.assertFalse(form.is_valid())
 
     def test_should_be_valid_if_resume_is_doc_docx(self):
         opening = OpeningFactory()

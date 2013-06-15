@@ -13,7 +13,6 @@ from ..factories._companysettings import (
 )
 from ..factories._openings import OpeningWithQuestionsFactory
 from applications.models import ApplicationMessage, Application, Applicant
-from openings.models import Opening
 from tests.utils import subdomain_get, subdomain_post_ajax
 
 
@@ -125,8 +124,9 @@ class ApplicationViewsTests(WebTest):
 
     def test_create_manual_application(self):
         InterviewStageFactory(company=self.user.company)
-        opening = Opening.objects.get()
-        url = reverse('applications:manual_application', args=[opening.pk])
+        url = reverse(
+            'applications:manual_application', args=[self.opening.pk]
+        )
         page = subdomain_get(self.app, url, user=self.user)
 
         form = page.forms['action-form']
@@ -134,6 +134,8 @@ class ApplicationViewsTests(WebTest):
         form['last_name'] = 'Sacquet'
         form['email'] = 'bilbo@shire.com'
         form['resume'] = 'bilbon_cv.pdf', "My resume"
+        form['q_checkbox'] = True
+        form['q_single-line'] = 'lalla'
 
         response = form.submit().follow()
         self.assertEqual(response.status_code, 200)

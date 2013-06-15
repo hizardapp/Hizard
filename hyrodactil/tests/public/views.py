@@ -87,6 +87,7 @@ class ApplicationViewsTests(WebTest):
         form['resume'] = 'bilbon_cv.pdf', "My resume"
         form['q_single-line'] = 'Lalala'
         form['q_multi-line'] = 'Lalala'
+        form['q_checkbox'] = True
         response = form.submit().follow()
 
         self.assertEqual(
