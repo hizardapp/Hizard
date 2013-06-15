@@ -13,6 +13,7 @@
   <div class="row">
 
     <div class="large-6 columns">
+    {% if openings %}
       {% for opening in openings %}
         <div class="opening">
           <a href="{% url 'public:apply' opening.id %}">
@@ -28,6 +29,9 @@
           </a>
         </div>
       {% endfor %}
+    {% else %}
+      <p>{% trans "Sorry, we don't have any jobs open right now." %}</p>
+    {% endif %}
     </div>
 
     <div class="large-6 columns">
