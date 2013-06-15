@@ -44,17 +44,17 @@
 
 @import "launch/topbar";
 @import "launch/landing";
-@import "launch/common";
-@import "launch/forms";
 @import "launch/tables";
 @import "launch/dashboard";
 @import "launch/openings";
 @import "launch/applications";
 @import "launch/accounts";
 
-// Common with jobss
+// Common with jobs
 @import "common/buttons";
 @import "common/alerts";
+@import "common/layout";
+@import "common/forms";
 
 // 3rd party
 @import "launch/flexslider";

@@ -4,25 +4,18 @@
 
 
 {% block title %}
-  Confirmation - {{ opening.title }} - {{ company.name }}
+  {{ opening.title }} - {{ company.name }}
 {% endblock title %}
 
+{% block content %}
 
-{% block header %}
-  {{ company.name }}
-{% endblock header %}
-
-
-{% block apply-header %}
-  <div class="apply-header large-12 columns">
-    <h3>{{ opening.title }}</h3>
-    <a href="{% url 'public:opening-list' %}">{% trans 'Back to the job listing' %}</a>
+  <div class="text-center">
+    <h3>
+      {% blocktrans with title=opening.title %}
+        Your application to {{ title }} has been received.
+      {% endblocktrans %}
+    </h3>
+    <a href="{% url 'public:opening-list' %}">{% trans 'Back to the job list' %}</a>
   </div>
-{% endblock apply-header %}
 
-
-{% block section %}
-  {% blocktrans with title=opening.title %}
-    Your application to {{ title }} has been received.
-  {% endblocktrans %}
-{% endblock section %}
+{% endblock content %}

@@ -1,20 +1,23 @@
 
-@import "variables";
-@import "compass/css3/border-radius";
+@import "../common/colours";
 
 form {
-  input {
-    @include border-radius($radius-form);
-  }
 
   label {
-    font-weight: bold;
+    color: black;
   }
 
-  .rounded-error {
-    @extend .error;
-    @include border-bottom-radius($radius-form);
-    padding: 8px;
+  .help-text {
+    background: white;
+    color: black;
+    font-size: .9em;
+  }
+  .error input {
+    border-color: $alert-error-background;
+  }
+  small.error {
+    background-color: $alert-error-background;
+    padding: 5px;
   }
 
 }

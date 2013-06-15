@@ -1,6 +1,18 @@
 
 @import "../common/colours";
 
+
+html, body {
+  overflow-x: hidden;
+  background: #EDF3F3;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+
+  p {
+    font-size: 0.9em;
+  }
+}
+
 .wrapper {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -31,7 +43,6 @@
     }
 
   }
-
 }
 
 

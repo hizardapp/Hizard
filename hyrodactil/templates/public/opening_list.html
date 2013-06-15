@@ -7,27 +7,36 @@
   {{ company.name }} - {% trans 'Job Board' %}
 {% endblock title %}
 
-{% block header %}
-  {{ company.name }}
-{% endblock header %}
 
-{% block section %}
-  <h3>{% trans 'Openings' %}</h3>
+{% block content %}
 
-  {% for opening in openings %}
-    <div class="opening">
-      <a href="{% url 'public:apply' opening.id %}">{{ opening.title }}</a>
-      <br>
-      {% if opening.department %}
-        <span>{% trans 'Department: ' %} {{ opening.department }}</span>
+  <div class="row">
+
+    <div class="large-6 columns">
+      {% for opening in openings %}
+        <div class="opening">
+          <a href="{% url 'public:apply' opening.id %}">
+            <span class="title">{{ opening.title }}</span>
+            <br>
+            {% if opening.get_location_string %}
+              <span>{{ opening.get_location_string }} - </span>
+            {% endif %}
+            <span>{{ opening.get_employment_type_display }}</span>
+            {% if opening.department %}
+              <span> - {{ opening.department.name }}</span>
+            {% endif %}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="large-6 columns">
+      {% if company.description %}
+        <h4>{% trans 'Company description' %}</h4>
+        {{ company.description }}
       {% endif %}
     </div>
-  {% endfor %}
-{% endblock section %}
 
+  </div>
 
-{% block aside %}
-  {% if company.description %}
-    {{ company.description }}
-  {% endif %}
-{% endblock aside %}
+{% endblock content %}

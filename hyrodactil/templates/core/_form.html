@@ -1,0 +1,48 @@
+{% load i18n %}
+
+<form action="." method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  {% for field in form %}
+    <div class="row">
+      <div class="large-12 columns {% if field.errors %} error {% endif %}">
+
+        <div class="row">
+          <div class="large-12 columns">
+            <label for="{{ field.auto_id }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+          </div>
+        </div>
+
+        {% if field.help_text %}
+          <div class="row help-text">
+            <div class="large-12 columns">
+              <span>{{ field.help_text }}</span>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="row">
+          <div class="large-12 columns">
+            {{ field }}
+          </div>
+        </div>
+
+        {% if field.errors %}
+          <small class="error">
+            {% for error in field.errors %}
+              {{ error }}
+            {% endfor %}
+          </small>
+        {% endif %}
+
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="row">
+    <div class="large-12 columns text-right">
+      <input type="submit" value="{% trans 'Apply' %}" class="button-positive">
+    </div>
+  </div>
+
+</form>
