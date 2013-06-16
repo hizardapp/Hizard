@@ -10,21 +10,15 @@ from .models import CustomUser
 class ImageWidget(forms.FileInput):
     template = '%(input)s<br />%(image)s'
 
-    def __init__(self, attrs=None, template=None, width=200, height=200):
-        if template is not None:
-            self.template = template
+    def __init__(self, attrs=None, width=200, height=200):
         self.width = width
         self.height = height
         super(ImageWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
         input_html = super(forms.FileInput, self).render(name, value, attrs)
-        if hasattr(value, 'width') and hasattr(value, 'height'):
-            image_html = '<img src="%s" width="%d" height="%d">' % (value.url, self.width, self.height)
-            output = self.template % {'input': input_html,
-                                      'image': image_html}
-        else:
-            output = input_html
+        image_html = '<img src="%s" width="%d" height="%d">' % (value.url, self.width, self.height)
+        output = self.template % {'input': input_html, 'image': image_html}
         return mark_safe(output)
 
 
@@ -154,4 +148,4 @@ class ChangeDetailsForm(forms.ModelForm):
         super(ChangeDetailsForm, self).__init__(*args, **kwargs)
 
         # change a widget attribute:
-        self.fields['avatar'].widget = ImageWidget()
+        self.fields['avatar'].widget = ImageWidget(width=200, height=200)
