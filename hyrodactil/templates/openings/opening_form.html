@@ -97,14 +97,16 @@
                                                                                 
 {% block extra-js %}
   <script src="{% static "js/select2.js" %}"></script>
-  <script src="{% static "js/cleditor.js" %}"></script>
+  <script src="{% static "js/vendor/tinymce/tinymce.min.js" %}"></script>
+  <script src="{% static "js/vendor/tinymce/jquery.tinymce.min.js" %}"></script>
   <script>
     $(document).ready(function() {
 
-      $('#id_description').cleditor({
-          width: $('#id_description').width(),
-          controls: "bold italic underline | bullets numbering | outdent indent " +
-                  "| alignleft center alignright justify | undo redo |  link unlink | source"
+      $('textarea').tinymce({
+        plugins: "link image preview fullscreen hr",
+        toolbar: "undo redo | bold italic |  hr  | bullist numlist | link unlink image | preview fullscreen",
+        menubar: false,
+        statusbar: false
       });
 
       $('input[id$="included"]').click(function() {
