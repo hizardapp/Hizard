@@ -17,7 +17,10 @@ class ImageWidget(forms.FileInput):
 
     def render(self, name, value, attrs=None):
         input_html = super(forms.FileInput, self).render(name, value, attrs)
-        image_html = '<img src="%s" width="%d" height="%d">' % (value.url, self.width, self.height)
+        if value:
+            image_html = '<img src="%s" width="%d" height="%d">' % (value.url, self.width, self.height)
+        else:
+            image_html = ''
         output = self.template % {'input': input_html, 'image': image_html}
         return mark_safe(output)
 
