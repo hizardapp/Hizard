@@ -166,10 +166,15 @@ class ChangeDetailsForm(forms.ModelForm):
         return thumbnail
 
     def save(self, commit=True):
+        current = CustomUser.objects.get(id=self.instance.pk)
         changes = super(ChangeDetailsForm, self).save(commit=False)
-        changes.avatar = self._make_thumbnail(self.cleaned_data['avatar'])
-        changes.save()
 
+        # Only recreates a thumbnail if we're uploading a file
+        if type(self.cleaned_data['avatar']) == InMemoryUploadedFile:
+            current.avatar.delete()
+            changes.avatar = self._make_thumbnail(self.cleaned_data['avatar'])
+
+        changes.save()
         return changes
 
 
