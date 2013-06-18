@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import json
+from django.contrib import messages
 
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -105,6 +106,8 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         context['application'] = application
         context['discussion'] = group(application.applicationmessage_set.all())
         context['new_message_form'] = ApplicationMessageForm()
+        context['user_rating'] = application.get_user_rating(context['user'])
+        context['rating'] = application.get_rating()
         context['answers'] = ApplicationAnswer.objects.filter(
             application=context['application'])
         return context
@@ -174,7 +177,9 @@ class BoardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
+class UpdatePositionsAjaxView(
+    LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin, View
+):
     def post_ajax(self, request, *args, **kwargs):
         data = json.loads(request.POST.get('data'))
 
@@ -209,3 +214,23 @@ class UpdatePositionsAjaxView(JSONResponseMixin, AjaxResponseMixin, View):
             result = {'status': 'error'}
 
         return self.render_json_response(result)
+
+
+class RateApplicationView(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        application = get_object_or_404(
+            Application.objects.select_related('opening', 'opening__company'),
+            id=self.kwargs['application_id']
+        )
+        if application.opening.company != request.user.company:
+            raise Http404
+
+        result = application.save_rating(request.user, self.kwargs['rating'])
+        if result:
+            messages.success(request, _('Application rated.'))
+        else:
+            messages.error(request, _("Couldn't rate the application"))
+
+        return redirect(
+            reverse('applications:application_detail', args=(application.id,))
+        )

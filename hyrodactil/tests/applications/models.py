@@ -32,22 +32,60 @@ class ApplicationModelTests(TestCase):
         bob = ApplicantFactory.build()
         self.assertEqual(bob.get_full_name(), 'Bilbon Sacquet')
 
-    def test_rating(self):
+    def test_get_rating(self):
         company = CompanyFactory()
         admin = UserFactory(company=company, is_company_admin=True)
         normal_user = UserFactory(email='b@b.com', company=company)
         bob_application = ApplicationFactory()
 
-        ApplicationRatingFactory(
-            user=admin,
-            application=bob_application,
-            rating=6
-        )
+        bob_application.save_rating(admin, -1)
+        bob_application.save_rating(normal_user, 1)
 
-        ApplicationRatingFactory(
-            user=normal_user,
-            application=bob_application,
-            rating=9
-        )
+        self.assertEqual(bob_application.get_rating(), 0)
 
-        self.assertEqual(bob_application.get_rating(), 7)
+    def test_get_rating_without_rating(self):
+        bob_application = ApplicationFactory()
+
+        self.assertEqual(bob_application.get_rating(), 0)
+
+    def test_save_rating_valid(self):
+        company = CompanyFactory()
+        user = UserFactory(company=company)
+        bob_application = ApplicationFactory()
+
+        result = bob_application.save_rating(user, -1)
+
+        self.assertTrue(result)
+        self.assertEqual(bob_application.get_rating(), -1)
+
+    def test_save_rating_invalid(self):
+        company = CompanyFactory()
+        user = UserFactory(company=company)
+        bob_application = ApplicationFactory()
+
+        result = bob_application.save_rating(user, -1000)
+
+        self.assertFalse(result)
+        self.assertEqual(bob_application.get_rating(), 0)
+
+    def test_save_rating_user_change(self):
+        company = CompanyFactory()
+        user = UserFactory(company=company)
+        bob_application = ApplicationFactory()
+
+        result = bob_application.save_rating(user, 1)
+        self.assertTrue(result)
+
+        result = bob_application.save_rating(user, 0)
+        self.assertTrue(result)
+
+        self.assertEqual(bob_application.get_rating(), 0)
+
+    def test_get_user_rating(self):
+        company = CompanyFactory()
+        user = UserFactory(company=company)
+        bob_application = ApplicationFactory()
+
+        bob_application.save_rating(user, 1)
+
+        self.assertEqual(bob_application.get_user_rating(user), 1)

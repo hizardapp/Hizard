@@ -11,6 +11,21 @@
   <h2>
     {{ application.applicant.first_name }} {{ application.applicant.last_name }}
     <small>{% trans 'applicant details' %}</small>
+    <span class="rating right">
+      {% if user_rating != -1 %}
+        <a href="{% url 'applications:rate' application.id -1 %}"><i class="icon-thumbs-down"></i></a>
+      {% else %}
+        <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-down"></i></a>
+      {% endif %}
+
+      {{ rating }}
+
+      {% if user_rating != 1 %}
+        <a href="{% url 'applications:rate' application.id 1 %}"><i class="icon-thumbs-up"></i></a>
+      {% else %}
+        <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-up"></i></a>
+      {% endif %}
+    </span>
   </h2>
 
   <p>

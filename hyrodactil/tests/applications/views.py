@@ -146,6 +146,24 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(applicant.last_name, "Sacquet")
         os.unlink(applicant.resume.path)
 
+    def test_vote_application_valid(self):
+        application = ApplicationFactory(opening=self.opening)
+        url = reverse(
+            'applications:rate', args=(application.pk, -1,)
+        )
+        page = subdomain_get(self.app, url, user=self.user)
+        self.assertTemplateUsed(page, 'applications/application_detail.html')
+        self.assertNotContains(page, 'class="alert-error"')
+
+    def test_vote_application_invalid(self):
+        application = ApplicationFactory(opening=self.opening)
+        url = reverse(
+            'applications:rate', args=(application.pk, -42,)
+        )
+        page = subdomain_get(self.app, url, user=self.user)
+        self.assertTemplateUsed(page, 'applications/application_detail.html')
+        self.assertContains(page, 'class="alert-error"')
+
 
 class ApplicationAjaxViewsTests(WebTest):
     csrf_checks = False

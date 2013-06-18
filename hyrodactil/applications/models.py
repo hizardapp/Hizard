@@ -15,7 +15,7 @@ class Applicant(TimeStampedModel):
     email = models.EmailField(max_length=254)
     resume = models.FileField(
         upload_to="tmp_resumes",
-        help_text=_('PDF files only')
+        help_text=_('PDF/doc files only')
     )
 
     ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx']
@@ -33,8 +33,6 @@ class Applicant(TimeStampedModel):
 class Application(TimeStampedModel):
     applicant = models.ForeignKey(Applicant)
     opening = models.ForeignKey(Opening)
-
-    rating = models.IntegerField(blank=True, null=True)
     position = models.IntegerField(default=0)
 
     current_stage = models.ForeignKey(InterviewStage, null=True)
@@ -55,26 +53,56 @@ class Application(TimeStampedModel):
         return super(Application, self).save(*args, **kwargs)
 
     def get_rating(self):
-        """
-        Admin user rating weight more than normal user so we just do the
-        average taking this into account.
-        For now admin vote count twice
-        """
         ratings = ApplicationRating.objects.filter(
             application=self
         ).select_related('CustomUser')
-        total_rating = 0
-        count_rating = 0
 
-        for rating in ratings:
-            if rating.user.is_company_admin:
-                total_rating += (rating.rating * 2)
-                count_rating += 2
-            else:
-                total_rating += rating.rating
-                count_rating += 1
+        rating = 0
 
-        return total_rating / count_rating
+        for user_rating in ratings:
+            rating += user_rating.rating
+
+        return rating
+
+    def save_rating(self, user, rating):
+        int_rating = int(rating)
+
+        if int_rating not in [-1, 0, 1]:
+            return False
+
+        rating_obj = ApplicationRating.objects.filter(
+            application=self,
+            user=user
+        ).select_related('CustomUser')
+
+        if rating_obj:
+            rating_obj = rating_obj[0]
+            if rating_obj.rating == int_rating:
+                return True
+            rating_obj.rating = int_rating
+            rating_obj.save()
+            return True
+
+        ApplicationRating.objects.create(
+            application=self,
+            user=user,
+            rating=int_rating
+        ).save()
+
+        return True
+
+    def get_user_rating(self, user):
+        rating_obj = ApplicationRating.objects.filter(
+            application=self,
+            user=user
+        ).select_related('CustomUser')
+
+        if rating_obj:
+            return rating_obj[0].rating
+
+        return 0
+
+
 
     class Meta:
         ordering = 'position',
