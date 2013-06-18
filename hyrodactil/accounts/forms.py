@@ -1,6 +1,10 @@
+import StringIO
+from PIL import Image
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth import forms as auth_forms
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -10,7 +14,7 @@ from .models import CustomUser
 class ImageWidget(forms.FileInput):
     template = '%(input)s<br />%(image)s'
 
-    def __init__(self, attrs=None, width=200, height=200):
+    def __init__(self, attrs=None, width=50, height=50):
         self.width = width
         self.height = height
         super(ImageWidget, self).__init__(attrs)
@@ -151,4 +155,21 @@ class ChangeDetailsForm(forms.ModelForm):
         super(ChangeDetailsForm, self).__init__(*args, **kwargs)
 
         # change a widget attribute:
-        self.fields['avatar'].widget = ImageWidget(width=200, height=200)
+        self.fields['avatar'].widget = ImageWidget(width=50, height=50)
+
+    def _make_thumbnail(self, full_size_image):
+        img = Image.open(full_size_image)
+        img.thumbnail((50, 50), Image.ANTIALIAS)
+        thumbnailString = StringIO.StringIO()
+        img.save(thumbnailString, 'PNG')
+        thumbnail = InMemoryUploadedFile(thumbnailString, None, 'temp.png', 'image/png', thumbnailString.len, None)
+        return thumbnail
+
+    def save(self, commit=True):
+        changes = super(ChangeDetailsForm, self).save(commit=False)
+        changes.avatar = self._make_thumbnail(self.cleaned_data['avatar'])
+        changes.save()
+
+        return changes
+
+
