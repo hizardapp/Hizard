@@ -16,7 +16,7 @@
     <small>{% trans 'things you want to ask candidates when they apply' %}</small>
   </h2>
 
-  <div id="table-questions">
+  <div id="sort-table">
 
     <table>
       <thead>
@@ -51,7 +51,7 @@
           <input type="text" class="form-name" placeholder="{% trans 'Name' %}" />
         </div>
         <div class="large-5 columns">
-          <select class="form-type">
+          <select class="form-type_field">
             {% for type in types %}
               <option value="{{ type.0 }}">{{ type.1 }}</option>
             {% endfor %}
@@ -72,120 +72,14 @@
 {% block extra-js %}
   <script src="{% static "js/vendor/list.min.js" %}"></script>
   <script src="{% static "js/csrf.js" %}"></script>
+  <script src="{% static "js/CompanySettings.js" %}"></script>
   <script>
     $(document).ready(function() {
-      var options = {
-        valueNames: ['id', 'name', 'type_field']
-      };
-      var questionTable = new List('table-questions', options);
-
-      var $nameInput = $('.form-name');
-      var $typeSelect = $('.form-type');
-      var $id = $('.form-id');
-      var $saveButton = $('.save');
-
-      var $alert;
-
-      $nameInput.keypress(function(event){
-        var keycode = (event.keyCode ? event.keyCode : event.which);
-        if(keycode === 13){
-          $saveButton.click();
-          event.preventDefault();
-          event.stopPropagation();
-        }
-      });
-
-      $nameInput.focus(function() {
-        $nameInput.removeClass('error');
-        $nameInput.next('small').remove();
-      });
-
-      $saveButton.click(function() {
-        var newQuestion = {
-          'name': $nameInput.val(),
-          'type_field': $typeSelect.val()
-        };
-
-        var isUpdate = false;
-        if ($id.val().length > 0) {
-          newQuestion.id = $id.val();
-          isUpdate = true;
-        }
-
-        $.post("{% url 'companysettings:ajax_question' %}", newQuestion, function(data) {
-          if (data.result === 'error') {
-            $nameInput.addClass('error');
-            var $error = $('<small>').addClass('error');
-            for (var error in data.errors) {
-              $error.text(data.errors[error]);
-            }
-            $nameInput.after($error);
-            if (isUpdate) {
-              var item = questionTable.get('id', newQuestion.id).values();
-              $nameInput.val(item.name);
-            }
-          } else {
-            $nameInput.val('');
-            $id.val('');
-            newQuestion.id = data.id;
-            newQuestion.type_field = $typeSelect.find('option:selected').text()
-            if (isUpdate) {
-              var item = questionTable.get('id', data.id);
-              item.values(newQuestion);
-            } else {
-              // listjs kinda suck sometimes
-              // fail to add if list is empty
-              if (questionTable.items.length === 0) {
-                location.reload();
-              }
-              questionTable.add(newQuestion);
-            }
-          }
-          if ($alert) {
-            $alert.remove();
-          }
-          displayMessage(data.result, data.message);
-        });
-      });
-
-      $('body').on('click', '.edit', function(e) {
-        var itemId = $(this).closest('tr').find('.id').text();
-        var itemValues = questionTable.get('id', itemId).values();
-        $nameInput.val(itemValues.name);
-        $nameInput.focus();
-        $typeSelect.val(itemValues.type);
-        $id.val(itemValues.id);
-      });
-
-      $('body').on('click', '.close', function() {
-        $(this).parent().remove();
-      });
-
-      function displayMessage(type, message) {
-        $alert = $('<div>');
-        $alert.addClass('alert-' + type);
-        $alert.data('alert', 'js');
-        $alert.html(message + '<a href="#" class="close">&times;</a>');
-        $alert.prependTo('.container');
-      }
-
-      $('body').on('click', 'a#cancel-link', function() {
-        $('#delete-confirm-modal').foundation('reveal', 'close');
-      });
-
-      $('body').on('click', 'a.delete-link', function() {
-        var link = $(this),
-            tr = link.closest('tr'),
-            refUrl = "{% url 'companysettings:delete_question' 8888 %}",
-            name = tr.find(".name").text(),
-            id = tr.find(".id").text(),
-            url = refUrl.replace("8888", id);
-
-        $('#delete-confirm-modal').foundation('reveal', 'open');
-        $('#delete-confirm-modal #object-name').text(name);
-        $('#delete-confirm-modal #confirm-delete-link').attr("href", url);
-      });
+      Hizard.CompanySettings(
+        "{% url 'companysettings:ajax_question' %}",
+        "{% url 'companysettings:delete_question' 8888 %}"
+      );
     });
   </script>
-{% endblock extra-js %}
 
+{% endblock extra-js %}
