@@ -171,7 +171,8 @@ class ChangeDetailsForm(forms.ModelForm):
 
         # Only recreates a thumbnail if we're uploading a file
         if type(self.cleaned_data['avatar']) == InMemoryUploadedFile:
-            current.avatar.delete()
+            if current.avatar:
+                current.avatar.delete()
             changes.avatar = self._make_thumbnail(self.cleaned_data['avatar'])
 
         changes.save()
