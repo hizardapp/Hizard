@@ -1,6 +1,7 @@
 {% extends "app_page.html" %}
 
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %}
   {% trans 'Home' %}
@@ -79,4 +80,49 @@
     </table>
   </div>
 
+  {% if false %}
+  <!-- At the bottom of your page but inside of the body tag -->
+  <ol class="joyride-list" data-joyride>
+    <li data-text="Next">
+      <h4>Welcome to Hizard</h4>
+      <p>Here's a quick tour of it to get you started</p>
+    </li>
+    <li data-class="dashboard-graph" data-text="Next">
+      <h4>Dashboard</h4>
+      <p>From there you can see the latest candidates and have a quick overview of all your openings.</p>
+    </li>
+    <li data-id="openings-menu" data-text="Next">
+      <h4>Openings</h4>
+      <p>If you want to create, edit, publish openings, it's there.</p>
+    </li>
+    <li data-id="applicants-menu" data-text="Next">
+      <h4>Applicants</h4>
+      <p>This page will show you the applicants for all your openings.</p>
+    </li>
+    <li data-id="career-site-menu" data-text="Next">
+      <h4>Career Site</h4>
+      <p>Clicking here will open your company career site on a new tab.</p>
+    </li>
+    <li data-id="settings-menu" data-text="Next">
+      <h4>Settings</h4>
+      <p>Go there to change anything related to the company : add question, departments, interview stages, invite colleagues and modify the company information that will appear on your career site</p>
+    </li>
+    <li data-id="user-menu" data-text="Next">
+      <h4>User settings</h4>
+      <p>This is where you can change your name, avatar and password</p>
+    </li>
+    <li data-button="Next">
+      <h4>And voila !</h4>
+      <p>Start exploring !</p>
+    </li>
+  </ol>
+   {% endif %}
 {% endblock page-content %}
+
+
+{% block extra-js %}
+  <script src="{% static "js/foundation/foundation.joyride.js" %}"></script>
+  <script type="text/javascript">
+    $(document).foundation('joyride', 'start');
+  </script>
+{% endblock extra-js %}
