@@ -74,3 +74,4 @@ OPENING_URL_REWRITED = False
 
 PUBLIC_DOMAIN = 'spp.com:8000'
 PUBLIC_URL = 'http://spp.com:8000'
+COMPANY_URL_PREFIX = 'http://%s.spp.com:8000'
