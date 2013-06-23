@@ -4,7 +4,7 @@ from braces.views import LoginRequiredMixin
 from django.db.models import Count
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
@@ -61,7 +61,6 @@ class OpeningDetailView(LoginRequiredMixin, RestrictedDetailView):
 
 
 class OpeningPublishView(LoginRequiredMixin, View):
-    success_url = reverse_lazy('openings:list_openings')
 
     def get(self, request, *args, **kwargs):
         opening = get_object_or_404(Opening, id=self.kwargs['pk'])
@@ -78,4 +77,4 @@ class OpeningPublishView(LoginRequiredMixin, View):
             opening.save()
             messages.success(request, _('Opening published.'))
 
-        return redirect(self.success_url)
+        return redirect(reverse('openings:detail_opening', args=(self.kwargs['pk'],)))
