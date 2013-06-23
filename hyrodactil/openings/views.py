@@ -30,11 +30,13 @@ class OpeningCreateView(LoginRequiredMixin, MessageMixin, CreateView):
     model = Opening
     form_class = OpeningForm
     action = 'created'
-    success_url = reverse_lazy('openings:list_openings')
     success_message = _('Opening created.')
 
     def get_form(self, form_class):
         return form_class(self.request.user.company, **self.get_form_kwargs())
+
+    def get_success_url(self):
+        return reverse('openings:detail_opening', args=(self.object.id,))
 
 
 class OpeningUpdateView(
@@ -43,11 +45,13 @@ class OpeningUpdateView(
     model = Opening
     form_class = OpeningForm
     action = 'updated'
-    success_url = reverse_lazy('openings:list_openings')
     success_message = _('Opening updated.')
 
     def get_form(self, form_class):
         return form_class(self.request.user.company, **self.get_form_kwargs())
+
+    def get_success_url(self):
+        return reverse('openings:detail_opening', args=(self.object.id,))
 
 
 class OpeningDeleteView(LoginRequiredMixin, QuickDeleteView):
