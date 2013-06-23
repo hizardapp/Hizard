@@ -1,8 +1,6 @@
 from datetime import datetime
 import os
-import shutil
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
@@ -13,7 +11,6 @@ from ..factories._companysettings import (
 from ..factories._openings import OpeningWithQuestionsFactory
 
 from applications.models import Application, ApplicationAnswer
-from companysettings.models import Question
 from tests.utils import subdomain_get, career_site_get
 
 
@@ -121,3 +118,8 @@ class ApplicationViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Application.objects.count(), 0)
+
+    def test_get_apply_form_unpublished(self):
+        opening = OpeningWithQuestionsFactory(company=self.user.company, published_date=None)
+        url = reverse('public:apply', args=(opening.id,))
+        career_site_get(self.app, url, self.user.company.subdomain.lower(), status=404)

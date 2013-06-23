@@ -41,6 +41,9 @@ class ApplyView(TemplateView):
         except Opening.DoesNotExist:
             raise Http404
 
+        if not opening.published_date:
+            raise Http404
+
         context = {
             'opening': opening,
             'company': opening.company,
@@ -54,6 +57,10 @@ class ApplyView(TemplateView):
             opening = Opening.objects.get(id=self.kwargs['opening_id'])
         except Opening.DoesNotExist:
             raise Http404
+
+        if not opening.published_date:
+            raise Http404
+
         form = ApplicationForm(request.POST, request.FILES, opening=opening)
 
         if form.is_valid():

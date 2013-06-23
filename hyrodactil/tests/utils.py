@@ -29,10 +29,11 @@ def subdomain_post_ajax(app, view_name, data, user=None, status=None):
 
     return response
 
-def career_site_get(app, view_name, company_name):
+def career_site_get(app, view_name, company_name, status=None):
     response = app.get(
         view_name,
-        headers=dict(Host="%s.%s" % (company_name, settings.PUBLIC_DOMAIN))
+        headers=dict(Host="%s.%s" % (company_name, settings.PUBLIC_DOMAIN)),
+        status=status
     )
 
     if response.status_code in [301, 302]:
