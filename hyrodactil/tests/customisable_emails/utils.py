@@ -9,7 +9,7 @@ from customisable_emails.utils import get_email_template, send_customised_email
 class UtilsTest(TestCase):
     def test_get_template(self):
         company = CompanyFactory()
-        template = EmailTemplateFactory(name="confirmation", company=company)
+        EmailTemplateFactory(name="confirmation", company=company)
         subject_template, body_template = get_email_template(company=company,
                 name="confirmation")
         self.assertTrue(subject_template)
@@ -17,7 +17,7 @@ class UtilsTest(TestCase):
 
     def test_send_template(self):
         company = CompanyFactory()
-        template = EmailTemplateFactory(company=company,
+        EmailTemplateFactory(company=company,
                 subject="Hi {{applicant}}",
                 body="Dear {{applicant}} XXX",
                 name="confirmation")

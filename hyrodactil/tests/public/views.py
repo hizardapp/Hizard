@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 
+from django.core import mail
 from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
@@ -12,6 +13,7 @@ from ..factories._openings import OpeningWithQuestionsFactory
 
 from applications.models import Application, ApplicationAnswer
 from tests.utils import subdomain_get, career_site_get
+from customisable_emails.models import EmailTemplate
 
 
 class PublicViewsTests(WebTest):
@@ -67,6 +69,14 @@ class ApplicationViewsTests(WebTest):
 
     def test_valid_post_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))
+
+        EmailTemplate.objects.create(
+            company=self.user.company,
+            name="application_received",
+            subject="Thank your for applying",
+            body="Dear {{applicant}}, Best regards",
+        )
+
         stage1 = InterviewStageFactory(
             company=self.opening.company,
             position=0, name="Received"
@@ -99,6 +109,7 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(applicant.resume.url,
                 '/media/resumes/%d/bilbon_cv.pdf' % self.opening.company.id)
         self.assertEqual(application.current_stage, stage1)
+        self.assertEqual(len(mail.outbox), 1)
 
         # 2 required, 1 not required, we still record the 3 though
         self.assertEqual(ApplicationAnswer.objects.count(), 3)

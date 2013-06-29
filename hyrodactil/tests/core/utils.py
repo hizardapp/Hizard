@@ -3,6 +3,7 @@ from django_webtest import WebTest
 from ..factories._companies import CompanyFactory
 from companysettings.models import Question, InterviewStage
 from openings.models import Opening
+from customisable_emails.models import EmailTemplate
 from core import utils
 
 
@@ -23,3 +24,4 @@ class SetupCompanyTests(WebTest):
             InterviewStage.objects.filter(company=company).exists()
         )
         self.assertTrue(Opening.objects.filter(company=company).exists())
+        self.assertEqual(EmailTemplate.objects.all().count(), 1)

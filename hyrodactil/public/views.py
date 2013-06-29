@@ -6,8 +6,9 @@ from django.views.generic.base import TemplateView, View
 
 from applications.forms import ApplicationForm
 from companies.models import Company
-from openings.models import Opening
 from core.views import SubdomainRequiredMixin
+from customisable_emails import send_customised_email
+from openings.models import Opening
 from .forms import InterestForm
 
 
@@ -64,7 +65,12 @@ class ApplyView(TemplateView):
         form = ApplicationForm(request.POST, request.FILES, opening=opening)
 
         if form.is_valid():
-            form.save()
+            applicant = form.save()
+            send_customised_email("application_received",
+                    company=opening.company,
+                    to="abc@example.com",
+                    context=dict(applicant=applicant.first_name)
+            )
             return redirect('public:confirmation', opening_id=opening.id)
         else:
             context = {

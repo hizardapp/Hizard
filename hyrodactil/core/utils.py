@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from companysettings.models import Question, InterviewStage
 from openings.models import Opening
+from customisable_emails.models import EmailTemplate
 
 
 def setup_company(company):
@@ -36,4 +37,13 @@ def setup_company(company):
     ).openingquestion_set.create(
         question=phone_question,
         required=True
+    )
+
+    EmailTemplate.objects.create(
+        company=company,
+        name="application_received",
+        subject="Thank your for applying",
+        body="""Dear {{applicant}},
+Your application has successfully been received.
+Best regards""",
     )
