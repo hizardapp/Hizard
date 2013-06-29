@@ -21,8 +21,11 @@ class ApplicationForm(forms.ModelForm):
         self.opening = kwargs.pop('opening')
         super(ApplicationForm, self).__init__(*args, **kwargs)
 
+
         if not self.opening:
             return
+
+        self.save_text = _('Apply')
 
         for opening_question in self.opening.openingquestion_set.all().select_related('question'):
             question = opening_question.question

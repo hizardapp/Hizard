@@ -189,14 +189,11 @@ class AccountsViewsTests(WebTest):
         GET the change password page (accessible only while logged in)
         """
         user = UserFactory()
-        response = subdomain_get(self.app, reverse('auth:change_password'), user=user)
+        response = subdomain_get(self.app, reverse('accounts:change_details'), user=user)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
-            response, 'accounts/password_change_form.html'
-        )
-        self.failUnless(
-            isinstance(response.context['form'], PasswordChangeForm)
+            response, 'accounts/change_details_form.html'
         )
 
     def test_post_change_password_success(self):
@@ -206,16 +203,17 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory()
 
-        page = subdomain_get(self.app, reverse('auth:change_password'), user=user)
-        form = page.forms[0]
+        page = subdomain_get(self.app, reverse('accounts:change_details'), user=user)
+        form = page.forms[1]
         form['old_password'] = 'bob'
         form['new_password1'] = 'a secure password'
         form['new_password2'] = 'a secure password'
         response = form.submit().follow()
 
         user_found = CustomUser.objects.get()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(reverse('auth:login'), response.request.path)
+        self.assertTemplateUsed(
+            response, 'accounts/change_details_form.html'
+        )
         self.assertTrue(user_found.check_password('a secure password'))
 
     def test_post_change_password_failure_too_short(self):
@@ -225,16 +223,17 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory()
 
-        page = subdomain_get(self.app, reverse('auth:change_password'), user=user)
-        form = page.forms[0]
+        page = subdomain_get(self.app, reverse('accounts:change_details'), user=user)
+        form = page.forms[1]
         form['old_password'] = 'bob'
         form['new_password1'] = 'nop'
         form['new_password2'] = 'nop'
         response = form.submit()
 
         user_found = CustomUser.objects.get()
-        error = "Password is too short. Should be at least 7 characters."
-        self.assertFormError(response, 'form', 'new_password2', error)
+        self.assertTemplateUsed(
+            response, 'accounts/change_details_form.html'
+        )
         self.assertFalse(user_found.check_password('nop'))
 
     def test_post_change_password_failure_not_matching(self):
@@ -244,16 +243,17 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory()
 
-        page = subdomain_get(self.app, reverse('auth:change_password'), user=user)
-        form = page.forms[0]
+        page = subdomain_get(self.app, reverse('accounts:change_details'), user=user)
+        form = page.forms[1]
         form['old_password'] = 'bob'
         form['new_password1'] = 'new'
         form['new_password2'] = 'wrong'
         response = form.submit()
 
         user_found = CustomUser.objects.get()
-        error = "The two password fields didn't match."
-        self.assertFormError(response, 'form', 'new_password2', error)
+        self.assertTemplateUsed(
+            response, 'accounts/change_details_form.html'
+        )
         self.assertFalse(user_found.check_password('new'))
         self.assertFalse(user_found.check_password('wrong'))
 

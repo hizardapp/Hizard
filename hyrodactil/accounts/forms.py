@@ -137,6 +137,10 @@ class MinLengthChangePasswordForm(auth_forms.PasswordChangeForm):
         )
     })
 
+    def __init__(self, user, *args, **kwargs):
+        super(MinLengthChangePasswordForm, self).__init__(user, *args, **kwargs)
+        self.save_text = _('Change password')
+
     def clean_new_password2(self):
         password2 = super(MinLengthChangePasswordForm, self).clean_new_password2()
 
@@ -156,6 +160,7 @@ class ChangeDetailsForm(forms.ModelForm):
 
         # change a widget attribute:
         self.fields['avatar'].widget = ImageWidget(width=50, height=50)
+        self.save_text = _('Change details')
 
     def _make_thumbnail(self, full_size_image):
         img = Image.open(full_size_image)

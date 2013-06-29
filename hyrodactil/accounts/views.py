@@ -6,7 +6,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import Http404, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.utils.http import base36_to_int
 from django.utils.translation import ugettext_lazy as _
@@ -215,12 +215,59 @@ class ToggleStatusView(View):
         return HttpResponseRedirect(reverse("companysettings:list_users"))
 
 
-class ChangeDetailsView(LoginRequiredMixin, MessageMixin, UpdateView):
-    form_class = ChangeDetailsForm
-    model = CustomUser
-    success_message = _("Personal details successfuly updated")
+class ChangeDetailsView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/change_details_form.html'
-    success_url = reverse_lazy('dashboard:dashboard')
 
-    def get_object(self):
-        return self.request.user
+    def dispatch(self, request, *args, **kwargs):
+        user = self.request.user
+        self.details_form = ChangeDetailsForm(instance=user)
+        self.password_form = MinLengthChangePasswordForm(user=user)
+        return super(ChangeDetailsView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        details_form = kwargs.get('details_form')
+        password_form = kwargs.get('password_form')
+
+        context = super(ChangeDetailsView, self).get_context_data(**kwargs)
+        if not details_form:
+            context['details_form'] = ChangeDetailsForm(instance=user)
+        else:
+            context['details_form'] = details_form
+
+        if not password_form:
+            context['password_form'] = MinLengthChangePasswordForm(user=user)
+        else:
+            context['password_form'] = password_form
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        data = dict(request.POST)
+        user = self.request.user
+
+        if 'name' in data:
+            form = ChangeDetailsForm(
+                instance=user, data=request.POST, files=request.FILES
+            )
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    self.request, _('Personal details successfully updated')
+                )
+                return redirect(reverse('accounts:change_details'))
+            messages.error(self.request, _('Please correct the errors below'))
+            return self.render_to_response(
+                self.get_context_data(details_form=form)
+            )
+
+        else:
+            form = MinLengthChangePasswordForm(user=user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(self.request, _('Password changed successfully'))
+                return redirect(reverse('accounts:change_details'))
+            messages.error(self.request, _('Please correct the errors below'))
+            return self.render_to_response(
+                self.get_context_data(password_form=form)
+            )

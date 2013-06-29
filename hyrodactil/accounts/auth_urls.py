@@ -14,11 +14,6 @@ urlpatterns = patterns('',
         name='logout'
     ),
     url(
-        r'^password/change/$',
-        views.PasswordChangeView.as_view(),
-        name='change_password'
-    ),
-    url(
         r'^password/reset/$',
         views.PasswordResetView.as_view(),
         name='reset_password'
