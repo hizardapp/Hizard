@@ -4,21 +4,6 @@ import views
 
 urlpatterns = patterns('',
     url(
-        r'^departments/$',
-        views.DepartmentListView.as_view(),
-        name='list_departments'
-    ),
-    url(
-        r'^department/$',
-        views.DepartmentCreateUpdateView.as_view(),
-        name='ajax_department'
-    ),
-    url(
-        r'^department/(?P<pk>\d+)/delete$',
-        views.DepartmentDeleteView.as_view(),
-        name='delete_department'
-    ),
-    url(
         r'^questions/$',
         views.QuestionListView.as_view(),
         name='list_questions'

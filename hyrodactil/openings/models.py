@@ -8,7 +8,7 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
-from companysettings.models import Department, Question, InterviewStage
+from companysettings.models import Question, InterviewStage
 
 
 class Opening(TimeStampedModel):
@@ -21,8 +21,7 @@ class Opening(TimeStampedModel):
     title = models.CharField(max_length=770)
     description = models.TextField()
     is_private = models.BooleanField(default=False)
-    department = models.ForeignKey(Department, blank=True, null=True,
-            on_delete=models.SET_NULL)
+    department = models.CharField(_("Department"), max_length=128, blank=True)
     country = CountryField(_("Country"), blank=True)
     city = models.CharField(_("City"), max_length=128, blank=True)
     published_date = models.DateTimeField(blank=True, null=True)

@@ -124,33 +124,6 @@
       var options = $.map($("#id_department option"), function (el) {
         return el.text;
       });
-
-      function formatState (state) {
-          if (state.id == "-1" ) {
-            return state.text + " {% trans "(will be created upon saving)" %}";
-          } else {
-            return state.text;
-          }
-      }
-
-      $("#id_department").select2({
-        width: '50%',
-        formatResult: formatState,
-        formatSelection: formatState,
-        createSearchChoice: function (term, data) {
-          if ($(options).filter(function () {
-            // XXX doesn't handle unicode well (ex: Reunion)
-            return term.toLowerCase() == this.toLowerCase();
-          }).length === 0) {
-            return {id: "-1", text: term};
-          }
-        },
-        prepareElementUpdate: function (data) {
-          if (data.id == "-1") {
-            $("#id_new_department").val(data.text);
-          }
-        }
-      });
     });
   </script>
 {% endblock %}

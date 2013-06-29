@@ -7,9 +7,9 @@ from companies.models import Company
 
 from ..factories._accounts import UserFactory
 from ..factories._companysettings import (
-    DepartmentFactory, SingleLineQuestionFactory, InterviewStageFactory
+    SingleLineQuestionFactory, InterviewStageFactory
 )
-from companysettings.models import Department, Question, InterviewStage
+from companysettings.models import Question, InterviewStage
 from accounts.models import CustomUser
 from tests.utils import subdomain_get, subdomain_post_ajax
 
@@ -18,89 +18,6 @@ class CompanySettingsViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory(is_company_admin=True)
         self.required = 'This field is required.'
-
-    def test_list_departments(self):
-        url = reverse('companysettings:list_departments')
-
-        department = DepartmentFactory(company=self.user.company)
-        page = subdomain_get(self.app, url, user=self.user)
-
-        self.assertContains(page, department.name)
-
-    def test_ajax_create_department_valid(self):
-        url = reverse('companysettings:ajax_department')
-        data = {'name': 'Cooking'}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-
-        result = json.loads(response.body)
-        self.assertEqual(result['result'], 'success')
-        self.assertEqual(result['id'], 1)
-        self.assertTrue(Department.objects.filter(name='Cooking').exists())
-
-    def test_ajax_create_department_invalid(self):
-        url = reverse('companysettings:ajax_department')
-        data = {'name': ''}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(
-            result['errors'], {'name': ['This field is required.']}
-        )
-        self.assertFalse(Department.objects.filter(name='Cooking').exists())
-
-    def test_ajax_update_department_valid(self):
-        url = reverse('companysettings:ajax_department')
-        dept = DepartmentFactory()
-        data = {'id': dept.id,'name': 'Cooking'}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(result['result'], 'success')
-        self.assertTrue(Department.objects.filter(name='Cooking').exists())
-
-    def test_ajax_update_department_invalid(self):
-        url = reverse('companysettings:ajax_department')
-        dept = DepartmentFactory()
-        data = {'id': dept.id, 'name': ''}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(
-            result['errors'], {'name': ['This field is required.']}
-        )
-        self.assertFalse(Department.objects.filter(name='Cooking').exists())
-
-    def test_ajax_update_department_inexisting(self):
-        url = reverse('companysettings:ajax_department')
-        data = {'id': 42, 'name': ''}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(result['result'], 'error')
-        self.assertFalse(Department.objects.filter(name='Cooking').exists())
-
-    def test_delete_department(self):
-        dept = DepartmentFactory.create(
-            name='Sales', company=self.user.company
-        )
-        url = reverse('companysettings:delete_department', args=(dept.id,))
-
-        response = subdomain_get(self.app, url, user=self.user)
-        self.assertEqual(response.request.path,
-                         reverse('companysettings:list_departments'))
-        self.assertNotContains(response, "Sales")
-        self.assertContains(response, "Department deleted.")
 
     def test_list_questions(self):
         url = reverse('companysettings:list_questions')

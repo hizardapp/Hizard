@@ -1,14 +1,7 @@
 import factory
 
-from companysettings.models import Department, Question, InterviewStage
+from companysettings.models import Question, InterviewStage
 import _companies
-
-
-class DepartmentFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Department
-
-    name = 'Engineering'
-    company = factory.SubFactory(_companies.CompanyFactory)
 
 
 class SingleLineQuestionFactory(factory.DjangoModelFactory):

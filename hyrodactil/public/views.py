@@ -27,7 +27,7 @@ class OpeningList(SubdomainRequiredMixin, TemplateView):
         context['company'] = company
         context['openings'] = company.opening_set.filter(
             published_date__isnull=False
-        ).select_related('department')
+        )
 
         return context
 

@@ -1,7 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from companysettings.models import Department
 from .models import Opening, OpeningQuestion
 
 
@@ -71,7 +70,6 @@ class OpeningQuestionFormset(object):
 
 class OpeningForm(forms.ModelForm):
     required_css_class = 'required'
-    new_department = forms.CharField(required=False, widget=forms.HiddenInput)
 
     class Meta:
         model = Opening
@@ -87,7 +85,6 @@ class OpeningForm(forms.ModelForm):
             data=kwargs.get('data'),
             opening=self.instance
         )
-        self.fields["department"].queryset = self.company.department_set.all()
 
         self.fields['is_private'].label = _("Private opening")
 
@@ -100,12 +97,6 @@ class OpeningForm(forms.ModelForm):
         return False
 
     def save(self, *args, **kwargs):
-        if (self.cleaned_data.get("new_department") and
-                not self.cleaned_data.get("department")):
-            self.instance.department = Department.objects.create(
-                name=self.cleaned_data.get("new_department"),
-                company=self.company
-            )
         self.instance.company = self.company
         opening = super(OpeningForm, self).save(*args, **kwargs)
 

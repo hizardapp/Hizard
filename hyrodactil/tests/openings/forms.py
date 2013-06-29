@@ -4,9 +4,8 @@ from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningQuestionFactory
 from ..factories._companysettings import (
-    SingleLineQuestionFactory, MultiLineQuestionFactory, DepartmentFactory
+    SingleLineQuestionFactory, MultiLineQuestionFactory
 )
-from companysettings.models import Department
 from openings.forms import OpeningForm, OpeningQuestionFormset
 from openings.models import OpeningQuestion
 
@@ -24,6 +23,7 @@ class OpeningsFormsTests(TestCase):
                           'is_private': '',
                           'country': 'FR',
                           'city': 'Cannes',
+                          'department': 'Vendeur de reve',
                           'employment_type': 'full_time',
                           'questions': [1, 2]}
 
@@ -56,34 +56,6 @@ class OpeningsFormsTests(TestCase):
     def test_invalid_opening_form(self):
         self._form_is_invalid_without('title')
         self._form_is_invalid_without('description')
-
-    def test_opening_form_create_new_department(self):
-        new_dept_data = dict(self.form_data)
-        new_dept_data['new_department'] = "HR"
-        form = self.Form(self.user.company, data=new_dept_data)
-        self.assertTrue(form.is_valid())
-        opening = form.save()
-        self.assertTrue(Department.objects.filter(name="HR").exists())
-        self.assertTrue(opening.department)
-        self.assertEqual(opening.department.name, "HR")
-        self.assertEqual(opening.department.company, self.user.company)
-
-    def test_opening_form_only_list_company_department(self):
-        form = self.Form(self.user.company)
-        capcom = DepartmentFactory.create(
-            company=self.user.company,
-            name="CAPCOM"
-        )
-        control = DepartmentFactory.create(
-            company=CompanyFactory(),
-            name="CONTROL"
-        )
-
-        def just_pks(choices):
-            return (pk for pk, choice in choices)
-        pks = just_pks(form.fields["department"].choices)
-        self.assertTrue(capcom.pk in pks)
-        self.assertTrue(control.pk not in pks)
 
     def test_opening_form_save_opening_questions(self):
         data = dict(self.form_data)

@@ -42,7 +42,7 @@
       {% for opening in opening_list %}
         <tr>
           <td><a href="{% url 'openings:detail_opening' opening.id %}">{{ opening.title }}</a></td>
-          <td>{{ opening.department|default_if_none:'—' }}</td>
+          <td>{{ opening.department }}</td>
           <td>{{ opening.get_employment_type_display }}</td>
           <td>{{ opening.get_location_string|default:'—' }}</td>
           <td><a href="{% url 'applications:list_applications_opening' opening.id %}">{{ opening.number_applications }}</a></td>

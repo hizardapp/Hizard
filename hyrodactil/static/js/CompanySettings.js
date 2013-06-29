@@ -12,11 +12,8 @@
     $saveButton = $('.save');
     $alert = void 0;
     currentUrl = document.URL;
-    pages = ['departments', 'questions', 'stages'];
+    pages = ['questions', 'stages'];
     data = {
-      departments: {
-        valueNames: ['id', 'name']
-      },
       questions: {
         valueNames: ['id', 'name', 'type_field']
       },

@@ -7,15 +7,6 @@ from model_utils.models import TimeStampedModel
 from companies.models import Company
 
 
-class Department(TimeStampedModel):
-    name = models.CharField(max_length=100)
-
-    company = models.ForeignKey(Company)
-
-    def __unicode__(self):
-        return self.name
-
-
 class Question(TimeStampedModel):
     TYPE_QUESTIONS = Choices(
         ('textbox', _('Single line text')),

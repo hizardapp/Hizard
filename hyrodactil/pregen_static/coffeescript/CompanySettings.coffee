@@ -8,10 +8,8 @@ CompanySettings = (postURL, deleteURL, upURL, downURL) ->
   # Getting all the divs/info necessary for a given page
   currentUrl = document.URL
 
-  pages = ['departments', 'questions', 'stages']
+  pages = ['questions', 'stages']
   data =
-    departments:
-      valueNames: ['id', 'name']
     questions:
       valueNames: ['id', 'name', 'type_field']
     stages:

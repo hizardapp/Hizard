@@ -8,19 +8,14 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
 from .forms import (
-    DepartmentForm, QuestionForm, InterviewStageForm, CompanyInformationForm
+    QuestionForm, InterviewStageForm, CompanyInformationForm
 )
 from .forms import CustomUserInviteForm
-from .models import Department, Question, InterviewStage
+from .models import Question, InterviewStage
 from companies.models import Company
 from accounts.models import CustomUser
 from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
 from core.views import RestrictedListView
-
-
-class DepartmentListView(LoginRequiredMixin, RestrictedListView):
-    model = Department
-    form = DepartmentForm
 
 
 class CreateUpdateAjaxView(
@@ -56,20 +51,6 @@ class CreateUpdateAjaxView(
                 'errors': form.errors,
                 'message': unicode(self.message_errors)
             })
-
-
-class DepartmentCreateUpdateView(CreateUpdateAjaxView):
-    model = Department
-    form = DepartmentForm
-    message_success = _('Department saved.')
-    message_errors = _('Please correct the errors below.')
-    message_not_exist = _('The department does not exist.')
-
-
-class DepartmentDeleteView(LoginRequiredMixin, QuickDeleteView):
-    model = Department
-    success_url = reverse_lazy('companysettings:list_departments')
-    success_message = _('Department deleted.')
 
 
 class QuestionListView(LoginRequiredMixin, RestrictedListView):
