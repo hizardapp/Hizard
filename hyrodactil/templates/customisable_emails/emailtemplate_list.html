@@ -1,0 +1,31 @@
+{% extends "app_page.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}{% trans 'Email templates' %}{% endblock title %}
+
+{% block page-content %}
+  <h2>{% trans 'Email templates' %}</h2>
+
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Name" %}</th>
+          <th>{% trans "Subject" %}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for emailtemplate in emailtemplate_list %}
+          <tr>
+            <td>{{ emailtemplate.name }}</td>
+            <td>{{ emailtemplate.subject }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+{% endblock page-content %}

@@ -54,6 +54,14 @@ urlpatterns = patterns('',
             app_name='applications')
     ),
     url(
+        r'^customisable_emails/',
+        include(
+            'customisable_emails.urls',
+            namespace='customisable_emails',
+            app_name='customisable_emails'
+        )
+    ),
+    url(
         r'^',
         include(
             'dashboard.urls',
