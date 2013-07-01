@@ -6,7 +6,7 @@ from django.test import TestCase
 from ..factories._applications import ApplicantFactory
 from ..factories._companysettings import InterviewStageFactory
 from ..factories._companies import CompanyFactory
-from ..factories._openings import OpeningFactory, OpeningWithQuestionsFactory
+from ..factories._openings import OpeningFactory, OpeningWithQuestionFactory
 from applications.forms import (
     ApplicationForm, ApplicationStageTransitionForm
 )
@@ -21,9 +21,7 @@ class ApplicationFormTests(TestCase):
     }
 
     question_data = {
-        'q_single-line': 'Lalala',
-        'q_multi-line': 'Lololo',
-        'q_checkbox': True
+        'question-1': 'Lalala'
     }
 
     def _get_temporary_file(self, type='application/pdf', extension='pdf'):
@@ -40,6 +38,7 @@ class ApplicationFormTests(TestCase):
 
         files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(self.form_data, files, opening=opening)
+
         self.assertTrue(form.is_valid())
 
     def test_application_without_questions_invalid(self):
@@ -52,7 +51,7 @@ class ApplicationFormTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_application_with_questions_valid(self):
-        opening = OpeningWithQuestionsFactory()
+        opening = OpeningWithQuestionFactory()
         data = dict(self.form_data)
         data.update(self.question_data)
 
@@ -62,10 +61,10 @@ class ApplicationFormTests(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_application_with_missing_required_valid(self):
-        opening = OpeningWithQuestionsFactory()
+        opening = OpeningWithQuestionFactory()
         data = dict(self.form_data)
         data.update(self.question_data)
-        del data['q_checkbox']
+        del data['question-1']
 
         files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(data, files, opening=opening)

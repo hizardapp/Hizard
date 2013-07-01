@@ -1,76 +1,10 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Opening, OpeningQuestion
-
-
-class OpeningQuestionForm(forms.Form):
-    included = forms.BooleanField(required=False)
-    required = forms.BooleanField(required=False)
-
-    def __init__(self, question, *args, **kwargs):
-        super(OpeningQuestionForm, self).__init__(*args, **kwargs)
-        self.question = question
-
-        if not kwargs.get('initial'):
-            self.fields['required'].widget.attrs['disabled'] = 'disabled'
-
-    def clean(self):
-        cleaned_data = super(OpeningQuestionForm, self).clean()
-        if cleaned_data.get('required') and not cleaned_data.get('included'):
-            raise forms.ValidationError(
-                _("Can't require a question not included")
-            )
-
-        return cleaned_data
-
-
-class OpeningQuestionFormset(object):
-    def __init__(self, company, opening=None, data=None):
-        self.company = company
-        self.questions = company.question_set.all()
-        self.forms = []
-
-        initials = dict()
-        if opening:
-            for opening_question in opening.openingquestion_set.all():
-                initials[opening_question.question_id] = dict(
-                    included=True, required=opening_question.required)
-
-        for question in self.questions:
-            prefix = 'oq-%d' % question.id
-            self.forms.append(
-                OpeningQuestionForm(
-                    question=question, prefix=prefix, data=data,
-                    initial=initials.get(question.id)
-                )
-            )
-
-    def __iter__(self):
-        for form in self.forms:
-            yield form
-
-    def is_valid(self):
-        return all([form.is_valid() for form in self.forms])
-
-    def save(self, opening):
-        for form in self.forms:
-            opening_question, created = OpeningQuestion.objects.get_or_create(
-                opening=opening,
-                question=form.question
-            )
-
-            if form.cleaned_data.get('included'):
-                if form.cleaned_data.get('required') != opening_question.required:
-                    opening_question.required = form.cleaned_data.get('required')
-                    opening_question.save()
-            else:
-                opening_question.delete()
+from .models import Opening
 
 
 class OpeningForm(forms.ModelForm):
-    required_css_class = 'required'
-
     class Meta:
         model = Opening
         fields = ('title', 'description', 'employment_type', 'is_private',
@@ -80,26 +14,39 @@ class OpeningForm(forms.ModelForm):
         super(OpeningForm, self).__init__(*args, **kwargs)
         self.company = company
 
-        self.opening_questions = OpeningQuestionFormset(
-            company=company,
-            data=kwargs.get('data'),
-            opening=self.instance
-        )
+        if self.instance:
+            self.questions = self.instance.questions.all()
 
         self.fields['is_private'].label = _("Private opening")
 
-    def is_valid(self):
-        is_valid = super(OpeningForm, self).is_valid()
+    def _clean_questions(self):
+        self.questions_present = {}
+        for field in self.data:
+            if field.startswith('question') and len(self.data[field]) > 0:
+                self.questions_present[field] = self.data[field]
 
-        if self.opening_questions.is_valid() and is_valid:
-            return True
-
-        return False
+    def clean(self):
+        self._clean_questions()
+        return super(OpeningForm, self).clean()
 
     def save(self, *args, **kwargs):
         self.instance.company = self.company
+
         opening = super(OpeningForm, self).save(*args, **kwargs)
 
-        self.opening_questions.save(opening)
+        if self.instance:
+            for question in self.questions:
+                field_name = 'question-' + str(question.id)
+                if field_name not in self.questions_present:
+                    question.delete()
+                else:
+                    if question.title != self.questions_present[field_name]:
+                        question.title = self.questions_present[field_name]
+                        question.save()
+                    del self.questions_present[field_name]
+
+            for field in self.questions_present:
+                opening.questions.create(title=self.questions_present[field])
+
 
         return opening

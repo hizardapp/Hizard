@@ -8,19 +8,16 @@ from ..factories._accounts import UserFactory
 from ..factories._applications import (
     ApplicationFactory, ApplicationAnswerFactory
 )
-from ..factories._companysettings import (
-    SingleLineQuestionFactory, InterviewStageFactory
-)
-from ..factories._openings import OpeningWithQuestionsFactory
-from applications.models import ApplicationMessage, Application, Applicant
+from ..factories._companysettings import InterviewStageFactory
+from ..factories._openings import OpeningWithQuestionFactory
+from applications.models import ApplicationMessage, Application, Applicant, ApplicationAnswer
 from tests.utils import subdomain_get, subdomain_post_ajax
 
 
 class ApplicationViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory()
-        self.question = SingleLineQuestionFactory(company=self.user.company)
-        self.opening = OpeningWithQuestionsFactory(company=self.user.company)
+        self.opening = OpeningWithQuestionFactory(company=self.user.company)
 
     def test_listing_all_applicants(self):
         application = ApplicationFactory.create(opening=self.opening)
@@ -36,7 +33,8 @@ class ApplicationViewsTests(WebTest):
     def test_get_applicant_details(self):
         application = ApplicationFactory(opening=self.opening)
         ApplicationAnswerFactory(
-            application=application, question=self.question, answer="Man"
+            question=self.opening.questions.get(), application=application,
+            answer="Man"
         )
 
         url = reverse(
@@ -134,8 +132,7 @@ class ApplicationViewsTests(WebTest):
         form['last_name'] = 'Sacquet'
         form['email'] = 'bilbo@shire.com'
         form['resume'] = 'bilbon_cv.pdf', "My resume"
-        form['q_checkbox'] = True
-        form['q_single-line'] = 'lalla'
+        form['question-1'] = 'lala'
 
         response = form.submit().follow()
         self.assertEqual(response.status_code, 200)
@@ -170,8 +167,7 @@ class ApplicationAjaxViewsTests(WebTest):
 
     def setUp(self):
         self.user = UserFactory()
-        self.question = SingleLineQuestionFactory(company=self.user.company)
-        self.opening = OpeningWithQuestionsFactory(company=self.user.company)
+        self.opening = OpeningWithQuestionFactory(company=self.user.company)
 
     def test_saving_position_applications_valid_with_stage(self):
         application1 = ApplicationFactory(opening=self.opening)

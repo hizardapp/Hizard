@@ -1,9 +1,11 @@
 from datetime import datetime
 
 from django.test import TestCase
+from applications.models import Application
 
+from ..factories._applications import ApplicationFactory
 from ..factories._companies import CompanyFactory
-from ..factories._openings import OpeningFactory
+from ..factories._openings import OpeningFactory, OpeningWithQuestionFactory
 
 
 class OpeningsModelsTests(TestCase):
@@ -37,3 +39,9 @@ class OpeningsModelsTests(TestCase):
 
         opening.published_date = datetime.now()
         self.assertEqual(unicode(opening.get_status()), 'Published')
+
+    def test_question_deletion_keeps_applications(self):
+        opening = OpeningWithQuestionFactory()
+        application = ApplicationFactory(opening=opening)
+        opening.questions.all().delete()
+        self.assertEqual(Application.objects.count(), 1)

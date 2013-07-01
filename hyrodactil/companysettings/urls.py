@@ -4,22 +4,6 @@ import views
 
 urlpatterns = patterns('',
     url(
-        r'^questions/$',
-        views.QuestionListView.as_view(),
-        name='list_questions'
-    ),
-    url(
-        r'^question/$',
-        views.QuestionCreateUpdateView.as_view(),
-        name='ajax_question'
-    ),
-    url(
-        r'^question/(?P<pk>\d+)/delete/$',
-        views.QuestionDeleteView.as_view(),
-        name='delete_question'
-    ),
-
-    url(
         r'^stages/$',
         views.InterviewStageListView.as_view(),
         name='list_stages'

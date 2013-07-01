@@ -4,8 +4,7 @@ from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
-from ..factories._openings import OpeningFactory
-from ..factories._companysettings import SingleLineQuestionFactory
+from ..factories._openings import OpeningQuestionFactory, OpeningFactory
 from ..factories._companies import CompanyFactory
 
 from openings.models import Opening
@@ -16,7 +15,6 @@ class OpeningsViewsTests(WebTest):
 
     def setUp(self):
         self.user = UserFactory()
-        self.question = SingleLineQuestionFactory(company=self.user.company)
 
     def test_arriving_on_opening_creation_page(self):
         url = reverse('openings:create_opening')
@@ -36,7 +34,6 @@ class OpeningsViewsTests(WebTest):
         form['is_private'] = ''
         form['country'] = 'FR'
         form['city'] = 'Cannes'
-        form['oq-1-included'] = True
         response = form.submit().follow()
 
         self.assertEqual(response.status_code, 200)
@@ -46,20 +43,6 @@ class OpeningsViewsTests(WebTest):
 
         self.assertEqual(opening_created.company, self.user.company)
         self.assertEqual(opening_created.title, 'Software Developer')
-        self.assertEqual(opening_created.openingquestion_set.count(), 1)
-
-    def test_opening_form_only_contains_questions_from_same_company(self):
-        same_company_question = SingleLineQuestionFactory(
-            name='To be or not to be?',
-            company=self.user.company)
-        other_company_question = SingleLineQuestionFactory(
-            name='Your 5 strenghts and weaknesses',
-            company=CompanyFactory())
-
-        url = reverse('openings:create_opening')
-        page = subdomain_get(self.app, url, user=self.user)
-        self.assertContains(page, same_company_question.name)
-        self.assertNotContains(page, other_company_question.name)
 
     def test_opening_creation_invalid(self):
         url = reverse('openings:create_opening')
@@ -71,7 +54,6 @@ class OpeningsViewsTests(WebTest):
         form['is_private'] = ''
         form['country'] = 'FR'
         form['city'] = 'Cannes'
-        form['oq-1-included'] = True
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)

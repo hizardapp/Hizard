@@ -2,7 +2,7 @@
 
 {% for answer in answers %}
   <p>
-    {{ answer.question.name }} :
+    {{ answer.question.title }} :
     {% if not answer.answer %}
       {% trans 'No answer' %}
     {% else %}

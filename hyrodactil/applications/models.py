@@ -4,8 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
 from accounts.models import CustomUser
-from companysettings.models import Question, InterviewStage
-from openings.models import Opening
+from companysettings.models import InterviewStage
+from openings.models import Opening, OpeningQuestion
 
 
 class Applicant(TimeStampedModel):
@@ -111,6 +111,15 @@ class Application(TimeStampedModel):
         return self.applicant.get_full_name()
 
 
+class ApplicationAnswer(TimeStampedModel):
+    application = models.ForeignKey(Application, related_name='answers')
+    question = models.ForeignKey(OpeningQuestion)
+
+    answer = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return 'Answer to: %s' % self.question.title
+
 class ApplicationStageTransition(TimeStampedModel):
     application = models.ForeignKey(
         Application, related_name='stage_transitions'
@@ -129,13 +138,6 @@ class ApplicationStageTransition(TimeStampedModel):
 
     def __str__(self):
         return "%s %s %s" % (self.application, self.user, self.stage)
-
-
-class ApplicationAnswer(TimeStampedModel):
-    answer = models.TextField(blank=True, null=True)
-
-    question = models.ForeignKey(Question)
-    application = models.ForeignKey(Application)
 
 
 class ApplicationMessage(TimeStampedModel):

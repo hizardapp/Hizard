@@ -15,7 +15,7 @@ from braces.views import (
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
 from .forms import ApplicationForm
 from .models import (
-    Application, ApplicationAnswer, ApplicationMessage,
+    Application, ApplicationMessage,
     ApplicationStageTransition, Applicant
 )
 from .threaded_discussion import group
@@ -108,8 +108,7 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         context['new_message_form'] = ApplicationMessageForm()
         context['user_rating'] = application.get_user_rating(context['user'])
         context['rating'] = application.get_rating()
-        context['answers'] = ApplicationAnswer.objects.filter(
-            application=context['application'])
+        context['answers'] = application.answers.all()
         return context
 
     def form_valid(self, form):

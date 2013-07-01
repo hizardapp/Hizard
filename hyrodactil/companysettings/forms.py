@@ -1,14 +1,8 @@
 from django import forms
 from companies.models import Company
 
-from .models import Question, InterviewStage
+from .models import InterviewStage
 from accounts.models import CustomUser
-
-
-class QuestionForm(forms.ModelForm):
-    class Meta:
-        model = Question
-        fields = ('name', 'type_field',)
 
 
 class InterviewStageForm(forms.ModelForm):

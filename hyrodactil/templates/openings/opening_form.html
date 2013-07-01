@@ -51,30 +51,17 @@
     <br>
     {% include 'openings/_opening_form_field.html' with field=form.loc_postcode %}
 
-    <div>
-      <table class="included-questions">
-        <thead>
-        <tr>
-          <th class="select">{% trans 'Select' %}</th>
-          <th class="name"></th>
-          <th class="required">{% trans 'Required ?' %}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for question_form in form.opening_questions %}
-          <tr>
-            <td>
-              {{ question_form.included }}
-            </td>
-            <td><label for="{{ question_form.included.auto_id }}">{{ question_form.question }}</label></td>
-            <td>
-              {{ question_form.required }}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+
+    <div class="questions">
+      {% for question in form.questions %}
+        <div>
+          <i class="icon-trash remove-question"></i>
+          <input type="text" name="question-{{ question.id }}" value="{{ question.title }}"/>
+        </div>
+      {% endfor %}
     </div>
+    <a class="button-positive add-question" href="#">{% trans 'Add a question' %}</a>
+
 
     <div class="text-right submit-opening">
 
@@ -86,8 +73,6 @@
 
     </div>
   </form>
-
-
 
 {% endblock page-content %}
 
@@ -124,6 +109,21 @@
       var options = $.map($("#id_department option"), function (el) {
         return el.text;
       });
+
+      $('.add-question').click(function(e) {
+        e.preventDefault();
+        var rand = Math.random().toString(36).substring(7);
+        $input = $(
+          '<div><i class="icon-trash remove-question"></i><input class="large-11 columns" type="text" name="question-' + rand + '"/></div>'
+        );
+        $('.questions').append($input);
+        $input.focus();
+      });
+
+      $('body').on("click", ".remove-question", function(e){
+        $(this).parent().remove();
+      });
+
     });
   </script>
 {% endblock %}

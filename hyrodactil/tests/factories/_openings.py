@@ -2,7 +2,6 @@ from datetime import datetime
 import factory
 
 import _companies
-import _companysettings
 from openings.models import Opening, OpeningQuestion
 
 
@@ -20,38 +19,16 @@ class OpeningFactory(factory.DjangoModelFactory):
 class OpeningQuestionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = OpeningQuestion
 
-    question = factory.SubFactory(_companysettings.Question)
+    title = 'My question'
     opening = factory.SubFactory(OpeningFactory)
-    required = False
 
 
-class OpeningWithQuestionsFactory(OpeningFactory):
-
+class OpeningWithQuestionFactory(OpeningFactory):
     published_date = datetime.now()
 
     @classmethod
-    def _prepare(cls, create, **kwargs):
-        opening = super(OpeningWithQuestionsFactory, cls)._prepare(create, **kwargs)
-
-        if opening.id:
-            OpeningQuestionFactory(
-                opening=opening,
-                question=_companysettings.SingleLineQuestionFactory(
-                    company=opening.company),
-                required=True
-            )
-
-            OpeningQuestionFactory(
-                opening=opening,
-                question=_companysettings.MultiLineQuestionFactory(
-                    company=opening.company)
-            )
-
-            OpeningQuestionFactory(
-                opening=opening,
-                question=_companysettings.CheckboxQuestionFactory(
-                    company=opening.company),
-                required=True
-            )
-
+    def _create(cls, target_class, *args, **kwargs):
+        opening = target_class(*args, **kwargs)
+        opening.save()
+        OpeningQuestionFactory(opening=opening)
         return opening

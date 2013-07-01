@@ -6,10 +6,8 @@ from django_webtest import WebTest
 from companies.models import Company
 
 from ..factories._accounts import UserFactory
-from ..factories._companysettings import (
-    SingleLineQuestionFactory, InterviewStageFactory
-)
-from companysettings.models import Question, InterviewStage
+from ..factories._companysettings import InterviewStageFactory
+from companysettings.models import InterviewStage
 from accounts.models import CustomUser
 from tests.utils import subdomain_get, subdomain_post_ajax
 
@@ -17,87 +15,6 @@ from tests.utils import subdomain_get, subdomain_post_ajax
 class CompanySettingsViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory(is_company_admin=True)
-        self.required = 'This field is required.'
-
-    def test_list_questions(self):
-        url = reverse('companysettings:list_questions')
-        question = SingleLineQuestionFactory(company=self.user.company)
-        page = subdomain_get(self.app, url, user=self.user)
-        self.assertContains(page, question.name)
-
-    def test_ajax_create_question_valid(self):
-        url = reverse('companysettings:ajax_question')
-        data = {'name': 'Cooking', 'type_field':'textbox'}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(result['result'], 'success')
-        self.assertEqual(result['id'], 1)
-        self.assertTrue(Question.objects.filter(name='Cooking').exists())
-
-    def test_ajax_create_question_invalid(self):
-        url = reverse('companysettings:ajax_question')
-        data = {'name': '', 'type_field': 'textbox'}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(
-            result['errors'], {'name': ['This field is required.']}
-        )
-        self.assertFalse(Question.objects.filter(name='Cooking').exists())
-
-    def test_ajax_update_question_valid(self):
-        url = reverse('companysettings:ajax_question')
-        question = SingleLineQuestionFactory()
-        data = {'id': question.id,'name': 'Cooking', 'type_field': 'textbox'}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(result['result'], 'success')
-        self.assertTrue(Question.objects.filter(name='Cooking').exists())
-
-    def test_ajax_update_question_invalid(self):
-        url = reverse('companysettings:ajax_question')
-        question = SingleLineQuestionFactory()
-        data = {'id': question.id, 'name': '', 'type_field': 'textbox'}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(
-            result['errors'], {'name': ['This field is required.']}
-        )
-        self.assertFalse(Question.objects.filter(name='Cooking').exists())
-
-    def test_ajax_update_question_inexisting(self):
-        url = reverse('companysettings:ajax_question')
-        data = {'id': 42, 'name': '', 'type_field': 'textbox'}
-
-        response = subdomain_post_ajax(
-            self.app, url, data, user=self.user
-        )
-        result = json.loads(response.body)
-        self.assertEqual(result['result'], 'error')
-        self.assertFalse(Question.objects.filter(name='Cooking').exists())
-        
-    def test_delete_question(self):
-        question = SingleLineQuestionFactory(
-            name='ninja', company=self.user.company
-        )
-        url = reverse('companysettings:delete_question', args=(question.id,))
-
-        response = subdomain_get(self.app, url, user=self.user)
-        self.assertEqual(response.request.path,
-                         reverse('companysettings:list_questions'))
-        self.assertNotContains(response, "ninja")
-        self.assertContains(response, "Question deleted.")
 
     def test_list_stages(self):
         url = reverse('companysettings:list_stages')

@@ -8,7 +8,7 @@ from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from companies.models import Company
-from companysettings.models import Question, InterviewStage
+from companysettings.models import InterviewStage
 
 
 class Opening(TimeStampedModel):
@@ -32,9 +32,6 @@ class Opening(TimeStampedModel):
     )
 
     company = models.ForeignKey(Company)
-    questions = models.ManyToManyField(
-        Question, blank=True, null=True, through='OpeningQuestion'
-    )
 
     def stage_counts(self):
         for stage in InterviewStage.objects.filter(company=self.company):
@@ -69,11 +66,16 @@ class Opening(TimeStampedModel):
 
         return _('Created')
 
-    def __unicode__(self):
-        return u"<Opening: %s>" % self.title
+    def __str__(self):
+        return '%s' % self.title
 
 
 class OpeningQuestion(TimeStampedModel):
-    opening = models.ForeignKey(Opening)
-    question = models.ForeignKey(Question)
-    required = models.BooleanField(default=False)
+    title = models.CharField(max_length=770)
+    opening = models.ForeignKey(Opening, related_name='questions')
+
+    class Meta:
+        ordering = ['created']
+
+    def __str__(self):
+        return '%s' % self.title

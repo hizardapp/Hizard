@@ -8,10 +8,10 @@ from django.utils.translation import ugettext_lazy as _
 from braces.views import LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
 
 from .forms import (
-    QuestionForm, InterviewStageForm, CompanyInformationForm
+    InterviewStageForm, CompanyInformationForm
 )
 from .forms import CustomUserInviteForm
-from .models import Question, InterviewStage
+from .models import InterviewStage
 from companies.models import Company
 from accounts.models import CustomUser
 from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
@@ -51,30 +51,6 @@ class CreateUpdateAjaxView(
                 'errors': form.errors,
                 'message': unicode(self.message_errors)
             })
-
-
-class QuestionListView(LoginRequiredMixin, RestrictedListView):
-    model = Question
-    form = QuestionForm
-
-    def get_context_data(self, **kwargs):
-        context = super(QuestionListView, self).get_context_data(**kwargs)
-        context['types'] = Question.TYPE_QUESTIONS
-        return context
-
-
-class QuestionCreateUpdateView(CreateUpdateAjaxView):
-    model = Question
-    form = QuestionForm
-    message_success = _('Question saved.')
-    message_errors = _('Please correct the errors below.')
-    message_not_exist = _('The question does not exist.')
-
-
-class QuestionDeleteView(LoginRequiredMixin, QuickDeleteView):
-    model = Question
-    success_url = reverse_lazy('companysettings:list_questions')
-    success_message = _('Question deleted.')
 
 
 class InterviewStageListView(LoginRequiredMixin, TemplateView):

@@ -1,15 +1,11 @@
 from django.utils.translation import ugettext_lazy as _
 
-from companysettings.models import Question, InterviewStage
+from companysettings.models import InterviewStage
 from openings.models import Opening
 from customisable_emails.models import EmailTemplate
 
 
 def setup_company(company):
-    website_question = Question(name=_('Website'), type_field='textbox')
-    phone_question = Question(name=_('Phone number'), type_field='textbox')
-    company.question_set.add(website_question)
-    company.question_set.add(phone_question)
 
     interview_stages = [
         InterviewStage(name=_('Received')),
@@ -34,9 +30,6 @@ def setup_company(company):
         <p>We are a small but growing university with a bright future ahead of us, enabling hundred of students to learn about magic.</p>"""),
         country="GB",
         city="London"
-    ).openingquestion_set.create(
-        question=phone_question,
-        required=True
     )
 
     EmailTemplate.objects.create(

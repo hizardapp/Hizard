@@ -1,7 +1,7 @@
 from django_webtest import WebTest
 
 from ..factories._companies import CompanyFactory
-from companysettings.models import Question, InterviewStage
+from companysettings.models import InterviewStage
 from openings.models import Opening
 from customisable_emails.models import EmailTemplate
 from core import utils
@@ -19,7 +19,6 @@ class SetupCompanyTests(WebTest):
         utils.setup_company(company)
 
         # Not asserting exact number since it can vary if we want to add some
-        self.assertTrue(Question.objects.filter(company=company).exists())
         self.assertTrue(
             InterviewStage.objects.filter(company=company).exists()
         )

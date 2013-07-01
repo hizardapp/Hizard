@@ -7,9 +7,9 @@ from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
 from ..factories._companysettings import (
-    SingleLineQuestionFactory, InterviewStageFactory
+    InterviewStageFactory
 )
-from ..factories._openings import OpeningWithQuestionsFactory
+from ..factories._openings import OpeningWithQuestionFactory
 
 from applications.models import Application, ApplicationAnswer
 from tests.utils import subdomain_get, career_site_get
@@ -26,8 +26,7 @@ class PublicViewsTests(WebTest):
 class ApplicationViewsTests(WebTest):
     def setUp(self):
         self.user = UserFactory()
-        self.question = SingleLineQuestionFactory(company=self.user.company)
-        self.opening = OpeningWithQuestionsFactory(company=self.user.company)
+        self.opening = OpeningWithQuestionFactory(company=self.user.company)
 
     def test_get_list_openings(self):
         url = reverse('public:opening-list')
@@ -44,7 +43,7 @@ class ApplicationViewsTests(WebTest):
         self.app.get(url, headers=dict(Host="tralala.h.com"), status=404)
 
     def test_get_list_openings_with_an_unpublished_one(self):
-        OpeningWithQuestionsFactory(
+        OpeningWithQuestionFactory(
             title="Dreamer",
             company=self.user.company,
             published_date=None
@@ -64,7 +63,7 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(page, self.opening.title)
 
         self.assertContains(
-            page, self.opening.openingquestion_set.all()[0].question.name
+            page, self.opening.questions.all()[0].title
         )
 
     def test_valid_post_application_form(self):
@@ -92,9 +91,7 @@ class ApplicationViewsTests(WebTest):
         form['email'] = 'bilbon@shire.com'
         # name of file, content of file
         form['resume'] = 'bilbon_cv.pdf', "My resume"
-        form['q_single-line'] = 'Lalala'
-        form['q_multi-line'] = 'Lalala'
-        form['q_checkbox'] = True
+        form['question-1'] = 'Lalala'
         response = form.submit().follow()
 
         self.assertEqual(
@@ -112,7 +109,7 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(len(mail.outbox), 1)
 
         # 2 required, 1 not required, we still record the 3 though
-        self.assertEqual(ApplicationAnswer.objects.count(), 3)
+        self.assertEqual(ApplicationAnswer.objects.count(), 1)
 
         # And the resume we just created
         os.unlink(applicant.resume.path)
@@ -123,14 +120,13 @@ class ApplicationViewsTests(WebTest):
 
         form['first_name'] = 'Software Developer'
         form['last_name'] = 'Fait des logiciels.'
-        form['q_single-line'] = 'Lalala'
-        form['q_multi-line'] = ''
+        form['question-1'] = ''
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Application.objects.count(), 0)
 
     def test_get_apply_form_unpublished(self):
-        opening = OpeningWithQuestionsFactory(company=self.user.company, published_date=None)
+        opening = OpeningWithQuestionFactory(company=self.user.company, published_date=None)
         url = reverse('public:apply', args=(opening.id,))
         career_site_get(self.app, url, self.user.company.subdomain.lower(), status=404)

@@ -7,9 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 from companysettings.models import InterviewStage
 
 from .models import (
-    Applicant, Application, ApplicationAnswer, ApplicationStageTransition,
-    ApplicationMessage
-)
+    Applicant, Application, ApplicationStageTransition,
+    ApplicationMessage,
+    ApplicationAnswer)
 
 
 class ApplicationForm(forms.ModelForm):
@@ -21,31 +21,22 @@ class ApplicationForm(forms.ModelForm):
         self.opening = kwargs.pop('opening')
         super(ApplicationForm, self).__init__(*args, **kwargs)
 
+        self.questions = self.opening.questions.all()
+        for question in self.questions:
+            field_name = 'question-' + str(question.id)
+            self.fields[field_name] = forms.CharField()
+            self.fields[field_name].required = True
+            self.fields[field_name].label = question.title
 
         if not self.opening:
             return
 
         self.save_text = _('Apply')
 
-        for opening_question in self.opening.openingquestion_set.all().select_related('question'):
-            question = opening_question.question
-            field_name = 'q_%s' % question.slug
-
-            if question.type_field == 'textbox':
-                self.fields[field_name] = forms.CharField(label=question.name)
-            elif question.type_field == 'textarea':
-                self.fields[field_name] = forms.CharField(
-                    label=question.name, widget=forms.Textarea)
-            elif question.type_field == 'checkbox':
-                self.fields[field_name] = forms.BooleanField(label=question.name)
-
-
-            self.fields[field_name].required = opening_question.required
-
     def clean_resume(self):
-        '''
+        """
         Make sure we really have a pdf file
-        '''
+        """
         resume = self.cleaned_data['resume']
 
         if resume:
@@ -93,6 +84,15 @@ class ApplicationForm(forms.ModelForm):
         application.applicant.resume = final_resume
         application.applicant.save()
 
+        for question in self.questions:
+            field_name = 'question-' + str(question.id)
+            answer = self.cleaned_data[field_name]
+            application_answer = ApplicationAnswer()
+            application_answer.application = application
+            application_answer.question = question
+            application_answer.answer = answer
+            application_answer.save()
+
         stage = InterviewStage.objects.filter(
             company=self.opening.company
         ).order_by('position')[0]
@@ -102,20 +102,6 @@ class ApplicationForm(forms.ModelForm):
                 application=application,
                 stage=stage
             )
-
-        questions = self.opening.questions.all()
-
-        for field in self.cleaned_data:
-            if field.startswith('q_'):
-                question = questions.filter(slug=field[2:])[0]
-                answer = self.cleaned_data[field]
-
-                if answer is not None:
-                    application_answer = ApplicationAnswer()
-                    application_answer.application = application
-                    application_answer.question = question
-                    application_answer.answer = answer
-                    application_answer.save()
 
         return applicant
 
