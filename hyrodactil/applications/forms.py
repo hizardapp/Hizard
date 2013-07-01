@@ -24,7 +24,7 @@ class ApplicationForm(forms.ModelForm):
         self.questions = self.opening.questions.all()
         for question in self.questions:
             field_name = 'question-' + str(question.id)
-            self.fields[field_name] = forms.CharField()
+            self.fields[field_name] = forms.CharField(widget=forms.Textarea)
             self.fields[field_name].required = True
             self.fields[field_name].label = question.title
 
