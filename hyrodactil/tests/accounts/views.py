@@ -451,3 +451,53 @@ class AccountsViewsTests(WebTest):
         self.assertEqual(user.name, "Henry IV")
         self.assertTrue(user.avatar.url)
         os.unlink(user.avatar.path)
+
+    def test_promote_to_admin_valid(self):
+        admin = UserFactory(is_company_admin=True)
+        user = UserFactory(company=admin.company)
+
+        url = reverse('accounts:promote', kwargs={'user_pk': user.id})
+
+        subdomain_get(self.app, url, user=admin)
+        self.assertTrue(CustomUser.objects.get(id=user.id).is_company_admin)
+
+    def test_promote_to_admin_without_being_admin(self):
+        fake_admin = UserFactory()
+        user = UserFactory(company=fake_admin.company)
+
+        url = reverse('accounts:promote', kwargs={'user_pk': user.id})
+
+        subdomain_get(self.app, url, user=fake_admin, status=404)
+
+    def test_promote_to_admin_different_company(self):
+        admin = UserFactory(is_company_admin=True)
+        user = UserFactory()
+
+        url = reverse('accounts:promote', kwargs={'user_pk': user.id})
+
+        subdomain_get(self.app, url, user=admin, status=404)
+
+    def test_delete_user_valid(self):
+        admin = UserFactory(is_company_admin=True)
+        user = UserFactory(company=admin.company)
+
+        url = reverse('accounts:delete', kwargs={'user_pk': user.id})
+
+        subdomain_get(self.app, url, user=admin)
+        self.assertEqual(len(CustomUser.objects.filter(id=user.id)), 0)
+
+    def test_promote_to_admin_without_being_admin(self):
+        fake_admin = UserFactory()
+        user = UserFactory(company=fake_admin.company)
+
+        url = reverse('accounts:delete', kwargs={'user_pk': user.id})
+
+        subdomain_get(self.app, url, user=fake_admin, status=404)
+
+    def test_promote_to_admin_different_company(self):
+        admin = UserFactory(is_company_admin=True)
+        user = UserFactory()
+
+        url = reverse('accounts:delete', kwargs={'user_pk': user.id})
+
+        subdomain_get(self.app, url, user=admin, status=404)

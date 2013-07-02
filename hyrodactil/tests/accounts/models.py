@@ -46,7 +46,7 @@ class CustomUserModelTests(TestCase):
         self.assertEqual(user.is_staff, True)
 
     def test_get_file_path(self):
-        user = UserFactory.create()
+        user = UserFactory()
         path = get_file_path(user, 'default_avatar.jpg')
         filename = path.split('/')[-1]
 
@@ -56,7 +56,7 @@ class CustomUserModelTests(TestCase):
         self.assertEqual(filename.split('.')[-1], 'jpg')
 
     def test_add_image_to_user(self):
-        user = UserFactory.create()
+        user = UserFactory()
         default = 'img/default_avatar.jpg'
         default_avatar = os.path.join(settings.STATICFILES_DIRS[0], default)
 
@@ -69,8 +69,7 @@ class CustomUserModelTests(TestCase):
         os.remove(user_found.avatar.path)
 
     def test_add_information_to_user(self):
-        user = UserFactory.create()
-        user.save()
+        user = UserFactory()
 
         user.name = 'Bob L'
         user.save()
@@ -80,14 +79,14 @@ class CustomUserModelTests(TestCase):
         self.assertEqual(user.name, user_found.name)
 
     def test_activate_user(self):
-        user = UserFactory.create(is_active=False)
+        user = UserFactory(is_active=False)
         activated = CustomUser.objects.activate_user(user.activation_key)
 
         self.assertNotEqual(activated, False)
         self.assertEqual(activated.is_active, True)
 
     def test_activate_user_past_date(self):
-        user = UserFactory.create(is_active=False)
+        user = UserFactory(is_active=False)
 
         old_value = settings.ACCOUNT_ACTIVATION_DAYS
         settings.ACCOUNT_ACTIVATION_DAYS = -1
@@ -99,20 +98,20 @@ class CustomUserModelTests(TestCase):
         self.assertEqual(activated, False)
 
     def test_activate_user_already_activated(self):
-        user = UserFactory.create(is_active=False)
+        user = UserFactory(is_active=False)
         CustomUser.objects.activate_user(user.activation_key)
         activated = CustomUser.objects.activate_user(user.activation_key)
 
         self.assertEqual(activated, False)
 
     def test_activation_key_did_not_expire(self):
-        user = UserFactory.create(is_active=False)
+        user = UserFactory(is_active=False)
         expired = user.activation_key_expired()
 
         self.assertEqual(expired, False)
 
     def test_activation_key_did_expire(self):
-        user = UserFactory.create(is_active=False)
+        user = UserFactory(is_active=False)
 
         old_value = settings.ACCOUNT_ACTIVATION_DAYS
         settings.ACCOUNT_ACTIVATION_DAYS = -1
@@ -130,7 +129,7 @@ class CustomUserModelTests(TestCase):
         self.assertTrue(SHA1_RE.search(key))
 
     def test_delete_expired_users(self):
-        user = UserFactory.create(is_active=False)
+        user = UserFactory(is_active=False)
         days = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
         user.created -= days
         user.save()
@@ -139,3 +138,18 @@ class CustomUserModelTests(TestCase):
 
         count = CustomUser.objects.count()
         self.assertEqual(count, 0)
+
+    def test_get_avatar_url_with_avatar(self):
+        user = UserFactory()
+        default = 'img/default_avatar.jpg'
+        default_avatar = os.path.join(settings.STATICFILES_DIRS[0], default)
+
+        user.avatar = File(open(default_avatar))
+        user.save()
+
+        self.assertTrue(settings.MEDIA_URL in user.get_avatar_url())
+        os.remove(user.avatar.path)
+
+    def test_get_avatar_url_without_avatar(self):
+        user = UserFactory()
+        self.assertTrue(settings.STATIC_URL in user.get_avatar_url())

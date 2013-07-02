@@ -19,9 +19,14 @@ urlpatterns = patterns('',
         name='activate'
     ),
     url(
-        r'^toggle_status/(?P<user_pk>\w+)/$',
-        views.ToggleStatusView.as_view(),
-        name='toggle_status'
+        r'^promote/(?P<user_pk>\w+)/$',
+        views.PromoteView.as_view(),
+        name='promote'
+    ),
+    url(
+        r'^delete/(?P<user_pk>\w+)/$',
+        views.DeleteView.as_view(),
+        name='delete'
     ),
     url(
         r'^details/$',

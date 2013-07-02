@@ -8,7 +8,7 @@ import _companies
 class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = CustomUser
 
-    email = 'bob@bob.com'
+    email = factory.Sequence(lambda n: 'person{0}@example.com'.format(n))
     name = 'Ann Onymous'
     password = 'bob'
     is_company_admin = False

@@ -15,7 +15,6 @@ from .models import InterviewStage
 from companies.models import Company
 from accounts.models import CustomUser
 from core.views import MessageMixin, QuickDeleteView, RestrictedUpdateView
-from core.views import RestrictedListView
 
 
 class CreateUpdateAjaxView(
@@ -123,9 +122,11 @@ class InviteUserCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(InviteUserCreateView, self).get_context_data(**kwargs)
-        context['users'] = CustomUser.objects.filter(
+        users = CustomUser.objects.filter(
             company=self.request.user.company
         )
+        context['users'] = [user for user in users if user.is_active is True]
+        context['invited_users'] = [user for user in users if user.is_active is False]
         return context
 
     def form_valid(self, form):

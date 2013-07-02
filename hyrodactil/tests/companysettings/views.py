@@ -221,47 +221,6 @@ class CompanySettingsViewsTests(WebTest):
         user = CustomUser.objects.get(email="steve@example.com")
         self.assertTrue(user.check_password("1234567"))
 
-    def test_disable_user(self):
-        colleague = UserFactory(email='e@e.com', company=self.user.company)
-        toggle_status_url = reverse(
-            'accounts:toggle_status',
-            args=(colleague.pk,)
-        )
-        subdomain_get(self.app, toggle_status_url, user=self.user, status=302)
-
-        self.assertTrue(
-            CustomUser.objects.filter(
-                pk=colleague.pk, is_active=False
-            ).exists()
-        )
-        subdomain_get(self.app, toggle_status_url, user=self.user, status=302)
-
-        self.assertTrue(
-            CustomUser.objects.filter(pk=colleague.pk, is_active=True).exists()
-        )
-
-    def test_disable_user_access(self):
-        colleague = UserFactory(
-            email='e@e.com', company=self.user.company, activation_key=''
-        )
-        toggle_colleague_status_url = reverse(
-            'accounts:toggle_status',
-            args=(colleague.pk,)
-        )
-        toggle_self_status_url = reverse(
-            'accounts:toggle_status',
-            args=(self.user.pk,)
-        )
-        url = reverse('companysettings:list_users')
-
-        response = subdomain_get(self.app, url, user=self.user)
-        self.assertContains(response, toggle_colleague_status_url)
-        self.assertNotContains(response, toggle_self_status_url)
-
-        response = subdomain_get(self.app, url, user=colleague)
-        self.assertNotContains(response, toggle_colleague_status_url)
-        self.assertNotContains(response, toggle_self_status_url)
-
     def test_modify_company_information_valid(self):
         url = reverse('companysettings:update_information')
 

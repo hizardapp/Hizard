@@ -30,7 +30,8 @@ class CustomUserInviteForm(forms.ModelForm):
                 password=None,
                 active=False,
                 is_company_admin=is_company_admin,
-                company=company
+                company=company,
+                invited=True
             )
             return user
 

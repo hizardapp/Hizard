@@ -24,7 +24,7 @@ class CustomUserManager(BaseUserManager):
     activating them
     """
     def create_user(self, email, name, password=None, active=True, company=None,
-                    is_company_admin=False):
+                    is_company_admin=False, invited=False):
         """
         Creates a basic user which is active by default.
         If we want to create an inactive one, an activation key is generated
@@ -33,7 +33,8 @@ class CustomUserManager(BaseUserManager):
             msg = _('Email is mandatory')
             raise ValueError(msg)
 
-        if settings.SKIP_ACTIVATION:
+        # We don't want to activate invited users straight away
+        if settings.SKIP_ACTIVATION and not invited:
             active = True
 
         user = self.model(
@@ -215,6 +216,12 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         mail.send_mail(
             subject, body, settings.DEFAULT_FROM_EMAIL, [self.email]
         )
+
+    def get_avatar_url(self):
+        if self.avatar:
+            return self.avatar.url
+
+        return settings.STATIC_URL + 'img/default_avatar.jpg'
 
     def __unicode__(self):
         return self.email

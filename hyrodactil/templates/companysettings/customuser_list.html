@@ -13,59 +13,45 @@
   <h2>{% trans "Manage users" %}</h2>
 
   <div>
-
-    <table>
-      <thead>
-        <tr class="row">
-          <th class="large-3 columns">{% trans "Email" %}</th>
-          <th class="large-3 columns">{% trans "Name" %}</th>
-          <th class="large-2 columns">{% trans "Status" %}</th>
-          <th class="large-2 columns">{% trans "Role" %}</th>
-          <th class="large-2 column"></th>
-        </tr>
-      </thead>
-
-      <tbody>
+    <ul class="user-list">
       {% for user in users %}
-        <tr class="row" data-id="{{ user.id }}">
-          <td class="large-3 columns">
-            <span>{{ user.email }}</span>
-          </td>
-          <td class="large-3 columns">
-            <span>{{ user.name }}</span>
-          </td>
-          <td class="large-2 columns">
-            <span>{{ user.get_status }}</span>
-          </td>
-          <td class="large-2 columns">
-            <span>
-             {% if user.is_company_admin %}
-               {% trans 'Administrator' %}
-             {% else %}
-               {% trans 'User' %}
-             {% endif %}
-            </span>
-          </td>
-          <td class="large-2 columns">
-            <span>
-              {% if request.user.is_company_admin and request.user != user %}
-                {% if not user.activation_key %}
-                  <a href="{% url 'accounts:toggle_status' user.pk %}">
-                    {% if user.is_active %}
-                      {% trans 'Disable' %}
-                    {% else %}
-                      {% trans 'Enable' %}
-                    {% endif %}
-                  </a>
-                {% endif %}
+        <li class="container">
+          <span class="left">
+            <img height="40" width="40" src="{{ user.get_avatar_url }}" alt="Avatar" align="left" />
+            <span class="right">
+              {{ user.name }}
+              <br>
+              {% if user.is_company_admin %}
+                {% trans 'Administrator' %}
               {% endif %}
             </span>
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
+          </span>
 
-    </table>
+          {% if request.user.is_company_admin and not user.is_company_admin and user != request.user %}
+            <span class="right">
+              <a href="{% url 'accounts:delete' user.id %}"><i class="icon-trash"></i> {% trans 'Delete this user' %}</a>
+              <br>
+              <a href="{% url 'accounts:promote' user.id %}"><i class="icon-thumbs-up"></i> {% trans 'Promote to administrator' %}</a>
+            </span>
+          {% endif %}
+
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div>
+    <ul class="user-list">
+      {% for user in invited_users %}
+        <li class="container">
+          <img height="40" width="40" src="{{ user.get_avatar_url }}" alt="Avatar" class="left" />
+          {{ user.email }}
+          <br>
+          {% trans 'Invited the ' %}{{ user.created|date:"SHORT_DATE_FORMAT" }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 
   <div>
     <form action="." method="POST">
@@ -100,8 +86,6 @@
       </div>
 
     </form>
-  </div>
-
   </div>
 
 {% endblock page-content %}

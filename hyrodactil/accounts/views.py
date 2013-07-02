@@ -206,12 +206,28 @@ class PasswordConfirmResetView(FormView):
         return self.valid_link
 
 
-class ToggleStatusView(View):
+class PromoteView(View):
     def get(self, request, user_pk):
         user = get_object_or_404(CustomUser, pk=user_pk)
-        user.is_active = not user.is_active
+        current_user = request.user
+        if current_user.company != user.company or not current_user.is_company_admin:
+            raise Http404
+
+        user.is_company_admin = True
         user.save()
-        messages.success(request, _('Changed user status.'))
+        messages.success(request, _('User promoted to administrator'))
+        return HttpResponseRedirect(reverse("companysettings:list_users"))
+
+
+class DeleteView(View):
+    def get(self, request, user_pk):
+        user = get_object_or_404(CustomUser, pk=user_pk)
+        current_user = request.user
+        if current_user.company != user.company or not current_user.is_company_admin:
+            raise Http404
+
+        user.delete()
+        messages.success(request, _('User deleted'))
         return HttpResponseRedirect(reverse("companysettings:list_users"))
 
 
