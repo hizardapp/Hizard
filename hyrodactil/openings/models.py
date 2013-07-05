@@ -35,7 +35,7 @@ class Opening(TimeStampedModel):
 
     def stage_counts(self):
         for stage in InterviewStage.objects.filter(company=self.company):
-            yield self.application_set.filter(current_stage_id=stage).count()
+            yield self.application_set.filter(current_stage=stage).count()
 
     def get_apply_url(self):
         company_prefix = (

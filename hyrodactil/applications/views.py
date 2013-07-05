@@ -1,5 +1,4 @@
-from collections import OrderedDict
-import json
+
 from django.contrib import messages
 
 from django.core.urlresolvers import reverse
@@ -8,9 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, CreateView, TemplateView, View
 
-from braces.views import (
-    LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin
-)
+from braces.views import LoginRequiredMixin
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
 from .forms import ApplicationForm
@@ -68,7 +65,7 @@ class ApplicationMessageCreateView(LoginRequiredMixin, CreateView):
             request, application_id, **kwargs)
 
     def get_success_url(self):
-        return '%s#comments' % reverse(
+        return reverse(
             'applications:application_detail',
             args=(self.application.id,)
         )
@@ -112,10 +109,14 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         return context
 
     def form_valid(self, form):
+        application = self.get_application()
         transition = form.save(commit=False)
-        transition.application = self.get_application()
+        transition.application = application
         transition.user = self.request.user
         transition.save()
+        application.current_stage = transition.stage
+        application.save()
+
         return redirect(
             'applications:application_detail',
             pk=self.kwargs['pk']
@@ -150,72 +151,7 @@ class ManualApplicationView(LoginRequiredMixin, MessageMixin, FormView):
         return super(ManualApplicationView, self).form_valid(form)
 
 
-class BoardView(LoginRequiredMixin, TemplateView):
-    template_name = 'applications/kanban.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(BoardView, self).get_context_data(**kwargs)
-
-        board_data = OrderedDict()
-
-        stages = InterviewStage.objects.filter(
-            company=self.request.user.company
-        ).order_by('position')
-        applications = Application.objects.filter(
-            opening__company=self.request.user.company
-        ).select_related('current_stage', 'applicant', 'opening')
-
-        for stage in stages:
-            board_data[stage] = []
-            for application in applications:
-                if stage == application.current_stage:
-                    board_data[stage].append(application)
-
-        context['board'] = board_data
-        context['full_width'] = True
-        return context
-
-
-class UpdatePositionsAjaxView(
-    LoginRequiredMixin, JSONResponseMixin, AjaxResponseMixin, View
-):
-    def post_ajax(self, request, *args, **kwargs):
-        data = json.loads(request.POST.get('data'))
-
-        if data.get('stage'):
-            stage = int(data.get('stage'))
-
-        positions = data.get('positions')
-
-        if positions:
-            for position in positions:
-                application_id, new_position = position
-
-                application = Application.objects.filter(
-                    id=int(application_id),
-                    opening__company=self.request.user.company
-                ).prefetch_related('stage_transitions__stage')[0]
-
-                application.position = new_position
-                application.save()
-
-                if data.get('stage'):
-                    current_stage = application.current_stage
-                    if not current_stage or current_stage.id != stage:
-                        ApplicationStageTransition.objects.create(
-                            application=application,
-                            user=self.request.user,
-                            stage=InterviewStage.objects.get(id=stage)
-                        )
-
-                result = {'status': 'success'}
-        else:
-            result = {'status': 'error'}
-
-        return self.render_json_response(result)
-
-
-class RateApplicationView(LoginRequiredMixin, TemplateView):
+class RateView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         application = get_object_or_404(
             Application.objects.select_related('opening', 'opening__company'),
@@ -229,6 +165,30 @@ class RateApplicationView(LoginRequiredMixin, TemplateView):
             messages.success(request, _('Application rated.'))
         else:
             messages.error(request, _("Couldn't rate the application"))
+
+        return redirect(
+            reverse('applications:application_detail', args=(application.id,))
+        )
+
+
+class HireView(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        application = get_object_or_404(
+            Application.objects.select_related('opening', 'opening__company'),
+            id=self.kwargs['application_id']
+        )
+        if application.opening.company != request.user.company:
+            raise Http404
+
+        hired_stage = InterviewStage.objects.get(tag='HIRED')
+
+        ApplicationStageTransition(
+            application=application,
+            user=request.user,
+            stage=hired_stage
+        ).save()
+
+        messages.success(request, _('Applicant marked as hired.'))
 
         return redirect(
             reverse('applications:application_detail', args=(application.id,))

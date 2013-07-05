@@ -121,7 +121,7 @@ class ApplicationViewsTests(WebTest):
         self.assertFalse(ApplicationMessage.objects.all().exists())
 
     def test_create_manual_application(self):
-        InterviewStageFactory(company=self.user.company)
+        InterviewStageFactory(tag='RECEIVED')
         url = reverse(
             'applications:manual_application', args=[self.opening.pk]
         )
@@ -161,60 +161,10 @@ class ApplicationViewsTests(WebTest):
         self.assertTemplateUsed(page, 'applications/application_detail.html')
         self.assertContains(page, 'class="alert-error"')
 
-
-class ApplicationAjaxViewsTests(WebTest):
-    csrf_checks = False
-
-    def setUp(self):
-        self.user = UserFactory()
-        self.opening = OpeningWithQuestionFactory(company=self.user.company)
-
-    def test_saving_position_applications_valid_with_stage(self):
-        application1 = ApplicationFactory(opening=self.opening)
-        application2 = ApplicationFactory(opening=self.opening)
-        stage = InterviewStageFactory(company=self.user.company)
-
-        url = reverse('applications:update_positions')
-        data = {
-            'stage': stage.id,
-            'positions': [(application1.id, 0), (application2.id, 1)]
-        }
-
-        response = subdomain_post_ajax(
-            self.app, url, {'data': json.dumps(data)}, user=self.user
+    def test_hire_applicant(self):
+        InterviewStageFactory(tag='HIRED')
+        application = ApplicationFactory(opening=self.opening)
+        url = reverse(
+            'applications:hire', args=(application.pk, )
         )
-
-        json_response = json.loads(response.content)
-        self.assertEqual(json_response['status'], 'success')
-
-        application1 = Application.objects.get(id=application1.id)
-        application2 = Application.objects.get(id=application2.id)
-
-        self.assertEqual(0, application1.position)
-        self.assertEqual(stage.id, application1.current_stage_id)
-
-        self.assertEqual(1, application2.position)
-        self.assertEqual(stage.id, application1.current_stage_id)
-
-    def test_saving_position_applications_valid_without_stage(self):
-        application1 = ApplicationFactory(opening=self.opening)
-        application2 = ApplicationFactory(opening=self.opening)
-
-        url = reverse('applications:update_positions')
-        data = {
-            'stage': None,
-            'positions': [(application1.id, 0), (application2.id, 1)]
-        }
-
-        response = subdomain_post_ajax(
-            self.app, url, {'data': json.dumps(data)}, user=self.user
-        )
-
-        json_response = json.loads(response.content)
-        self.assertEqual(json_response['status'], 'success')
-        self.assertEqual(
-            0, Application.objects.get(id=application1.id).position
-        )
-        self.assertEqual(
-            1, Application.objects.get(id=application2.id).position
-        )
+        page = subdomain_get(self.app, url, user=self.user)

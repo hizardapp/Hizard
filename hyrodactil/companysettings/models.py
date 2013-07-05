@@ -7,12 +7,10 @@ from companies.models import Company
 
 class InterviewStage(TimeStampedModel):
     name = models.CharField(max_length=100)
-    position = models.PositiveIntegerField(null=True)
+    position = models.IntegerField(null=True)
+    tag = models.CharField(blank=True, max_length=15)
 
-    accepted = models.NullBooleanField(default=False)
-    rejected = models.NullBooleanField(default=False)
-
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company, null=True)
 
     class Meta:
         unique_together = ('company', 'position')

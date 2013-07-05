@@ -100,32 +100,6 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(response, "Interview")
         self.assertContains(response, "Stage deleted.")
 
-    def test_delete_last_stage(self):
-        stage = InterviewStageFactory(company=self.user.company)
-        url = reverse('companysettings:delete_stage', args=(stage.id,))
-
-        response =  subdomain_get(self.app, url, user=self.user)
-
-        self.assertEqual(
-            response.request.path,
-            reverse('companysettings:list_stages')
-        )
-        self.assertContains(response, stage.name)
-        self.assertContains(response, "You need to have at least one stage.")
-
-    def test_delete_accepted_stage(self):
-        stage = InterviewStageFactory(company=self.user.company, accepted=True)
-        url = reverse('companysettings:delete_stage', args=(stage.id,))
-
-        subdomain_get(self.app, url, user=self.user, status=404)
-
-    def test_delete_rejected_stage(self):
-        stage = InterviewStageFactory(company=self.user.company, rejected=True)
-        url = reverse('companysettings:delete_stage', args=(stage.id,))
-
-        # Expecting a 404
-        subdomain_get(self.app, url, user=self.user, status=404)
-
     def test_reorder_stage_valid_up(self):
         stage1 = InterviewStageFactory(company=self.user.company)
         stage2 = InterviewStageFactory(company=self.user.company)
@@ -168,7 +142,6 @@ class CompanySettingsViewsTests(WebTest):
             reverse('companysettings:list_stages')
         )
         self.assertEqual(InterviewStage.objects.get(id=1).position, 1)
-
     def test_list_users(self):
         url = reverse('companysettings:list_users')
         colleague = UserFactory(

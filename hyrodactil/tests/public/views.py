@@ -67,6 +67,7 @@ class ApplicationViewsTests(WebTest):
         )
 
     def test_valid_post_application_form(self):
+        stage = InterviewStageFactory(tag='RECEIVED')
         url = reverse('public:apply', args=(self.opening.id,))
 
         EmailTemplate.objects.create(
@@ -76,14 +77,6 @@ class ApplicationViewsTests(WebTest):
             body="Dear {{applicant}}, Best regards",
         )
 
-        stage1 = InterviewStageFactory(
-            company=self.opening.company,
-            position=0, name="Received"
-        )
-        InterviewStageFactory(
-            company=self.opening.company,
-            position=1, name="Accepted"
-        )
         form = career_site_get(self.app, url, self.user.company.subdomain.lower()).form
 
         form['first_name'] = 'Bilbon'
@@ -105,7 +98,7 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(applicant.first_name, 'Bilbon')
         self.assertEqual(applicant.resume.url,
                 '/media/resumes/%d/bilbon_cv.pdf' % self.opening.company.id)
-        self.assertEqual(application.current_stage, stage1)
+        self.assertEqual(application.current_stage, stage)
         self.assertEqual(len(mail.outbox), 1)
 
         # 2 required, 1 not required, we still record the 3 though

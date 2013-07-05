@@ -8,11 +8,12 @@ from customisable_emails.models import EmailTemplate
 def setup_company(company):
 
     interview_stages = [
-        InterviewStage(name=_('Received')),
         InterviewStage(name=_('Phone interview')),
         InterviewStage(name=_('In-person interview')),
-        InterviewStage(name=_('Rejected'), rejected=True),
-        InterviewStage(name=_('Accepted'), accepted=True),
+        InterviewStage(name=_('Offer')),
+        InterviewStage(name=_('Received'), tag='HIRED'),
+        InterviewStage(name=_('Rejected'), tag='REJECTED'),
+        InterviewStage(name=_('Hired'), tag='HIRED'),
     ]
 
     for stage in interview_stages:

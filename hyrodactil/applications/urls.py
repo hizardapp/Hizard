@@ -14,11 +14,6 @@ urlpatterns = patterns('',
        name='list_applications_opening'
    ),
    url(
-        r'^update_positions/$',
-        views.UpdatePositionsAjaxView.as_view(),
-        name='update_positions'
-   ),
-   url(
         r'^(?P<pk>\d+)/$',
         views.ApplicationDetailView.as_view(),
         name='application_detail'
@@ -35,7 +30,12 @@ urlpatterns = patterns('',
    ),
    url(
        r'^rate/(?P<application_id>\d+)/(?P<rating>-?\d+)$',
-       views.RateApplicationView.as_view(),
+       views.RateView.as_view(),
        name='rate'
-   )
+   ),
+   url(
+        r'^hire/(?P<application_id>\d+)/$',
+        views.HireView.as_view(),
+        name='hire'
+    )
 )

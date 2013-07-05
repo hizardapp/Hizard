@@ -7,89 +7,84 @@
 {% endblock title %}
 
 {% block page-content %}
-
   <h2>
     {{ application.applicant.first_name }} {{ application.applicant.last_name }}
-    <small>{% trans 'applicant details' %}</small>
-    <span class="rating right">
-      {% if user_rating != -1 %}
-        <a href="{% url 'applications:rate' application.id -1 %}"><i class="icon-thumbs-down"></i></a>
-      {% else %}
-        <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-down"></i></a>
-      {% endif %}
-
-      {{ rating }}
-
-      {% if user_rating != 1 %}
-        <a href="{% url 'applications:rate' application.id 1 %}"><i class="icon-thumbs-up"></i></a>
-      {% else %}
-        <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-up"></i></a>
-      {% endif %}
+    <small>{% trans 'applying for ' %}<a href="{% url 'openings:detail_opening' application.opening.id %}">{{ application.opening.title }}</a></small>
+     <span class="actions">
+       <a href="" class="button-negative right">
+         {% trans "Reject" %}
+       </a>
+        <a href="#" data-reveal-id="transition-form-modal" class="button-positive right">
+          {% trans "Change stage" %}
+        </a>
     </span>
   </h2>
 
-  <p>
-    <i class="icon-envelope"></i> {{ application.applicant.email }}
-    <br>
-    <i class="icon-briefcase"></i> <a href="{% url 'openings:detail_opening' application.opening.id %}">{{ application.opening.title }}</a>
-  </p>
+  <div class="row">
+    <div class="large-6 columns">
+      <p>
+        <span class="left">
+          <i class="icon-envelope"></i> {{ application.applicant.email }}
+        </span>
 
-  <div class="transitions">
-    <a href="#" data-reveal-id="transition-form-modal" class="button-positive">
-      {% trans 'Change the stage of this application' %}
-    </a>
+        <span class="rating right">
+          {% if user_rating != -1 %}
+            <a href="{% url 'applications:rate' application.id -1 %}"><i class="icon-thumbs-down"></i></a>
+          {% else %}
+            <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-down"></i></a>
+          {% endif %}
 
-    {% for transition in application.stage_transitions.all %}
-      <div class="row transition {% if forloop.last %}last-transition{% endif %}">
-        <div class="large-2 columns">
-          {{ transition.created|date:"Y/m/d" }}
-        </div>
-        <div class="large-3 columns">
-          {{ transition.stage }}
-        </div>
-        <div class="large-4 columns">
-            {{ transition.user.name }}
-        </div>
-        {% if transition.note %}
-        <div class="large-3 columns toggle-note">
-          {% trans 'See note' %}
-        </div>
-        {% else %}
-          <div class="large-3 columns">
-          </div>
-        {% endif %}
+          {{ rating }}
 
-        <div class="transition-note">
-          {{ transition.note|linebreaks }}
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+          {% if user_rating != 1 %}
+            <a href="{% url 'applications:rate' application.id 1 %}"><i class="icon-thumbs-up"></i></a>
+          {% else %}
+            <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-up"></i></a>
+          {% endif %}
+        </span>
+      </p>
 
-  <div class="section-container tabs" data-section="" data-options="deep_linking: true">
+      <p class="clear">
+        <h4>{% trans 'Resume' %}</h4>
+        <a href="http://docs.google.com/gview?url={{ application.applicant.resume.url }}" target="_blank"class="button-positive">See resume</a>
+        <a href="{{ application.applicant.resume.url }}" target="_blank" class="button-positive">Download resume</a>
+      </p>
 
-    <section class="section">
-      <p class="title"><a href="#resume">{% trans 'Resume' %}</a></p>
-      <div class="content" data-slug="resume">
-        {% include 'applications/_resume_tab.html' with application=application %}
-      </div>
-    </section>
+      <span>
+        <h4>{% trans 'Answers' %}</h4>
+        {% for answer in answers %}
+          <p>
+            <strong>{{ answer.question.title }}</strong><br>
+            {{ answer.answer }}
+          </p>
+        {% endfor %}
+      </span>
 
-    {% if answers %}
-      <section class="section">
-        <p class="title"><a href="#questions">{% trans 'Additional Questions' %}</a></p>
-        <div class="content" data-slug="questions">
-          {% include 'applications/_questions_tab.html' with application=application %}
-        </div>
-      </section>
-    {% endif %}
-
-    <section class="section">
-      <p class="title"><a href="#comments">{% trans 'Comments' %}</a></p>
-      <div class="content" data-slug="comments">
+      <span>
+        <h4>{% trans 'Discussion' %}</h4>
         {% include 'applications/_comments_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
-      </div>
-    </section>
+      </span>
+
+    </div>
+
+    <div class="large-6 columns">
+      <h4>{% trans 'Event feed' %}</h4>
+
+      {% for transition in application.stage_transitions.all %}
+        <div>
+          <span>{{ transition.created|date:"Y/m/d" }} - {% trans 'Moved to ' %}{{ transition.stage }}</span>
+          {% if transition.note %}
+            <blockquote class="note">
+              {{ transition.note|linebreaks }}
+              <cite>{{ transition.user.name }}</cite>
+            </blockquote>
+          {% endif %}
+
+        </div>
+      {% endfor %}
+
+    </div>
+
   </div>
 
   <div id="transition-form-modal" class="reveal-modal">
@@ -120,6 +115,7 @@
       {% endfor %}
 
       <div class="row">
+        <a href="{% url 'applications:hire' application.id %}" class="button-positive left">{% trans 'Hire' %}</a>
         <input type="submit" value="{% trans 'Change stage' %}" class="button-positive right" />
       </div>
 
@@ -130,26 +126,21 @@
 
 {% block extra-js %}
   <script type="text/javascript">
-
-   $('.toggle-note').click(function() {
-      $(this).next('.transition-note').toggle();
-   });
-
     $("a.reply-link").click(function (event) {
-        event.preventDefault();
+      event.preventDefault();
 
-        var newForm = $("#new-message-form").clone(),
-            link = $(this),
-            parentMessage = link.data("reply-to");
-        link.after(newForm);
+      var newForm = $("#new-message-form").clone(),
+              link = $(this),
+              parentMessage = link.data("reply-to");
+      link.after(newForm);
       newForm.find("#id_parent").val(parentMessage);
     });
 
     $("textarea#id_note").on("keydown", function () {
       var textarea = $(this),
-          str = textarea.val(),
-          cols = textarea.attr("cols"),
-          linecount = 0;
+              str = textarea.val(),
+              cols = textarea.attr("cols"),
+              linecount = 0;
 
       $.each(str.split("\n"), function (i, line) {
         linecount += (Math.ceil(line.length / cols) || 1);

@@ -33,24 +33,7 @@ class Applicant(TimeStampedModel):
 class Application(TimeStampedModel):
     applicant = models.ForeignKey(Applicant)
     opening = models.ForeignKey(Opening)
-    position = models.IntegerField(default=0)
-
     current_stage = models.ForeignKey(InterviewStage, null=True)
-
-    def update_current_stage(self, commit=True):
-        transitions = ApplicationStageTransition.objects.filter(
-            application=self
-        )
-        if transitions:
-            last_transistion = transitions[0]
-            if last_transistion.stage != self.current_stage:
-                self.current_stage = last_transistion.stage
-                if commit:
-                    self.save()
-
-    def save(self, *args, **kwargs):
-        self.update_current_stage(commit=False)
-        return super(Application, self).save(*args, **kwargs)
 
     def get_rating(self):
         ratings = ApplicationRating.objects.filter(
@@ -102,11 +85,6 @@ class Application(TimeStampedModel):
 
         return 0
 
-
-
-    class Meta:
-        ordering = 'position',
-
     def __unicode__(self):
         return self.applicant.get_full_name()
 
@@ -130,11 +108,6 @@ class ApplicationStageTransition(TimeStampedModel):
 
     class Meta:
         ordering = '-created',
-
-    def save(self, *args, **kwargs):
-        result = super(ApplicationStageTransition, self).save(*args, **kwargs)
-        self.application.update_current_stage()
-        return result
 
     def __str__(self):
         return "%s %s %s" % (self.application, self.user, self.stage)

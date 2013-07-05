@@ -93,15 +93,16 @@ class ApplicationForm(forms.ModelForm):
             application_answer.answer = answer
             application_answer.save()
 
-        stage = InterviewStage.objects.filter(
-            company=self.opening.company
-        ).order_by('position')[0]
+        stage = InterviewStage.objects.get(tag='RECEIVED')
 
         if stage:
             ApplicationStageTransition.objects.create(
                 application=application,
                 stage=stage
             )
+
+        application.current_stage = stage
+        application.save()
 
         return applicant
 

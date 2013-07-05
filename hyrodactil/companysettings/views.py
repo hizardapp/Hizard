@@ -57,11 +57,12 @@ class InterviewStageListView(LoginRequiredMixin, TemplateView):
     template_name = 'companysettings/interviewstage_list.html'
 
     def get_context_data(self, **kwargs):
-        stages = InterviewStage.objects.filter(
-            company=self.request.user.company, position__isnull=False
-        )
         context = super(InterviewStageListView, self).get_context_data(**kwargs)
-        context['stages'] = stages
+        stages = InterviewStage.objects.filter(
+            company=self.request.user.company
+        )
+        custom_stages = [stage for stage in stages if stage.tag == '']
+        context['stages'] = custom_stages
 
         return context
 
@@ -78,23 +79,6 @@ class InterviewStageDeleteView(LoginRequiredMixin, QuickDeleteView):
     model = InterviewStage
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage deleted.')
-
-    def get(self, *args, **kwargs):
-        self.object = self.get_object()
-        # Can't delete those 2, we use them to classify
-        if self.object.accepted or self.object.rejected:
-            raise Http404
-
-        count_stages = InterviewStage.objects.filter(
-            company=self.request.user.company
-        ).count()
-        if count_stages > 1:
-            return super(InterviewStageDeleteView, self).get(*args, **kwargs)
-        else:
-            messages.error(
-                self.request, _('You need to have at least one stage.')
-            )
-            return redirect(self.success_url)
 
 
 class InterviewStageReorderView(LoginRequiredMixin, View):

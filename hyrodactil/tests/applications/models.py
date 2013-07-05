@@ -10,24 +10,6 @@ from ..factories._companies import CompanyFactory
 
 
 class ApplicationModelTests(TestCase):
-    def test_application_has_current_stage(self):
-        s1 = InterviewStageFactory.create(name="1D")
-        s2 = InterviewStageFactory.create(name="Vacuum")
-        application = ApplicationFactory()
-        self.assertFalse(application.current_stage)
-
-        ApplicationStageTransitionFactory.create(
-            application=application,
-            stage=s1
-        )
-        self.assertEqual(application.current_stage, s1)
-
-        ApplicationStageTransitionFactory.create(
-            application=application,
-            stage=s2
-        )
-        self.assertEqual(application.current_stage, s2)
-
     def test_get_full_name(self):
         bob = ApplicantFactory.build()
         self.assertEqual(bob.get_full_name(), 'Bilbon Sacquet')
