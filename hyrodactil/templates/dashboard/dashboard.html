@@ -13,36 +13,16 @@
 
   <div class="dashboard-graph">
     <h3>{% trans 'Latest candidates' %}</h3>
-    <table>
-      <thead>
-      <tr>
-        <th>{% trans 'Name' %}</th>
-        <th>{% trans 'Applied for' %}</th>
-        <th>{% trans 'Applied the' %}</th>
-      </tr>
-      </thead>
-      <tbody>
 
-      {% for application in last_applications %}
-        <tr>
-          <td>
-            <a href="{% url "applications:application_detail" application.id %}">{{ application.applicant.get_full_name }}</a>
-          </td>
-          <td>
-            <a href="{% url "openings:detail_opening" application.opening.id %}">{{ application.opening.title }}</a>
-          </td>
-          <td>{{ application.created|date:"Y/m/d H:i" }}</td>
-        </tr>
-      {% endfor %}
+    {% for application in last_applications %}
+      <p>
+        <a href="{% url "applications:application_detail" application.id %}">{{ application.applicant.get_full_name }}</a>
+        {% trans 'applied for' %}
+        <a href="{% url "openings:detail_opening" application.opening.id %}">{{ application.opening.title }}</a>
+      - {{ application.created|date:"Y/m/d H:i" }}
+      </p>
+    {% endfor %}
 
-      {% if not last_applications %}
-        <tr>
-          <td colspan="42">{% trans 'No candidates' %}</td>
-        </tr>
-      {% endif %}
-
-      </tbody>
-    </table>
   </div>
 
   <div class="dashboard-graph">
