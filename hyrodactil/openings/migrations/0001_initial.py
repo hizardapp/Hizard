@@ -16,11 +16,11 @@ class Migration(SchemaMigration):
             ('title', self.gf('django.db.models.fields.CharField')(max_length=770)),
             ('description', self.gf('django.db.models.fields.TextField')()),
             ('is_private', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('department', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companysettings.Department'], null=True, blank=True)),
-            ('closing_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('loc_country', self.gf('django_countries.fields.CountryField')(max_length=2, blank=True)),
-            ('loc_city', self.gf('django.db.models.fields.CharField')(max_length=128, blank=True)),
-            ('loc_postcode', self.gf('django.db.models.fields.CharField')(max_length=64, blank=True)),
+            ('department', self.gf('django.db.models.fields.CharField')(max_length=128, blank=True)),
+            ('country', self.gf('django_countries.fields.CountryField')(max_length=2, blank=True)),
+            ('city', self.gf('django.db.models.fields.CharField')(max_length=128, blank=True)),
+            ('published_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('employment_type', self.gf('django.db.models.fields.CharField')(default='full_time', max_length=20)),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companies.Company'])),
         ))
         db.send_create_signal(u'openings', ['Opening'])
@@ -30,9 +30,8 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
             ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
-            ('opening', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['openings.Opening'])),
-            ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['companysettings.Question'])),
-            ('required', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=770)),
+            ('opening', self.gf('django.db.models.fields.related.ForeignKey')(related_name='questions', to=orm['openings.Opening'])),
         ))
         db.send_create_signal(u'openings', ['OpeningQuestion'])
 
@@ -56,48 +55,28 @@ class Migration(SchemaMigration):
             'subdomain': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'})
         },
-        u'companysettings.department': {
-            'Meta': {'object_name': 'Department'},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'companysettings.question': {
-            'Meta': {'object_name': 'Question'},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': "'name'"}),
-            'type': ('django.db.models.fields.CharField', [], {'default': "'textbox'", 'max_length': '20'})
-        },
         u'openings.opening': {
             'Meta': {'object_name': 'Opening'},
-            'closing_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'city': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companies.Company']"}),
+            'country': ('django_countries.fields.CountryField', [], {'max_length': '2', 'blank': 'True'}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
-            'department': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companysettings.Department']", 'null': 'True', 'blank': 'True'}),
+            'department': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
+            'employment_type': ('django.db.models.fields.CharField', [], {'default': "'full_time'", 'max_length': '20'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_private': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'loc_city': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
-            'loc_country': ('django_countries.fields.CountryField', [], {'max_length': '2', 'blank': 'True'}),
-            'loc_postcode': ('django.db.models.fields.CharField', [], {'max_length': '64', 'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'questions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['companysettings.Question']", 'null': 'True', 'through': u"orm['openings.OpeningQuestion']", 'blank': 'True'}),
+            'published_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '770'})
         },
         u'openings.openingquestion': {
-            'Meta': {'object_name': 'OpeningQuestion'},
+            'Meta': {'ordering': "['created']", 'object_name': 'OpeningQuestion'},
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
-            'opening': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['openings.Opening']"}),
-            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['companysettings.Question']"}),
-            'required': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'opening': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': u"orm['openings.Opening']"}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '770'})
         }
     }
 

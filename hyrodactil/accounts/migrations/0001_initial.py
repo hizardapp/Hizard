@@ -22,28 +22,29 @@ class Migration(SchemaMigration):
             ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('is_company_admin', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('avatar', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('activation_key', self.gf('django.db.models.fields.CharField')(max_length=40, blank=True)),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='employees', null=True, to=orm['companies.Company'])),
         ))
         db.send_create_signal(u'accounts', ['CustomUser'])
 
         # Adding M2M table for field groups on 'CustomUser'
-        db.create_table(u'accounts_customuser_groups', (
+        m2m_table_name = db.shorten_name(u'accounts_customuser_groups')
+        db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('customuser', models.ForeignKey(orm[u'accounts.customuser'], null=False)),
             ('group', models.ForeignKey(orm[u'auth.group'], null=False))
         ))
-        db.create_unique(u'accounts_customuser_groups', ['customuser_id', 'group_id'])
+        db.create_unique(m2m_table_name, ['customuser_id', 'group_id'])
 
         # Adding M2M table for field user_permissions on 'CustomUser'
-        db.create_table(u'accounts_customuser_user_permissions', (
+        m2m_table_name = db.shorten_name(u'accounts_customuser_user_permissions')
+        db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('customuser', models.ForeignKey(orm[u'accounts.customuser'], null=False)),
             ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
         ))
-        db.create_unique(u'accounts_customuser_user_permissions', ['customuser_id', 'permission_id'])
+        db.create_unique(m2m_table_name, ['customuser_id', 'permission_id'])
 
 
     def backwards(self, orm):
@@ -51,10 +52,10 @@ class Migration(SchemaMigration):
         db.delete_table(u'accounts_customuser')
 
         # Removing M2M table for field groups on 'CustomUser'
-        db.delete_table('accounts_customuser_groups')
+        db.delete_table(db.shorten_name(u'accounts_customuser_groups'))
 
         # Removing M2M table for field user_permissions on 'CustomUser'
-        db.delete_table('accounts_customuser_user_permissions')
+        db.delete_table(db.shorten_name(u'accounts_customuser_user_permissions'))
 
 
     models = {
@@ -65,7 +66,6 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'employees'", 'null': 'True', 'to': u"orm['companies.Company']"}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -74,8 +74,8 @@ class Migration(SchemaMigration):
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
         },
