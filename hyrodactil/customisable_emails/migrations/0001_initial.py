@@ -7,6 +7,12 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ("companies", "0001_initial"),
+        ("accounts", "0001_initial")
+    )
+
+
     def forwards(self, orm):
         # Adding model 'EmailTemplate'
         db.create_table(u'customisable_emails_emailtemplate', (
