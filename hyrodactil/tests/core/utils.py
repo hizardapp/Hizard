@@ -22,5 +22,14 @@ class SetupCompanyTests(WebTest):
         self.assertTrue(
             InterviewStage.objects.filter(company=company).exists()
         )
+        self.assertTrue(
+            InterviewStage.objects.filter(company=company, tag="RECEIVED").exists()
+        )
+        self.assertTrue(
+            InterviewStage.objects.filter(company=company, tag="HIRED").exists()
+        )
+        self.assertTrue(
+            InterviewStage.objects.filter(company=company, tag="REJECTED").exists()
+        )
         self.assertTrue(Opening.objects.filter(company=company).exists())
         self.assertEqual(EmailTemplate.objects.all().count(), 1)

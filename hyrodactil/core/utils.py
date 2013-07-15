@@ -11,7 +11,7 @@ def setup_company(company):
         InterviewStage(name=_('Phone interview')),
         InterviewStage(name=_('In-person interview')),
         InterviewStage(name=_('Offer')),
-        InterviewStage(name=_('Received'), tag='HIRED'),
+        InterviewStage(name=_('Received'), tag='RECEIVED'),
         InterviewStage(name=_('Rejected'), tag='REJECTED'),
         InterviewStage(name=_('Hired'), tag='HIRED'),
     ]
