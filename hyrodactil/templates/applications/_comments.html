@@ -13,21 +13,16 @@
     {% endifchanged %}
 
   <div class="message">
-    {# only for test, users always have an avatar #}
-    {% if message.user.avatar %}
-      <img src="{{ message.user.avatar.url }}" alt="{{ message.user.name }}" class="left" />
-    {% endif %}
+    <img src="{{ message.user.get_avatar_url }}" alt="{{ message.user.name }}" class="avatar" />
     <div class="message-content">
-
       <span class="name">{{ message.user.name }}</span>
       —
       <span class="time">{{ message.created|timesince }} {% trans 'ago' %}</span>
       <p>
         {{ message.body }}
       </p>
-      <a href="#" data-reply-to="{{ message.pk }}" class="reply-link">{% trans 'Reply' %}</a>
     </div>
-
+    <a href="#" data-reply-to="{{ message.pk }}" class="reply-link">{% trans 'Reply' %}</a>
   </div>
 
   {% if forloop.last %}
@@ -41,17 +36,12 @@
   method="POST"
   id="new-message-form">
   {% csrf_token %}
-    <div>
-      {{ new_message_form.body }}
-    </div>
 
-  <div>
-    <div class="form-actions end">
-      <div>
-        {{ new_message_form.parent }}
-        <input type="submit" value="{% trans 'Save message' %}" class="button-positive right" />
-      </div>
-      <div class="clear"></div>
-    </div>
+  <label for="{{ new_message_form.body.auto_id }}">{% trans 'Post a new message' %}</label>
+   {{ new_message_form.body }}
+
+  <div class="form-actions end">
+    {{ new_message_form.parent }}
+    <input type="submit" value="{% trans 'Save message' %}" class="button right post-message" />
   </div>
 </form>

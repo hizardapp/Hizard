@@ -1,0 +1,80 @@
+@import "mixins";
+@import "../common/colours";
+
+@import "compass/css3/border-radius";
+
+
+.container {
+  padding: 2em;
+  height: 100%;
+
+  h1 {
+    margin-bottom: emCalc(20px);
+    color: $navigation-blue;
+  }
+
+  &.restrict-width-container {
+    @include calc(width, "100% - #{$menu-width}");
+  }
+
+
+  // Common box used to contain informations in the site
+  .box {
+    border: 1px solid $silver;
+    padding: 0;
+
+    .box-header {
+      background: $navigation-blue;
+
+      h2 {
+        margin: 0;
+        padding: .5em;
+        text-align: center;
+        color: white;
+      }
+    }
+  }
+
+  .styled-list {
+    list-style: none;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    li {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid $silver;
+
+      &:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      &:last-child {
+        border-bottom: none;
+        margin-bottom: 10px;
+      }
+
+      img {
+        @include avatar();
+      }
+    }
+  }
+
+  label {
+    margin-bottom: 1em;
+  }
+
+  table {
+    width: 100%;
+
+    .sort {
+      cursor: pointer;
+    }
+  }
+
+
+}
+

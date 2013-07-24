@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 
 {% load staticfiles %}
 {% load i18n %}
@@ -13,13 +13,17 @@
 {% endblock title %}
 
 
-{% block page-content %}
+{% block content %}
 
-  {% if opening %}
-    <h2>{{ opening.title }} <small>{% trans 'edit opening' %}</small></h2>
-  {% else %}
-    <h2>{% trans 'Add an opening' %}</h2>
-  {% endif %}
+  <h1>
+    {% if opening %}
+      {% blocktrans with title=opening.title %}
+        Edit {{ title }} opening
+      {% endblocktrans %}
+    {% else %}
+      {% trans 'Add an opening' %}
+    {% endif %}
+  </h1>
 
   <form action="." method="POST">
     {% csrf_token %}
@@ -35,46 +39,42 @@
     {% for field in form.hidden_fields %}
       {{ field }}
     {% endfor %}
-    {% include 'openings/_opening_form_field.html' with field=form.title %}
-    <br>
-    {% include 'openings/_opening_form_field.html' with field=form.description %}
 
-    {% include 'openings/_opening_form_field.html' with field=form.employment_type %}
-    <br>
-    {% include 'openings/_opening_form_field.html' with field=form.is_private %}
-    <br>
-    {% include 'openings/_opening_form_field.html' with field=form.department %}
-    <br>
-    {% include 'openings/_opening_form_field.html' with field=form.country %}
-    <br>
-    {% include 'openings/_opening_form_field.html' with field=form.city %}
-    <br>
-    {% include 'openings/_opening_form_field.html' with field=form.loc_postcode %}
-
-
-    <div class="questions">
-      {% for question in form.questions %}
-        <div>
-          <i class="icon-trash remove-question"></i>
-          <input type="text" name="question-{{ question.id }}" value="{{ question.title }}"/>
-        </div>
-      {% endfor %}
+    <div class="large-6 columns">
+      {% include 'core/_field.html' with field=form.title %}
+      {% include 'core/_field.html' with field=form.description %}
+      {% include 'core/_field.html' with field=form.employment_type %}
     </div>
-    <a class="button-positive add-question" href="#">{% trans 'Add a question' %}</a>
 
+    <div class="large-6 columns">
+      {% include 'core/_field.html' with field=form.department %}
+      {% include 'core/_field.html' with field=form.is_private %}
+      {% include 'core/_field.html' with field=form.country %}
+      {% include 'core/_field.html' with field=form.city %}
+      {% include 'core/_field.html' with field=form.loc_postcode %}
 
-    <div class="text-right submit-opening">
+      <div class="questions">
+        {% for question in form.questions %}
+          <div class="large-12 columns">
+            <label class="remove-question"><i class="icon-trash icon-2x"></i>Delete</label>
+            <input type="text" name="question-{{ question.id }}" value="{{ question.title }}"/>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="button add-question" href="#">{% trans 'Add a question' %}</a>
+    </div>
 
+    <div class="large-12 columns">
       {% if opening %}
-        <input type="submit" class="button-positive" value="{% trans 'Save changes' %}" />
+        <input type="submit" class="button" value="{% trans 'Save changes' %}" />
       {% else %}
-        <input type="submit" class="button-positive" value="{% trans 'Create this opening' %}" />
+        <input type="submit" class="button" value="{% trans 'Create this opening' %}" />
       {% endif %}
-
     </div>
+
   </form>
 
-{% endblock page-content %}
+{% endblock content %}
 
 {% block extrahead %}
   <link rel="stylesheet" href="{% static "css/select2.css" %}" />
@@ -89,9 +89,10 @@
 
       $('textarea').tinymce({
         plugins: "link image preview fullscreen hr",
-        toolbar: "undo redo | bold italic |  hr  | bullist numlist | link unlink | preview fullscreen",
+        toolbar: "undo redo | bold italic |  hr  | bullist numlist | link unlink | preview",
         menubar: false,
-        statusbar: false
+        statusbar: false,
+        height: 200
       });
 
       $('input[id$="included"]').click(function() {
@@ -114,7 +115,7 @@
         e.preventDefault();
         var rand = Math.random().toString(36).substring(7);
         $input = $(
-          '<div><i class="icon-trash remove-question"></i><input class="large-11 columns" type="text" name="question-' + rand + '"/></div>'
+          '<div class="large-12 columns"><label class="remove-question"><i class="icon-trash icon-2x"></i>{% trans "Delete" %}</label><input type="text" name="question-' + rand + '"/></div>'
         );
         $('.questions').append($input);
         $input.focus();

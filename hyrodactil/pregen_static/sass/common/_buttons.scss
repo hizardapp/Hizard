@@ -21,3 +21,34 @@
     background-color: lighten($alizaring, 10);
   }
 }
+
+
+@mixin custom-button($colour, $hover_colour) {
+  display: inline-block;
+  margin: 0 15px 15px 0;
+  padding: 14px 25px;
+  background-color: $colour;
+  border-radius: 4px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  line-height: 18px;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  transition: box-shadow 100ms ease-in;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0) inset,0 2px 0 0 $colour;
+
+  &:hover {
+    box-shadow: 0 0 100px 0 rgba(255,255,255,0.2) inset,0 2px 0 0 $hover_colour;
+  }
+}
+
+.button {
+  @include custom-button($navigation-blue, $light-navigation-blue);
+}
+
+.button-alert {
+  @include custom-button($pomegranate, $pomegranate);
+}

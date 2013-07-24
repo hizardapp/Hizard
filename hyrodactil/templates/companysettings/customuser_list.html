@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
 {% load staticfiles %}
@@ -9,57 +9,15 @@
 {% endblock title %}
 
 
-{% block page-content %}
-  <h2>{% trans "Manage users" %}</h2>
+{% block content %}
+  <h1>{% trans "Manage users" %}</h1>
 
-  <div>
-    <ul class="styled-list">
-      {% for user in users %}
-        <li class="container">
-          <span class="left">
-            <img height="40" width="40" src="{{ user.get_avatar_url }}" alt="Avatar" align="left" />
-            <span class="right">
-              {{ user.name }}
-              <br>
-              {% if user.is_company_admin %}
-                {% trans 'Administrator' %}
-              {% endif %}
-            </span>
-          </span>
-
-          {% if request.user.is_company_admin and not user.is_company_admin and user != request.user %}
-            <span class="right">
-              <a href="{% url 'accounts:delete' user.id %}"><i class="icon-trash"></i> {% trans 'Delete this user' %}</a>
-              <br>
-              <a href="{% url 'accounts:promote' user.id %}"><i class="icon-thumbs-up"></i> {% trans 'Promote to administrator' %}</a>
-            </span>
-          {% endif %}
-
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  <div>
-    <ul class="user-list">
-      {% for user in invited_users %}
-        <li class="container">
-          <img height="40" width="40" src="{{ user.get_avatar_url }}" alt="Avatar" class="left" />
-          {{ user.email }}
-          <br>
-          {% trans 'Invited ' %}{{ user.created|date:"SHORT_DATE_FORMAT" }}
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  <div>
     <form action="." method="POST">
       {% csrf_token %}
 
       {% for field in form %}
 
-        <div class="row">
+        <div>
           <div class="large-12 columns {% if field.errors %} error {% endif %}">
 
             {{ field.label_tag }}
@@ -77,15 +35,53 @@
 
       {% endfor %}
 
-      <div class="row">
+      <div>
         <div class="large-12 columns">
-          <div class="right">
-            <input type="submit" value="{% trans 'Invite user' %}" class="button-positive" />
-          </div>
+          <input type="submit" value="{% trans 'Invite user' %}" class="button right" />
         </div>
       </div>
 
     </form>
   </div>
 
-{% endblock page-content %}
+  <div class="box large-5 columns left">
+    <div class="box-header">
+      <h2>{% trans 'Active users' %}</h2>
+    </div>
+
+    <ul class="styled-list">
+      {% for user in users %}
+        <li>
+          <img src="{{ user.get_avatar_url }}" alt="Avatar" />
+          <strong>{{ user.name }} {% if user.is_company_admin %}({% trans 'administrator' %}){% endif %}</strong>
+          <br>
+          <br>
+
+          {% if request.user.is_company_admin %}
+            <a class="button" href="{% url 'accounts:delete' user.id %}">{% trans 'Delete' %}</a>
+            <a class="button" href="{% url 'accounts:promote' user.id %}">{% trans 'Make administrator' %}</a>
+          {% endif %}
+
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="box large-5 columns right">
+    <div class="box-header">
+      <h2>{% trans 'Invited users' %}</h2>
+    </div>
+
+    <ul class="styled-list">
+      {% for user in invited_users %}
+        <li>
+          <strong>{{ user.email }}</strong>
+          <br>
+          <br>
+          {% trans 'Invited the ' %}{{ user.created|date:"SHORT_DATE_FORMAT" }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock content %}

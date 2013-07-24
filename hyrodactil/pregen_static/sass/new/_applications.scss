@@ -1,0 +1,50 @@
+@import "../common/colours";
+
+
+.application-rating {
+  font-size: 2em;
+  .rate-neutral {
+    color: $orange;
+  }
+
+  i {
+    margin-right: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}
+
+.message {
+  .avatar {
+    @include avatar();
+  }
+
+  .message-content {
+    overflow: hidden;
+    margin-bottom: 10px;
+
+    .time {
+      font-size: .8em;
+    }
+  }
+
+  .reply-link {
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+}
+
+#new-message-form {
+  margin-top: 20px;
+}
+
+.message-level-1 {
+  margin-left: 20px;
+}
+.message-level-2 {
+  margin-left: 40px;
+}
+.message-level-3 {
+  margin-left: 60px;
+}
+

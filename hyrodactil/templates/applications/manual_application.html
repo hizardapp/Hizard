@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
 
@@ -7,13 +7,11 @@
 {% endblock title %}
 
 
-{% block page-content %}
-  <h2>
-    {{ opening.title }}
-  </h2>
+{% block content %}
+  <h1>{% trans 'Add applicant for ' %}{{ opening.title }}</h1>
 
-  <form action="." method="POST" class="large-6 columns large-centered"
-      enctype="multipart/form-data" id="action-form"> {% csrf_token %}
+  <form class="large-6 columns" action="." method="POST" enctype="multipart/form-data" id="action-form">
+    {% csrf_token %}
 
     {% if form.non_field_errors %}
       <small class="error">
@@ -24,21 +22,7 @@
     {% endif %}
 
     {% for field in form %}
-      <div class="row">
-        <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-          <label for="{{ field.auto_id }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-          {{ field }}
-
-          {% if field.errors %}
-            <small class="error">
-              {% for error in field.errors %}
-                {{ error }}
-              {% endfor %}
-            </small>
-          {% endif %}
-        </div>
-      </div>
+      {% include 'core/_field.html' with field=field %}
     {% endfor %}
 
     <div class="row">
@@ -47,4 +31,4 @@
       </div>
     </div>
   </form>
-{% endblock page-content %}
+{% endblock content %}

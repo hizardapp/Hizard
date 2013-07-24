@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
 
@@ -6,85 +6,76 @@
   {{ application.applicant.first_name }} {{ application.applicant.last_name }}
 {% endblock title %}
 
-{% block page-content %}
-  <h2>
+{% block content %}
+
+  <h1>
     {{ application.applicant.first_name }} {{ application.applicant.last_name }}
     <small>{% trans 'applying for ' %}<a href="{% url 'openings:detail_opening' application.opening.id %}">{{ application.opening.title }}</a></small>
-     <span class="actions">
-       <a href="" class="button-negative right">
-         {% trans "Reject" %}
-       </a>
-        <a href="#" data-reveal-id="transition-form-modal" class="button-positive right">
-          {% trans "Change stage" %}
-        </a>
-    </span>
-  </h2>
+  </h1>
 
-  <div class="row">
-    <div class="large-6 columns">
-      <p>
-        <span class="left">
-          <i class="icon-envelope"></i> {{ application.applicant.email }}
-        </span>
+  <div class="large-12 columns">
+    <a href="" class="button-alert">
+      {% trans "Reject" %}
+    </a>
+    <a href="#" data-reveal-id="transition-form-modal" class="button">
+      {% trans "Change stage" %}
+    </a>
 
-        <span class="rating right">
-          {% if user_rating != -1 %}
-            <a href="{% url 'applications:rate' application.id -1 %}"><i class="icon-thumbs-down"></i></a>
-          {% else %}
-            <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-down"></i></a>
-          {% endif %}
+  <span class="application-rating">
+    {% if user_rating != -1 %}
+      <a href="{% url 'applications:rate' application.id -1 %}"><i class="icon-thumbs-down"></i></a>
+    {% else %}
+      <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-down"></i></a>
+    {% endif %}
 
-          {{ rating }}
+    {{ rating }}
 
-          {% if user_rating != 1 %}
-            <a href="{% url 'applications:rate' application.id 1 %}"><i class="icon-thumbs-up"></i></a>
-          {% else %}
-            <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-up"></i></a>
-          {% endif %}
-        </span>
-      </p>
+    {% if user_rating != 1 %}
+      <a href="{% url 'applications:rate' application.id 1 %}"><i class="icon-thumbs-up"></i></a>
+    {% else %}
+      <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-up"></i></a>
+    {% endif %}
+  </span>
 
-      <p class="clear">
-        <h4>{% trans 'Resume' %}</h4>
-        <a href="http://docs.google.com/gview?url={{ application.applicant.resume.url }}" target="_blank"class="button-positive">See resume</a>
-        <a href="{{ application.applicant.resume.url }}" target="_blank" class="button-positive">Download resume</a>
-      </p>
+  </div>
 
-      <span>
-        <h4>{% trans 'Answers' %}</h4>
-        {% for answer in answers %}
-          <p>
-            <strong>{{ answer.question.title }}</strong><br>
-            {{ answer.answer }}
-          </p>
-        {% endfor %}
-      </span>
+  <div class="large-8 columns">
+    <h2>{% trans 'Informations' %}</h2>
+    <i class="icon-envelope"></i> {{ application.applicant.email }}
+    <br>
+    <br>
+    <a href="http://docs.google.com/gview?url={{ application.applicant.resume.url }}" target="_blank"class="button">{% trans 'See resume' %}</a>
+    <a href="{{ application.applicant.resume.url }}" target="_blank" class="button">{% trans 'Download resume' %}</a>
 
-      <span>
-        <h4>{% trans 'Discussion' %}</h4>
-        {% include 'applications/_comments_tab.html' with application=application new_message_form=new_message_form discussion=discussion %}
-      </span>
-
-    </div>
-
-    <div class="large-6 columns">
-      <h4>{% trans 'Event feed' %}</h4>
-
-      {% for transition in application.stage_transitions.all %}
-        <div>
-          <span>{{ transition.created|date:"Y/m/d" }} - {% trans 'Moved to ' %}{{ transition.stage }}</span>
-          {% if transition.note %}
-            <blockquote class="note">
-              {{ transition.note|linebreaks }}
-              <cite>{{ transition.user.name }}</cite>
-            </blockquote>
-          {% endif %}
-
-        </div>
+    {% if answers %}
+      <h4>{% trans 'Answers' %}</h4>
+      {% for answer in answers %}
+        <p>
+          <strong>{{ answer.question.title }}</strong><br>
+          {{ answer.answer }}
+        </p>
       {% endfor %}
+    {% endif %}
 
-    </div>
+    <h2>{% trans 'Discussion' %}</h2>
+    {% include 'applications/_comments.html' with application=application new_message_form=new_message_form discussion=discussion %}
+  </div>
 
+  <div class="large-4 columns">
+    <h2>{% trans 'Event feed' %}</h2>
+
+    {% for transition in application.stage_transitions.all %}
+      <div>
+        <span>{{ transition.created|date:"Y/m/d" }} - {% trans 'Moved to ' %}{{ transition.stage }}</span>
+        {% if transition.note %}
+          <blockquote class="note">
+            {{ transition.note|linebreaks }}
+            <cite>{{ transition.user.name }}</cite>
+          </blockquote>
+        {% endif %}
+
+      </div>
+    {% endfor %}
   </div>
 
   <div id="transition-form-modal" class="reveal-modal">
@@ -122,11 +113,12 @@
     </form>
     <a class="close-reveal-modal">&#215;</a>
   </div>
-{% endblock page-content %}
+
+{% endblock content %}
 
 {% block extra-js %}
   <script type="text/javascript">
-    $("a.reply-link").click(function (event) {
+    $("a.reply-link").click(function(event) {
       event.preventDefault();
 
       var newForm = $("#new-message-form").clone(),
@@ -134,6 +126,9 @@
               parentMessage = link.data("reply-to");
       link.after(newForm);
       newForm.find("#id_parent").val(parentMessage);
+      newForm.find('label').remove();
+      newForm.find('.post-message').val('{% trans 'Reply' %}');
+      $(this).remove();
     });
 
     $("textarea#id_note").on("keydown", function () {

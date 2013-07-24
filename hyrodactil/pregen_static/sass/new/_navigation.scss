@@ -1,0 +1,124 @@
+@import "../common/colours";
+@import "mixins";
+
+
+$menu-width: 240px;
+$top-menu-height: 55px;
+
+
+body {
+  overflow-x: hidden;
+  @include slide-transition();
+}
+
+.push-to-right {
+  left: 240px;
+}
+
+
+.left-menu {
+  @include slide-transition();
+  background: $navigation-blue;
+  position: fixed;
+  width: 240px;
+  height: 100%;
+  z-index: 1000;
+  color: white;
+
+  h3 {
+    font-size: 1.9em;
+    padding: 25px;
+    margin: 0;
+  }
+
+  a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 300;
+    padding: 1em;
+
+    &.active {
+      background: white;
+      color: black;
+    }
+
+    i {
+      padding-right: 10px;
+      vertical-align: middle;
+    }
+
+    &:hover {
+      color: black;
+      background: white;
+    }
+  }
+
+  &.open {
+    left: 0;
+  }
+}
+
+
+.top-menu {
+  @include grid-column(12);
+  padding: .5em;
+  height: $top-menu-height;
+  z-index: 1000;
+  background: url(../img/logo.png) no-repeat 50% 50% $navigation-blue;
+  background-size: auto 35px;
+  color: white;
+  line-height: 45px;
+
+  .open-left-menu {
+    cursor: pointer;
+    padding-top: 5px;
+    vertical-align: middle;
+  }
+
+  .logo {
+    text-align: center;
+  }
+
+  .avatar {
+    float: right;
+    font-weight: bold;
+  }
+}
+
+.remove-logo-top-menu {
+  background: $navigation-blue;
+}
+
+
+// Media queries
+@media only screen and (max-width: emCalc(940px)) {
+  .left-menu {
+    left: -240px;
+  }
+  .top-menu {
+    display: block;
+  }
+  body {
+    left: 0;
+  }
+  .container {
+    @include grid-column(12);
+  }
+}
+
+@media only screen and (min-width: emCalc(940px)) {
+  body {
+    left: 240px;
+  }
+  .left-menu {
+    left: 0;
+  }
+  .top-menu {
+    display: none;
+  }
+  .container {
+    @include grid-column(10);
+  }
+}

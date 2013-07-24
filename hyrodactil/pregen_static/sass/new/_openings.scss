@@ -1,0 +1,29 @@
+@import "../common/colours";
+
+.error-description {
+  small.error {
+    margin-top: 0em;
+  }
+}
+
+.link-box {
+  margin-top: 1em;
+}
+
+.box-with-icon {
+  ul {
+    padding: 0;
+    i {
+      padding-right: 10px;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+
+      &:hover {
+        color: $light-navigation-blue;
+      }
+    }
+  }
+}

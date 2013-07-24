@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
 
@@ -8,36 +8,32 @@
 {% endblock title %}
 
 
-{% block page-content %}
+{% block content %}
 
-  <h2>
-    {% trans 'Openings' %}
+  <h1>{% trans 'Openings' %}</h1>
 
-    <span class="actions">
-      <a href="{% url 'openings:create_opening' %}" class="button-positive right">
-        {% trans "Create an opening" %}
-      </a>
-      <a href="#" class="button-positive right"
-        data-reveal-id="add-applicant-modal">
-        {% trans "Add a candidate" %}
-      </a>
-    </span>
+  <span class="actions">
+    <a href="{% url 'openings:create_opening' %}" class="button">
+      {% trans "Create an opening" %}
+    </a>
+    <a href="#" class="button"
+       data-reveal-id="add-applicant-modal">
+      {% trans "Add a candidate" %}
+    </a>
+  </span>
 
-  </h2>
 
-  <div>
+  <div class="box">
+    <div class="box-header">
+      <h2>{% trans 'Active openings' %}</h2>
+    </div>
+
     <ul class="styled-list">
       {% for opening in opening_list %}
-        <li class="container">
-
+        <li>
           <span class="large-5 columns">
             <a href="{% url 'openings:detail_opening' opening.id %}">{{ opening.title }}</a>
-            {% if opening.department %}
-              <span>{{ opening.department }}</span>
-            {% endif %}
-
             <br>
-
             {% if opening.get_location_string %}
               {{ opening.get_location_string  }}
             {% endif %}
@@ -50,12 +46,10 @@
           <span class="large-4 columns">
             {{ opening.get_status }} {% if opening.published_date %} : {{ opening.published_date }}{% endif %}
           </span>
-
         </li>
       {% endfor %}
     </ul>
   </div>
-
 
   <div id="add-applicant-modal" class="reveal-modal">
     <h3>{% trans 'Add applicant' %}</h3>
@@ -84,7 +78,7 @@
     <a class="close-reveal-modal">&#215;</a>
   </div>
 
-{% endblock page-content %}
+{% endblock content %}
 
 {% block extra-js %}
   <script type="text/javascript">

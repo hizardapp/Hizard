@@ -1,0 +1,23 @@
+
+
+@mixin calc($property, $expression) {
+  #{$property}: -moz-calc(#{$expression});
+  #{$property}: -o-calc(#{$expression});
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}: calc(#{$expression});
+}
+
+
+@mixin slide-transition() {
+  -webkit-transition: all 0.25s cubic-bezier(0.7, 0, 0.175, 1) 0s;
+  -moz-transition: all 0.25s cubic-bezier(0.7, 0, 0.175, 1) 0s;
+  transition: all 0.25s cubic-bezier(0.7, 0, 0.175, 1) 0s;
+}
+
+@mixin avatar() {
+  height: 60px;
+  width: 60px;
+  margin-right: 15px;
+  float: left;
+  @include border-radius(50em);
+}

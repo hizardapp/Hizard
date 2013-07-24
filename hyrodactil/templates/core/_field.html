@@ -1,0 +1,14 @@
+
+<div {% if field.errors %}class="error {% if field.name == 'description' %}error-description{% endif %}"{% endif %}>
+  <label for="{{ field.auto_id }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+  {{ field }}
+
+  {% if field.errors %}
+    <small class="error">
+      {% for error in field.errors %}
+        {{ error }}
+      {% endfor %}
+    </small>
+  {% endif %}
+</div>
+<br>

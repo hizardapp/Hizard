@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
 {% load staticfiles %}
@@ -12,21 +12,21 @@
   {% endif %}
 {% endblock title %}
 
-{% block page-content %}
+{% block content %}
 
-  <h2>
+  <h1>
     {% if opening %}
       {% trans 'Applications for ' %} {{ opening.title }}
     {% else %}
       {% trans 'All applications' %}
     {% endif %}
-  </h2>
+  </h1>
 
-  <div class="row">
+  <div>
 
     <div id="table-applicants">
 
-      <div class="large-3 columns">
+      <div class="large-2 columns">
         <input type="search" class="search" placeholder="Search" />
 
         {% for stage in stages %}
@@ -37,7 +37,7 @@
 
       </div>
 
-      <div class="large-9 columns">
+      <div class="large-10 columns">
 
         <table>
 
@@ -78,7 +78,7 @@
 
   </div>
 
-{% endblock page-content %}
+{% endblock content %}
 
 {% block extra-js %}
   <script src="{% static "js/vendor/list.min.js" %}"></script>
