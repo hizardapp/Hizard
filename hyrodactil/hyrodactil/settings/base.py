@@ -269,6 +269,6 @@ OPENING_URL_REWRITED = True
 DISPLAY_SITE_NAME = 'Hizard'
 DEFAULT_FROM_EMAIL = 'Hizard <app@hizard.com>'
 
-SESSION_COOKIE_DOMAIN = '.' + APP_SITE_DOMAIN
+SESSION_COOKIE_DOMAIN = '.hizard.com'
 
 ALLOWED_HOSTS = ('.hizard.com',)
