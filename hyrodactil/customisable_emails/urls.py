@@ -8,4 +8,9 @@ urlpatterns = patterns('',
         views.CustomisableEmailsListView.as_view(),
         name='list'
     ),
+    url(
+        r'^edit/(?P<pk>[\d]+)/$',
+        views.CustomisableEmailsUpdateView.as_view(),
+        name='edit'
+    )
 )

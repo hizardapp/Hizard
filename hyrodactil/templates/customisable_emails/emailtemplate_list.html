@@ -20,7 +20,7 @@
       <tbody>
         {% for emailtemplate in emailtemplate_list %}
           <tr>
-            <td>{{ emailtemplate.name }}</td>
+            <td><a href="{% url "customisable_emails:edit" emailtemplate.pk %}">{{ emailtemplate.name }}</a></td>
             <td>{{ emailtemplate.subject }}</td>
           </tr>
         {% endfor %}
