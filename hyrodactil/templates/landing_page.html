@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load staticfiles %}
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+
+  <title>
+    Hizard | Applicant tracking system
+  </title>
+
+  <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1">
+
+  <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
+  <link rel="stylesheet" href="{% static "css/landing.css" %}" />
+</head>
+<body>
+
+  <div class="section-top white row">
+    <div class="large-4 columns">
+      <img width="150" height="150" src="{% static "img/logo-black.png" %}"/>
+    </div>
+
+    <div class="large-8 columns navigation">
+      <a class="nav-link" href="#features">{% trans 'Features' %}</a>
+      <a class="button-custom sign-up" href="{% url 'accounts:register' %}">{% trans 'Sign up' %}</a>
+      <a class="nav-link" href="{% url 'auth:login' %}">{% trans 'Login' %}</a>
+    </div>
+  </div>
+
+  {% if messages %}
+    <div class="section row">
+      {% for message in messages %}
+        <div class="alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="section hero">
+    <div class="row">
+      <h1 class="hero-heading">
+        {% trans 'Post jobs' %}. <br>
+        {% trans 'Get applicants' %}. <br>
+        {% trans 'Manage them' %}.
+      </h1>
+      <p class="hero-subhead">{% trans 'Never lose sight of the right persons' %}.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <h2>{% trans 'Put your email in the box below to know when it launches' %}</h2>
+
+    <div class="row">
+      <form action="{% url 'public:add-interest' %}" method="POST">
+        {% csrf_token %}
+          <input name="email" id="id_email" type="email" placeholder="Your email" />
+          <input type="submit" value="Let me know when it's ready" class="button-custom" />
+      </form>
+    </div>
+
+  </div>
+
+  <div class="section">
+    <a href="#features"></a>
+    <div class="row">
+      <h1 class="section-title">Involve your whole company in the hiring process</h1>
+      <p class="section-subtitle">You are working as a team. Hire as a team.</p>
+      <div class="row">
+        <div class="large-6 columns">
+          <h3>Discuss applicants<br></h3>
+          <img src="images/image-placeholder.svg">
+        </div>
+        <div class="large-6 columns">
+          <h3>Rate application</h3>
+          <img src="images/image-placeholder.svg">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section grey">
+    <div class="row">
+      <h1 class="section-title">Your own mobile-friendly career site</h1>
+      <p class="section-subtitle">Apply from anywhere.</p>
+      <div class="row">
+        <div class="large-6 columns">
+          <h3>From a computer</h3>
+          <img src="images/image-placeholder.svg">
+        </div>
+        <div class="large-6 columns">
+          <h3>From a phone</h3>
+          <img src="images/image-placeholder.svg">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section footer">
+    <div class="row">
+      <div class="large-6 columns">
+        <div class="footer-text">Hizard</div>
+      </div>
+      <div class="large-6 columns right-text">
+        <div class="footer-text">Contact us:</div>
+        <a class="inline-block social-icon first" href="mailto:team@hizard.com?subject=Hello">
+          <img src="{% static "img/landing-email.png" %}" width="30">
+        </a>
+        <a class="inline-block social-icon" href="http://facebook.com/hizard">
+          <img src="{% static "img/landing-facebook.png" %}" width="30">
+        </a>
+        <a class="inline-block social-icon" href="http://www.twitter.com/hizardapp">
+          <img src="{% static "img/landing-twitter.png" %}" width="30">
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41253554-1', 'hizard.com');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>
