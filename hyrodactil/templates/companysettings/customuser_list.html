@@ -47,7 +47,7 @@
           <img height="40" width="40" src="{{ user.get_avatar_url }}" alt="Avatar" class="left" />
           {{ user.email }}
           <br>
-          {% trans 'Invited the ' %}{{ user.created|date:"SHORT_DATE_FORMAT" }}
+          {% trans 'Invited ' %}{{ user.created|date:"SHORT_DATE_FORMAT" }}
         </li>
       {% endfor %}
     </ul>
