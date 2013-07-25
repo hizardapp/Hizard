@@ -2,10 +2,11 @@ import base64
 import os
 
 from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+    AuthenticationForm, PasswordResetForm, SetPasswordForm
 )
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.http import int_to_base36
 
@@ -48,6 +49,7 @@ class AccountsViewsTests(WebTest):
 
         self.assertEqual(CustomUser.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue(settings.APP_SITE_URL in mail.outbox[0].body)
         new_user = CustomUser.objects.get()
         self.assertTrue(new_user.is_company_admin)
 
