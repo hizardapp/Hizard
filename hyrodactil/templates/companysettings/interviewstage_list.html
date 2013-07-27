@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 
 {% load i18n %}
 {% load staticfiles %}
@@ -8,74 +8,71 @@
 {% endblock title %}
 
 
-{% block page-content %}
-  <h2>
-    {% trans "Stages" %}
-    <small>{% trans 'modify your recruitement workflow' %}</small>
-  </h2>
+{% block content %}
+  <h1>{% trans "Stages" %}</h1>
 
-  <div id="sort-table">
+  <div class="large-6 columns">
+    <div id="sort-table">
+      <table>
+        <thead>
+        <tr>
+          <th class="large-2 columns" colspan="2"></th>
+          <th class="large-8 columns">{% trans "Name" %}</th>
+          <th class="large-2 columns" colspan="2"></th>
+        </tr>
+        </thead>
 
-    <table>
-      <thead>
-      <tr class="row">
-        <th class="large-2 columns" colspan="2"></th>
-        <th class="large-8 columns">{% trans "Name" %}</th>
-        <th class="large-2 columns" colspan="2"></th>
-      </tr>
-      </thead>
+        <tbody class="list">
+          {% for stage in stages %}
+            <tr>
+              <td class="large-1 columns">
+                <a href="#" class="edit">
+                  {% if not forloop.last %}
+                    <a href="{% url "companysettings:reorder_stage" stage.id "down" %}">
+                      <i class="icon-arrow-down icon-2x"></i>
+                    </a>
+                  {% endif %}
+                </a>
+              </td>
+              <td class="large-1 columns">
+                <a href="#">
+                  {% if not forloop.first %}
+                    <a href="{% url "companysettings:reorder_stage" stage.id "up" %}">
+                      <i class="icon-arrow-up icon-2x"></i>
+                    </a>
+                  {% endif %}
+                </a>
+              </td>
+              <td class="id" style="display: none;">{{ stage.id }}</td>
+              <td class="large-8 columns name">{{ stage.name }}</td>
+              <td class="large-1 columns">
+                <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
+              </td>
+              <td class="large-1 columns">
+                <a href="#" class="delete-link"><i class="icon-trash icon-2x"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-      <tbody class="list">
-        {% for stage in stages %}
-          <tr class="row">
-            <td class="large-1 columns">
-              <a href="#" class="edit">
-                {% if not forloop.last %}
-                  <a href="{% url "companysettings:reorder_stage" stage.id "down" %}">
-                    <i class="icon-arrow-down icon-2x"></i>
-                  </a>
-                {% endif %}
-              </a>
-            </td>
-            <td class="large-1 columns">
-              <a href="#">
-                {% if not forloop.first %}
-                  <a href="{% url "companysettings:reorder_stage" stage.id "up" %}">
-                    <i class="icon-arrow-up icon-2x"></i>
-                  </a>
-                {% endif %}
-              </a>
-            </td>
-            <td class="id" style="display: none;">{{ stage.id }}</td>
-            <td class="large-8 columns name">{{ stage.name }}</td>
-            <td class="large-1 columns">
-              <a href="#" class="edit"><i class="icon-edit icon-2x"></i></a>
-            </td>
-            <td class="large-1 columns">
-              <a href="#" class="delete-link"><i class="icon-trash icon-2x"></i></a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <form action="." method="POST">
-      <div class="row">
-        <div class="large-8 columns push-2">
+      <form action="." method="POST">
+        <div class="large-10 columns">
           <input type="hidden" class="form-id" />
           <input type="text" class="form-name" placeholder="{% trans 'Name' %}" />
         </div>
         <div class="large-2 columns">
-          <a class="button-positive save" href="#">{% trans 'Save' %}</a>
+          <a class="button save" href="#">{% trans 'Save' %}</a>
         </div>
-      </div>
-    </form>
+      </form>
+
+    </div>
 
   </div>
 
   {% include "companysettings/_modal_confirm.html" %}
 
-{% endblock page-content %}
+{% endblock content %}
 
 {% block extra-js %}
   <script src="{% static "js/vendor/list.min.js" %}"></script>

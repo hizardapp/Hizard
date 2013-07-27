@@ -12,35 +12,17 @@
 {% block content %}
   <h1>{% trans "Manage users" %}</h1>
 
-    <form action="." method="POST">
+  <div class="large-12 columns">
+    <form action="." method="POST" class="large-6 columns">
       {% csrf_token %}
 
       {% for field in form %}
-
-        <div>
-          <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-            {{ field.label_tag }}
-            {{ field }}
-
-            {% if field.errors %}
-              <small class="error">
-                {% for error in field.errors %}
-                  {{ error }}
-                {% endfor %}
-              </small>
-            {% endif %}
-          </div>
-        </div>
-
+        {% include 'core/_field.html' with field=field %}
       {% endfor %}
 
-      <div>
-        <div class="large-12 columns">
-          <input type="submit" value="{% trans 'Invite user' %}" class="button right" />
-        </div>
+      <div class="large-12 columns">
+        <input type="submit" value="{% trans 'Invite user' %}" class="button" />
       </div>
-
     </form>
   </div>
 

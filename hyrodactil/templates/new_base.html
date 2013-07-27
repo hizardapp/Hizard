@@ -26,7 +26,7 @@
 
   <nav class="left-menu">
     <h3><img src="{% static "img/logo.png" %}"></h3>
-    <a href="#"><i class="icon-camera-retro icon-2x"></i>Gautier Hayoun</a>
+    <a href="{% url 'accounts:change_details' %}"><i class="icon-camera-retro icon-2x"></i>{{ user.name }}</a>
     <a href="{% url 'dashboard:dashboard' %}"><i class="icon-camera-retro icon-2x"></i>Dashboard</a>
     <a href="{% url 'openings:list_openings' %}"><i class="icon-camera-retro icon-2x"></i>Openings</a>
     <a href="{% url 'applications:list_applications' %}"><i class="icon-camera-retro icon-2x"></i>Applicants</a>

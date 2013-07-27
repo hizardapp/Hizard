@@ -1,4 +1,4 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 {% load i18n %}
 
 
@@ -7,10 +7,15 @@
 {% endblock title %}
 
 
-{% block page-content %}
-  <h2>{% trans "Change your information" %}</h2>
+{% block content %}
+  <h1>{% trans "Change your information" %}</h1>
 
-  {% include 'core/_form.html' with form=details_form %}
-  {% include 'core/_form.html' with form=password_form %}
+  <div class="large-6 columns">
+    {% include 'core/_form.html' with form=details_form %}
+  </div>
 
-{% endblock page-content %}
+  <div class="large-6 columns">
+    {% include 'core/_form.html' with form=password_form %}
+  </div>
+
+{% endblock content %}

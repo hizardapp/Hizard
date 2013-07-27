@@ -4,45 +4,11 @@
   {% csrf_token %}
 
   {% for field in form %}
-    <div class="row">
-      <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-        <div class="row">
-          <div class="large-12 columns">
-            <label for="{{ field.auto_id }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-          </div>
-        </div>
-
-        {% if field.help_text %}
-          <div class="row help-text">
-            <div class="large-12 columns">
-              <span>{{ field.help_text }}</span>
-            </div>
-          </div>
-        {% endif %}
-
-        <div class="row">
-          <div class="large-12 columns">
-            {{ field }}
-          </div>
-        </div>
-
-        {% if field.errors %}
-          <small class="error">
-            {% for error in field.errors %}
-              {{ error }}
-            {% endfor %}
-          </small>
-        {% endif %}
-
-      </div>
-    </div>
+    {% include 'core/_field.html' with field=field %}
   {% endfor %}
 
-  <div class="row">
-    <div class="large-12 columns text-right">
-      <input type="submit" value="{{ form.save_text }}" class="button-positive">
-    </div>
+  <div class="large-12 columns">
+    <input type="submit" value="{{ form.save_text }}" class="button">
   </div>
 
 </form>
