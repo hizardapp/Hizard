@@ -1,9 +1,10 @@
 from django.core.urlresolvers import reverse_lazy
 from django.template import Context, Template, TemplateSyntaxError
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
 from braces.views import LoginRequiredMixin, AjaxResponseMixin, JSONResponseMixin
-from core.views import RestrictedListView, RestrictedUpdateView
+from core.views import RestrictedListView, RestrictedUpdateView, MessageMixin
 
 from .models import EmailTemplate
 from .forms import EmailTemplateForm
@@ -20,10 +21,11 @@ class CustomisableEmailsListView(LoginRequiredMixin, RestrictedListView):
     model = EmailTemplate
 
 
-class CustomisableEmailsUpdateView(LoginRequiredMixin, RestrictedUpdateView):
+class CustomisableEmailsUpdateView(LoginRequiredMixin, MessageMixin, RestrictedUpdateView):
     model = EmailTemplate
     form_class = EmailTemplateForm
     success_url = reverse_lazy("customisable_emails:list")
+    success_message = _('Email edited')
 
     def get_context_data(self, **kwargs):
         context = super(
