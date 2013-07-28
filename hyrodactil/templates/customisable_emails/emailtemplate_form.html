@@ -14,8 +14,10 @@
         <h3>{% trans "Template" %}</h3>
         <p>{% trans "You can use the following variables in the templates : " %}
             <dl>
-                <dt>{% verbatim %}{{ applicant }}{% endverbatim %}</dt>
-                <dd>{% trans "Name of the applicant" %}</dd>
+                <dt>{% verbatim %}{{ applicant_first_name }}{% endverbatim %}</dt>
+                <dd>{% trans "First name of the applicant" %}</dd>
+                <dt>{% verbatim %}{{ applicant_last_name }}{% endverbatim %}</dt>
+                <dd>{% trans "Last name of the applicant" %}</dd>
                 <dt>{% verbatim %}{{ opening }}{% endverbatim %}</dt>
                 <dd>{% trans "Title of the opening" %}</dd>
                 <dt>{% verbatim %}{{ company }}{% endverbatim %}</dt>
@@ -27,8 +29,10 @@
         <h3>{% trans "Example" %}</h3>
         <p><br/>
             <dl>
-                <dt>{% verbatim %}{{ applicant }}{% endverbatim %}</dt>
-                <dd>{{ TEST_CONTEXT.applicant }}</dd>
+                <dt>{% verbatim %}{{ applicant_first_name }}{% endverbatim %}</dt>
+                <dd>{{ TEST_CONTEXT.applicant_first_name }}</dd>
+                <dt>{% verbatim %}{{ applicant_last_name }}{% endverbatim %}</dt>
+                <dd>{{ TEST_CONTEXT.applicant_last_name }}</dd>
                 <dt>{% verbatim %}{{ opening }}{% endverbatim %}</dt>
                 <dd>{{ TEST_CONTEXT.opening }}</dd>
                 <dt>{% verbatim %}{{ company }}{% endverbatim %}</dt>

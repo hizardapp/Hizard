@@ -9,7 +9,9 @@ from .models import EmailTemplate
 from .forms import EmailTemplateForm
 
 
-TEST_CONTEXT = Context(dict(applicant=mark_safe(u"Mayjic Eight"),
+TEST_CONTEXT = Context(dict(
+    applicant_first_name=mark_safe(u"Mayjic"),
+    applicant_last_name=mark_safe(u"Eight"),
     opening=mark_safe("Professor of magic"),
     company=mark_safe("Magic & Co.")))
 

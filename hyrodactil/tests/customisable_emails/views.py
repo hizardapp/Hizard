@@ -50,12 +50,11 @@ class CustomisableEmailsViewsTests(WebTest):
 
         response = subdomain_post_ajax(self.app,
                 render_test_template_url,
-                dict(subject=u"hi {{ applicant }}",
+                dict(subject=u"hi {{ applicant_first_name }}",
                      body=u"{% if True %}Hey!{% endif %}"),
                 user=self.user)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(dict(subject="hi Mayjic Eight", body="Hey!"),
-                         response.json)
+        self.assertEqual(dict(subject="hi Mayjic", body="Hey!"), response.json)
 
     def test_test_renderer_syntax_error(self):
         render_test_template_url = reverse("customisable_emails:test_render")
