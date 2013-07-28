@@ -1,4 +1,4 @@
-{% extends "new_base.html" %}
+{% extends "companysettings/main.html" %}
 
 {% load i18n %}
 {% load staticfiles %}
@@ -8,9 +8,7 @@
 {% endblock title %}
 
 
-{% block content %}
-  <h1>{% trans "Stages" %}</h1>
-
+{% block settings-content %}
   <div class="large-6 columns">
     <div id="sort-table">
       <table>
@@ -72,7 +70,7 @@
 
   {% include "companysettings/_modal_confirm.html" %}
 
-{% endblock content %}
+{% endblock settings-content %}
 
 {% block extra-js %}
   <script src="{% static "js/vendor/list.min.js" %}"></script>

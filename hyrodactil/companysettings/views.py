@@ -98,14 +98,14 @@ class InterviewStageReorderView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 
-class InviteUserCreateView(LoginRequiredMixin, CreateView):
+class SettingsView(LoginRequiredMixin, CreateView):
     template_name = "companysettings/customuser_list.html"
     model = CustomUser
     form_class = CustomUserInviteForm
-    success_url = reverse_lazy('companysettings:list_users')
+    success_url = reverse_lazy('companysettings:main')
 
     def get_context_data(self, **kwargs):
-        context = super(InviteUserCreateView, self).get_context_data(**kwargs)
+        context = super(SettingsView, self).get_context_data(**kwargs)
         users = CustomUser.objects.filter(
             company=self.request.user.company
         )

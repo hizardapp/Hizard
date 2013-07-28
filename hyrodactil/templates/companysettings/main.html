@@ -1,0 +1,24 @@
+{% extends "new_base.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+{% load core_extra %}
+
+{% block title %}
+  {% trans 'Settings' %}
+{% endblock title %}
+
+
+{% block content %}
+  <h1>{% trans "Settings" %}</h1>
+
+  <ul class="inline-list settings-links">
+    <li><a class="{% active request 'companysettings:main' %}" href="{% url 'companysettings:main' %}">{% trans 'Users' %}</a></li>
+    <li><a class="{% active request 'companysettings:list_stages' %}" href="{% url 'companysettings:list_stages' %}">{% trans 'Interview Stages' %}</a></li>
+    <li><a class="{% active request 'companysettings:update_information' %}" href="{% url 'companysettings:update_information' %}">{% trans 'Company information' %}</a></li>
+  </ul>
+
+  {% block settings-content %}
+  {% endblock settings-content %}
+
+{% endblock content %}

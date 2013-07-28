@@ -1,4 +1,4 @@
-{% extends "new_base.html" %}
+{% extends "companysettings/main.html" %}
 {% load i18n %}
 
 
@@ -7,9 +7,7 @@
 {% endblock title %}
 
 
-{% block content %}
-  <h1>{% trans "Company information" %}</h1>
-
+{% block settings-content %}
   <form action="." method="POST" class="large-6 columns">
     {% csrf_token %}
 
@@ -23,4 +21,4 @@
 
   </form>
 
-{% endblock content %}
+{% endblock settings-content %}

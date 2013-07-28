@@ -89,7 +89,7 @@ class CompanySettingsViewsTests(WebTest):
     def test_delete_stage(self):
         InterviewStageFactory(company=self.user.company)
         stage = InterviewStageFactory(
-            name='Interview',
+            name='Interview youhou',
             company=self.user.company
         )
         url = reverse('companysettings:delete_stage', args=(stage.id,))
@@ -97,7 +97,7 @@ class CompanySettingsViewsTests(WebTest):
         response = subdomain_get(self.app, url, user=self.user)
         self.assertEqual(response.request.path,
                          reverse('companysettings:list_stages'))
-        self.assertNotContains(response, "Interview")
+        self.assertNotContains(response, stage.name)
         self.assertContains(response, "Stage deleted.")
 
     def test_reorder_stage_valid_up(self):
@@ -142,8 +142,9 @@ class CompanySettingsViewsTests(WebTest):
             reverse('companysettings:list_stages')
         )
         self.assertEqual(InterviewStage.objects.get(id=1).position, 1)
+
     def test_list_users(self):
-        url = reverse('companysettings:list_users')
+        url = reverse('companysettings:main')
         colleague = UserFactory(
             company=self.user.company,
             name="Steve",
@@ -159,12 +160,12 @@ class CompanySettingsViewsTests(WebTest):
         self.assertNotContains(page, not_colleague.name)
 
     def test_invite_user(self):
-        url = reverse('companysettings:list_users')
+        url = reverse('companysettings:main')
         page = subdomain_get(self.app, url, user=self.user)
 
         self.assertEqual(len(mail.outbox), 0)
         form = page.form
-        form.action = reverse('companysettings:list_users')
+        form.action = reverse('companysettings:main')
         form["email"] = "steve@example.com"
         page = form.submit().follow()
         self.assertTrue(

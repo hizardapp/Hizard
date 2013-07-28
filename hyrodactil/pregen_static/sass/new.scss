@@ -22,7 +22,7 @@
 // @import "foundation/components/dropdown-buttons"; // *requires components/buttons
 // @import "foundation/components/split-buttons"; // *requires components/buttons
 // @import "foundation/components/flex-video";
-// @import "foundation/components/section";
+@import "foundation/components/section";
 // @import "foundation/components/top-bar";  // *requires components/grid
 // @import "foundation/components/orbit";
 @import "foundation/components/reveal";
@@ -32,7 +32,7 @@
 // @import "foundation/components/breadcrumbs";
 // @import "foundation/components/keystrokes";
 // @import "foundation/components/labels";
-// @import "foundation/components/inline-lists";
+@import "foundation/components/inline-lists";
 // @import "foundation/components/pagination";
 // @import "foundation/components/panels";
 // @import "foundation/components/pricing-tables";
@@ -56,3 +56,4 @@
 @import "new/openings";
 @import "new/applications";
 @import "new/accounts";
+@import "new/companysettings";

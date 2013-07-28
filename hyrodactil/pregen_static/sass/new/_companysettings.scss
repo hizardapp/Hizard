@@ -1,0 +1,20 @@
+@import "../common/colours";
+
+.settings-links {
+  border-top: 1px solid $silver;
+  border-bottom: 1px solid $silver;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  a {
+    color: black;
+
+    &:hover {
+      color: $light-navigation-blue;
+    }
+
+    &.active-link {
+      color: $light-navigation-blue;
+    }
+  }
+}

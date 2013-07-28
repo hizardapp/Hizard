@@ -1,4 +1,4 @@
-{% extends "new_base.html" %}
+{% extends "companysettings/main.html" %}
 
 {% load i18n %}
 {% load staticfiles %}
@@ -8,10 +8,7 @@
   {% trans 'Manage users' %}
 {% endblock title %}
 
-
-{% block content %}
-  <h1>{% trans "Manage users" %}</h1>
-
+{% block settings-content %}
   <div class="large-12 columns">
     <form action="." method="POST" class="large-6 columns">
       {% csrf_token %}
@@ -66,4 +63,4 @@
     </ul>
   </div>
 
-{% endblock content %}
+{% endblock settings-content %}

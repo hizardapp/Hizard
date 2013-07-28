@@ -194,7 +194,7 @@ class PromoteView(View):
         user.is_company_admin = True
         user.save()
         messages.success(request, _('User promoted to administrator'))
-        return HttpResponseRedirect(reverse("companysettings:list_users"))
+        return HttpResponseRedirect(reverse("companysettings:main"))
 
 
 class DeleteView(View):
@@ -206,7 +206,7 @@ class DeleteView(View):
 
         user.delete()
         messages.success(request, _('User deleted'))
-        return HttpResponseRedirect(reverse("companysettings:list_users"))
+        return HttpResponseRedirect(reverse("companysettings:main"))
 
 
 class ChangeDetailsView(LoginRequiredMixin, TemplateView):
