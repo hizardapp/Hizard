@@ -13,7 +13,6 @@
 
   <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1">
 
-  <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
   <link rel="stylesheet" href="{% static "css/landing.css" %}" />
 </head>
 <body>
@@ -30,15 +29,7 @@
     </div>
   </div>
 
-  {% if messages %}
-    <div class="section row">
-      {% for message in messages %}
-        <div class="alert-{{ message.tags }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
+  {% include 'core/_messages.html' with messages=messages %}
 
   <div class="section hero">
     <div class="row">
@@ -71,12 +62,16 @@
       <p class="section-subtitle">You are working as a team. Hire as a team.</p>
       <div class="row">
         <div class="large-6 columns">
-          <h3>Discuss applicants<br></h3>
-          <img src="images/image-placeholder.svg">
+          <h3>Discuss applicants</h3>
+          <p>
+            Each hire is important. <br>
+            Let your team be part of it by asking questions, noticing things and comparing applicants
+            with an integrated chat on each application.
+          </p>
         </div>
         <div class="large-6 columns">
-          <h3>Rate application</h3>
-          <img src="images/image-placeholder.svg">
+          <h3>Rate applications</h3>
+          <p>Easily find out who your top applicants are according to your team.</p>
         </div>
       </div>
     </div>
@@ -89,11 +84,34 @@
       <div class="row">
         <div class="large-6 columns">
           <h3>From a computer</h3>
-          <img src="images/image-placeholder.svg">
+          <img src="http://placekitten.com/200/200">
         </div>
         <div class="large-6 columns">
           <h3>From a phone</h3>
-          <img src="images/image-placeholder.svg">
+          <img src="http://placekitten.com/200/200">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="row">
+      <h1 class="section-title">Making your hiring life easier</h1>
+      <p class="section-subtitle">No more excel spreadsheet or forgotten mails</p>
+      <div class="row">
+        <div class="large-6 columns">
+          <h3>Automated emails</h3>
+          <p>
+            We take care of sending the emails for you. <br>
+            Let the applicant know when you receive, reject or accept their application.
+          </p>
+        </div>
+        <div class="large-6 columns">
+          <h3>Custom interview stages</h3>
+          <p>
+            Every company has a different way to do business <br>
+            Hizard is flexible and let you organize your hiring process your own way.
+          </p>
         </div>
       </div>
     </div>
