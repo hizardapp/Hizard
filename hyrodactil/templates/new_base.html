@@ -40,16 +40,7 @@
   </nav>
 
   <div class="container">
-
-    {% if messages %}
-      {% for message in messages %}
-        <div data-alert class="alert-{{ message.tags }}">
-          {{ message }}
-          <a href="#" class="close">&times;</a>
-        </div>
-      {% endfor %}
-    {% endif %}
-
+    {% include 'core/_messages.html' with messages=messages %}
     {% block content %}
     {% endblock content %}
   </div>

@@ -1,4 +1,4 @@
-{% extends "account_page.html" %}
+{% extends "account_base.html" %}
 {% load i18n %}
 
 
@@ -7,19 +7,9 @@
 {% endblock title %}
 
 
-{% block page-content %}
+{% block content %}
 
   {% url 'accounts:register' as register_url %}
-
-  <h2>
-    {% trans 'Login' %}
-    <small>
-      {% blocktrans %}
-        Don't have an account ? <a href="{{ register_url }}">Sign up</a>
-      {% endblocktrans %}
-    </small>
-  </h2>
-
 
   {% if from_activation %}
     <div class="text-center large-centered large-6 columns">
@@ -28,8 +18,18 @@
     </div>
   {% endif %}
 
+  <div class="box large-3 columns large-centered account-box">
+    <div class="box-header">
+      <h2>{% trans 'Login' %}</h2>
+    </div>
 
-    <form action="." method="POST" class="large-6 columns large-centered">
+    <p class="text-center">
+      {% blocktrans %}
+        Don't have an account ? <a href="{{ register_url }}">Sign up</a>
+      {% endblocktrans %}
+    </p>
+
+    <form action="." method="POST" class="large-10 columns large-centered">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
@@ -41,33 +41,17 @@
       {% endif %}
 
       {% for field in form %}
-        <div class="row">
-          <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-            {{ field.label_tag }}
-            {{ field }}
-
-            {% if field.errors %}
-              <small class="error">
-                {% for error in field.errors %}
-                  {{ error }}
-                {% endfor %}
-              </small>
-            {% endif %}
-          </div>
-        </div>
+        {% include 'core/_field.html' with field=field %}
       {% endfor %}
 
 
-      <div class="row">
-        <div class="large-12 columns text-right">
-          <a href="{% url 'auth:reset_password' %}" class="forgot-password">
-            {% trans 'Forgot your password?' %}
-          </a>
-          <input type="submit" class="button-positive" value="{% trans 'Login' %}" />
-        </div>
-      </div>
+      <input type="submit" class="button" value="{% trans 'Login' %}" />
+
+      <a href="{% url 'auth:reset_password' %}" class="forgot-password right">
+        {% trans 'Forgot your password?' %}
+      </a>
     </form>
 
+  </div>
 
-{% endblock page-content %}
+{% endblock content %}

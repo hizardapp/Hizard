@@ -1,17 +1,21 @@
-{% extends "account_page.html" %}
+{% extends "account_base.html" %}
 {% load i18n %}
 
-{% block page-content %}
 
-  <div class="row text-center">
-    <h1 class="large-12 columns">
-      {% trans "Activate your account" %}
-    </h1>
-    <br>
+{% block title %}
+  {% trans 'Account activation' %}
+{% endblock title %}
 
-    <p class="large-12 columns">
+{% block content %}
+
+  <div class="box large-3 columns large-centered account-box">
+    <div class="box-header">
+      <h2>{% trans 'Activate your account' %}</h2>
+    </div>
+
+    <p class="text-center">
       {% trans "We just sent you an email " %} <i class="icon-thumbs-up icon-3x"></i>
     </p>
   </div>
 
-{% endblock page-content %}
+{% endblock content %}

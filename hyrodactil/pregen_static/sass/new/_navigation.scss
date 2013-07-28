@@ -9,6 +9,10 @@ $top-menu-height: 55px;
 body {
   overflow-x: hidden;
   @include slide-transition();
+
+  &.no-push {
+    left: 0;
+  }
 }
 
 .push-to-right {
@@ -122,3 +126,4 @@ body {
     @include grid-column(10);
   }
 }
+

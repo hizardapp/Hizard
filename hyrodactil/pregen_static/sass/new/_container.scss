@@ -4,6 +4,25 @@
 @import "compass/css3/border-radius";
 
 
+// Common box used to contain informations in the site
+.box {
+  border: 1px solid $silver;
+  padding: 0;
+
+  .box-header {
+    background: $navigation-blue;
+
+    h2 {
+      margin: 0;
+      padding: .5em;
+      font-size: 1.4em;
+      text-align: center;
+      color: white;
+    }
+  }
+}
+
+
 .container {
   padding: 2em;
   height: 100%;
@@ -15,25 +34,6 @@
 
   &.restrict-width-container {
     @include calc(width, "100% - #{$menu-width}");
-  }
-
-
-  // Common box used to contain informations in the site
-  .box {
-    border: 1px solid $silver;
-    padding: 0;
-
-    .box-header {
-      background: $navigation-blue;
-
-      h2 {
-        margin: 0;
-        padding: .5em;
-        font-size: 1.4em;
-        text-align: center;
-        color: white;
-      }
-    }
   }
 
   .styled-list {

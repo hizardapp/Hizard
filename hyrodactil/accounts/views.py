@@ -41,7 +41,6 @@ class ActivateView(FormView):
             CustomUser,
             activation_key=self.activation_key
         )
-
         return super(ActivateView, self).dispatch(*args, **kwargs)
 
     def get(self, *args, **kwargs):
@@ -113,27 +112,6 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         logout(self.request)
         return HttpResponseRedirect(reverse("auth:login"))
-
-
-class PasswordChangeView(LoginRequiredMixin, FormView):
-    """
-    Change password view, only for logged in users
-    """
-    form_class = MinLengthChangePasswordForm
-    template_name = 'accounts/password_change_form.html'
-    success_url = reverse_lazy('auth:login')
-
-    def get_form_kwargs(self):
-        """
-        The password change form takes the user in the constructor
-        """
-        kwargs = super(PasswordChangeView, self).get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        form.save()
-        return super(PasswordChangeView, self).form_valid(form)
 
 
 class PasswordResetView(FormView):

@@ -1,4 +1,4 @@
-{% extends "account_page.html" %}
+{% extends "account_base.html" %}
 {% load i18n %}
 
 
@@ -7,11 +7,14 @@
 {% endblock title %}
 
 
-{% block page-content %}
+{% block content %}
 
-  <h2>{% trans 'Register' %}</h2>
+  <div class="box large-3 columns large-centered account-box">
+    <div class="box-header">
+      <h2>{% trans 'Register' %}</h2>
+    </div>
 
-    <form action="." method="POST" class="large-6 columns large-centered">
+    <form action="." method="POST" class="large-10 columns large-centered">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
@@ -23,29 +26,13 @@
       {% endif %}
 
       {% for field in form %}
-        <div class="row">
-          <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-            <label for="{{ field.auto_id }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-            {{ field }}
-
-            {% if field.errors %}
-              <small class="error">
-                {% for error in field.errors %}
-                  {{ error }}
-                {% endfor %}
-              </small>
-            {% endif %}
-          </div>
-        </div>
+        {% include 'core/_field.html' with field=field %}
       {% endfor %}
 
 
-      <div class="row">
-        <div class="large-12 columns text-right">
-          <input type="submit" class="button-positive" value="{% trans 'Register' %}" />
-        </div>
-      </div>
+      <input type="submit" class="button" value="{% trans 'Register' %}" />
     </form>
 
-{% endblock page-content %}
+  </div>
+
+{% endblock content %}

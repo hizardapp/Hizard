@@ -1,4 +1,4 @@
-{% extends "account_page.html" %}
+{% extends "account_base.html" %}
 {% load i18n %}
 
 
@@ -7,46 +7,33 @@
 {% endblock title %}
 
 
-{% block page-content %}
+{% block content %}
 
-  <h2>{% trans 'Activate my account' %}</h2>
-
-  <form action="." method="POST" class="large-centered large-6 columns">
-    {% csrf_token %}
-
-    {% if form.non_field_errors %}
-      <small class="error">
-        {% for error in form.non_field_errors %}
-          {{ error }}
-        {% endfor %}
-      </small>
-    {% endif %}
-
-    {% for field in form %}
-      <div class="row">
-        <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-          <label for="{{ field.auto_id }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-          {{ field }}
-
-          {% if field.errors %}
-            <small class="error">
-              {% for error in field.errors %}
-                {{ error }}
-              {% endfor %}
-            </small>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
-
-
-    <div class="row">
-      <div class="large-12 columns text-right">
-        <input type="submit" class="button-positive" value="{% trans 'Activate my account' %}" />
-      </div>
+  <div class="box large-3 columns large-centered account-box">
+    <div class="box-header">
+      <h2>{% trans 'Activate my account' %}</h2>
     </div>
-  </form>
+
+    <form action="." method="POST" class="large-10 columns large-centered">
+
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <small class="error">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </small>
+      {% endif %}
+
+      {% for field in form %}
+        {% include 'core/_field.html' with field=field %}
+      {% endfor %}
+
+      <input type="submit" class="button" value="{% trans 'Activate my account' %}" />
+    </form>
+
+  </div>
 
 
-{% endblock page-content %}
+{% endblock content %}
