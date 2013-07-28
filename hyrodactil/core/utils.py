@@ -38,7 +38,7 @@ def setup_company(company):
         code="application_received",
         name="Application received",
         subject="Thank your for applying",
-        body="""Dear {{applicant}},
+        body="""Dear {{applicant_first_name}},
 Your application has successfully been received.
 Best regards""",
     )
