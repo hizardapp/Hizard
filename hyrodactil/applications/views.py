@@ -192,7 +192,8 @@ class HireView(LoginRequiredMixin, TemplateView):
         if application.opening.company != request.user.company:
             raise Http404
 
-        hired_stage = InterviewStage.objects.get(tag='HIRED')
+        hired_stage = InterviewStage.objects.get(tag='HIRED',
+                company=request.user.company)
 
         ApplicationStageTransition(
             application=application,

@@ -98,7 +98,7 @@ class ApplicationFormTests(TestCase):
         ApplicantFactory(email='bob@marley.jah')
         company = CompanyFactory()
         opening = OpeningFactory(company=company)
-        stage = InterviewStageFactory(tag='RECEIVED')
+        InterviewStageFactory(tag='RECEIVED', company=company)
 
         files = {'resume': self._get_temporary_file()}
         form = ApplicationForm(self.form_data, files, opening=opening)
@@ -119,3 +119,19 @@ class ApplicationFormTests(TestCase):
         pks = just_pks(form["stage"].field.choices)
         self.assertTrue(s_ic.pk in pks)
         self.assertTrue(s_ii.pk not in pks)
+
+    def test_save_with_company_stage(self):
+        ApplicantFactory(email='bob@marley.jah')
+        company1 = CompanyFactory()
+        company2 = CompanyFactory()
+        opening = OpeningFactory(company=company1)
+        stage_company1 = InterviewStageFactory(tag='RECEIVED', company=company1)
+        stage_company2 = InterviewStageFactory(tag='RECEIVED', company=company2)
+
+        files = {'resume': self._get_temporary_file()}
+        form = ApplicationForm(self.form_data, files, opening=opening)
+        self.assertTrue(form.is_valid())
+
+        form.save()
+
+        self.assertEqual(Applicant.objects.count(), 1)

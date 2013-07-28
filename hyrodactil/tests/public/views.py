@@ -73,7 +73,7 @@ class ApplicationViewsTests(WebTest):
         )
 
     def test_valid_post_application_form(self):
-        stage = InterviewStageFactory(tag='RECEIVED')
+        stage = InterviewStageFactory(tag='RECEIVED', company=self.user.company)
         url = reverse('public:apply', args=(self.opening.id,))
 
         EmailTemplate.objects.create(

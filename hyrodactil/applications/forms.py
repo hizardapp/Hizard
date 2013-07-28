@@ -93,7 +93,8 @@ class ApplicationForm(forms.ModelForm):
             application_answer.answer = answer
             application_answer.save()
 
-        stage = InterviewStage.objects.get(tag='RECEIVED')
+        stage = InterviewStage.objects.get(tag='RECEIVED',
+                company=application.opening.company)
 
         if stage:
             ApplicationStageTransition.objects.create(

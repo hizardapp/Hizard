@@ -9,6 +9,7 @@ from ..factories._applications import (
     ApplicationFactory, ApplicationAnswerFactory
 )
 from ..factories._companysettings import InterviewStageFactory
+from ..factories._companies import CompanyFactory
 from ..factories._customisable_emails import EmailTemplateFactory
 from ..factories._openings import OpeningWithQuestionFactory
 from applications.models import ApplicationMessage, Application, Applicant
@@ -122,7 +123,7 @@ class ApplicationViewsTests(WebTest):
         self.assertFalse(ApplicationMessage.objects.all().exists())
 
     def test_create_manual_application(self):
-        InterviewStageFactory(tag='RECEIVED')
+        InterviewStageFactory(tag='RECEIVED', company=self.user.company)
         url = reverse(
             'applications:manual_application', args=[self.opening.pk]
         )
@@ -163,7 +164,8 @@ class ApplicationViewsTests(WebTest):
         self.assertContains(page, 'class="alert-error"')
 
     def test_hire_applicant(self):
-        InterviewStageFactory(tag='HIRED')
+        InterviewStageFactory(tag='HIRED', company=CompanyFactory())
+        InterviewStageFactory(tag='HIRED', company=self.user.company)
         EmailTemplateFactory(code="candidate_hired",
             company=self.user.company,
             subject="Congrats {{ applicant_first_name }}")
