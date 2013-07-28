@@ -1,11 +1,17 @@
-from django.views.generic.base import View
-from django.template import Context, Template, TemplateSyntaxError
 from django.core.urlresolvers import reverse_lazy
+from django.template import Context, Template, TemplateSyntaxError
+from django.utils.safestring import mark_safe
+from django.views.generic.base import View
 from braces.views import LoginRequiredMixin, AjaxResponseMixin, JSONResponseMixin
 from core.views import RestrictedListView, RestrictedUpdateView
 
 from .models import EmailTemplate
 from .forms import EmailTemplateForm
+
+
+TEST_CONTEXT = Context(dict(applicant=mark_safe(u"Mayjic Eight"),
+    opening=mark_safe("Professor of magic"),
+    company=mark_safe("Magic & Co.")))
 
 
 class CustomisableEmailsListView(LoginRequiredMixin, RestrictedListView):
@@ -18,27 +24,25 @@ class CustomisableEmailsUpdateView(LoginRequiredMixin, RestrictedUpdateView):
     success_url = reverse_lazy("customisable_emails:list")
 
     def get_context_data(self, **kwargs):
-        return super(
+        context = super(
                 CustomisableEmailsUpdateView, self).get_context_data(**kwargs)
+        context["TEST_CONTEXT"] = TEST_CONTEXT
+        return context
 
 
 class TestEmailTemplateRendererView(LoginRequiredMixin, AjaxResponseMixin,
         JSONResponseMixin, View):
-    TEST_CONTEXT = Context(dict(applicant=u"Bob"))
 
     def post_ajax(self, request):
-        print "post_ajax"
         try:
             subject_template = Template(request.POST.get("subject"))
-            subject = subject_template.render(
-                    TestEmailTemplateRendererView.TEST_CONTEXT)
+            subject = subject_template.render(TEST_CONTEXT)
         except TemplateSyntaxError as e:
             subject = str(e)
 
         try:
             body_template = Template(request.POST.get("body"))
-            body = body_template.render(
-                    TestEmailTemplateRendererView.TEST_CONTEXT)
+            body = body_template.render(TEST_CONTEXT)
         except TemplateSyntaxError as e:
             body = str(e)
 
