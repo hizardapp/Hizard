@@ -55,7 +55,7 @@ class CustomisableEmailsViewsTests(WebTest):
                      body=u"{% if True %}Hey!{% endif %}"),
                 user=self.user)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(dict(subject="hi Mayjic", body="Hey!"), response.json)
+        self.assertEqual(dict(subject="hi Quentin", body="Hey!"), response.json)
 
     def test_test_renderer_syntax_error(self):
         render_test_template_url = reverse("customisable_emails:test_render")
