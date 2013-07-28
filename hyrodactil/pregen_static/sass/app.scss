@@ -1,5 +1,5 @@
 // Global Foundation Settings
-@import "settings_new";
+@import "settings";
 
 // Comment out this import if you don't want to use normalize
 @import "normalize";
@@ -52,9 +52,9 @@
 @import "common/alerts";
 @import "common/forms";
 
-@import "new/navigation";
-@import "new/container";
-@import "new/openings";
-@import "new/applications";
-@import "new/accounts";
-@import "new/companysettings";
+@import "app/navigation";
+@import "app/container";
+@import "app/openings";
+@import "app/applications";
+@import "app/accounts";
+@import "app/companysettings";

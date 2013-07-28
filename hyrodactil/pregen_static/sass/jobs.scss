@@ -1,5 +1,5 @@
 // Global Foundation Settings
-@import "settings_app";
+@import "settings";
 
 // Comment out this import if you are customizing you imports below
 // @import "foundation";
@@ -46,6 +46,6 @@
 
 @import "common/forms";
 @import "common/buttons";
-@import "common/layout";
 
 @import "jobs/opening_list";
+@import "jobs/layout";

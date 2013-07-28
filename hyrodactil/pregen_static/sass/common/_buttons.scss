@@ -1,27 +1,6 @@
 
 @import "colours";
-@import "variables";
 @import "compass/css3/border-radius";
-
-
-.button-positive {
-  @include button;
-  background-color: $emerland;
-  border: none;
-  &:hover {
-    background-color: lighten($emerland, 10);
-  }
-}
-
-.button-negative {
-  @include button;
-  background-color: $alizaring;
-  border: none;
-  &:hover {
-    background-color: lighten($alizaring, 10);
-  }
-}
-
 
 @mixin custom-button($colour, $hover-colour) {
   display: inline-block;

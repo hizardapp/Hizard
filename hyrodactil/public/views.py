@@ -16,7 +16,7 @@ from .forms import InterestForm
 
 
 class LandingPageView(TemplateView):
-    template_name = "landing_page.html"
+    template_name = "public/landing_page.html"
 
 
 class OpeningList(SubdomainRequiredMixin, TemplateView):
