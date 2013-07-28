@@ -123,7 +123,7 @@ class UpdateCompanyInformationView(
 ):
     model = Company
     form_class = CompanyInformationForm
-    success_url = reverse_lazy('dashboard:dashboard')
+    success_url = reverse_lazy('companysettings:update_information')
     success_message = _('Company information updated.')
     template_name = 'companysettings/information_form.html'
 
