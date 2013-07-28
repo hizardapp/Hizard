@@ -19,7 +19,7 @@ def send_customised_email(name, company, to, context):
 
     context = Context(context)
     send_mail(subject_template.render(context),
-            'Here is the message.',
+            body_template.render(context),
             settings.DEFAULT_FROM_EMAIL,
             [to],
             fail_silently=False)

@@ -1,4 +1,3 @@
-from datetime import datetime
 import os
 
 from django.core import mail
@@ -73,8 +72,8 @@ class ApplicationViewsTests(WebTest):
         EmailTemplate.objects.create(
             company=self.user.company,
             name="application_received",
-            subject="Thank your for applying",
-            body="Dear {{applicant}}, Best regards",
+            subject="Thank your for applying for {{ opening }}",
+            body="Dear {{applicant_first_name}}, Best regards",
         )
 
         form = career_site_get(self.app, url, self.user.company.subdomain.lower()).form
@@ -100,6 +99,9 @@ class ApplicationViewsTests(WebTest):
                 '/media/resumes/%d/bilbon_cv.pdf' % self.opening.company.id)
         self.assertEqual(application.current_stage, stage)
         self.assertEqual(len(mail.outbox), 1)
+        email, = mail.outbox
+        self.assertTrue("Bilbon" in email.body)
+        self.assertTrue(self.opening.title in email.subject)
 
         # 2 required, 1 not required, we still record the 3 though
         self.assertEqual(ApplicationAnswer.objects.count(), 1)

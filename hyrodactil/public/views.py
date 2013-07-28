@@ -2,7 +2,8 @@ import json
 
 from django.http import Http404, HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from django.views.generic.base import TemplateView, View
+from django.utils.safestring import mark_safe
+from django.views.generic.base import TemplateView
 
 from applications.forms import ApplicationForm
 from companies.models import Company
@@ -68,8 +69,11 @@ class ApplyView(TemplateView):
             applicant = form.save()
             send_customised_email("application_received",
                     company=opening.company,
-                    to="abc@example.com",
-                    context=dict(applicant=applicant.first_name)
+                    to=applicant.email,
+                    context=dict(applicant_first_name=applicant.first_name,
+                                 applicant_last_name=applicant.last_name,
+                                 company=mark_safe(opening.company.name),
+                                 opening=mark_safe(opening.title))
             )
             return redirect('public:confirmation', opening_id=opening.id)
         else:
