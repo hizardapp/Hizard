@@ -7,6 +7,7 @@ from model_utils.models import TimeStampedModel
 
 
 class EmailTemplate(TimeStampedModel):
+    code = models.CharField(max_length=256)
     name = models.CharField(max_length=256)
     company = models.ForeignKey(Company)
 

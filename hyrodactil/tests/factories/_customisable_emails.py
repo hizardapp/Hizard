@@ -7,7 +7,8 @@ import _companies
 class EmailTemplateFactory(factory.DjangoModelFactory):
     FACTORY_FOR = EmailTemplate
 
-    name = "confirmation"
+    code = "confirmation"
+    name = "Confirmation email"
     company = factory.SubFactory(_companies.CompanyFactory)
     subject = "Hi {{applicant}}"
     body = "Dear {{applicant}}, bla bla"

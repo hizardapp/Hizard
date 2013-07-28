@@ -14,12 +14,13 @@ class CustomisableEmailsViewsTests(WebTest):
 
     def test_list_emails(self):
         template = EmailTemplateFactory(company=self.user.company,
-                name="application_received")
+                code="application_received",
+                name="Application received")
         response = subdomain_get(self.app,
                 reverse('customisable_emails:list'),
                 user=self.user)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "application_received")
+        self.assertContains(response, "Application received")
 
         edit_email_url = reverse("customisable_emails:edit",
                 args=[template.pk])
@@ -27,7 +28,7 @@ class CustomisableEmailsViewsTests(WebTest):
 
     def test_edit_template(self):
         template = EmailTemplateFactory(company=self.user.company,
-                name="application_received")
+                code="application_received")
 
         edit_email_url = reverse("customisable_emails:edit",
                 args=[template.pk])

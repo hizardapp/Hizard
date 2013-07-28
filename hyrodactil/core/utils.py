@@ -35,7 +35,8 @@ def setup_company(company):
 
     EmailTemplate.objects.create(
         company=company,
-        name="application_received",
+        code="application_received",
+        name="Application received",
         subject="Thank your for applying",
         body="""Dear {{applicant}},
 Your application has successfully been received.

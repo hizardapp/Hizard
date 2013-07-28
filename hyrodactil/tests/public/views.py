@@ -71,7 +71,7 @@ class ApplicationViewsTests(WebTest):
 
         EmailTemplate.objects.create(
             company=self.user.company,
-            name="application_received",
+            code="application_received",
             subject="Thank your for applying for {{ opening }}",
             body="Dear {{applicant_first_name}}, Best regards",
         )
