@@ -117,6 +117,18 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         application.current_stage = transition.stage
         application.save()
 
+        if transition.stage.tag == "REJECTED":
+            applicant = application.applicant
+            opening = application.opening
+            send_customised_email("application_rejected",
+                company=opening.company,
+                to=applicant.email,
+                context=dict(applicant_first_name=applicant.first_name,
+                  applicant_last_name=applicant.last_name,
+                  company=mark_safe(opening.company.name),
+                  opening=mark_safe(opening.title))
+            )
+
         return redirect(
             'applications:application_detail',
             pk=self.kwargs['pk']

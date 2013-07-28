@@ -45,6 +45,16 @@ Best regards""",
 
     EmailTemplate.objects.create(
         company=company,
+        code="application_rejected",
+        name="Application rejected",
+        subject="Sorry but your application was not accepted",
+        body="""Dear {{applicant_first_name}},
+We are sorry to inform you that we didn't accept your application.
+Best regards""",
+    )
+
+    EmailTemplate.objects.create(
+        company=company,
         code="candidate_hired",
         name="Candidate hired",
         subject="Congratulations",

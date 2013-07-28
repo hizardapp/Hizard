@@ -176,3 +176,24 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(len(mail.outbox), 1)
         email, = mail.outbox
         self.assertTrue("Bilbon" in email.subject)
+
+    def test_reject_applicant(self):
+        application = ApplicationFactory(opening=self.opening)
+        EmailTemplateFactory(code="application_rejected",
+            company=self.user.company,
+            subject="Sorry {{ applicant_first_name }}")
+        goodbye = InterviewStageFactory(company=self.user.company,
+            tag="REJECTED")
+
+        url = reverse(
+            'applications:application_detail', args=(application.id,)
+        )
+        response = subdomain_get(self.app, url, user=self.user)
+
+        form = response.forms['transition-form']
+        form['stage'] = '%s' % goodbye.pk
+        form['note'] = 'Nope, doesn\t fit the description'
+        response = form.submit().follow()
+        self.assertEqual(len(mail.outbox), 1)
+        email, = mail.outbox
+        self.assertTrue("Bilbon" in email.subject)
