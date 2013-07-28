@@ -1,5 +1,5 @@
 {% extends "app_page.html" %}
-{% load i18n %}
+{% load staticfiles i18n %}
 
 {% block title %}{% trans 'Edit template' %}{% endblock title %}
 
@@ -9,31 +9,60 @@
   <form action="." method="POST">
     {% csrf_token %}
 
-    {% for field in form %}
+    <div class="row">
+      <div class="large-6 columns {% if form.subject.errors %} error {% endif %}">
 
-      <div class="row">
-        <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-          <label for="id_name">
-            {{ field.label }}
-            {% if field.help_text %}
-              <span class="help-text right">{{ field.help_text }}</span>
-            {% endif %}
-          </label>
-
-          {{ field }}
-
-          {% if field.errors %}
-            <small class="error">
-              {% for error in field.errors %}
-                {{ error }}
-              {% endfor %}
-            </small>
+        <label for="id_name">
+          {{ form.subject.label }}
+          {% if form.subject.help_text %}
+            <span class="help-text right">{{ form.subject.help_text }}</span>
           {% endif %}
-        </div>
+        </label>
+
+        {{ form.subject }}
+
+        {% if form.subject.errors %}
+          <small class="error">
+            {% for error in form.subject.errors %}
+              {{ error }}
+            {% endfor %}
+          </small>
+        {% endif %}
       </div>
 
-    {% endfor %}
+      <div class="large-6 columns">
+        <small>&nbsp;</small>
+        <pre id="test_subject"></pre>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-6 columns {% if form.body.errors %} error {% endif %}">
+
+        <label for="id_name">
+          {{ form.body.label }}
+          {% if form.body.help_text %}
+            <span class="help-text right">{{ form.body.help_text }}</span>
+          {% endif %}
+        </label>
+
+        {{ form.body }}
+
+        {% if form.body.errors %}
+          <small class="error">
+            {% for error in form.body.errors %}
+              {{ error }}
+            {% endfor %}
+          </small>
+        {% endif %}
+      </div>
+
+      <div class="large-6 columns">
+        <small>&nbsp;</small>
+        <pre id="test_body"></pre>
+      </div>
+
+    </div>
 
     <div class="row">
       <div class="large-12 columns">
@@ -46,3 +75,23 @@
   </form>
 
 {% endblock page-content %}
+
+{% block extra-js %}
+<script src="{% static "js/vendor/jquery.ba-throttle-debounce.js" %}"></script>
+<script src="{% static "js/csrf.js" %}"></script>
+
+<script>
+    function show_test_template() {
+        var data = {body: $("#id_body").val(), subject: $("#id_subject").val()};
+        $.post("{% url "customisable_emails:test_render" %}",
+               data,
+               function (data, textStatus, jqXHR) {
+            $("#test_subject").text(data["subject"]);
+            $("#test_body").text(data["body"]);
+        });
+    }
+
+    $("#id_body,#id_subject").keyup($.debounce(200, show_test_template));
+    show_test_template();
+</script>
+{% endblock extra-js %}
