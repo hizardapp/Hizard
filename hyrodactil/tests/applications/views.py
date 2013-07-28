@@ -1,4 +1,3 @@
-import json
 import os
 
 from django.core.urlresolvers import reverse
@@ -10,8 +9,8 @@ from ..factories._applications import (
 )
 from ..factories._companysettings import InterviewStageFactory
 from ..factories._openings import OpeningWithQuestionFactory
-from applications.models import ApplicationMessage, Application, Applicant, ApplicationAnswer
-from tests.utils import subdomain_get, subdomain_post_ajax
+from applications.models import ApplicationMessage, Application, Applicant
+from tests.utils import subdomain_get
 
 
 class ApplicationViewsTests(WebTest):
@@ -76,6 +75,8 @@ class ApplicationViewsTests(WebTest):
 
         self.assertContains(response, transition.user.name)
         self.assertContains(response, transition.stage)
+
+        # test email here?
 
     def test_discuss_an_application(self):
         application = ApplicationFactory(opening=self.opening)
@@ -167,4 +168,4 @@ class ApplicationViewsTests(WebTest):
         url = reverse(
             'applications:hire', args=(application.pk, )
         )
-        page = subdomain_get(self.app, url, user=self.user)
+        subdomain_get(self.app, url, user=self.user)
