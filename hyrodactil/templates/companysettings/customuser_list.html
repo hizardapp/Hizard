@@ -36,7 +36,7 @@
           <br>
           <br>
 
-          {% if request.user.is_company_admin %}
+          {% if request.user.is_company_admin and request.user != user %}
             <a class="button" href="{% url 'accounts:delete' user.id %}">{% trans 'Delete' %}</a>
             <a class="button" href="{% url 'accounts:promote' user.id %}">{% trans 'Make administrator' %}</a>
           {% endif %}
