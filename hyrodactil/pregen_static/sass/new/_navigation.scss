@@ -48,6 +48,11 @@ body {
       color: black;
     }
 
+    &.active-link {
+      background: white;
+      color: black;
+    }
+
     i {
       padding-right: 10px;
       vertical-align: middle;
@@ -85,7 +90,7 @@ body {
     text-align: center;
   }
 
-  .avatar {
+  .username {
     float: right;
     font-weight: bold;
   }

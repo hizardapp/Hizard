@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load i18n %}
 {% load staticfiles %}
+{% load core_extra %}
 
 <html>
 <head>
@@ -26,17 +27,29 @@
 
   <nav class="left-menu">
     <h3><img src="{% static "img/logo.png" %}"></h3>
-    <a href="{% url 'accounts:change_details' %}"><i class="icon-camera-retro icon-2x"></i>{{ user.name }}</a>
-    <a href="{% url 'dashboard:dashboard' %}"><i class="icon-camera-retro icon-2x"></i>Dashboard</a>
-    <a href="{% url 'openings:list_openings' %}"><i class="icon-camera-retro icon-2x"></i>Openings</a>
-    <a href="{% url 'applications:list_applications' %}"><i class="icon-camera-retro icon-2x"></i>Applicants</a>
-    <a href="{{ opening_list_url }}" target="_blank"><i class="icon-camera-retro icon-2x"></i>{% trans 'Career site' %}</a>
-    <a href="#"><i class="icon-camera-retro icon-2x"></i>Settings</a>
+    <a class="{% active request 'accounts:change_details' %}" href="{% url 'accounts:change_details' %}">
+      <i class="icon-user icon-2x"></i>{{ user.name }}
+    </a>
+    <a class="{% active request 'dashboard:dashboard' %}" href="{% url 'dashboard:dashboard' %}">
+      <i class="icon-home icon-2x"></i>{% trans 'Dashboard' %}
+    </a>
+    <a class="{% active request 'openings:list_openings' %}" href="{% url 'openings:list_openings' %}">
+      <i class="icon-folder-close icon-2x"></i>{% trans 'Openings' %}
+    </a>
+    <a class="{% active request 'applications:list_applications' %}" href="{% url 'applications:list_applications' %}">
+      <i class="icon-group icon-2x"></i>{% trans 'Applicants' %}
+    </a>
+    <a href="{{ opening_list_url }}" target="_blank">
+      <i class="icon-share-alt icon-2x"></i>{% trans 'Career site' %}
+    </a>
+    <a class="{% active request 'companysettings:main' %}" href="{% url 'companysettings:main' %}">
+      <i class="icon-cogs icon-2x"></i>{% trans 'Settings' %}
+    </a>
   </nav>
 
   <nav class="top-menu">
     <i class="icon-reorder icon-2x open-left-menu"></i>
-    <span class="avatar">Gautier Hayoun</span>
+    <span class="username">{{ user.name }}</span>
   </nav>
 
   <div class="container">
