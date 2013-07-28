@@ -1,6 +1,16 @@
 // Make sure the charset is set appropriately
 @charset "UTF-8";
 
+// Comment out this import if you don't want to use normalize
+@import "normalize";
+
+//
+// Use this grid if you want to start using the new Foundation 5 grid early.
+// It will change breakpoints to min-width: 640px and 1024px.
+//
+// @import "foundation/components/grid-5";
+//
+
 // This includes all of the foundation global elements that are needed to work with any of the other files.
 @import "foundation/variables";
 

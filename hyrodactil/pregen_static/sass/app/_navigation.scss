@@ -102,7 +102,7 @@ body {
 
 
 // Media queries
-@media only screen and (max-width: emCalc(940px)) {
+@media only screen and (max-width: emCalc(940)) {
   .left-menu {
     left: -240px;
   }
@@ -117,7 +117,7 @@ body {
   }
 }
 
-@media only screen and (min-width: emCalc(940px)) {
+@media only screen and (min-width: emCalc(940)) {
   body {
     left: 240px;
   }
