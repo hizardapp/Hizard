@@ -1,142 +1,108 @@
-{% extends "app_page.html" %}
+{% extends "new_base.html" %}
 {% load staticfiles i18n %}
 
 {% block title %}{% trans 'Edit template' %}{% endblock title %}
 
-{% block page-content %}
-  <h2>{% trans "Edit email template" %}</h2>
+{% block content %}
+  <h1>{% trans "Edit email template" %}</h1>
 
-  <form action="." method="POST">
+  <form action="." method="POST" class="large-6 columns">
     {% csrf_token %}
 
-    <div class="row">
       <div class="large-6 columns">
         <h3>{% trans "Template" %}</h3>
-        <p>{% trans "You can use the following variables in the templates : " %}
-            <dl>
-                <dt>{% verbatim %}{{ applicant_first_name }}{% endverbatim %}</dt>
-                <dd>{% trans "First name of the applicant" %}</dd>
-                <dt>{% verbatim %}{{ applicant_last_name }}{% endverbatim %}</dt>
-                <dd>{% trans "Last name of the applicant" %}</dd>
-                <dt>{% verbatim %}{{ opening }}{% endverbatim %}</dt>
-                <dd>{% trans "Title of the opening" %}</dd>
-                <dt>{% verbatim %}{{ company }}{% endverbatim %}</dt>
-                <dd>{% trans "Name of your company" %}</dd>
-            </dl>
-        </p>
-      </div>
-      <div class="large-6 columns">
-        <h3>{% trans "Example" %}</h3>
-        <p><br/>
-            <dl>
-                <dt>{% verbatim %}{{ applicant_first_name }}{% endverbatim %}</dt>
-                <dd>{{ TEST_CONTEXT.applicant_first_name }}</dd>
-                <dt>{% verbatim %}{{ applicant_last_name }}{% endverbatim %}</dt>
-                <dd>{{ TEST_CONTEXT.applicant_last_name }}</dd>
-                <dt>{% verbatim %}{{ opening }}{% endverbatim %}</dt>
-                <dd>{{ TEST_CONTEXT.opening }}</dd>
-                <dt>{% verbatim %}{{ company }}{% endverbatim %}</dt>
-                <dd>{{ TEST_CONTEXT.company }}</dd>
-            </dl>
-        </p>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="large-6 columns {% if form.subject.errors %} error {% endif %}">
 
-        <label for="id_name">
-          {{ form.subject.label }}
-          {% if form.subject.help_text %}
-            <span class="help-text right">{{ form.subject.help_text }}</span>
-          {% endif %}
-        </label>
 
-        {{ form.subject }}
+        {% for field in form %}
+          {% include 'core/_field.html' with field=field %}
+        {% endfor %}
 
-        {% if form.subject.errors %}
-          <small class="error">
-            {% for error in form.subject.errors %}
-              {{ error }}
-            {% endfor %}
-          </small>
-        {% endif %}
+        <input type="submit" value="{% trans 'Save' %}" class="button" />
       </div>
 
       <div class="large-6 columns">
-        <small>&nbsp;</small>
+        <h3>{% trans "Example result email" %}</h3>
+
+        <strong>{% trans 'Subject' %}</strong>
         <pre id="test_subject"></pre>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="large-6 columns {% if form.body.errors %} error {% endif %}">
-
-        <label for="id_name">
-          {{ form.body.label }}
-          {% if form.body.help_text %}
-            <span class="help-text right">{{ form.body.help_text }}</span>
-          {% endif %}
-        </label>
-
-        {{ form.body }}
-
-        {% if form.body.errors %}
-          <small class="error">
-            {% for error in form.body.errors %}
-              {{ error }}
-            {% endfor %}
-          </small>
-        {% endif %}
-      </div>
-
-      <div class="large-6 columns">
-        <small>&nbsp;</small>
+        <br>
+        <strong>{% trans 'Body' %}</strong>
         <pre id="test_body"></pre>
       </div>
 
-    </div>
-
-    <div class="row">
-      <div class="large-12 columns">
-        <div class="right">
-            <input type="submit" value="{% trans 'Save' %}" class="button-positive" />
-        </div>
-      </div>
-    </div>
-
   </form>
 
-{% endblock page-content %}
+  <div class="box large-3 columns left text-center">
+    <div class="box-header">
+      <h2>{% trans 'Help' %}</h2>
+    </div>
+
+    <strong class="help-text">{% trans "You can use the following variables in the templates" %}</strong>
+
+    <ul class="styled-list">
+      <li>
+        {% verbatim %}{{ applicant_first_name }}{% endverbatim %}
+      </li>
+      <li>
+        {% verbatim %}{{ applicant_last_name }}{% endverbatim %}
+      </li>
+      <li>
+        {% verbatim %}{{ opening }}{% endverbatim %}
+      </li>
+      <li>
+        {% verbatim %}{{ company }}{% endverbatim %}
+      </li>
+    </ul>
+  </div>
+{% endblock content %}
+
 
 {% block extra-js %}
-<script src="{% static "js/vendor/jquery.ba-throttle-debounce.js" %}"></script>
-<script src="{% static "js/csrf.js" %}"></script>
+  <script src="{% static "js/vendor/jquery.ba-throttle-debounce.js" %}"></script>
 
-<script>
-    function show_test_template() {
-        var data = {body: $("#id_body").val(), subject: $("#id_subject").val()};
-        $.post("{% url "customisable_emails:test_render" %}",
-               data,
-               function (data, textStatus, jqXHR) {
-            $("#test_subject").text(data["subject"]);
-            $("#test_body").text(data["body"]);
+  <script>
+      $(document).ready(function() {
+        var $body = $("#id_body");
+        var $subject = $("#id_subject");
+
+
+        var showTestTemplate = function() {
+          var data = {
+            body: $body.val(),
+            subject: $subject.val()
+          };
+
+          $.post(
+            '{% url "customisable_emails:test_render" %}',
+            data,
+            function (data, textStatus, jqXHR) {
+              $("#test_subject").text(data.subject);
+              $("#test_body").text(data.body);
+            });
+        };
+
+        var resizeTextArea = function() {
+          var str = $body.val();
+          var cols = $body.attr("cols");
+          var linecount = 0;
+
+          $.each(str.split("\n"), function (i, line) {
+            linecount += (Math.ceil(line.length / cols) || 1);
+          });
+          console.log(linecount);
+          $body.attr("rows", linecount + 1);
+        };
+
+        $("#id_body, #id_subject").keyup($.debounce(200, showTestTemplate));
+
+        showTestTemplate();
+        resizeTextArea();
+
+        $("textarea#id_body").on("keydown", function () {
+          resizeTextArea();
         });
-    }
+      });
 
-    $("#id_body,#id_subject").keyup($.debounce(200, show_test_template));
-    show_test_template();
-
-    $("textarea#id_body").on("keydown", function () {
-      var textarea = $(this),
-              str = textarea.val(),
-              cols = textarea.attr("cols"),
-              linecount = 0;
-
-      $.each(str.split("\n"), function (i, line) {
-        linecount += (Math.ceil(line.length / cols) || 1);
-      })
-      textarea.attr("rows", linecount + 1);
-    });
-</script>
+  </script>
 {% endblock extra-js %}

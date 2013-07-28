@@ -10,8 +10,8 @@ from .forms import EmailTemplateForm
 
 
 TEST_CONTEXT = Context(dict(
-    applicant_first_name=mark_safe(u"Mayjic"),
-    applicant_last_name=mark_safe(u"Eight"),
+    applicant_first_name=mark_safe(u"Quentin"),
+    applicant_last_name=mark_safe(u"Potter"),
     opening=mark_safe("Professor of magic"),
     company=mark_safe("Magic & Co.")))
 
@@ -27,15 +27,20 @@ class CustomisableEmailsUpdateView(LoginRequiredMixin, RestrictedUpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(
-                CustomisableEmailsUpdateView, self).get_context_data(**kwargs)
+            CustomisableEmailsUpdateView, self
+        ).get_context_data(**kwargs)
         context["TEST_CONTEXT"] = TEST_CONTEXT
         return context
 
 
-class TestEmailTemplateRendererView(LoginRequiredMixin, AjaxResponseMixin,
-        JSONResponseMixin, View):
+class TestEmailTemplateRendererView(
+    LoginRequiredMixin,
+    AjaxResponseMixin,
+    JSONResponseMixin,
+    View
+):
 
-    def post_ajax(self, request):
+    def post_ajax(self, request, *args, **kwargs):
         try:
             subject_template = Template(request.POST.get("subject"))
             subject = subject_template.render(TEST_CONTEXT)

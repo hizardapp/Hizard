@@ -23,7 +23,7 @@
 }
 
 
-@mixin custom-button($colour, $hover_colour) {
+@mixin custom-button($colour, $hover-colour) {
   display: inline-block;
   margin: 0 15px 15px 0;
   padding: 14px 25px;
@@ -42,7 +42,7 @@
 
   &:hover {
     color: white;
-    box-shadow: 0 0 100px 0 rgba(255,255,255,0.2) inset,0 2px 0 0 $hover_colour;
+    box-shadow: 0 0 100px 0 rgba(255,255,255,0.2) inset,0 2px 0 0 $hover-colour;
   }
 }
 

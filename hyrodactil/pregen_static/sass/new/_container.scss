@@ -20,8 +20,18 @@
       color: white;
     }
   }
+
+  .help-text {
+    display: inline-block;
+    margin-top: 10px;
+  }
+
 }
 
+textarea {
+  min-height: 2em;
+  height: auto !important;
+}
 
 .container {
   padding: 2em;

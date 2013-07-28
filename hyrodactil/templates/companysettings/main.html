@@ -13,9 +13,26 @@
   <h1>{% trans "Settings" %}</h1>
 
   <ul class="inline-list settings-links">
-    <li><a class="{% active request 'companysettings:main' %}" href="{% url 'companysettings:main' %}">{% trans 'Users' %}</a></li>
-    <li><a class="{% active request 'companysettings:list_stages' %}" href="{% url 'companysettings:list_stages' %}">{% trans 'Interview Stages' %}</a></li>
-    <li><a class="{% active request 'companysettings:update_information' %}" href="{% url 'companysettings:update_information' %}">{% trans 'Company information' %}</a></li>
+    <li>
+      <a class="{% active request 'companysettings:main' %}" href="{% url 'companysettings:main' %}">
+        {% trans 'Users' %}
+      </a>
+    </li>
+    <li>
+      <a class="{% active request 'companysettings:list_stages' %}" href="{% url 'companysettings:list_stages' %}">
+        {% trans 'Interview Stages' %}
+      </a>
+    </li>
+    <li>
+      <a class="{% active request 'companysettings:update_information' %}" href="{% url 'companysettings:update_information' %}">
+        {% trans 'Company information' %}
+      </a>
+    </li>
+    <li>
+      <a class="{% active request 'customisable_emails:list' %}" href="{% url 'customisable_emails:list' %}">
+        {% trans 'Emails' %}
+      </a>
+    </li>
   </ul>
 
   {% block settings-content %}

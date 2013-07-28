@@ -1,31 +1,27 @@
-{% extends "app_page.html" %}
+{% extends "companysettings/main.html" %}
 
 {% load i18n %}
 {% load staticfiles %}
 
 {% block title %}{% trans 'Email templates' %}{% endblock title %}
 
-{% block page-content %}
-  <h2>{% trans 'Email templates' %}</h2>
+{% block settings-content %}
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Subject" %}</th>
+      </tr>
+    </thead>
 
-  <div>
-    <table>
-      <thead>
+    <tbody>
+      {% for emailtemplate in emailtemplate_list %}
         <tr>
-          <th>{% trans "Name" %}</th>
-          <th>{% trans "Subject" %}</th>
+          <td><a href="{% url "customisable_emails:edit" emailtemplate.pk %}">{{ emailtemplate.name }}</a></td>
+          <td>{{ emailtemplate.subject }}</td>
         </tr>
-      </thead>
+      {% endfor %}
+    </tbody>
 
-      <tbody>
-        {% for emailtemplate in emailtemplate_list %}
-          <tr>
-            <td><a href="{% url "customisable_emails:edit" emailtemplate.pk %}">{{ emailtemplate.name }}</a></td>
-            <td>{{ emailtemplate.subject }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-
-    </table>
-  </div>
-{% endblock page-content %}
+  </table>
+{% endblock settings-content %}
