@@ -1,9 +1,11 @@
-import json
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 
-from django.http import Http404, HttpResponseNotAllowed, HttpResponse
+from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.safestring import mark_safe
-from django.views.generic.base import TemplateView
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic.base import TemplateView, View
 
 from applications.forms import ApplicationForm
 from companies.models import Company
@@ -14,7 +16,7 @@ from .forms import InterestForm
 
 
 class LandingPageView(TemplateView):
-    template_name = "public/home.html"
+    template_name = "landing_page.html"
 
 
 class OpeningList(SubdomainRequiredMixin, TemplateView):
@@ -101,18 +103,20 @@ class ApplicationConfirmationView(TemplateView):
         return self.render_to_response(context)
 
 
-def add_interest(request):
-    if request.method != "POST":
-        return HttpResponseNotAllowed("")
+class InterestView(View):
+    def post(self, request, *args, **kwargs):
+        form = InterestForm(request.POST)
 
-    form = InterestForm(data=request.POST)
-    if form.is_valid():
-        form.save()
-        ret = dict(result='success',
-                message=unicode("Thanks for your interest, we'll keep in touch"))
-    else:
-        ret = dict(result='error',
-                message=unicode("Email seems invalid, please check it again"))
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                _('Thanks for your interest, we will send you a mail on release')
+            )
+        else:
+            messages.error(
+                request,
+                _('Email seems invalid, please check it again')
+            )
 
-    return HttpResponse(json.dumps(ret), content_type="application/json")
-
+        return redirect(reverse('public:landing-page'))

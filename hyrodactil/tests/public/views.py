@@ -11,6 +11,7 @@ from ..factories._companysettings import (
 from ..factories._openings import OpeningWithQuestionFactory
 
 from applications.models import Application, ApplicationAnswer
+from public.models import Interest
 from tests.utils import subdomain_get, career_site_get
 from customisable_emails.models import EmailTemplate
 
@@ -21,6 +22,12 @@ class PublicViewsTests(WebTest):
         response = subdomain_get(self.app, url)
         self.assertEqual(response.status_code, 200)
 
+    def test_anonymous_can_add_email(self):
+        url = reverse('public:landing-page')
+        form = subdomain_get(self.app, url).form
+        form['email'] =  'aston@martin.com'
+        form.submit()
+        self.assertEqual(Interest.objects.count(), 1)
 
 class ApplicationViewsTests(WebTest):
     def setUp(self):

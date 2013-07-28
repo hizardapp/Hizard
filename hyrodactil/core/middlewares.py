@@ -8,7 +8,7 @@ class AppSubdomainRequired(object):
     with HTTPS on live.
     """
 
-    public_urls = ['/landing_page/', '/favicon.ico']
+    public_urls = ['/landing_page/', '/add_interest/', '/favicon.ico']
 
     def process_request(self, request):
         # Do nothing if it's a career site
