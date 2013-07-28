@@ -1,11 +1,10 @@
-
 from django.contrib import messages
-
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView, CreateView, TemplateView, View
+from django.views.generic import FormView, CreateView, TemplateView
 
 from braces.views import LoginRequiredMixin
 
@@ -18,6 +17,7 @@ from .models import (
 from .threaded_discussion import group
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
+from customisable_emails import send_customised_email
 from openings.models import Opening
 
 
@@ -187,6 +187,17 @@ class HireView(LoginRequiredMixin, TemplateView):
             user=request.user,
             stage=hired_stage
         ).save()
+
+        applicant = application.applicant
+        opening = application.opening
+        send_customised_email("candidate_hired",
+            company=request.user.company,
+            to=applicant.email,
+            context=dict(applicant_first_name=applicant.first_name,
+              applicant_last_name=applicant.last_name,
+              company=mark_safe(opening.company.name),
+              opening=mark_safe(opening.title))
+        )
 
         messages.success(request, _('Applicant marked as hired.'))
 

@@ -1,6 +1,7 @@
 import os
 
 from django.core.urlresolvers import reverse
+from django.core import mail
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
@@ -8,6 +9,7 @@ from ..factories._applications import (
     ApplicationFactory, ApplicationAnswerFactory
 )
 from ..factories._companysettings import InterviewStageFactory
+from ..factories._customisable_emails import EmailTemplateFactory
 from ..factories._openings import OpeningWithQuestionFactory
 from applications.models import ApplicationMessage, Application, Applicant
 from tests.utils import subdomain_get
@@ -75,8 +77,6 @@ class ApplicationViewsTests(WebTest):
 
         self.assertContains(response, transition.user.name)
         self.assertContains(response, transition.stage)
-
-        # test email here?
 
     def test_discuss_an_application(self):
         application = ApplicationFactory(opening=self.opening)
@@ -164,8 +164,15 @@ class ApplicationViewsTests(WebTest):
 
     def test_hire_applicant(self):
         InterviewStageFactory(tag='HIRED')
+        EmailTemplateFactory(code="candidate_hired",
+            company=self.user.company,
+            subject="Congrats {{ applicant_first_name }}")
         application = ApplicationFactory(opening=self.opening)
         url = reverse(
             'applications:hire', args=(application.pk, )
         )
         subdomain_get(self.app, url, user=self.user)
+
+        self.assertEqual(len(mail.outbox), 1)
+        email, = mail.outbox
+        self.assertTrue("Bilbon" in email.subject)
