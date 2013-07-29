@@ -24,7 +24,7 @@
 
     <div class="large-8 columns navigation">
       <a class="nav-link" href="#features">{% trans 'Features' %}</a>
-      <a class="button-custom sign-up" href="{% url 'accounts:register' %}">{% trans 'Sign up' %}</a>
+      {% comment %}<a class="button-custom sign-up" href="{% url 'accounts:register' %}">{% trans 'Sign up' %}</a>{% endcomment %}
       <a class="nav-link" href="{% url 'auth:login' %}">{% trans 'Login' %}</a>
     </div>
   </div>
