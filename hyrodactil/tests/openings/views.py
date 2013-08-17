@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django_webtest import WebTest
 
 from ..factories._accounts import UserFactory
-from ..factories._openings import OpeningQuestionFactory, OpeningFactory
+from ..factories._openings import OpeningFactory
 from ..factories._companies import CompanyFactory
 
 from openings.models import Opening
@@ -18,9 +18,7 @@ class OpeningsViewsTests(WebTest):
 
     def test_arriving_on_opening_creation_page(self):
         url = reverse('openings:create_opening')
-
         response = subdomain_get(self.app, url, user=self.user)
-
         self.assertEqual(response.status_code, 200)
 
     def test_opening_creation(self):

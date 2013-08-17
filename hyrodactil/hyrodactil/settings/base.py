@@ -147,7 +147,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 
-    'core.middlewares.AppSubdomainRequired'
+    'core.middlewares.AppSubdomainRequired',
+    'core.middlewares.CompanyRequired'
 )
 ########## END MIDDLEWARE CONFIGURATION
 

@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.http import HttpResponsePermanentRedirect
+from django.core.urlresolvers import reverse
+from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 
 
 class AppSubdomainRequired(object):
@@ -40,3 +41,12 @@ class AppSubdomainRequired(object):
             )
 
         return None
+
+class CompanyRequired(object):
+    "Make sure the user has a company."
+
+    def process_request(self, request):
+        if (request.user.is_authenticated()
+            and request.user.company is None
+            and not request.path.startswith(reverse("companies:create"))):
+            return HttpResponseRedirect(reverse("companies:create"))

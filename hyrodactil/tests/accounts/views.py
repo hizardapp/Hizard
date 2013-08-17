@@ -488,18 +488,6 @@ class AccountsViewsTests(WebTest):
         subdomain_get(self.app, url, user=admin)
         self.assertEqual(len(CustomUser.objects.filter(id=user.id)), 0)
 
-    def test_promote_to_admin_without_being_admin(self):
-        fake_admin = UserFactory()
-        user = UserFactory(company=fake_admin.company)
-
-        url = reverse('accounts:delete', kwargs={'user_pk': user.id})
-
-        subdomain_get(self.app, url, user=fake_admin, status=404)
-
-    def test_promote_to_admin_different_company(self):
-        admin = UserFactory(is_company_admin=True)
-        user = UserFactory()
-
-        url = reverse('accounts:delete', kwargs={'user_pk': user.id})
-
-        subdomain_get(self.app, url, user=admin, status=404)
+    def test_user_without_company_is_redirected(self):
+        url = reverse('dashboard:dashboard')
+        subdomain_get(self.app, url, user=UserFactory(company=None), status=302)
