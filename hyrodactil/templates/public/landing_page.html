@@ -117,6 +117,36 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="row">
+      <h1 class="section-title">Your own jobs page</h1>
+      <div class="row">
+
+        <div class="large-6 columns">
+          <h3>Hizard openings</h3>
+          <div id="hizard-openings"></div>
+          <script type="text/javascript">
+             (function() {
+                var hiz = document.createElement('script');
+                hiz.type = 'text/javascript';
+                hiz.async = true;
+                hiz.src = '{{ hizard_prefix }}/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hiz);
+             })();
+          </script>
+          </p>
+        </div>
+
+        <div class="large-6 columns">
+          <h3>Easy to integrate</h3>
+          <p>Simply include our widget and your current openings will
+          appear on your website using your website style.  </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <div class="section footer">
     <div class="row">
       <div class="large-6 columns">

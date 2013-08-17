@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 
+from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.template import loader, Context
@@ -18,6 +19,11 @@ from .forms import InterestForm
 
 class LandingPageView(TemplateView):
     template_name = "public/landing_page.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(LandingPageView, self).get_context_data(**kwargs)
+        context["hizard_prefix"] = settings.COMPANY_URL_PREFIX % "hizard"
+        return context
 
 
 def get_context_for_subdomain(context, subdomain):
