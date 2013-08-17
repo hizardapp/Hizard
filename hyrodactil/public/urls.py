@@ -9,6 +9,11 @@ urlpatterns = patterns('',
         name='landing-page'
     ),
     url(
+        r'^embed.js$',
+        views.EmbedView.as_view(),
+        name='embed'
+    ),
+    url(
         r'^opening_list/$',
         views.OpeningList.as_view(),
         name='opening-list'

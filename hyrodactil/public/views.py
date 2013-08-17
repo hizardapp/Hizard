@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
+from django.template import loader, Context
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateView, View
@@ -19,21 +20,25 @@ class LandingPageView(TemplateView):
     template_name = "public/landing_page.html"
 
 
+def get_context_for_subdomain(context, subdomain):
+    company = get_object_or_404(
+        Company,
+        subdomain__iexact=subdomain
+    )
+    context['company'] = company
+    context['openings'] = company.opening_set.filter(
+        published_date__isnull=False
+    )
+
+    return context
+
+
 class OpeningList(SubdomainRequiredMixin, TemplateView):
     template_name = "public/opening_list.html"
 
     def get_context_data(self, **kwargs):
         context = super(OpeningList, self).get_context_data(**kwargs)
-        company = get_object_or_404(
-            Company,
-            subdomain__iexact=self.request.subdomain
-        )
-        context['company'] = company
-        context['openings'] = company.opening_set.filter(
-            published_date__isnull=False
-        )
-
-        return context
+        return get_context_for_subdomain(context, self.request.subdomain)
 
 
 class ApplyView(TemplateView):
@@ -120,3 +125,20 @@ class InterestView(View):
             )
 
         return redirect(reverse('public:landing-page'))
+
+
+class EmbedView(SubdomainRequiredMixin, TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super(EmbedView, self).get_context_data(**kwargs)
+        return get_context_for_subdomain(context, self.request.subdomain)
+
+    def get(self, request, *args, **kwargs):
+        context = Context(self.get_context_data(**kwargs))
+        embed_template = loader.get_template('public/embed.html')
+        embed_html = embed_template.render(context)
+
+        context = Context({'embed_html': embed_html})
+        embed_template_js = loader.get_template('public/embed.js')
+        embed_js = embed_template_js.render(context)
+
+        return HttpResponse(embed_js)

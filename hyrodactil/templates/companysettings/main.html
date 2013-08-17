@@ -33,6 +33,11 @@
         {% trans 'Emails' %}
       </a>
     </li>
+    <li>
+      <a class="{% active request 'companysettings:widget' %}" href="{% url 'companysettings:widget' %}">
+        {% trans 'Widget' %}
+      </a>
+    </li>
   </ul>
 
   {% block settings-content %}

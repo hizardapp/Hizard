@@ -132,3 +132,15 @@ class ApplicationViewsTests(WebTest):
         opening = OpeningWithQuestionFactory(company=self.user.company, published_date=None)
         url = reverse('public:apply', args=(opening.id,))
         career_site_get(self.app, url, self.user.company.subdomain, status=404)
+
+
+class EmbedViewsTest(WebTest):
+    def setUp(self):
+        self.user = UserFactory()
+        self.opening = OpeningWithQuestionFactory(company=self.user.company)
+
+    def test_basic_opening_embedding(self):
+        url = reverse('public:embed')
+        response = career_site_get(self.app, url, self.user.company.subdomain.lower())
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.opening.title)

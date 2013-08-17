@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, TemplateView, View
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
@@ -129,3 +129,28 @@ class UpdateCompanyInformationView(
 
     def get_object(self):
         return self.request.user.company
+
+
+class WidgetView(LoginRequiredMixin, TemplateView):
+    template_name = 'companysettings/widget.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(WidgetView, self).get_context_data(**kwargs)
+        embed_url = '//%s.%s/embed.js' % (
+            self.request.user.company.subdomain.lower(),
+            'spp.com:8000'
+        )
+        snippet = """
+<div id="hizard-openings"></div>\n
+<script type="text/javascript">
+    (function() {
+      var hiz = document.createElement('script');
+      hiz.type = 'text/javascript';
+      hiz.async = true;
+      hiz.src = '%s';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hiz);
+    })();
+</script>
+        """ % embed_url
+        context['snippet'] = snippet
+        return context

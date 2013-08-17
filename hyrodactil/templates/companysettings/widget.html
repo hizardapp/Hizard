@@ -1,0 +1,17 @@
+{% extends "companysettings/main.html" %}
+{% load i18n %}
+
+
+{% block title %}
+  {% trans 'Opening widget' %}
+{% endblock title %}
+
+
+{% block settings-content %}
+  {% trans 'Place the following snippet where you would like your openings to appear' %}
+
+  <pre class="widget-snippet">
+    {{ snippet }}
+  </pre>
+
+{% endblock settings-content %}

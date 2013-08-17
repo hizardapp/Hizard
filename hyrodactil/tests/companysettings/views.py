@@ -223,3 +223,12 @@ class CompanySettingsViewsTests(WebTest):
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, 'form', 'website', 'Enter a valid URL.')
+
+    def test_get_widget_view(self):
+        url = reverse('companysettings:widget')
+
+        page = subdomain_get(self.app, url, user=self.user)
+        self.assertContains(
+            page,
+            '%s.spp.com:8000/embed.js' % self.user.company.subdomain
+        )

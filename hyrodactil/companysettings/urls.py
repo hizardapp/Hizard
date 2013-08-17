@@ -34,5 +34,10 @@ urlpatterns = patterns('',
         views.UpdateCompanyInformationView.as_view(),
         name='update_information'
     ),
+    url(
+        r'^widget/$',
+        views.WidgetView.as_view(),
+        name='widget'
+    ),
 
 )

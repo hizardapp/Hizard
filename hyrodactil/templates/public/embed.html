@@ -1,0 +1,33 @@
+<style type="text/css">
+  .hizard-openings-list {
+    list-style-type: none;
+  }
+
+  .hizard-openings-list li {
+    padding: 10px 15px 5px;
+    border-top: 1px solid #98999B;
+    font-size: 1.1em;
+  }
+
+  .hizard-openings-list li:last-of-type {
+    border-bottom: 1px solid #98999B;
+  }
+
+  .hizard-openings-list li a {
+    color: #3473A9;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+  }
+</style>
+
+<ul class="hizard-openings-list">
+  {% for opening in openings %}
+    <li>
+      <a href="{{ opening.get_apply_url }}">{{ opening.title }}</a>
+    </li>
+    <li>
+      <a href="{{ opening.get_apply_url }}">{{ opening.title }}</a>
+    </li>
+  {% endfor %}
+</ul>
