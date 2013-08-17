@@ -46,7 +46,9 @@ class CompanyRequired(object):
     "Make sure the user has a company."
 
     def process_request(self, request):
-        if (request.user.is_authenticated()
-            and request.user.company is None
-            and not request.path.startswith(reverse("companies:create"))):
+        if (not request.path.startswith(reverse("auth:logout")) and
+            not request.path.startswith("/admin") and
+            request.user.is_authenticated() and
+            request.user.company is None and
+            not request.path.startswith(reverse("companies:create"))):
             return HttpResponseRedirect(reverse("companies:create"))

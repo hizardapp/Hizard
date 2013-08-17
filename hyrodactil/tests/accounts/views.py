@@ -173,6 +173,7 @@ class AccountsViewsTests(WebTest):
         """
         user = UserFactory()
         response = subdomain_get(self.app, reverse('auth:logout'), user=user)
+        self.assertEqual(response.request.path, reverse("auth:login"))
         self.assertTemplateUsed(response, 'accounts/login.html')
         self.assertNotIn('_auth_user_id', self.app.session)
 
