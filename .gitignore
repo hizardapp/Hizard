@@ -25,3 +25,6 @@ logs/
 # Sass
 .sass-cache
 /hyrodactil/media/
+
+# Coverage
+.coverage
