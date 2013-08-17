@@ -15,3 +15,6 @@ class CompanyForm(forms.ModelForm):
         self.fields['subdomain'].label = _('Url of your career site (***.hizard.com)')
         self.fields['website'].label = _('Company website (will appear on career site)')
         self.fields['description'].label = _('Company description (will appear on career site)')
+
+    def clean_subdomain(self):
+        return self.cleaned_data['subdomain'].lower()

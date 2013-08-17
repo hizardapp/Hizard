@@ -39,7 +39,7 @@ class ApplicationViewsTests(WebTest):
         self.user.company.subdomain = self.user.company.subdomain.title()
         self.user.company.save()
 
-        page = career_site_get(self.app, url, self.user.company.subdomain.lower())
+        page = career_site_get(self.app, url, self.user.company.subdomain)
 
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, self.opening.title)
@@ -55,13 +55,13 @@ class ApplicationViewsTests(WebTest):
             published_date=None
         )
         url = reverse('public:opening-list')
-        page = career_site_get(self.app, url, self.user.company.subdomain.lower())
+        page = career_site_get(self.app, url, self.user.company.subdomain)
         self.assertNotContains(page, 'Dreamer')
 
     def test_get_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))
 
-        page = career_site_get(self.app, url, self.user.company.subdomain.lower())
+        page = career_site_get(self.app, url, self.user.company.subdomain)
 
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, self.opening.company.name)
@@ -83,7 +83,7 @@ class ApplicationViewsTests(WebTest):
             body="Dear {{applicant_first_name}}, Best regards",
         )
 
-        form = career_site_get(self.app, url, self.user.company.subdomain.lower()).form
+        form = career_site_get(self.app, url, self.user.company.subdomain).form
 
         form['first_name'] = 'Bilbon'
         form['last_name'] = 'Sacquet'
@@ -118,7 +118,7 @@ class ApplicationViewsTests(WebTest):
 
     def test_invalid_post_application_form(self):
         url = reverse('public:apply', args=(self.opening.id,))
-        form = career_site_get(self.app, url, self.user.company.subdomain.lower()).form
+        form = career_site_get(self.app, url, self.user.company.subdomain).form
 
         form['first_name'] = 'Software Developer'
         form['last_name'] = 'Fait des logiciels.'
@@ -131,4 +131,4 @@ class ApplicationViewsTests(WebTest):
     def test_get_apply_form_unpublished(self):
         opening = OpeningWithQuestionFactory(company=self.user.company, published_date=None)
         url = reverse('public:apply', args=(opening.id,))
-        career_site_get(self.app, url, self.user.company.subdomain.lower(), status=404)
+        career_site_get(self.app, url, self.user.company.subdomain, status=404)
