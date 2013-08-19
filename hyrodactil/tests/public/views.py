@@ -12,7 +12,7 @@ from ..factories._openings import OpeningWithQuestionFactory
 
 from applications.models import Application, ApplicationAnswer
 from public.models import Interest
-from tests.utils import subdomain_get, career_site_get
+from tests.utils import subdomain_get, career_site_get, career_site_post
 from customisable_emails.models import EmailTemplate
 
 
@@ -28,6 +28,16 @@ class PublicViewsTests(WebTest):
         form['email'] =  'aston@martin.com'
         form.submit()
         self.assertEqual(Interest.objects.count(), 1)
+
+    def test_invalid_interest_email_error(self):
+        url = reverse('public:landing-page')
+        form = subdomain_get(self.app, url).form
+        form['email'] =  'astonmartin.com'
+        response = form.submit().follow()
+
+        self.assertEqual(Interest.objects.count(), 0)
+        self.assertContains(response, 'invalid')
+
 
 class ApplicationViewsTests(WebTest):
     def setUp(self):
@@ -131,6 +141,23 @@ class ApplicationViewsTests(WebTest):
     def test_get_apply_form_unpublished(self):
         opening = OpeningWithQuestionFactory(company=self.user.company, published_date=None)
         url = reverse('public:apply', args=(opening.id,))
+        career_site_get(self.app, url, self.user.company.subdomain, status=404)
+
+    def test_get_inexisting_opening_form(self):
+        url = reverse('public:apply', args=(42,))
+        career_site_get(self.app, url, self.user.company.subdomain, status=404)
+
+    def test_post_inexisting_opening_form(self):
+        url = reverse('public:apply', args=(42,))
+        career_site_post(self.app, url, self.user.company.subdomain, status=404)
+
+    def test_post_unpublished_opening_form(self):
+        opening = OpeningWithQuestionFactory(company=self.user.company, published_date=None)
+        url = reverse('public:apply', args=(opening.id,))
+        career_site_post(self.app, url, self.user.company.subdomain, status=404)
+
+    def test_get_application_confirmation_opening_not_exist(self):
+        url = reverse('public:confirmation', args=(42,))
         career_site_get(self.app, url, self.user.company.subdomain, status=404)
 
 

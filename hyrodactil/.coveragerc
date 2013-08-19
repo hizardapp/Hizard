@@ -5,5 +5,3 @@ omit =
      *__init__*
      *manage*
 
-[report]
-exclude_lines = def __unicode__

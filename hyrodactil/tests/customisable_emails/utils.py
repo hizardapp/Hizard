@@ -10,10 +10,21 @@ class UtilsTest(TestCase):
     def test_get_template(self):
         company = CompanyFactory()
         EmailTemplateFactory(code="confirmation", company=company)
-        subject_template, body_template = get_email_template(company=company,
-                code="confirmation")
+        subject_template, body_template = get_email_template(
+            company=company,
+            code="confirmation"
+        )
         self.assertTrue(subject_template)
         self.assertTrue(body_template)
+
+    def test_get_template_failure(self):
+        company = CompanyFactory()
+        subject_template, body_template = get_email_template(
+            company=company,
+            code="confirmation"
+        )
+        self.assertIsNone(subject_template)
+        self.assertIsNone(body_template)
 
     def test_send_template(self):
         company = CompanyFactory()

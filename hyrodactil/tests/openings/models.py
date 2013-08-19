@@ -6,6 +6,7 @@ from applications.models import Application
 from ..factories._applications import ApplicationFactory
 from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningWithQuestionFactory
+from ..factories._companysettings import InterviewStageFactory
 
 
 class OpeningsModelsTests(TestCase):
@@ -45,3 +46,13 @@ class OpeningsModelsTests(TestCase):
         application = ApplicationFactory(opening=opening)
         opening.questions.all().delete()
         self.assertEqual(Application.objects.count(), 1)
+
+    def test_get_stage_counts(self):
+        opening = OpeningWithQuestionFactory()
+        stage1 = InterviewStageFactory(company=opening.company)
+        stage2 = InterviewStageFactory(company=opening.company)
+        application = ApplicationFactory(opening=opening)
+        application.current_stage = stage1
+        application.save()
+
+        self.assertEqual([1, 0], list(opening.stage_counts()))

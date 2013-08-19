@@ -199,3 +199,19 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(len(mail.outbox), 1)
         email, = mail.outbox
         self.assertTrue("Bilbon" in email.subject)
+
+    def test_can_only_rate_own_company_opening(self):
+        application = ApplicationFactory(opening=self.opening)
+        other_user = UserFactory()
+        url = reverse(
+            'applications:rate', args=(application.pk, -1,)
+        )
+        page = subdomain_get(self.app, url, other_user, status=404)
+
+    def test_can_only_hire_own_company_applicant(self):
+        application = ApplicationFactory(opening=self.opening)
+        other_user = UserFactory()
+        url = reverse(
+            'applications:hire', args=(application.pk, )
+        )
+        subdomain_get(self.app, url, other_user, status=404)

@@ -224,4 +224,4 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         return settings.STATIC_URL + 'img/default_avatar.jpg'
 
     def __unicode__(self):
-        return self.email
+        return self.get_full_name()

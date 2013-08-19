@@ -40,3 +40,15 @@ def career_site_get(app, view_name, company_name, status=None):
         return response.follow()
 
     return response
+
+def career_site_post(app, view_name, company_name, status=None):
+    response = app.post(
+        view_name,
+        headers=dict(Host="%s.%s" % (company_name, settings.PUBLIC_DOMAIN)),
+        status=status
+    )
+
+    if response.status_code in [301, 302]:
+        return response.follow()
+
+    return response

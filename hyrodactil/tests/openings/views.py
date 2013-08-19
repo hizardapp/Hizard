@@ -125,3 +125,11 @@ class OpeningsViewsTests(WebTest):
         subdomain_get(self.app, url, user=self.user)
 
         self.assertIsNone(Opening.objects.get().published_date)
+
+    def test_publish_another_company_opening(self):
+        opening = OpeningFactory(
+            company=self.user.company, published_date=datetime.now()
+        )
+        user2 = UserFactory()
+        url = reverse('openings:publish_opening', args=(opening.id,))
+        subdomain_get(self.app, url, user=user2, status=404)

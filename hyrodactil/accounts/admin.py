@@ -13,9 +13,6 @@ class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
 
-    def clean_password(self):
-        return self.initial["password"]
-
 
 class CustomUserAdmin(UserAdmin):
     add_form = UserCreationForm

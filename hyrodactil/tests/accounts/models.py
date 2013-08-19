@@ -153,3 +153,23 @@ class CustomUserModelTests(TestCase):
     def test_get_avatar_url_without_avatar(self):
         user = UserFactory()
         self.assertTrue(settings.STATIC_URL in user.get_avatar_url())
+
+    def test_get_full_name(self):
+        user = UserFactory()
+        self.assertEqual(user.get_full_name(), user.email)
+
+    def test_get_short_name(self):
+        user = UserFactory()
+        self.assertEqual(user.get_short_name(), user.name)
+
+    def test_get_status_active(self):
+        user = UserFactory()
+        self.assertEqual(unicode(user.get_status()), 'Active')
+
+    def test_get_status_invited(self):
+        user = UserFactory(is_active=False)
+        self.assertEqual(unicode(user.get_status()), 'Invited')
+
+    def test_get_fallback_status(self):
+        user = UserFactory(is_active=False, activation_key='')
+        self.assertEqual(unicode(user.get_status()), 'Disabled')
