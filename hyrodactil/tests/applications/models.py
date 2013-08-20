@@ -1,18 +1,17 @@
 from django.test import TestCase
 
-from ..factories._companysettings import InterviewStageFactory
-from ..factories._applications import (
-    ApplicationFactory, ApplicantFactory, ApplicationRatingFactory
-)
-from ..factories._applications import ApplicationStageTransitionFactory
+from ..factories._applications import ApplicationFactory, ApplicantFactory
 from ..factories._accounts import UserFactory
 from ..factories._companies import CompanyFactory
 
 
 class ApplicationModelTests(TestCase):
     def test_get_full_name(self):
-        bob = ApplicantFactory.build()
+        bob = ApplicantFactory()
         self.assertEqual(bob.get_full_name(), 'Bilbon Sacquet')
+        self.assertEqual(unicode(bob), u'Bilbon Sacquet')
+        self.assertEqual(unicode(ApplicationFactory(applicant=bob)),
+                u'Bilbon Sacquet')
 
     def test_get_rating(self):
         company = CompanyFactory()

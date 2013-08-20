@@ -38,6 +38,11 @@ class CustomUserModelTests(TestCase):
         self.assertEqual(user, user_found)
         self.assertEqual(user.is_active, False)
 
+    def test_create_user_without_email(self):
+        with self.assertRaises(ValueError):
+            CustomUser.objects.create_user(email="",
+                    name="Bob", password="PASSWORD")
+
     def test_create_superuser(self):
         user = CustomUser.objects.create_superuser(**self.user_info)
         user_found = CustomUser.objects.get(id=1)
@@ -128,6 +133,9 @@ class CustomUserModelTests(TestCase):
 
         self.assertTrue(SHA1_RE.search(key))
 
+    def test_activate_no_user(self):
+        self.assertFalse(CustomUser.objects.activate_user(""))
+
     def test_delete_expired_users(self):
         user = UserFactory(is_active=False)
         days = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
@@ -157,6 +165,7 @@ class CustomUserModelTests(TestCase):
     def test_get_full_name(self):
         user = UserFactory()
         self.assertEqual(user.get_full_name(), user.email)
+        self.assertEqual(str(user), user.email)
 
     def test_get_short_name(self):
         user = UserFactory()

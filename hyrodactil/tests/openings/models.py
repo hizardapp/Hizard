@@ -6,6 +6,7 @@ from applications.models import Application
 from ..factories._applications import ApplicationFactory
 from ..factories._companies import CompanyFactory
 from ..factories._openings import OpeningFactory, OpeningWithQuestionFactory
+from ..factories._openings import OpeningQuestionFactory
 from ..factories._companysettings import InterviewStageFactory
 
 
@@ -41,16 +42,22 @@ class OpeningsModelsTests(TestCase):
         opening.published_date = datetime.now()
         self.assertEqual(unicode(opening.get_status()), 'Published')
 
+    def test_get_unicode_opening_and_quesionts(self):
+        question = OpeningQuestionFactory(title="WPM",
+           opening__title="CEO")
+        self.assertEqual(unicode(question), u"WPM")
+        self.assertEqual(unicode(question.opening), u"CEO")
+
     def test_question_deletion_keeps_applications(self):
         opening = OpeningWithQuestionFactory()
-        application = ApplicationFactory(opening=opening)
+        ApplicationFactory(opening=opening)
         opening.questions.all().delete()
         self.assertEqual(Application.objects.count(), 1)
 
     def test_get_stage_counts(self):
         opening = OpeningWithQuestionFactory()
         stage1 = InterviewStageFactory(company=opening.company)
-        stage2 = InterviewStageFactory(company=opening.company)
+        InterviewStageFactory(company=opening.company)
         application = ApplicationFactory(opening=opening)
         application.current_stage = stage1
         application.save()

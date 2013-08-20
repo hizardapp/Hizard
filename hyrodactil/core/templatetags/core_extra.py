@@ -42,5 +42,5 @@ def active(parser, token):
     try:
         args = token.split_contents()
         return ActiveUrlNode(args[1], args[2:])
-    except ValueError:
+    except IndexError:
         raise template.TemplateSyntaxError, "%r tag requires at least 2 arguments" % token.contents.split()[0]

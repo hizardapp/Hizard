@@ -4,4 +4,5 @@ omit =
     tests/*
      *__init__*
      *manage*
+     tests_timer.py
 

@@ -1,4 +1,5 @@
 import base64
+import datetime
 import os
 
 from django.contrib.auth.forms import (
@@ -91,6 +92,20 @@ class AccountsViewsTests(WebTest):
         Should raise a 404, using client instead of app since app would fail
         """
         url = reverse('accounts:activate', args=('FAKE',))
+        response = subdomain_get(self.app, url, status=404)
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_expired_activation(self):
+        """
+        GET the activation page with an expired activation key
+        Should raise a 404, using client instead of app since app would fail
+        """
+        user = UserFactory(is_active=False,
+                created=datetime.datetime.now() - datetime.timedelta(
+                                days=settings.ACCOUNT_ACTIVATION_DAYS+1),
+                company=None
+        )
+        url = reverse('accounts:activate', args=(user.activation_key,))
         response = subdomain_get(self.app, url, status=404)
         self.assertEqual(response.status_code, 404)
 
