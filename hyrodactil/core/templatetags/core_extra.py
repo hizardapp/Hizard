@@ -1,7 +1,10 @@
+import logging
+
 from django import template
 from django.core.urlresolvers import resolve
 
 register = template.Library()
+logger = logging.getLogger(__name__)
 
 
 class ActiveUrlNode(template.Node):
@@ -22,8 +25,8 @@ class ActiveUrlNode(template.Node):
                     any_of = True
                     break
         except:
-            # TODO - think a better way to log these
-            print "Cannot resolve %s" % request.path_info
+            return ''
+
         return self.return_value if any_of else ''
 
 
