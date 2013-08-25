@@ -12,12 +12,18 @@ form {
     color: black;
     font-size: .9em;
   }
-  .error input {
-    border-color: $alert-error-background;
+
+  .error {
+    input {
+      border-color: $alert-error-background;
+    }
+
+    small.error {
+      background-color: $alert-error-background;
+      padding: 5px;
+      margin-top: 0;
+    }
   }
-  small.error {
-    background-color: $alert-error-background;
-    padding: 5px;
-  }
+
 
 }
