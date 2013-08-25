@@ -1,7 +1,18 @@
-{% extends "base.html" %}
+{% extends "account_base.html" %}
+{% load i18n %}
 
-{% block title %}Internal Error{% endblock %}
+{% block title %}Internal error{% endblock %}
 
 {% block content %}
-  <p>We're looking into it</p>
+  <div class="box large-3 columns large-centered account-box">
+    <div class="box-error box-header">
+      <h2>{% trans 'Internal error' %}</h2>
+    </div>
+    <p class="text-center">
+      {% blocktrans %}We have been notified of this error and are looking into it.{% endblocktrans %}
+    </p>
+    <p class="text-center">
+      {% blocktrans %}You can keep working by going back to the <a href="/">home page</a>.{% endblocktrans %}
+    </p>
+  </div>
 {% endblock content %}

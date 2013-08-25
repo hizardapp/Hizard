@@ -1,8 +1,18 @@
-{% extends "base.html" %}
+{% extends "account_base.html" %}
+{% load i18n %}
 
 {% block title %}Page Not found{% endblock %}
 
-
 {% block content %}
-  <p>This is not the page you were looking for.</p>
+  <div class="box large-3 columns large-centered account-box">
+    <div class="box-header">
+      <h2>{% trans 'Page not found' %}</h2>
+    </div>
+    <p class="text-center">
+      {% blocktrans %}This is not the page you were looking for.{% endblocktrans %}
+    </p>
+    <p class="text-center">
+      {% blocktrans %}When possible, make a u-turn; otherwise go back to the <a href="/">home page</a>.{% endblocktrans %}
+    </p>
+  </div>
 {% endblock content %}
