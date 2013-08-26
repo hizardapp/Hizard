@@ -13,9 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, FormView, View, TemplateView
-from django.views.generic import UpdateView
 
-from core.views import MessageMixin
 from .forms import UserCreationForm, MinLengthSetPasswordForm, ChangeDetailsForm
 from .forms import MinLengthChangePasswordForm, InvitedRegistrationForm
 from .models import CustomUser
