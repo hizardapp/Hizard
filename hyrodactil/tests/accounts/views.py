@@ -121,6 +121,14 @@ class AccountsViewsTests(WebTest):
             isinstance(response.context['form'], AuthenticationForm)
         )
 
+    def test_get_demo_login_view(self):
+        response = subdomain_get(self.app, reverse('auth:login'),
+            data=dict(demo=1))
+        self.assertEqual(response.status_code, 200)
+        form = response.forms[0]
+        self.assertEqual(form['username'].value, "demo")
+        self.assertEqual(form['password'].value, "demo")
+
     def test_post_login_view_success_without_company(self):
         """
         POST to the view to login

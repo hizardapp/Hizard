@@ -29,6 +29,12 @@
       {% endblocktrans %}
     </p>
 
+    {% if demo_login %}
+      <p class="text-center">
+        <p>{% trans "You are about to log-in with the demo account." %}</p>
+      </p>
+    {% endif %}
+
     <form action="." method="POST" class="large-10 columns large-centered">
       {% csrf_token %}
 

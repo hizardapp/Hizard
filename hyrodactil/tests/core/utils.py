@@ -1,10 +1,12 @@
 from django_webtest import WebTest
 
 from ..factories._companies import CompanyFactory
+from accounts.models import CustomUser
+from companies.models import Company
 from companysettings.models import InterviewStage
-from openings.models import Opening
-from customisable_emails.models import EmailTemplate
 from core import utils
+from customisable_emails.models import EmailTemplate
+from openings.models import Opening
 
 
 class SetupCompanyTests(WebTest):
@@ -33,3 +35,22 @@ class SetupCompanyTests(WebTest):
         )
         self.assertTrue(Opening.objects.filter(company=company).exists())
         self.assertEqual(EmailTemplate.objects.all().count(), 3)
+
+
+class SetupDemoAccountTest(WebTest):
+    def test_add_demo_account(self):
+        demo_user = utils.create_demo_account()
+        self.assertTrue(demo_user.check_password("demo"))
+        self.assertTrue(demo_user.company)
+        self.assertEqual(EmailTemplate.objects.filter(
+          company=demo_user.company).count(), 3)
+
+    def test_reset_existing_demo_account(self):
+        demo_user = utils.create_demo_account()
+        # add documents
+
+
+        utils.delete_demo_company()
+        self.assertFalse(CustomUser.objects.filter(pk=demo_user.pk))
+        self.assertFalse(Company.objects.filter(pk=demo_user.company.pk))
+        self.assertEqual(EmailTemplate.objects.all().count(), 0)

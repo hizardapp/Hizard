@@ -1,6 +1,8 @@
 from django.utils.translation import ugettext_lazy as _
 
+from companies.models import Company
 from companysettings.models import InterviewStage
+from accounts.models import CustomUser
 from openings.models import Opening
 from customisable_emails.models import EmailTemplate
 
@@ -62,3 +64,19 @@ Best regards""",
 Your application has been accepted.
 Best regards""",
     )
+
+
+def delete_demo_company():
+    # related resources?
+    Company.objects.filter(name="demo").delete()
+
+def create_demo_account():
+    company = Company.objects.create(name="demo",
+            subdomain="demo",
+            website="http://hizard.com",
+            description="Test account")
+    setup_company(company)
+    return CustomUser.objects.create_user("demo",
+            "demo",
+            password="demo",
+            company=company)

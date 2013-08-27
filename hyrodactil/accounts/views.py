@@ -88,12 +88,26 @@ class LoginView(FormView):
         if self.request.session.get('from_activation', False):
             context['from_activation'] = True
             del self.request.session['from_activation']
+        if self.request.GET.get("demo"):
+            context["demo_login"] = True
         return context
 
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
         return super(LoginView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(LoginView, self).get_form_kwargs()
+        if self.request.GET.get("demo"):
+            kwargs['initial'] = dict(username="demo", password="demo")
+        return kwargs
+
+    def get_form(self, form_class):
+        form = super(LoginView, self).get_form(form_class)
+        if self.request.GET.get("demo"):
+            form.fields["password"].widget.render_value = True
+        return form
 
     def get_success_url(self):
         if self.request.user.company is None:

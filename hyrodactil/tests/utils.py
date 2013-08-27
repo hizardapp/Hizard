@@ -1,9 +1,10 @@
 from django.conf import settings
 
 
-def subdomain_get(app, view_name, user=None, status=None):
+def subdomain_get(app, view_name, user=None, status=None, data=None):
     response = app.get(
         view_name,
+        params=data,
         user=user,
         status=status,
         headers=dict(Host=settings.APP_SITE_DOMAIN)
