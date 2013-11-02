@@ -206,7 +206,7 @@ class ApplicationViewsTests(WebTest):
         url = reverse(
             'applications:rate', args=(application.pk, -1,)
         )
-        page = subdomain_get(self.app, url, other_user, status=404)
+        subdomain_get(self.app, url, other_user, status=404)
 
     def test_can_only_hire_own_company_applicant(self):
         application = ApplicationFactory(opening=self.opening)
