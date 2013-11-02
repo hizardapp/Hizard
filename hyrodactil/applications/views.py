@@ -10,10 +10,7 @@ from braces.views import LoginRequiredMixin
 
 from .forms import ApplicationStageTransitionForm, ApplicationMessageForm
 from .forms import ApplicationForm
-from .models import (
-    Application, ApplicationMessage,
-    ApplicationStageTransition, Applicant
-)
+from .models import Application, ApplicationMessage, Applicant
 from .threaded_discussion import group
 from companysettings.models import InterviewStage
 from core.views import MessageMixin, RestrictedListView
@@ -117,9 +114,9 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
         application.current_stage = transition.stage
         application.save()
 
+        applicant = application.applicant
+        opening = application.opening
         if transition.stage.tag == "REJECTED":
-            applicant = application.applicant
-            opening = application.opening
             send_customised_email("application_rejected",
                 company=opening.company,
                 to=applicant.email,
@@ -128,6 +125,16 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
                   company=mark_safe(opening.company.name),
                   opening=mark_safe(opening.title))
             )
+        elif transition.stage.tag == "HIRED":
+            send_customised_email("candidate_hired",
+                company=opening.company,
+                to=applicant.email,
+                context=dict(applicant_first_name=applicant.first_name,
+                  applicant_last_name=applicant.last_name,
+                  company=mark_safe(opening.company.name),
+                  opening=mark_safe(opening.title))
+            )
+            messages.success(self.request, _('Applicant marked as hired.'))
 
         return redirect(
             'applications:application_detail',
@@ -177,44 +184,6 @@ class RateView(LoginRequiredMixin, TemplateView):
             messages.success(request, _('Application rated.'))
         else:
             messages.error(request, _("Couldn't rate the application"))
-
-        return redirect(
-            reverse('applications:application_detail', args=(application.id,))
-        )
-
-
-class HireView(LoginRequiredMixin, TemplateView):
-    def get(self, request, *args, **kwargs):
-        application = get_object_or_404(
-            Application.objects.select_related('opening', 'opening__company'),
-            id=self.kwargs['application_id']
-        )
-        if application.opening.company != request.user.company:
-            raise Http404
-
-        hired_stage = InterviewStage.objects.get(tag='HIRED',
-                company=request.user.company)
-
-        ApplicationStageTransition(
-            application=application,
-            user=request.user,
-            stage=hired_stage
-        ).save()
-        application.current_stage = hired_stage
-        application.save()
-
-        applicant = application.applicant
-        opening = application.opening
-        send_customised_email("candidate_hired",
-            company=request.user.company,
-            to=applicant.email,
-            context=dict(applicant_first_name=applicant.first_name,
-              applicant_last_name=applicant.last_name,
-              company=mark_safe(opening.company.name),
-              opening=mark_safe(opening.title))
-        )
-
-        messages.success(request, _('Applicant marked as hired.'))
 
         return redirect(
             reverse('applications:application_detail', args=(application.id,))

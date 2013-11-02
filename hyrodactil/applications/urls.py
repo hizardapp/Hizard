@@ -32,10 +32,5 @@ urlpatterns = patterns('',
        r'^rate/(?P<application_id>\d+)/(?P<rating>-?\d+)$',
        views.RateView.as_view(),
        name='rate'
-   ),
-   url(
-        r'^hire/(?P<application_id>\d+)/$',
-        views.HireView.as_view(),
-        name='hire'
-    )
+   )
 )

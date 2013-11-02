@@ -170,15 +170,24 @@ class ApplicationViewsTests(WebTest):
             subject="Congrats {{ applicant_first_name }}")
         application = ApplicationFactory(opening=self.opening)
         url = reverse(
-            'applications:hire', args=(application.pk, )
+            'applications:application_detail', args=(application.pk,)
         )
-        subdomain_get(self.app, url, user=self.user)
+        response = subdomain_get(self.app, url, user=self.user)
+
+        form = response.forms['transition-form']
+        form['stage'] = '%s' % hired_stage.pk
+        response = form.submit().follow()
 
         self.assertEqual(len(mail.outbox), 1)
         email, = mail.outbox
         self.assertTrue("Bilbon" in email.subject)
+
         application = Application.objects.get(pk=application.pk)
         self.assertEqual(application.current_stage, hired_stage)
+
+        transition = application.stage_transitions.get()
+        self.assertEqual(transition.user, self.user)
+        self.assertEqual(transition.stage, hired_stage)
 
     def test_reject_applicant(self):
         application = ApplicationFactory(opening=self.opening)
@@ -205,13 +214,5 @@ class ApplicationViewsTests(WebTest):
         other_user = UserFactory()
         url = reverse(
             'applications:rate', args=(application.pk, -1,)
-        )
-        subdomain_get(self.app, url, other_user, status=404)
-
-    def test_can_only_hire_own_company_applicant(self):
-        application = ApplicationFactory(opening=self.opening)
-        other_user = UserFactory()
-        url = reverse(
-            'applications:hire', args=(application.pk, )
         )
         subdomain_get(self.app, url, other_user, status=404)
