@@ -200,6 +200,8 @@ class HireView(LoginRequiredMixin, TemplateView):
             user=request.user,
             stage=hired_stage
         ).save()
+        application.current_stage = hired_stage
+        application.save()
 
         applicant = application.applicant
         opening = application.opening

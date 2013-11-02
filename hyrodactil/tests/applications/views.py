@@ -165,7 +165,8 @@ class ApplicationViewsTests(WebTest):
 
     def test_hire_applicant(self):
         InterviewStageFactory(tag='HIRED', company=CompanyFactory())
-        InterviewStageFactory(tag='HIRED', company=self.user.company)
+        hired_stage = InterviewStageFactory(tag='HIRED',
+                company=self.user.company)
         EmailTemplateFactory(code="candidate_hired",
             company=self.user.company,
             subject="Congrats {{ applicant_first_name }}")
@@ -178,6 +179,8 @@ class ApplicationViewsTests(WebTest):
         self.assertEqual(len(mail.outbox), 1)
         email, = mail.outbox
         self.assertTrue("Bilbon" in email.subject)
+        application = Application.objects.get(pk=application.pk)
+        self.assertEqual(application.current_stage, hired_stage)
 
     def test_reject_applicant(self):
         application = ApplicationFactory(opening=self.opening)
