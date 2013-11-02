@@ -46,6 +46,9 @@
     <a class="{% active request 'companysettings:main' %}" href="{% url 'companysettings:main' %}">
       <i class="icon-cogs icon-2x"></i>{% trans 'Settings' %}
     </a>
+    <a href="{% url 'auth:logout' %}">
+      <i class="icon-off icon-2x"></i>{% trans 'Logout' %}
+    </a>
   </nav>
 
   <nav class="top-menu">
