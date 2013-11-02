@@ -68,13 +68,11 @@ class ApplicationViewsTests(WebTest):
 
         form = response.forms['transition-form']
         form['stage'] = '%s' % phoned.pk
-        form['note'] = 'Yep, looks good'
         response = form.submit().follow()
 
         transition = application.stage_transitions.get()
         self.assertEqual(transition.user, self.user)
         self.assertEqual(transition.stage, phoned)
-        self.assertEqual(transition.note, "Yep, looks good")
 
         self.assertContains(response, transition.user.name)
         self.assertContains(response, transition.stage)
@@ -197,7 +195,6 @@ class ApplicationViewsTests(WebTest):
 
         form = response.forms['transition-form']
         form['stage'] = '%s' % goodbye.pk
-        form['note'] = 'Nope, doesn\t fit the description'
         response = form.submit().follow()
         self.assertEqual(len(mail.outbox), 1)
         email, = mail.outbox

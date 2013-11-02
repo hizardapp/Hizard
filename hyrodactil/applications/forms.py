@@ -117,13 +117,7 @@ class ApplicationStageTransitionForm(forms.ModelForm):
 
     class Meta:
         model = ApplicationStageTransition
-        fields = ('stage', 'note')
-        widgets = {
-            'note': forms.Textarea(attrs={
-                'rows': 4,
-                'placeholder': 'Additional comment',
-                'cols': 55}),
-        }
+        fields = ('stage',)
 
 
 class ApplicationMessageForm(forms.ModelForm):

@@ -104,7 +104,6 @@ class ApplicationStageTransition(TimeStampedModel):
     )
     user = models.ForeignKey(CustomUser, null=True)
     stage = models.ForeignKey(InterviewStage)
-    note = models.TextField(blank=True)
 
     class Meta:
         ordering = '-created',
