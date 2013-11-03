@@ -53,11 +53,12 @@
       {% include 'core/_field.html' with field=form.city %}
       {% include 'core/_field.html' with field=form.loc_postcode %}
 
-      <div class="questions">
+      <div class="questions large-12 columns">
+        <h4>{% trans 'Questions' %}</h4>
         {% for question in form.questions %}
-          <div class="large-12 columns">
-            <label class="remove-question"><i class="icon-trash icon-2x"></i>Delete</label>
-            <input type="text" name="question-{{ question.id }}" value="{{ question.title }}"/>
+          <div class="question large-12 columns">
+            <div class="large-1 columns remove-question"><i class="icon-trash icon-large"></i></div>
+            <div class="large-11 columns"><input type="text"  name="question-{{ question.id }}" value="{{ question.title }}"/></div>
           </div>
         {% endfor %}
       </div>
@@ -115,14 +116,14 @@
         e.preventDefault();
         var rand = Math.random().toString(36).substring(7);
         $input = $(
-          '<div class="large-12 columns"><label class="remove-question"><i class="icon-trash icon-2x"></i>{% trans "Delete" %}</label><input type="text" name="question-' + rand + '"/></div>'
+          '<div class="question large-12 columns"><div class="large-1 columns remove-question"><i class="icon-trash icon-large"></i></div><div class="large-11 columns"><input type="text" class="large-10 columns" name="question-' + rand + '"/></div></div></div>'
         );
         $('.questions').append($input);
         $input.focus();
       });
 
       $('body').on("click", ".remove-question", function(e){
-        $(this).parent().remove();
+        $(this).parents('.question').remove();
       });
 
     });
