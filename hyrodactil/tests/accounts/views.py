@@ -309,6 +309,9 @@ class AccountsViewsTests(WebTest):
 
         self.assertTemplateUsed(response, 'accounts/login.html')
         self.assertEqual(len(mail.outbox), 1)
+        email, = mail.outbox
+        self.assertTrue("app.test.com" in email.body)
+        self.assertTrue("app.test.com" in email.subject)
 
     def test_post_password_reset_failure(self):
         """
