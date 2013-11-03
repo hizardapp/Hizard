@@ -52,9 +52,11 @@
         <li>
           <a href="{% url 'openings:update_opening' opening.pk %}"><i class="icon-edit"></i>{% trans 'Edit this opening' %}</a>
         </li>
+        {% comment %} Commented by Gautier on 3/11/2013 as I think we should only soft-delete things
         <li>
           <a href="{% url 'openings:delete_opening' opening.pk %}"><i class="icon-trash"></i>{% trans 'Delete this opening' %}</a>
         </li>
+        {% endcomment %}
         <li>
           <a href="{% url 'applications:manual_application' opening.pk %}"><i class="icon-upload"></i>{% trans 'Add applicant' %}</a>
         </li>
