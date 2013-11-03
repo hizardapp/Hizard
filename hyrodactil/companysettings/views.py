@@ -144,7 +144,7 @@ class WidgetView(LoginRequiredMixin, TemplateView):
         context = super(WidgetView, self).get_context_data(**kwargs)
         embed_url = '//%s.%s/embed.js' % (
             self.request.user.company.subdomain.lower(),
-            'spp.com:8000'
+            'hizard.com'
         )
         snippet = """
 <div id="hizard-openings"></div>\n
