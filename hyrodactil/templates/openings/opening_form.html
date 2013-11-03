@@ -25,7 +25,7 @@
     {% endif %}
   </h1>
 
-  <form action="." method="POST">
+  <form action="." method="POST" id="opening-form">
     {% csrf_token %}
 
     {% if form.non_field_errors %}
@@ -55,10 +55,14 @@
 
       <div class="questions large-12 columns">
         <h4>{% trans 'Questions' %}</h4>
+
         {% for question in form.questions %}
           <div class="question large-12 columns">
             <div class="large-1 columns remove-question"><i class="icon-trash icon-large"></i></div>
-            <div class="large-11 columns"><input type="text"  name="question-{{ question.id }}" value="{{ question.title }}"/></div>
+            <div class="large-11 columns">
+              <input type="text"  name="question-{{ question.id }}" value="{{ question.title }}"/>
+              <input type="hidden"  name="position-question-{{ question.id }}" value="{{ question.position }}"/>
+            </div>
           </div>
         {% endfor %}
       </div>
@@ -74,6 +78,14 @@
     </div>
 
   </form>
+
+  <div class="question large-12 columns" id="question-template" style="display: none;">
+    <div class="large-1 columns remove-question"><i class="icon-trash icon-large"></i></div>
+    <div class="large-11 columns">
+      <input type="text" name="question-name" value=""/>
+      <input type="hidden" name="question-position" value=""/>
+    </div>
+  </div>
 
 {% endblock content %}
 
@@ -112,12 +124,34 @@
         return el.text;
       });
 
+      function highestQuestionPosition () {
+        var max = 1;
+        $("form#opening-form input[type=hidden]").each(function (index, val) {
+          var input_name = $(val).attr("name");
+          if (/^position-question-/.test(input_name)) {
+            var position = + $(val).val();
+            if (position > max) {
+              max = position;
+            }
+          }
+        });
+        return max;
+      }
+
       $('.add-question').click(function(e) {
         e.preventDefault();
-        var rand = Math.random().toString(36).substring(7);
-        $input = $(
-          '<div class="question large-12 columns"><div class="large-1 columns remove-question"><i class="icon-trash icon-large"></i></div><div class="large-11 columns"><input type="text" class="large-10 columns" name="question-' + rand + '"/></div></div></div>'
-        );
+        var rand = Math.random().toString(36).substring(7),
+            $input = $("#question-template").clone(),
+            $questionName = $input.find("input[name=question-name]"),
+            $questionPosition = $input.find("input[name=question-position]");
+        $input.attr("id", "");
+
+        $questionName.attr("name", 'question-' + rand);
+        $questionPosition.attr("name", 'position-question-' + rand);
+
+        $questionPosition.val(highestQuestionPosition() + 1);
+
+        $input.show();
         $('.questions').append($input);
         $input.focus();
       });

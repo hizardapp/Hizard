@@ -21,6 +21,7 @@ class OpeningQuestionFactory(factory.DjangoModelFactory):
 
     title = 'My question'
     opening = factory.SubFactory(OpeningFactory)
+    position = 1
 
 
 class OpeningWithQuestionFactory(OpeningFactory):

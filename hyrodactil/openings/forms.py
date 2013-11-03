@@ -22,8 +22,10 @@ class OpeningForm(forms.ModelForm):
     def _clean_questions(self):
         self.questions_present = {}
         for field in self.data:
-            if field.startswith('question') and len(self.data[field]) > 0:
-                self.questions_present[field] = self.data[field]
+            if field.startswith('question') and self.data[field]:
+                prefix, question_id = field.split("-")
+                position = self.data['position-question-%s' % question_id]
+                self.questions_present[field] = (position, self.data[field])
 
     def clean(self):
         self._clean_questions()
@@ -40,13 +42,18 @@ class OpeningForm(forms.ModelForm):
                 if field_name not in self.questions_present:
                     question.delete()
                 else:
-                    if question.title != self.questions_present[field_name]:
-                        question.title = self.questions_present[field_name]
+                    present_position, present_title =\
+                            self.questions_present[field_name]
+                    if (question.title != present_title or
+                        question.position != question.position):
+                        question.position = present_position
+                        question.title = present_title
                         question.save()
                     del self.questions_present[field_name]
 
             for field in self.questions_present:
-                opening.questions.create(title=self.questions_present[field])
-
+                present_position, present_title = self.questions_present[field]
+                opening.questions.create(title=present_title,
+                                         position=present_position)
 
         return opening

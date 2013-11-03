@@ -73,9 +73,10 @@ class Opening(TimeStampedModel):
 class OpeningQuestion(TimeStampedModel):
     title = models.CharField(max_length=770)
     opening = models.ForeignKey(Opening, related_name='questions')
+    position = models.IntegerField()
 
     class Meta:
-        ordering = ['created']
+        ordering = ['position']
 
     def __str__(self):
         return '%s' % self.title

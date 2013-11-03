@@ -49,7 +49,8 @@ class OpeningsFormsTests(TestCase):
     def test_opening_form_clean_valid_question(self):
         data = self.form_data
         data.update({
-            'question-1': 'What is your quest?'
+            'question-1': 'What is your quest?',
+            'position-question-1': '1'
         })
         form = self.Form(
             self.user.company,
@@ -64,7 +65,8 @@ class OpeningsFormsTests(TestCase):
     def test_opening_form_clean_empty_question(self):
         data = self.form_data
         data.update({
-            'question-1': ''
+            'question-1': '',
+            'position-question-1': '1'
         })
         form = self.Form(
             self.user.company,
@@ -81,7 +83,8 @@ class OpeningsFormsTests(TestCase):
 
         data = self.form_data
         data.update({
-            'question-1': ''
+            'question-1': '',
+            'position-question-1': '1'
         })
         form = self.Form(
             self.user.company,
@@ -99,7 +102,8 @@ class OpeningsFormsTests(TestCase):
 
         data = self.form_data
         data.update({
-            'question-1': 'What is your quest?'
+            'question-1': 'What is your quest?',
+            'position-question-1': '1'
         })
         form = self.Form(
             self.user.company,
