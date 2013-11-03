@@ -14,29 +14,32 @@
   </h1>
 
   <div class="large-12 columns">
-    <a href="" class="button-alert">
-      {% trans "Reject" %}
-    </a>
-    <a href="#" data-reveal-id="transition-form-modal" class="button">
-      {% trans "Change stage" %}
-    </a>
+    <form action="." method="POST" id="transition-form" class="large-6 columns">
+      {% csrf_token %}
 
-  <span class="application-rating">
-    {% if user_rating != -1 %}
-      <a href="{% url 'applications:rate' application.id -1 %}"><i class="icon-thumbs-down"></i></a>
-    {% else %}
-      <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-down"></i></a>
-    {% endif %}
+      {% if form.errors %}
+        <span class="has-errors"></span>
+      {% endif %}
 
-    {{ rating }}
+      {{ form.stage.label_tag }}
+      {{ form.stage }}
+    </form>
 
-    {% if user_rating != 1 %}
-      <a href="{% url 'applications:rate' application.id 1 %}"><i class="icon-thumbs-up"></i></a>
-    {% else %}
-      <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-up"></i></a>
-    {% endif %}
-  </span>
+    <span class="application-rating" class="large-6 columns">
+      {% if user_rating != -1 %}
+        <a href="{% url 'applications:rate' application.id -1 %}"><i class="icon-thumbs-down"></i></a>
+      {% else %}
+        <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-down"></i></a>
+      {% endif %}
 
+      {{ rating }}
+
+      {% if user_rating != 1 %}
+        <a href="{% url 'applications:rate' application.id 1 %}"><i class="icon-thumbs-up"></i></a>
+      {% else %}
+        <a href="{% url 'applications:rate' application.id 0 %}" class="rate-neutral"><i class="icon-thumbs-up"></i></a>
+      {% endif %}
+    </span>
   </div>
 
   <div class="large-8 columns">
@@ -70,42 +73,6 @@
       </div>
     {% endfor %}
   </div>
-
-  <div id="transition-form-modal" class="reveal-modal">
-    <h3>{% trans 'Current stage' %} : {{ application.current_stage }}</h3>
-    <form action="." method="POST" id="transition-form">
-      {% csrf_token %}
-
-      {% if form.errors %}
-        <span class="has-errors"></span>
-      {% endif %}
-
-      {% for field in form %}
-        <div class="row">
-          <div class="large-12 columns {% if field.errors %} error {% endif %}">
-
-            {{ field.label_tag }}
-            {{ field }}
-
-            {% if field.errors %}
-              <small class="rounded-error">
-                {% for error in field.errors %}
-                  {{ error }}
-                {% endfor %}
-              </small>
-            {% endif %}
-          </div>
-        </div>
-      {% endfor %}
-
-      <div class="row">
-        <input type="submit" value="{% trans 'Change stage' %}" class="button right" />
-      </div>
-
-    </form>
-    <a class="close-reveal-modal">&#215;</a>
-  </div>
-
 {% endblock content %}
 
 {% block extra-js %}
@@ -123,10 +90,8 @@
       $(this).remove();
     });
 
-    $(function () {
-      if ($("#transition-form").find(".has-errors").length > 0) {
-        $("a[data-reveal-id=transition-form-modal]").click();
-      }
-    })
+    $("select#id_stage").change(function () {
+      $("form#transition-form").submit();
+    });
   </script>
 {% endblock extra-js %}

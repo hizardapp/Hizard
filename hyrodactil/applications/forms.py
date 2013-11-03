@@ -114,6 +114,7 @@ class ApplicationStageTransitionForm(forms.ModelForm):
         self.fields['stage'].queryset = InterviewStage.objects.filter(
             company=company
         )
+        self.fields['stage'].label = _("Change stage")
 
     class Meta:
         model = ApplicationStageTransition

@@ -80,17 +80,22 @@ class ApplicationDetailView(LoginRequiredMixin, FormView):
     template_name = 'applications/application_detail.html'
 
     def get_application(self):
-        try:
-            return Application.objects.get(
-                pk=self.kwargs['pk'],
-                opening__company=self.request.user.company
-            )
-        except Application.DoesNotExist:
-            raise Http404
+        if not hasattr(self, "_application"):
+            try:
+                self._application = Application.objects.get(
+                    pk=self.kwargs['pk'],
+                    opening__company=self.request.user.company
+                )
+            except Application.DoesNotExist:
+                raise Http404
+
+        return self._application
 
     def get_form_kwargs(self):
         default_kwargs = super(ApplicationDetailView, self).get_form_kwargs()
         default_kwargs['company'] = self.request.user.company
+        application = self.get_application()
+        default_kwargs['initial'] = dict(stage=application.current_stage)
         return default_kwargs
 
     def get_context_data(self, **kwargs):
