@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import HttpResponseRedirect
+from django.db.models import Max
+from django.http import HttpResponseRedirect, Http404
 from django.views.generic import CreateView, TemplateView, View
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
@@ -38,6 +39,9 @@ class CreateUpdateAjaxView(
         if form.is_valid():
             obj = form.save(commit=False)
             obj.company = self.request.user.company
+            position_max = obj.company.interviewstage_set.aggregate(Max('position'))['position__max'] or 0
+            obj.position = position_max + 1
+
             obj.save()
             return self.render_json_response({
                 'result': 'success',
@@ -80,21 +84,23 @@ class InterviewStageDeleteView(LoginRequiredMixin, QuickDeleteView):
     success_url = reverse_lazy('companysettings:list_stages')
     success_message = _('Stage deleted.')
 
+    def get(self, *args, **kwargs):
+        stage = self.get_object()
+        if stage.company == self.request.user.company:
+            stage.prepare_for_deletion()
+            return super(InterviewStageDeleteView, self) .get(args, kwargs)
+
+        raise Http404
+
 
 class InterviewStageReorderView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        stage = InterviewStage.objects.get(id=kwargs.pop('pk'))
-        direction = kwargs.pop('direction')
-
-        if direction == 'up':
-            swapping_stage = stage.get_previous_stage()
-        else:
-            swapping_stage = stage.get_next_stage()
-
-        if stage.swap_position(swapping_stage):
-            messages.success(self.request, 'Stages reordered.')
-        else:
-            messages.info(self.request, "Couldn't reorder the stages.")
+        stage = InterviewStage.objects.get(
+            id=kwargs.pop('pk'), company=self.request.user.company
+        )
+        delta = kwargs.pop('delta')
+        stage.change_position(delta)
+        messages.success(self.request, 'Stages reordered.')
         return HttpResponseRedirect(reverse('companysettings:list_stages'))
 
 

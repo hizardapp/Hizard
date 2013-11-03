@@ -26,7 +26,7 @@
               <td class="large-1 columns">
                 <a href="#" class="edit">
                   {% if not forloop.last %}
-                    <a href="{% url "companysettings:reorder_stage" stage.id "down" %}">
+                    <a href="{% url "companysettings:reorder_stage" stage.id 1 %}">
                       <i class="icon-arrow-down icon-2x"></i>
                     </a>
                   {% endif %}
@@ -35,7 +35,7 @@
               <td class="large-1 columns">
                 <a href="#">
                   {% if not forloop.first %}
-                    <a href="{% url "companysettings:reorder_stage" stage.id "up" %}">
+                    <a href="{% url "companysettings:reorder_stage" stage.id -1 %}">
                       <i class="icon-arrow-up icon-2x"></i>
                     </a>
                   {% endif %}
@@ -81,8 +81,8 @@
       Hizard.CompanySettings(
         "{% url 'companysettings:ajax_stage' %}",
         "{% url 'companysettings:delete_stage' 8888 %}",
-        '{% url "companysettings:reorder_stage" 0 "up" %}',
-        '{% url "companysettings:reorder_stage" 0 "down" %}'
+        '{% url "companysettings:reorder_stage" 0 -1 %}',
+        '{% url "companysettings:reorder_stage" 0 1 %}'
       );
     });
   </script>

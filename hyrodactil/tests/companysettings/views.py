@@ -101,9 +101,9 @@ class CompanySettingsViewsTests(WebTest):
         self.assertContains(response, "Stage deleted.")
 
     def test_reorder_stage_valid_up(self):
-        stage1 = InterviewStageFactory(company=self.user.company)
-        stage2 = InterviewStageFactory(company=self.user.company)
-        url = reverse('companysettings:reorder_stage', args=(stage2.id, 'up'))
+        stage1 = InterviewStageFactory(company=self.user.company, position=1)
+        stage2 = InterviewStageFactory(company=self.user.company, position=2)
+        url = reverse('companysettings:reorder_stage', args=(stage2.id, -1))
 
         response = subdomain_get(self.app, url, user=self.user)
 
@@ -114,10 +114,10 @@ class CompanySettingsViewsTests(WebTest):
         self.assertEqual(InterviewStage.objects.get(id=1).position, 2)
 
     def test_reorder_stage_valid_down(self):
-        stage1 = InterviewStageFactory(company=self.user.company)
-        stage2 = InterviewStageFactory(company=self.user.company)
+        stage1 = InterviewStageFactory(company=self.user.company, position=1)
+        stage2 = InterviewStageFactory(company=self.user.company, position=2)
         url = reverse(
-            'companysettings:reorder_stage', args=(stage1.id, 'down')
+            'companysettings:reorder_stage', args=(stage1.id, 1)
         )
 
         response = subdomain_get(self.app, url, user=self.user)
@@ -127,21 +127,6 @@ class CompanySettingsViewsTests(WebTest):
             reverse('companysettings:list_stages')
         )
         self.assertEqual(InterviewStage.objects.get(id=1).position, 2)
-
-    def test_reorder_stage_invalid(self):
-        stage1 = InterviewStageFactory(company=self.user.company)
-        stage2 = InterviewStageFactory(company=self.user.company)
-        url = reverse(
-            'companysettings:reorder_stage', args=(stage2.id, 'down')
-        )
-
-        response = subdomain_get(self.app, url, user=self.user)
-
-        self.assertEqual(
-            response.request.path,
-            reverse('companysettings:list_stages')
-        )
-        self.assertEqual(InterviewStage.objects.get(id=1).position, 1)
 
     def test_list_users(self):
         url = reverse('companysettings:main')

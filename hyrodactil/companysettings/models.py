@@ -13,77 +13,35 @@ class InterviewStage(TimeStampedModel):
     company = models.ForeignKey(Company, null=True)
 
     class Meta:
-        unique_together = ('company', 'position')
         ordering = ['position']
 
     def __unicode__(self):
         return self.name
 
-    def get_previous_stage(self):
-        """
-        Finds out what's the stage before this one for the company.
-        Returns None if it's the first one already
-        """
-        previous_position = InterviewStage.objects.filter(
-            company=self.company,
-            position__lt=self.position
-        ).aggregate(models.Max('position'))['position__max']
+    def change_position(self, delta):
+        delta = int(delta)
+        if self.position == 1 and delta == -1:
+            return
 
         try:
-            previous = InterviewStage.objects.filter(
+            other_stage = InterviewStage.objects.get(
                 company=self.company,
-                position=previous_position
-            )[0]
-        except IndexError:
-            return None
+                position=self.position + delta
+            )
+        except InterviewStage.DoesNotExist:
+            # Should not happen
+            return
 
-        return previous
-
-    def get_next_stage(self):
-        """
-        Finds out what's the stage after this one for the company.
-        Returns None if it's the last one already
-        """
-        next_position = InterviewStage.objects.filter(
-            company=self.company,
-            position__gt=self.position
-        ).aggregate(models.Min('position'))['position__min']
-        try:
-            next_stage = InterviewStage.objects.filter(
-                company=self.company,
-                position=next_position
-            )[0]
-        except IndexError:
-            return None
-
-        return next_stage
-
-    def swap_position(self, other_stage):
-        """
-        Swaps the position value of 2 stages
-        """
-        if not other_stage:
-            return False
-
-        new_position = other_stage.position
         other_stage.position = self.position
-        self.position = 99999
-        self.save()
         other_stage.save()
-
-        self.position = new_position
+        self.position = self.position + delta
         self.save()
-        return True
 
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            max_position = InterviewStage.objects.filter(
-                company=self.company
-            ).aggregate(models.Max('position'))['position__max']
+    def prepare_for_deletion(self):
+        stages_to_modify = InterviewStage.objects.filter(
+            company=self.company, position__gt=self.position
+        )
 
-            if not max_position:
-                self.position = 1
-            else:
-                self.position = max_position + 1
-
-        super(InterviewStage, self).save(*args, **kwargs)
+        for stage in stages_to_modify:
+            stage.position -= 1
+            stage.save()

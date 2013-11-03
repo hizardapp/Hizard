@@ -10,10 +10,10 @@ from customisable_emails.models import EmailTemplate
 def setup_company(company):
 
     interview_stages = [
-        InterviewStage(name=_('Phone interview')),
-        InterviewStage(name=_('In-person interview')),
-        InterviewStage(name=_('Offer')),
         InterviewStage(name=_('Received'), tag='RECEIVED'),
+        InterviewStage(name=_('Phone interview'), position=1),
+        InterviewStage(name=_('In-person interview'), position=2),
+        InterviewStage(name=_('Offer'), position=3),
         InterviewStage(name=_('Rejected'), tag='REJECTED'),
         InterviewStage(name=_('Hired'), tag='HIRED'),
     ]

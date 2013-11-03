@@ -10,65 +10,37 @@ class InterviewStageModelTests(TestCase):
         stage = InterviewStageFactory.build()
         self.assertEqual(unicode(stage), stage.name)
 
-    def test_get_previous_stage_ok(self):
+    def test_change_position_move_up(self):
         company = CompanyFactory()
-        stage1 = InterviewStageFactory(company=company)
-        stage2 = InterviewStageFactory(company=company)
+        InterviewStageFactory(name='first', position=1, company=company)
+        stage2 = InterviewStageFactory(name='second', position=2, company=company)
 
-        previous_stage = stage2.get_previous_stage()
-        self.assertEqual(previous_stage, stage1)
+        stage2.change_position(-1)
 
-    def test_get_previous_stage_none(self):
+
+        self.assertEqual(InterviewStage.objects.get(name='first').position, 2)
+        self.assertEqual(InterviewStage.objects.get(name='second').position, 1)
+
+    def test_change_position_move_down(self):
         company = CompanyFactory()
-        stage1 = InterviewStageFactory(company=company)
+        stage1 = InterviewStageFactory(name='first', position=1, company=company)
+        InterviewStageFactory(name='second', position=2, company=company)
 
-        previous_stage = stage1.get_previous_stage()
-        self.assertIsNone(previous_stage)
+        stage1.change_position(1)
 
-    def test_get_next_stage_ok(self):
+
+        self.assertEqual(InterviewStage.objects.get(name='first').position, 2)
+        self.assertEqual(InterviewStage.objects.get(name='second').position, 1)
+
+    def test_prepare_for_deletion(self):
         company = CompanyFactory()
-        stage1 = InterviewStageFactory(company=company)
-        stage2 = InterviewStageFactory(company=company)
+        stage1 = InterviewStageFactory(name='first', position=1, company=company)
+        InterviewStageFactory(name='second', position=2, company=company)
 
-        next_stage = stage1.get_next_stage()
-        self.assertEqual(next_stage, stage2)
+        stage1.prepare_for_deletion()
 
-    def test_get_next_stage_none(self):
-        company = CompanyFactory()
-        stage1 = InterviewStageFactory(company=company)
 
-        next_stage = stage1.get_next_stage()
-        self.assertIsNone(next_stage)
+        self.assertEqual(InterviewStage.objects.get(name='first').position, 1)
+        self.assertEqual(InterviewStage.objects.get(name='second').position, 1)
 
-    def test_get_swap_position_ok(self):
-        company = CompanyFactory()
-        stage1 = InterviewStageFactory(position=42, company=company)
-        stage2 = InterviewStageFactory(position=7, company=company)
 
-        old_stage1_position = stage1.position
-        old_stage2_position = stage2.position
-
-        result = stage1.swap_position(stage2)
-        self.assertTrue(result)
-
-        self.assertEqual(
-            stage1.position,
-            old_stage2_position
-        )
-        self.assertEqual(
-            stage2.position,
-            old_stage1_position
-        )
-
-    def test_get_swap_position_with_none(self):
-        company = CompanyFactory()
-        stage1 = InterviewStageFactory(company=company)
-
-        old_stage1_position = stage1.position
-        result = stage1.swap_position(None)
-
-        self.assertFalse(result)
-        self.assertEqual(
-            stage1.position,
-            old_stage1_position
-        )
