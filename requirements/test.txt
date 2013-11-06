@@ -1,7 +1,6 @@
 # Test dependencies go here.
 -r _base.txt
 coverage==3.6
-django-discover-runner==0.3.0
 factory_boy==2.1.0
 webtest==1.4.3
 django-webtest==1.6.1

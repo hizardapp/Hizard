@@ -1,11 +1,5 @@
 from base import *
 
-########## TEST SETTINGS
-TEST_RUNNER = 'discover_runner.DiscoverRunner'
-TEST_DISCOVER_TOP_LEVEL = SITE_ROOT
-# Default is test*.py
-TEST_DISCOVER_PATTERN = "*"
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

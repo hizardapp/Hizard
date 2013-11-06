@@ -323,9 +323,10 @@ class AccountsViewsTests(WebTest):
         page = subdomain_get(self.app, reverse('auth:reset_password'))
         form = page.forms[0]
         form['email'] = 'wrong@email.com'
-        response = form.submit()
+        response = form.submit().follow()
 
-        self.assertContains(response, 'have an associated user account')
+        self.assertTemplateUsed(response, 'accounts/login.html')
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_get_password_confirm_valid(self):
         """
