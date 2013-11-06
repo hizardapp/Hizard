@@ -215,5 +215,5 @@ class CompanySettingsViewsTests(WebTest):
         page = subdomain_get(self.app, url, user=self.user)
         self.assertContains(
             page,
-            '%s.spp.com:8000/embed.js' % self.user.company.subdomain
+            '%s.hizard.com/embed.js' % self.user.company.subdomain
         )
